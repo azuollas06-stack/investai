@@ -113,9 +113,11 @@ function facts(a) {
   const over = cmp.slice().sort((x, y) => y.diff - x.diff)[0];
   const missing = cmp.filter((x) => x.mine < 0.005 && x.market >= 0.08).map((x) => x.k.toLowerCase());
   if (a.ex.equity > 0 && over && over.diff > 0.1) out.push(`Palyginti su pasaulio rinka, labiausiai išsiskiria <b>${esc(over.k.toLowerCase())}</b>: ${pct(over.mine)} tavo akcijų, rinkoje ~${pct(over.market)}.${missing.length ? ` Portfelyje nėra šių sektorių akcijų: ${missing.slice(0, 3).join(", ")}.` : ""}`);
+  const withEx = a.rows.filter((r) => EXPLAIN[r.s]);
+  if (withEx.length) out.push(`Turime paaiškinimą, kodėl keitėsi kaina: <b>${withEx.slice(0, 3).map((r) => esc(r.n)).join(", ")}</b>${withEx.length > 3 ? ` ir dar ${withEx.length - 3}` : ""}. Jį rasi pozicijų kortelėse žemiau.`);
   const crypto = a.typeShare("Kriptovaliuta");
   if (crypto) out.push(`Kriptovaliutos sudaro ${pct(crypto)} portfelio.`);
-  return out.slice(0, 6);
+  return out.slice(0, 7);
 }
 
 /* ---------- Analizės vaizdas ---------- */
@@ -185,8 +187,9 @@ function renderMovers(a) {
     return;
   }
   card.querySelector("h2").textContent = "Daugiausiai uždirbo ir prarado";
-  const row = (r) => `<li><span class="mv-name">${isTv(r.s) ? `<a href="${assetUrl(r.s)}">${esc(r.n)}</a>` : esc(r.n)}</span><span class="mv-amt">${signed(r.pnl)}</span><span class="pill ${r.pp >= 0 ? "up" : "down"}">${signedPct(r.pp)}</span></li>`;
-  $("#r-movers").innerHTML = `${P.best.length ? `<h3 class="mv-h">Augo</h3><ul class="movers">${P.best.map(row).join("")}</ul>` : ""}${P.worst.length ? `<h3 class="mv-h">Krito</h3><ul class="movers">${P.worst.map(row).join("")}</ul>` : ""}<p class="muted small" style="margin:12px 0 0">Kodėl taip pasikeitė kainos, paaiškinsime netrukus. Kol kas naujienas rasi aktyvo puslapyje.</p>`;
+  const row = (r) => `<li><span class="mv-name"><button type="button" class="linkish mv-open" data-s="${esc(r.s)}">${esc(r.n)}</button>${EXPLAIN[r.s] ? ` <span class="why-dot">Kodėl?</span>` : ""}</span><span class="mv-amt">${signed(r.pnl)}</span><span class="pill ${r.pp >= 0 ? "up" : "down"}">${signedPct(r.pp)}</span></li>`;
+  $("#r-movers").innerHTML = `${P.best.length ? `<h3 class="mv-h">Augo</h3><ul class="movers">${P.best.map(row).join("")}</ul>` : ""}${P.worst.length ? `<h3 class="mv-h">Krito</h3><ul class="movers">${P.worst.map(row).join("")}</ul>` : ""}<p class="muted small" style="margin:12px 0 0">Paspausk pavadinimą – pamatysi grafiką, naujienas ir, jei turime, paaiškinimą, kodėl kaina pasikeitė.</p>`;
+  $("#r-movers").querySelectorAll(".mv-open").forEach((b) => b.addEventListener("click", () => openCard(b.dataset.s)));
 }
 function renderCompare(a) {
   const card = $("#r-compare-card");
@@ -215,18 +218,47 @@ function renderScenarios(a) {
     <ul class="scn-parts">${parts.map(([k, v]) => `<li><span>${label[k]} (${s.shock[k]}\u00a0%)</span><b>${signed(v)}</b></li>`).join("")}${a.typeShare("Grynieji") ? `<li><span>Grynieji pinigai</span><b>0 €</b></li>` : ""}</ul>
   </div><p class="muted small" style="margin:12px 0 0">${esc(s.note)} Atskiros akcijos ir siauri sektorių fondai per nuosmukius dažnai krenta daugiau nei visa rinka.</p>`;
 }
+let EXPLAIN = {};
 function renderCards(a) {
   const total = a.total;
-  $("#r-cards").innerHTML = state.holdings.filter((h) => h.value > 0).slice().sort((x, y) => y.value - x.value).map((h) => {
+  const list = state.holdings.filter((h) => h.value > 0).slice().sort((x, y) => y.value - x.value);
+  $("#r-cards").innerHTML = list.map((h) => {
     const m = meta(h);
     const sIdx = Math.abs([...m.sector].reduce((t, c) => t + c.charCodeAt(0), 0)) % PALETTE.length;
     const initials = m.n.replace(/[^A-Za-zĄČĘĖĮŠŲŪŽąčęėįšųūž0-9 ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase() || "?";
     const pp = typeof h.pnlPct === "number" ? h.pnlPct : typeof h.pnl === "number" && h.value - h.pnl > 0 ? (h.pnl / (h.value - h.pnl)) * 100 : null;
-    const inner = `<span class="pos-ava" style="background:${PALETTE[sIdx]}">${esc(initials)}</span>
-      <span class="pos-main"><b>${esc(m.n)}</b><small>${esc([isTv(h.s) ? ticker(h.s) : "", m.sector === "Kita" ? "Sektorius nežinomas" : m.sector].filter(Boolean).join(" · "))}</small></span>
-      <span class="pos-num"><b>${money(h.value)}</b><small>${pct(h.value / total)}${pp !== null ? ` · <span class="${pp >= 0 ? "up" : "down"}">${signedPct(pp)}</span>` : ""}</small></span>`;
-    return isTv(h.s) ? `<a class="pos" href="${assetUrl(h.s)}">${inner}</a>` : `<div class="pos">${inner}</div>`;
+    const ex = EXPLAIN[h.s];
+    const tvOk = isTv(h.s);
+    return `<details class="pos" data-s="${esc(h.s)}">
+      <summary>
+        <span class="pos-ava" style="background:${PALETTE[sIdx]}">${esc(initials)}</span>
+        <span class="pos-main"><b>${esc(m.n)}</b><small>${esc([tvOk ? ticker(h.s) : "", m.sector === "Kita" ? "Sektorius nežinomas" : m.sector].filter(Boolean).join(" · "))}</small>${ex ? `<span class="why-dot">Kodėl ${ex.direction === "up" ? "kilo" : ex.direction === "down" ? "krito" : "svyruoja"}?</span>` : ""}</span>
+        <span class="pos-num"><b>${money(h.value)}</b><small>${pct(h.value / total)}${pp !== null ? ` · <span class="${pp >= 0 ? "up" : "down"}">${signedPct(pp)}</span>` : ""}</small></span>
+      </summary>
+      <div class="pos-body">
+        ${ex ? explainHTML(ex) : `<p class="muted small" style="margin:0">${tvOk ? "Paaiškinimo apie šį aktyvą dar nėra. Kas su juo vyko, matysi grafike ir naujienose žemiau." : "Šio aktyvo neturime sąraše, todėl grafiko ir naujienų parodyti negalime."}</p>`}
+        ${tvOk ? `<div class="pos-widgets"><div class="pos-chart"></div><div class="pos-news"></div></div>
+        <p style="margin:12px 0 0"><a href="${assetUrl(h.s)}">Visa informacija apie ${esc(m.n)}</a></p>` : ""}
+      </div>
+    </details>`;
   }).join("");
+  $("#r-cards").querySelectorAll("details.pos").forEach((d) => d.addEventListener("toggle", () => {
+    if (!d.open || d.dataset.loaded || !isTv(d.dataset.s)) return;
+    d.dataset.loaded = "1";
+    const sym = d.dataset.s;
+    tv(d.querySelector(".pos-chart"), "symbol-overview", {
+      symbols: [[sym.split(":")[1], `${sym}|1M`]], chartOnly: false, width: "100%", height: 300, autosize: false,
+      showVolume: false, hideDateRanges: false, scalePosition: "right", scaleMode: "Normal", lineWidth: 2, chartType: "area",
+      dateRanges: ["1d|1", "1m|30", "3m|60", "12m|1D", "60m|1W"],
+    });
+    tv(d.querySelector(".pos-news"), "timeline", { feedMode: "symbol", symbol: sym, width: "100%", height: 300, displayMode: "compact" });
+  }));
+}
+function openCard(s) {
+  const d = [...document.querySelectorAll("#r-cards details.pos")].find((x) => x.dataset.s === s);
+  if (!d) return;
+  d.open = true;
+  d.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 function renderTable(a) {
   $("#r-table").innerHTML = `<div class="pf-table-wrap"><table class="pf-table">
@@ -641,6 +673,7 @@ function flag(input, msg) {
 document.addEventListener("DOMContentLoaded", async () => {
   if (document.body.dataset.page !== "portfolio") return;
   try { ASSETS = (await getJSON("data/assets.json")).groups.flatMap((g) => g.items); } catch (e) { console.error(e); }
+  EXPLAIN = await loadExplain();
   setupInputs();
   if (new URLSearchParams(location.search).has("pavyzdys")) {
     isDemo = true;

@@ -90,6 +90,75 @@ function renderChrome(page) {
       <p>InvestAI teikia informaciją, o ne investavimo rekomendacijas. Apžvalgas rengia dirbtinis intelektas pagal nurodytus šaltinius, todėl galimos klaidos. Kainos ir grafikai: <a href="https://www.tradingview.com/" target="_blank" rel="noopener">TradingView</a>, gali vėluoti.</p>
     </div>`;
   document.body.append(footer);
+
+  // Apatinė navigacija telefone (programėlės pojūtis)
+  const ICONS = {
+    portfolio: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+    markets: '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+    digest: '<path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h4"/>',
+    asset: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+  };
+  const tabs = [["portfolio", "portfelis.html", "Portfelis"], ["markets", "rinkos.html", "Rinkos"], ["digest", "apzvalga.html", "Apžvalga"], ["asset", "aktyvas.html", "Paieška"]];
+  const bar = document.createElement("nav");
+  bar.className = "tabbar";
+  bar.setAttribute("aria-label", "Pagrindinė navigacija");
+  bar.innerHTML = tabs.map(([id, href, label]) => `<a href="${href}"${id === page ? ' aria-current="page"' : ""}><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[id]}</svg><span>${label}</span></a>`).join("");
+  document.body.append(bar);
+  setupInstall(page);
+}
+
+/* ---------- „Kodėl kilo / krito?“ paaiškinimai ---------- */
+let _explain = null;
+async function loadExplain() {
+  if (_explain) return _explain;
+  try { _explain = (await getJSON("data/explain.json")).items || {}; } catch { _explain = {}; }
+  return _explain;
+}
+function explainHTML(e, opts = {}) {
+  if (!e) return "";
+  const st = STATUS[e.status] || STATUS.media;
+  const dir = e.direction === "up" ? "up" : e.direction === "down" ? "down" : "mixed";
+  const age = Math.round((Date.now() - new Date(e.date + "T12:00:00").getTime()) / 864e5);
+  return `<div class="explain ex-${dir}">
+    <div class="explain-head"><span class="explain-q">Kodėl ${dir === "up" ? "kilo" : dir === "down" ? "krito" : "svyruoja"}?</span><span class="explain-move">${esc(e.move || "")}</span></div>
+    <h4>${esc(e.headline)}</h4>
+    <ul>${(e.points || []).map((p) => `<li>${esc(p)}</li>`).join("")}</ul>
+    ${e.context ? `<p class="explain-ctx">${esc(e.context)}</p>` : ""}
+    <p class="explain-meta"><span class="badge ${st.cls}">${st.label}</span> Atnaujinta ${fmtShort(e.date)}${age > 7 ? " (senesnis nei savaitė)" : ""} · ${(e.sources || []).map((s) => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>`).join(" · ")}</p>
+    ${opts.footer === false ? "" : `<p class="explain-foot">Paaiškinimą parengė DI pagal nurodytus šaltinius. Tai ne rekomendacija pirkti ar parduoti.</p>`}
+  </div>`;
+}
+
+/* ---------- Programėlė (PWA) ---------- */
+const STANDALONE = window.matchMedia && window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+if (STANDALONE) document.documentElement.classList.add("standalone");
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch((e) => console.warn("SW", e)));
+}
+let deferredInstall = null;
+window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); deferredInstall = e; showInstall(); });
+function installDismissed() { try { return localStorage.getItem("investai.install.dismissed") === "1"; } catch { return false; } }
+function setupInstall(page) {
+  if (STANDALONE || installDismissed() || !["home", "portfolio"].includes(page)) return;
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !/crios|fxios/i.test(navigator.userAgent);
+  if (ios) showInstall(true);
+}
+function showInstall(ios = false) {
+  if (STANDALONE || installDismissed() || document.querySelector(".install") || !["home", "portfolio"].includes(document.body.dataset.page)) return;
+  const el = document.createElement("div");
+  el.className = "install";
+  el.setAttribute("role", "dialog");
+  el.setAttribute("aria-label", "Įdiegti InvestAI");
+  el.innerHTML = `<img src="assets/icons/icon-192.png" alt="" width="44" height="44">
+    <div><b>Įdiek InvestAI telefone</b><span>${ios ? "Paspausk „Bendrinti“ <svg viewBox='0 0 24 24' width='15' height='15' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:-2px'><path d='M12 3v12M7 8l5-5 5 5'/><path d='M5 13v7h14v-7'/></svg> ir „Į pradžios ekraną“." : "Atsidarys kaip programėlė – be naršyklės juostų."}</span></div>
+    ${ios ? "" : `<button class="btn primary small" type="button" data-act="install">Įdiegti</button>`}
+    <button class="icon-btn" type="button" data-act="close" aria-label="Uždaryti">×</button>`;
+  document.body.append(el);
+  el.addEventListener("click", async (e) => {
+    const act = e.target.closest("[data-act]")?.dataset.act;
+    if (act === "install" && deferredInstall) { deferredInstall.prompt(); await deferredInstall.userChoice.catch(() => {}); deferredInstall = null; el.remove(); }
+    if (act === "close") { try { localStorage.setItem("investai.install.dismissed", "1"); } catch {} el.remove(); }
+  });
 }
 
 /* ---------- TradingView valdikliai ---------- */
@@ -320,6 +389,7 @@ async function pageAsset() {
   $("#tv-link").href = `https://www.tradingview.com/symbols/${sym.replace(":", "-")}/`;
 
   tv($("#w-info"), "symbol-info", { symbol: sym, width: "100%" });
+  loadExplain().then((ex) => { if (ex[sym]) $("#w-explain").innerHTML = explainHTML(ex[sym]); });
   tv($("#w-chart"), "advanced-chart", {
     symbol: sym, width: "100%", height: 520, interval: "D", timezone: "Europe/Vilnius", theme: THEME,
     style: "1", allow_symbol_change: false, calendar: false, hide_volume: false, support_host: "https://www.tradingview.com",

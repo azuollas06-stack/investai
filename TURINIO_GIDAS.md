@@ -67,3 +67,41 @@ Savaitgaliais ir Baltijos biržų nedarbo dienomis apžvalga nerengiama.
 ```
 
 Sekcijų `id`: `rinka` (bendra nuotaika, indeksai, makro), `imones` (įmonių pranešimai), pasirinktinai `obligacijos` (naujos emisijos, platinimai). `calendar`: tik būsimos datos, artimiausios 3–4 savaitės.
+
+---
+
+# „Kodėl kilo / krito?“ paaiškinimai (`data/explain.json`)
+
+Kasdienė užduotis, be apžvalgos, atnaujina paaiškinimus, kodėl keitėsi populiarių aktyvų kainos. Jie rodomi portfelio pozicijų kortelėse ir aktyvų puslapiuose.
+
+## Ką aprėpti kiekvieną dieną
+
+1. **Būtinai** – aktyvai iš `data/assets.json`, kurie per paskutines 1–5 prekybos dienas pajudėjo bent ~5 % (akcijos) arba ~8 % (kriptovaliutos), arba turėjo svarbią naujieną (rezultatai, prognozių keitimas, vadovų pasikeitimai, sandoriai, teisinės problemos).
+2. Pirmenybė: JAV didžiosios ir populiarios mažmeninių investuotojų akcijos (NVDA, AAPL, MSFT, TSLA, PLTR, RKLB, IONQ ir pan.), Europos gynybos akcijos (RHM, Saab, Leonardo ir kt.), Baltijos akcijos (IGN1L, LHV1T, TEL1L ir kt.), BTC, ETH.
+3. Kasdien atnaujinti 5–12 paaiškinimų. Kokybė svarbiau nei kiekis.
+4. Įrašus, senesnius nei 21 diena, ištrinti.
+
+## Struktūra
+
+Raktas – tikslus `s` simbolis iš `data/assets.json` (pvz., `NASDAQ:NVDA`, `XETR:RHM`). Jei aktyvo sąraše nėra, jį pirmiausia pridėti į `data/assets.json` (su sektoriumi, šalimi, tipu).
+
+```json
+"NASDAQ:NVDA": {
+  "date": "YYYY-MM-DD",
+  "direction": "up | down | mixed",
+  "move": "Trumpas pokytis, pvz. „≈ −35 % nuo spalio 6 d. piko“ arba „+12 % per savaitę“",
+  "headline": "Viena eilutė – pagrindinė priežastis",
+  "points": ["2–4 faktai su datomis ir skaičiais, savais žodžiais"],
+  "context": "Neprivaloma: kas artėja (rezultatų data, renginys) arba kaip įprastai svyruoja",
+  "status": "primary | media | unverified",
+  "sources": [{ "name": "Šaltinis: tema", "url": "https://...", "published": "YYYY-MM-DD" }]
+}
+```
+
+## Taisyklės
+
+- Kiekvienas skaičius ir data – iš šaltinio; bent 2 šaltiniai, jei įmanoma – vienas pirminis (bendrovės pranešimas, SEC, biržos pranešimas).
+- **Jokių prognozių ir rekomendacijų.** Nerašyti „gera proga pirkti“, „verta parduoti“, „turėtų atsigauti“. Analitikų tikslines kainas galima minėti tik kaip faktą su šaltiniu.
+- Jei priežastis neaiški – taip ir parašyti („aiškios priežasties šaltiniuose nerasta; krito kartu su visu sektoriumi“) ir `status: "unverified"`.
+- Jautrias asmenines detales (pvz., vadovų privatus gyvenimas) minėti tik tiek, kiek būtina, neutraliai.
+- `move` ir procentai turi atitikti šaltinių duomenis; jei skaičiuoji pats (pvz., nuo piko), naudok šaltinių kainas.
