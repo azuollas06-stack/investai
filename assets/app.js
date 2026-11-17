@@ -13,6 +13,7 @@ const NAV = [
   ["markets", "rinkos.html", "Rinkos"],
   ["digest", "apzvalga.html", "Dienos apžvalga"],
   ["asset", "aktyvas.html", "Aktyvai"],
+  ["strategy", "strategija.html", "Strategija"],
   ["portfolio", "portfelis.html", "Mano portfelis", "nav-cta"],
 ];
 // Portfelio juostos spalvos (tamsiam tekstui – šviesios spalvos)
@@ -80,7 +81,7 @@ function renderChrome(page) {
     <div class="wrap wide">
       <div class="foot-grid">
         <a class="logo" href="./"><span>Invest<b>AI</b></span></a>
-        <nav class="foot-links" aria-label="Kiti puslapiai"><a href="portfelis.html">Mano portfelis</a><a href="rinkos.html">Rinkos</a><a href="apzvalga.html">Dienos apžvalga</a><a href="archyvas.html">Archyvas</a><a href="apie.html">Apie InvestAI</a></nav>
+        <nav class="foot-links" aria-label="Kiti puslapiai"><a href="portfelis.html">Mano portfelis</a><a href="strategija.html">Strategija</a><a href="rinkos.html">Rinkos</a><a href="apzvalga.html">Dienos apžvalga</a><a href="archyvas.html">Archyvas</a><a href="apie.html">Apie InvestAI</a></nav>
       </div>
       <div class="legend">
         <span class="badge primary">Pirminis šaltinis</span><span>įmonės ar biržos pranešimas</span>
@@ -97,14 +98,67 @@ function renderChrome(page) {
     markets: '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
     digest: '<path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h4"/>',
     asset: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+    strategy: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
   };
-  const tabs = [["portfolio", "portfelis.html", "Portfelis"], ["markets", "rinkos.html", "Rinkos"], ["digest", "apzvalga.html", "Apžvalga"], ["asset", "aktyvas.html", "Paieška"]];
+  const tabs = [["portfolio", "portfelis.html", "Portfelis"], ["strategy", "strategija.html", "Strategija"], ["markets", "rinkos.html", "Rinkos"], ["digest", "apzvalga.html", "Apžvalga"], ["asset", "aktyvas.html", "Paieška"]];
   const bar = document.createElement("nav");
   bar.className = "tabbar";
   bar.setAttribute("aria-label", "Pagrindinė navigacija");
   bar.innerHTML = tabs.map(([id, href, label]) => `<a href="${href}"${id === page ? ' aria-current="page"' : ""}><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[id]}</svg><span>${label}</span></a>`).join("");
   document.body.append(bar);
   setupInstall(page);
+}
+
+/* ---------- Kainų duomenys, logotipai, mini grafikai ---------- */
+let _prices = null;
+async function loadPrices() {
+  if (_prices) return _prices;
+  try { const d = await getJSON("data/prices.json"); _prices = { updated: d.updated, items: d.items || {} }; }
+  catch { _prices = { updated: null, items: {} }; }
+  return _prices;
+}
+// TradingView simbolis → Yahoo/FMP simbolis (tas pats kaip tools/fetch_prices.py)
+const YSUF = { XETR: ".DE", MIL: ".MI", OMXSTO: ".ST", OSL: ".OL", OMXCOP: ".CO", OMXHEX: ".HE", LSE: ".L", SIX: ".SW", TSE: ".T", KRX: ".KS", OMXVSE: ".VS", OMXTSE: ".TL", OMXRSE: ".RG" };
+const YEURONEXT = { ASML: "ASML.AS", AIR: "AIR.PA", SAF: "SAF.PA", HO: "HO.PA", MC: "MC.PA", OR: "OR.PA", TTE: "TTE.PA", SAN: "SAN.PA", RMS: "RMS.PA", BNP: "BNP.PA", AD: "AD.AS", INGA: "INGA.AS", ADYEN: "ADYEN.AS", PRX: "PRX.AS" };
+function yahooSymbol(s) {
+  if (!s || s.startsWith("X:") || s.startsWith("CASH")) return null;
+  const [ex, t] = s.split(":");
+  if (["NASDAQ", "NYSE", "AMEX"].includes(ex)) return t.replace(".", "-");
+  if (ex === "EURONEXT") return YEURONEXT[t] || null;
+  if (ex === "BITSTAMP" || ex === "BINANCE") return t.replace(/USDT?$/, "") + "-USD";
+  if (YSUF[ex]) return (ex === "LSE" ? t.replace(/\.$/, "") : t.replace("_", "-")) + YSUF[ex];
+  return null;
+}
+function initialsOf(name) {
+  return (name || "?").replace(/[^A-Za-zĄČĘĖĮŠŲŪŽąčęėįšųūž0-9 ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase() || "?";
+}
+// Tikri logotipai iš viešo CDN; nepavykus – inicialai
+function logoHTML(s, name, color = "#1d3a63", size = 40) {
+  const y = yahooSymbol(s);
+  const ini = esc(initialsOf(name));
+  let src = null;
+  if (y && /-USD$/.test(y)) src = `https://s3-symbol-logo.tradingview.com/crypto/XTVC${y.replace("-USD", "")}.svg`;
+  else if (y) src = `https://financialmodelingprep.com/image-stock/${encodeURIComponent(y)}.png`;
+  return `<span class="logo-ava" style="--ava:${color};width:${size}px;height:${size}px"><b>${ini}</b>${src ? `<img src="${src}" alt="" loading="lazy" referrerpolicy="no-referrer" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()">` : ""}</span>`;
+}
+function sparkSVG(values, w = 96, h = 30) {
+  if (!values || values.length < 2) return "";
+  const min = Math.min(...values), max = Math.max(...values), r = max - min || 1;
+  const pts = values.map((v, i) => `${((i / (values.length - 1)) * w).toFixed(1)},${(h - 2 - ((v - min) / r) * (h - 4)).toFixed(1)}`).join(" ");
+  const up = values[values.length - 1] >= values[0];
+  return `<svg class="spark ${up ? "s-up" : "s-down"}" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+}
+const fmtPct = (v, digits = 1) => (v === null || v === undefined ? "–" : `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toLocaleString("lt-LT", { maximumFractionDigits: digits })} %`);
+
+/* ---------- Asmeninė pagalba ---------- */
+function helpHTML() {
+  return `<aside class="help">
+    <div class="help-text">
+      <h3>Nori, kad padėtų žmogus?</h3>
+      <p>InvestAI parodo faktus, bet negali pasakyti, kas tinka būtent tau. Asmeninės strategijos ir portfelio klausimais gali kreiptis į nepriklausomą investicijų konsultantą <b>Marių Lencevičių</b> („Ekonomisto užrašai“). Pirmasis pokalbis – nemokamas.</p>
+    </div>
+    <a class="btn primary" href="https://www.ekonomistouzrasai.lt/" target="_blank" rel="noopener">Užsiregistruoti konsultacijai</a>
+  </aside>`;
 }
 
 /* ---------- „Kodėl kilo / krito?“ paaiškinimai ---------- */
@@ -257,6 +311,7 @@ async function pageArchive() {
 /* ---------- Pradžia ---------- */
 async function pageHome() {
   tickerTape($("#ticker"));
+  $("#home-help").innerHTML = helpHTML();
   $("#demo-strip").innerHTML = stripHTML([
     { k: "Technologijos", p: 0.5 }, { k: "Pasaulio indeksas", p: 0.2 }, { k: "Komunalinės", p: 0.12 },
     { k: "Kriptovaliutos", p: 0.07 }, { k: "Finansai", p: 0.06 }, { k: "Grynieji", p: 0.05 },

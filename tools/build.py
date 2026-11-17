@@ -12,6 +12,7 @@ PAGES = {
     "rinkos": "Rinkos – InvestAI",
     "aktyvas": "Aktyvai – InvestAI",
     "portfelis": "Mano portfelis – InvestAI",
+    "strategija": "Strategija – InvestAI",
     "archyvas": "Archyvas – InvestAI",
     "apie": "Apie – InvestAI",
 }

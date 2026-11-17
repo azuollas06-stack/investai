@@ -219,6 +219,7 @@ function renderScenarios(a) {
   </div><p class="muted small" style="margin:12px 0 0">${esc(s.note)} Atskiros akcijos ir siauri sektorių fondai per nuosmukius dažnai krenta daugiau nei visa rinka.</p>`;
 }
 let EXPLAIN = {};
+let PRICES_PF = { items: {} };
 function renderCards(a) {
   const total = a.total;
   const list = state.holdings.filter((h) => h.value > 0).slice().sort((x, y) => y.value - x.value);
@@ -229,13 +230,16 @@ function renderCards(a) {
     const pp = typeof h.pnlPct === "number" ? h.pnlPct : typeof h.pnl === "number" && h.value - h.pnl > 0 ? (h.pnl / (h.value - h.pnl)) * 100 : null;
     const ex = EXPLAIN[h.s];
     const tvOk = isTv(h.s);
+    const pr = PRICES_PF.items[h.s];
     return `<details class="pos" data-s="${esc(h.s)}">
       <summary>
-        <span class="pos-ava" style="background:${PALETTE[sIdx]}">${esc(initials)}</span>
+        ${logoHTML(h.s, m.n, PALETTE[sIdx], 44)}
         <span class="pos-main"><b>${esc(m.n)}</b><small>${esc([tvOk ? ticker(h.s) : "", m.sector === "Kita" ? "Sektorius nežinomas" : m.sector].filter(Boolean).join(" · "))}</small>${ex ? `<span class="why-dot">Kodėl ${ex.direction === "up" ? "kilo" : ex.direction === "down" ? "krito" : "svyruoja"}?</span>` : ""}</span>
-        <span class="pos-num"><b>${money(h.value)}</b><small>${pct(h.value / total)}${pp !== null ? ` · <span class="${pp >= 0 ? "up" : "down"}">${signedPct(pp)}</span>` : ""}</small></span>
+        <span class="pos-spark">${pr ? sparkSVG(pr.spark, 84, 28) : ""}</span>
+        <span class="pos-num"><b>${money(h.value)}</b><small>${pct(h.value / total)}${pp !== null ? ` · <span class="${pp >= 0 ? "up" : "down"}">${signedPct(pp)}</span>` : ""}</small>${pr && pr.d1 !== null ? `<small>Šiandien <span class="${pr.d1 >= 0 ? "up" : "down"}">${fmtPct(pr.d1)}</span></small>` : ""}</span>
       </summary>
       <div class="pos-body">
+        ${pr ? `<dl class="pos-stats"><div><dt>Per mėnesį</dt><dd class="${(pr.m1 ?? 0) >= 0 ? "up" : "down"}">${fmtPct(pr.m1)}</dd></div><div><dt>Per metus</dt><dd class="${(pr.y1 ?? 0) >= 0 ? "up" : "down"}">${fmtPct(pr.y1)}</dd></div><div><dt>Nuo metų aukščiausios</dt><dd class="${(pr.fromHigh ?? 0) < -0.5 ? "down" : ""}">${fmtPct(pr.fromHigh)}</dd></div><div><dt>Svyravimas per metus</dt><dd>${pr.vol ? `~${Math.round(pr.vol)} %` : "–"}</dd></div></dl>` : ""}
         ${ex ? explainHTML(ex) : `<p class="muted small" style="margin:0">${tvOk ? "Paaiškinimo apie šį aktyvą dar nėra. Kas su juo vyko, matysi grafike ir naujienose žemiau." : "Šio aktyvo neturime sąraše, todėl grafiko ir naujienų parodyti negalime."}</p>`}
         ${tvOk ? `<div class="pos-widgets"><div class="pos-chart"></div><div class="pos-news"></div></div>
         <p style="margin:12px 0 0"><a href="${assetUrl(h.s)}">Visa informacija apie ${esc(m.n)}</a></p>` : ""}
@@ -673,7 +677,8 @@ function flag(input, msg) {
 document.addEventListener("DOMContentLoaded", async () => {
   if (document.body.dataset.page !== "portfolio") return;
   try { ASSETS = (await getJSON("data/assets.json")).groups.flatMap((g) => g.items); } catch (e) { console.error(e); }
-  EXPLAIN = await loadExplain();
+  [EXPLAIN, PRICES_PF] = await Promise.all([loadExplain(), loadPrices()]);
+  const slot = $("#pf-help"); if (slot) slot.innerHTML = helpHTML();
   setupInputs();
   if (new URLSearchParams(location.search).has("pavyzdys")) {
     isDemo = true;

@@ -1,0 +1,57 @@
+<body data-page="strategy">
+<main class="wrap wide stg">
+  <h1>Strategija</h1>
+  <p class="lead">Pasirink, kaip nori paskirstyti savo pinigus. Įvedęs sumą pamatysi, kur ją skirti, kad portfelis priartėtų prie <b>tavo</b> pasirinkto plano, ir ko pagal tavo taisykles nedidinti.</p>
+  <p class="note" id="stg-noportfolio" hidden>Portfelis dar neįkeltas – skaičiuosime taip, lyg pradėtum nuo nulio. <a href="portfelis.html">Įkelti portfelį</a></p>
+
+  <section class="stg-step">
+    <div class="step-title"><span class="step-n">1</span><h2>Pasirink strategiją</h2></div>
+    <p class="step-sub">Tai bendri, plačiai žinomi paskirstymo pavyzdžiai – ne patarimas tau. Kuo daugiau akcijų, tuo didesnis galimas pelnas ir tuo didesni kritimai blogais metais.</p>
+    <div class="models" id="models" role="radiogroup" aria-label="Strategija"></div>
+    <div class="card custom" id="custom" hidden>
+      <h3>Tavo paskirstymas</h3>
+      <div class="custom-grid" id="custom-grid"></div>
+      <p class="muted small" id="custom-sum"></p>
+    </div>
+  </section>
+
+  <section class="stg-step">
+    <div class="step-title"><span class="step-n">2</span><h2>Tavo taisyklės</h2></div>
+    <p class="step-sub">Ribos, kurių nori laikytis. Jos bendros su portfelio puslapiu. Palik tuščią, jei nesvarbu.</p>
+    <div class="rule-grid card" id="stg-rules"></div>
+  </section>
+
+  <section class="stg-step">
+    <div class="step-title"><span class="step-n">3</span><h2>Kiek nori investuoti?</h2></div>
+    <form class="amount" id="amount-form" autocomplete="off">
+      <label for="amount" class="sr-only">Suma eurais</label>
+      <input id="amount" type="number" min="1" step="any" inputmode="decimal" value="100">
+      <span>€</span>
+      <button class="btn primary" type="submit">Skaičiuoti</button>
+    </form>
+    <div id="plan"></div>
+  </section>
+
+  <section class="stg-step">
+    <div class="step-title"><span class="step-n">4</span><h2>Pasitikrink prieš pirkdamas</h2></div>
+    <p class="step-sub">Įvesk, ką galvoji pirkti, – pamatysi, kaip tai paveiktų tavo portfelį ir strategiją.</p>
+    <form class="add-row" id="check-form" autocomplete="off">
+      <div class="field grow"><label for="check-q">Aktyvas</label><input id="check-q" type="search" placeholder="Pvz., Nvidia, Rheinmetall, pasaulio fondas VWCE"><ul class="suggest" hidden></ul></div>
+      <div class="field"><label for="check-val">Suma, €</label><input id="check-val" type="number" min="1" step="any" inputmode="decimal" value="100"></div>
+      <button class="btn" type="submit">Patikrinti</button>
+    </form>
+    <div id="check-out"></div>
+  </section>
+
+  <section class="stg-step" id="dd-section">
+    <h2>Kiek tavo aktyvai nutolę nuo metų aukščiausios kainos</h2>
+    <p class="step-sub">Didelis kritimas savaime nereiškia, kad akcija „pigi“: kartais kaina atsigauna, kartais ne – priklauso nuo priežasčių. Todėl prie kiekvieno aktyvo rasi ir paaiškinimą, jei jį turime.</p>
+    <div id="dd"></div>
+  </section>
+
+  <div id="help-slot"></div>
+  <p class="disclaimer">Strategijos įrankis mechaniškai pritaiko tavo paties pasirinktą paskirstymą ir taisykles. Tai nėra investavimo rekomendacija ir neįvertina, ar strategija tinka tavo situacijai. Istoriniai kritimai – apytiksliai ir negarantuoja ateities rezultatų.</p>
+</main>
+<script src="assets/pf-insights.js" defer></script>
+<script src="assets/portfolio.js" defer></script>
+<script src="assets/strategy.js" defer></script>
