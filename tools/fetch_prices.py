@@ -1,0 +1,144 @@
+"""Kasdien surenka visų data/assets.json aktyvų kainas ir apskaičiuoja rodiklius → data/prices.json.
+
+Paleidžiama GitHub Actions (žr. .github/workflows/prices.yml). Duomenys – Yahoo Finance per `yfinance`
+(neoficialus nemokamas šaltinis; tinka prototipui, komerciniam produktui reikės licencijuoto tiekėjo).
+
+Kiekvienam aktyvui: paskutinė kaina, valiuta, pokyčiai (1 d., 1 sav., 1 mėn., 3 mėn., nuo metų pradžios, 1 m.),
+52 savaičių aukščiausia/žemiausia kaina, kritimas nuo 52 sav. aukščiausios, metinis svyravimas (volatility),
+ir mini grafikas (~60 taškų per 1 metus).
+"""
+from __future__ import annotations
+
+import json
+import math
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+
+# TradingView birža → Yahoo priesaga
+SUFFIX = {
+    "XETR": ".DE", "EURONEXT": None, "MIL": ".MI", "OMXSTO": ".ST", "OSL": ".OL", "OMXCOP": ".CO",
+    "OMXHEX": ".HE", "LSE": ".L", "SIX": ".SW", "TSE": ".T", "KRX": ".KS",
+    "OMXVSE": ".VS", "OMXTSE": ".TL", "OMXRSE": ".RG",
+}
+# Euronext: kurioje biržoje kotiruojama
+EURONEXT = {
+    "ASML": "ASML.AS", "AIR": "AIR.PA", "SAF": "SAF.PA", "HO": "HO.PA", "MC": "MC.PA", "OR": "OR.PA",
+    "TTE": "TTE.PA", "SAN": "SAN.PA", "RMS": "RMS.PA", "BNP": "BNP.PA", "AD": "AD.AS", "INGA": "INGA.AS",
+    "ADYEN": "ADYEN.AS", "PRX": "PRX.AS",
+}
+OVERRIDES = {
+    "BITSTAMP:BTCUSD": "BTC-USD", "BITSTAMP:ETHUSD": "ETH-USD", "BINANCE:SOLUSDT": "SOL-USD",
+    "BINANCE:XRPUSDT": "XRP-USD", "BINANCE:BNBUSDT": "BNB-USD", "BINANCE:ADAUSDT": "ADA-USD",
+    "BINANCE:DOGEUSDT": "DOGE-USD", "BINANCE:DOTUSDT": "DOT-USD", "BINANCE:LINKUSDT": "LINK-USD",
+    "BINANCE:AVAXUSDT": "AVAX-USD", "BINANCE:TRXUSDT": "TRX-USD", "BINANCE:SUIUSDT": "SUI20947-USD",
+    "XETR:IS3N": "IS3N.DE", "XETR:VUAA": "VUAA.DE", "XETR:CSPX": "SXR8.DE",
+}
+
+
+def yahoo_symbol(tv: str) -> str | None:
+    if tv.startswith("X:"):
+        return None
+    if tv in OVERRIDES:
+        return OVERRIDES[tv]
+    ex, t = tv.split(":", 1)
+    if ex in ("NASDAQ", "NYSE", "AMEX"):
+        return t.replace(".", "-")
+    if ex == "EURONEXT":
+        return EURONEXT.get(t)
+    if ex in SUFFIX and SUFFIX[ex]:
+        t = t.replace("_", "-")
+        if ex == "LSE":
+            t = t.rstrip(".")
+        return t + SUFFIX[ex]
+    return None
+
+
+def pct(a: float, b: float) -> float | None:
+    if a is None or b is None or b == 0 or math.isnan(a) or math.isnan(b):
+        return None
+    return round((a / b - 1) * 100, 2)
+
+
+def metrics(closes: list[tuple[str, float]]) -> dict | None:
+    """closes – [(YYYY-MM-DD, kaina)], seniausia pirmoji."""
+    closes = [(d, c) for d, c in closes if c is not None and not math.isnan(c) and c > 0]
+    if len(closes) < 5:
+        return None
+    dates = [d for d, _ in closes]
+    px = [c for _, c in closes]
+    last = px[-1]
+
+    def back(n: int):
+        return px[-1 - n] if len(px) > n else None
+
+    year = dates[-1][:4]
+    ytd_base = next((c for d, c in reversed(closes) if d[:4] < year), None)
+    hi, lo = max(px), min(px)
+    rets = [math.log(px[i] / px[i - 1]) for i in range(1, len(px)) if px[i - 1] > 0]
+    vol = None
+    if len(rets) > 20:
+        m = sum(rets) / len(rets)
+        vol = round(math.sqrt(sum((r - m) ** 2 for r in rets) / (len(rets) - 1)) * math.sqrt(252) * 100, 1)
+    step = max(1, len(px) // 60)
+    spark = [round(c, 4) for c in px[::step]]
+    if spark[-1] != round(last, 4):
+        spark.append(round(last, 4))
+    return {
+        "price": round(last, 4), "date": dates[-1],
+        "d1": pct(last, back(1)), "w1": pct(last, back(5)), "m1": pct(last, back(21)), "m3": pct(last, back(63)),
+        "ytd": pct(last, ytd_base), "y1": pct(last, px[0]) if len(px) > 200 else None,
+        "hi52": round(hi, 4), "lo52": round(lo, 4), "fromHigh": pct(last, hi), "vol": vol, "spark": spark,
+    }
+
+
+def main() -> int:
+    import yfinance as yf  # importuojama tik paleidžiant Actions
+
+    assets = json.loads((ROOT / "data/assets.json").read_text(encoding="utf-8"))
+    items = [a for g in assets["groups"] for a in g["items"]]
+    mapping = {a["s"]: yahoo_symbol(a["s"]) for a in items}
+    ysyms = sorted({y for y in mapping.values() if y})
+    print(f"Aktyvų: {len(items)}, Yahoo simbolių: {len(ysyms)}")
+
+    data = yf.download(ysyms, period="1y", interval="1d", auto_adjust=True, group_by="ticker", progress=False, threads=True)
+    currency = {}
+    out, missing = {}, []
+    for tv, y in mapping.items():
+        if not y:
+            continue
+        try:
+            series = data[y]["Close"].dropna()
+            closes = [(idx.strftime("%Y-%m-%d"), float(v)) for idx, v in series.items()]
+            m = metrics(closes)
+        except Exception as e:  # noqa: BLE001
+            m = None
+            print(f"  ! {tv} ({y}): {e}", file=sys.stderr)
+        if not m:
+            missing.append(tv)
+            continue
+        if y not in currency:
+            try:
+                currency[y] = yf.Ticker(y).fast_info.get("currency")
+            except Exception:  # noqa: BLE001
+                currency[y] = None
+        m["cur"] = currency[y]
+        m["y"] = y
+        out[tv] = m
+
+    result = {
+        "updated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
+        "source": "Yahoo Finance (yfinance), dienos uždarymo kainos",
+        "count": len(out),
+        "missing": missing,
+        "items": out,
+    }
+    (ROOT / "data/prices.json").write_text(json.dumps(result, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    print(f"Įrašyta: {len(out)}, trūksta: {len(missing)} {missing[:20]}")
+    return 0 if len(out) > len(items) * 0.5 else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,40 @@
+name: Kainų duomenys
+
+on:
+  schedule:
+    - cron: "40 21 * * 1-5"   # darbo dienomis po JAV biržų uždarymo (UTC)
+    - cron: "15 16 * * 1-5"   # po Europos/Baltijos biržų uždarymo (UTC)
+  push:
+    paths:
+      - "tools/fetch_prices.py"
+      - ".github/workflows/prices.yml"
+      - "data/assets.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: prices
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install "yfinance>=0.2.50"
+      - run: python tools/fetch_prices.py
+      - name: Įrašyti pakeitimus
+        run: |
+          git config user.name "investai-bot"
+          git config user.email "investai-bot@users.noreply.github.com"
+          git add data/prices.json
+          if git diff --cached --quiet; then echo "Nėra pakeitimų"; exit 0; fi
+          git commit -m "Kainų duomenys $(date -u +%Y-%m-%d)"
+          for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 5; done
+          exit 1
