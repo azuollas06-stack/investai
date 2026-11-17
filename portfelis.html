@@ -13,102 +13,151 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 <script src="assets/app.js" defer></script>
 </head>
 <body data-page="portfolio">
 <main class="wrap wide pf">
-  <h1>Mano portfelis</h1>
-  <p class="lead">Suvesk, ką turi, ir pamatysi, kaip paskirstyti tavo pinigai, ar portfelis atitinka <b>tavo paties</b> taisykles ir kas vyksta su tavo aktyvais.</p>
-  <p class="privacy">🔒 Duomenys saugomi tik šioje naršyklėje – jie niekur nesiunčiami. Kitame įrenginyje jų nematysi, nebent <a href="#pf-data">eksportuosi</a>.</p>
 
-  <section class="pf-block" id="pf-holdings">
-    <h2 class="kicker">1. Tavo pozicijos</h2>
-    <form id="pf-add" class="pf-add" autocomplete="off">
-      <div class="pf-field grow">
-        <label for="pf-q">Aktyvas</label>
-        <input id="pf-q" type="search" placeholder="Pvz., Apple, Ignitis, BTC arba NYSE:KO">
-        <ul class="suggest" hidden></ul>
-      </div>
-      <div class="pf-field">
-        <label for="pf-val">Vertė, €</label>
-        <input id="pf-val" type="number" min="0" step="any" inputmode="decimal" placeholder="1000">
-      </div>
-      <div class="pf-field pf-custom" hidden>
-        <label for="pf-sector">Sektorius</label>
-        <select id="pf-sector"></select>
-      </div>
-      <div class="pf-field pf-custom" hidden>
-        <label for="pf-country">Šalis</label>
-        <select id="pf-country"></select>
-      </div>
-      <div class="pf-field pf-custom" hidden>
-        <label for="pf-type">Tipas</label>
-        <select id="pf-type"></select>
-      </div>
-      <button class="btn primary" type="submit">Pridėti</button>
-    </form>
-    <p class="pf-hint">Nėra sąraše? Įvesk simbolį formatu BIRŽA:SIMBOLIS ir pats nurodyk sektorių bei šalį. <button type="button" class="linkish" id="pf-cash">+ Pridėti grynuosius pinigus</button></p>
-    <div id="pf-table"></div>
+  <!-- 1. Įkėlimas -->
+  <section id="v-start" hidden>
+    <h1>Mano portfelis</h1>
+    <p class="lead">Įkelk portfelio ekrano nuotrauką iš savo banko ar brokerio programėlės. Per kelias sekundes pamatysi, kaip paskirstyti tavo pinigai.</p>
+    <label class="drop" id="drop" for="file">
+      <span class="drop-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span>
+      <h2>Įkelk ekrano nuotrauką</h2>
+      <p>Nutempk ją čia, įklijuok (Ctrl+V) arba pasirink iš įrenginio. Gali įkelti ir kelias nuotraukas iš karto.</p>
+      <span class="btn primary">Pasirinkti nuotrauką</span>
+      <input id="file" type="file" accept="image/*" multiple class="sr-only">
+    </label>
+    <div class="progress" id="progress" hidden>
+      <div class="progress-bar"><span></span></div>
+      <p id="progress-text">Ruošiama…</p>
+    </div>
+    <div class="alt-actions">
+      <button type="button" class="linkish" id="manual">Suvesti pozicijas ranka</button>
+      <a href="portfelis.html?pavyzdys=1">Žiūrėti pavyzdį</a>
+    </div>
+    <ul class="trust">
+      <li>Nuotrauka apdorojama tavo naršyklėje ir niekur nesiunčiama</li>
+      <li>Tinka Revolut, Swedbank, SEB, Lightyear, Trading 212 ir kt.</li>
+      <li>Prieš analizę galėsi viską pataisyti</li>
+    </ul>
   </section>
 
-  <div id="pf-results">
-    <section class="pf-block" id="pf-xray">
-      <h2 class="kicker">2. Portfelio rentgenas</h2>
-      <div id="pf-stats" class="pf-stats"></div>
-      <div id="pf-bars" class="pf-bars"></div>
-      <p class="pf-hint">ETF ir fondai turi daug įmonių, todėl jie rodomi kaip viena grupė (pvz., „Platus JAV indeksas“). Sektoriai – apytiksliai, pagal pagrindinę įmonės veiklą.</p>
-    </section>
-
-    <section class="pf-block" id="pf-rules">
-      <h2 class="kicker">3. Tavo taisyklės</h2>
-      <p class="pf-hint">Nustatyk ribas, kurių <b>pats</b> nori laikytis. Palik tuščią, jei taisyklė tau nesvarbi. InvestAI ribų nesiūlo – tai tavo sprendimas.</p>
-      <div id="pf-rule-inputs" class="pf-rule-inputs"></div>
-      <ul id="pf-checks" class="pf-checks"></ul>
-    </section>
-
-    <section class="pf-block" id="pf-whatif">
-      <h2 class="kicker">4. Kas būtų, jei…</h2>
-      <p class="pf-hint">Pasitikrink, kaip pasikeistų tavo portfelio skaičiai. Skaičiuoklė nieko nerekomenduoja – ji tik parodo pasekmes tavo paties taisyklėms.</p>
-      <form id="pf-wi" class="pf-add" autocomplete="off">
-        <div class="pf-field grow">
-          <label for="pf-wi-q">Aktyvas</label>
-          <input id="pf-wi-q" type="search" placeholder="Esamas arba naujas aktyvas">
-          <ul class="suggest" hidden></ul>
-        </div>
-        <div class="pf-field">
-          <label for="pf-wi-val">Pokytis, €</label>
-          <input id="pf-wi-val" type="number" step="any" inputmode="decimal" placeholder="+500 arba -300">
-        </div>
-        <button class="btn" type="submit">Skaičiuoti</button>
-      </form>
-      <div id="pf-wi-out"></div>
-    </section>
-
-    <section class="pf-block" id="pf-today">
-      <h2 class="kicker">5. Tavo aktyvai šiandien</h2>
-      <div id="pf-quotes" class="widget"></div>
-    </section>
-
-    <section class="pf-block" id="pf-news">
-      <h2 class="kicker">6. Tavo aktyvai InvestAI apžvalgose</h2>
-      <div id="pf-mentions"><p class="muted">Ieškoma…</p></div>
-    </section>
-  </div>
-
-  <section class="pf-block" id="pf-data">
-    <h2 class="kicker">Duomenys</h2>
-    <div class="pf-actions">
-      <button class="btn" type="button" id="pf-export">Eksportuoti (.json)</button>
-      <label class="btn" for="pf-import-file">Importuoti</label>
-      <input id="pf-import-file" type="file" accept="application/json,.json" hidden>
-      <button class="btn danger" type="button" id="pf-clear">Ištrinti viską</button>
+  <!-- 2. Peržiūra -->
+  <section id="v-review" hidden>
+    <div class="step-title"><span class="step-n">2</span><h2>Patikrink, ką radome</h2></div>
+    <p class="step-sub" id="review-sub">Pataisyk pavadinimus ar sumas, jei reikia. Geltonai pažymėtų eilučių neatpažinome – priskirk aktyvą arba pašalink.</p>
+    <p class="note" id="review-note" hidden></p>
+    <ul class="review" id="review-list"></ul>
+    <div class="review-actions">
+      <button class="btn" type="button" id="review-add">Pridėti eilutę</button>
+      <label class="btn" for="file2">Įkelti dar vieną nuotrauką</label>
+      <input id="file2" type="file" accept="image/*" multiple class="sr-only">
+    </div>
+    <div class="review-actions">
+      <button class="btn primary" type="button" id="review-done">Rodyti analizę</button>
+      <button class="btn" type="button" id="review-cancel">Atšaukti</button>
+    </div>
+    <div class="progress" id="progress2" hidden>
+      <div class="progress-bar"><span></span></div>
+      <p></p>
     </div>
   </section>
 
-  <p class="muted small">„Mano portfelis“ – informacinis įrankis. Jis neteikia investavimo rekomendacijų ir nevertina, ar aktyvai tinka būtent tau. Sprendimus priimi tu.</p>
+  <!-- 3. Analizė -->
+  <section id="v-result" hidden>
+    <p class="note" id="demo-note" hidden>Tai išgalvotas pavyzdinis portfelis. <a href="portfelis.html">Analizuoti savo portfelį</a></p>
+    <div class="result-head">
+      <h1>Tavo portfelis</h1>
+      <div class="result-total">Iš viso<b id="r-total"></b></div>
+    </div>
+    <div class="card">
+      <div class="seg" role="group" aria-label="Rodyti pagal">
+        <button type="button" data-dim="bySector" aria-pressed="true">Sektoriai</button>
+        <button type="button" data-dim="byCountry" aria-pressed="false">Šalys</button>
+        <button type="button" data-dim="byAsset" aria-pressed="false">Pozicijos</button>
+        <button type="button" data-dim="byType" aria-pressed="false">Tipai</button>
+      </div>
+      <div id="r-strip"></div>
+    </div>
+
+    <div class="summary">
+      <div>
+        <h2>Svarbiausia</h2>
+        <ul class="facts" id="r-facts"></ul>
+      </div>
+      <div class="card">
+        <h2>Detaliau</h2>
+        <div class="bars" id="r-bars"></div>
+      </div>
+    </div>
+
+    <details class="more" id="d-positions">
+      <summary><div><h2>Pozicijos</h2><p>Pataisyk sumas, pridėk ar pašalink aktyvus</p></div></summary>
+      <div class="more-body">
+        <div id="r-table"></div>
+        <form class="add-row" id="add-form" autocomplete="off">
+          <div class="field grow"><label for="add-q">Aktyvas</label><input id="add-q" type="search" placeholder="Pvz., Apple, Ignitis, BTC arba NYSE:KO"><ul class="suggest" hidden></ul></div>
+          <div class="field"><label for="add-val">Vertė</label><input id="add-val" type="number" min="0" step="any" inputmode="decimal" placeholder="1000"></div>
+          <button class="btn" type="submit">Pridėti</button>
+        </form>
+        <div class="review-actions">
+          <label class="btn" for="file3">Įkelti naują nuotrauką</label>
+          <input id="file3" type="file" accept="image/*" multiple class="sr-only">
+        </div>
+      </div>
+    </details>
+
+    <details class="more" id="d-rules">
+      <summary><div><h2>Mano taisyklės</h2><p id="rules-sum">Nustatyk ribas, kurių pats nori laikytis</p></div></summary>
+      <div class="more-body">
+        <p class="muted small">InvestAI ribų nesiūlo – užpildyk tik tas, kurios tau svarbios.</p>
+        <div class="rule-grid" id="rule-inputs"></div>
+        <ul class="checks" id="r-checks"></ul>
+      </div>
+    </details>
+
+    <details class="more" id="d-whatif">
+      <summary><div><h2>Kas būtų, jei…</h2><p>Pažiūrėk, kaip pasikeistų skaičiai pridėjus ar sumažinus poziciją</p></div></summary>
+      <div class="more-body">
+        <form class="add-row" id="wi-form" autocomplete="off">
+          <div class="field grow"><label for="wi-q">Aktyvas</label><input id="wi-q" type="search" placeholder="Esamas arba naujas aktyvas"><ul class="suggest" hidden></ul></div>
+          <div class="field"><label for="wi-val">Pokytis</label><input id="wi-val" type="number" step="any" inputmode="decimal" placeholder="+500 arba -300"></div>
+          <button class="btn" type="submit">Skaičiuoti</button>
+        </form>
+        <div class="wi-out" id="wi-out"></div>
+        <p class="muted small">Skaičiuoklė nieko nerekomenduoja – ji tik parodo, kaip pasikeistų portfelio dalys ir tavo taisyklių atitiktis.</p>
+      </div>
+    </details>
+
+    <details class="more" id="d-today">
+      <summary><div><h2>Tavo aktyvai šiandien</h2><p>Kainos ir paminėjimai InvestAI apžvalgose</p></div></summary>
+      <div class="more-body">
+        <div id="r-mentions"></div>
+        <div id="r-quotes" class="widget" style="margin-top:16px"></div>
+      </div>
+    </details>
+
+    <details class="more" id="d-data">
+      <summary><div><h2>Duomenys</h2><p>Duomenys saugomi tik šioje naršyklėje</p></div></summary>
+      <div class="more-body">
+        <p class="muted small">Norėdamas matyti portfelį kitame įrenginyje, eksportuok failą ir importuok jį ten.</p>
+        <div class="data-actions">
+          <button class="btn" type="button" id="export">Eksportuoti failą</button>
+          <label class="btn" for="import">Importuoti failą</label>
+          <input id="import" type="file" accept="application/json,.json" class="sr-only">
+          <button class="btn danger" type="button" id="clear">Ištrinti portfelį</button>
+        </div>
+      </div>
+    </details>
+
+    <p class="disclaimer">„Mano portfelis“ – informacinis įrankis. Jis neteikia investavimo rekomendacijų ir nevertina, ar aktyvai tinka būtent tau. Sektoriai ir šalys priskiriami apytiksliai, o ETF fondai rodomi kaip viena grupė.</p>
+  </section>
 </main>
+<script src="assets/pf-parse.js" defer></script>
 <script src="assets/portfolio.js" defer></script>
 </body>
 </html>

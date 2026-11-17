@@ -292,6 +292,13 @@
      "country": "Pasaulis"
     },
     {
+     "s": "XETR:VWCE",
+     "n": "Vanguard FTSE All-World (VWCE)",
+     "type": "ETF",
+     "sector": "Pasaulio indeksas",
+     "country": "Pasaulis"
+    },
+    {
      "s": "XETR:EUNL",
      "n": "iShares Core MSCI World (EUNL)",
      "type": "ETF",

@@ -10,14 +10,24 @@ const STATUS = {
 const MONTHS = ["sausio", "vasario", "kovo", "balandžio", "gegužės", "birželio", "liepos", "rugpjūčio", "rugsėjo", "spalio", "lapkričio", "gruodžio"];
 const WEEKDAYS = ["sekmadienis", "pirmadienis", "antradienis", "trečiadienis", "ketvirtadienis", "penktadienis", "šeštadienis"];
 const NAV = [
-  ["home", "./", "Pradžia"],
-  ["digest", "apzvalga.html", "Apžvalga"],
   ["markets", "rinkos.html", "Rinkos"],
+  ["digest", "apzvalga.html", "Dienos apžvalga"],
   ["asset", "aktyvas.html", "Aktyvai"],
-  ["portfolio", "portfelis.html", "Mano portfelis"],
-  ["archive", "archyvas.html", "Archyvas"],
-  ["about", "apie.html", "Apie"],
+  ["portfolio", "portfelis.html", "Mano portfelis", "nav-cta"],
 ];
+// Portfelio juostos spalvos (tamsiam tekstui – šviesios spalvos)
+const PALETTE = ["#1d3a63", "#e39b1b", "#2c8c99", "#b5523b", "#7c5cbf", "#6e8b3d", "#d4677f", "#4c7dbf", "#a07a2c", "#8c9aab"];
+const LIGHT_COLORS = new Set(["#e39b1b", "#8c9aab", "#a07a2c"]);
+function stripHTML(list, max = 7) {
+  const top = list.slice(0, max);
+  const rest = list.slice(max).reduce((t, x) => t + x.p, 0);
+  const items = top.map((x, i) => ({ ...x, c: PALETTE[i % PALETTE.length] }));
+  if (rest > 0.0005) items.push({ k: "Kiti", p: rest, c: "#8c9aab" });
+  const pctS = (p) => `${Math.round(p * 100)}\u00a0%`;
+  return `<div class="strip" role="img" aria-label="${esc(items.map((x) => `${x.k} ${pctS(x.p)}`).join(", "))}">${items
+    .map((x) => `<span style="flex:${x.p};background:${x.c}" class="${LIGHT_COLORS.has(x.c) ? "ink-dark" : ""}">${x.p >= 0.09 ? pctS(x.p) : ""}</span>`)
+    .join("")}</div><ul class="strip-legend">${items.map((x) => `<li><i style="background:${x.c}"></i>${esc(x.k)} <b>${pctS(x.p)}</b></li>`).join("")}</ul>`;
+}
 const DARK = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 const THEME = DARK ? "dark" : "light";
 const TV_LOCALE = "en";
@@ -52,11 +62,11 @@ function renderChrome(page) {
   header.innerHTML = `
     <div class="wrap wide">
       <a class="logo" href="./" aria-label="InvestAI pradžia">
-        <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="currentColor"/><path d="M14 44 L26 32 L34 38 L50 20" fill="none" stroke="var(--paper)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="20" r="4" fill="var(--paper)"/></svg>
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#10233f"/><rect x="12" y="38" width="10" height="14" rx="3" fill="#2c8c99"/><rect x="27" y="28" width="10" height="24" rx="3" fill="#ffffff"/><rect x="42" y="14" width="10" height="38" rx="3" fill="#e39b1b"/></svg>
         <span>Invest<b>AI</b></span>
       </a>
       <button class="menu-btn" aria-expanded="false" aria-controls="main-nav">Meniu</button>
-      <nav id="main-nav">${NAV.map(([id, href, label]) => `<a href="${href}"${id === page ? ' aria-current="page"' : ""}>${label}</a>`).join("")}</nav>
+      <nav id="main-nav">${NAV.map(([id, href, label, cls]) => `<a href="${href}"${cls ? ` class="${cls}"` : ""}${id === page ? ' aria-current="page"' : ""}>${label}</a>`).join("")}</nav>
     </div>`;
   document.body.prepend(header);
   const btn = $(".menu-btn", header);
@@ -68,12 +78,16 @@ function renderChrome(page) {
   const footer = document.createElement("footer");
   footer.innerHTML = `
     <div class="wrap wide">
+      <div class="foot-grid">
+        <a class="logo" href="./"><span>Invest<b>AI</b></span></a>
+        <nav class="foot-links" aria-label="Kiti puslapiai"><a href="portfelis.html">Mano portfelis</a><a href="rinkos.html">Rinkos</a><a href="apzvalga.html">Dienos apžvalga</a><a href="archyvas.html">Archyvas</a><a href="apie.html">Apie InvestAI</a></nav>
+      </div>
       <div class="legend">
         <span class="badge primary">Pirminis šaltinis</span><span>įmonės ar biržos pranešimas</span>
         <span class="badge media">Žiniasklaida</span><span>naujienų agentūra ar analitikas</span>
         <span class="badge unverified">Reikia patikrinti</span><span>šaltiniai neaiškūs ar nesutaria</span>
       </div>
-      <p>InvestAI teikia informaciją, o ne investavimo rekomendacijas. Apžvalgas rengia dirbtinis intelektas pagal nurodytus šaltinius – galimos klaidos. Kainos ir grafikai – <a href="https://www.tradingview.com/" target="_blank" rel="noopener">TradingView</a>, gali vėluoti.</p>
+      <p>InvestAI teikia informaciją, o ne investavimo rekomendacijas. Apžvalgas rengia dirbtinis intelektas pagal nurodytus šaltinius, todėl galimos klaidos. Kainos ir grafikai: <a href="https://www.tradingview.com/" target="_blank" rel="noopener">TradingView</a>, gali vėluoti.</p>
     </div>`;
   document.body.append(footer);
 }
@@ -155,9 +169,9 @@ async function pageDigest() {
   root.innerHTML =
     renderDigest(d) +
     `<nav class="pager">
-      ${prev ? `<a href="apzvalga.html?d=${prev.date}">← ${fmtShort(prev.date)}</a>` : "<span></span>"}
+      ${prev ? `<a href="apzvalga.html?d=${prev.date}">Ankstesnė: ${fmtShort(prev.date)}</a>` : "<span></span>"}
       <a href="archyvas.html">Visos apžvalgos</a>
-      ${next ? `<a href="apzvalga.html?d=${next.date}">${fmtShort(next.date)} →</a>` : "<span></span>"}
+      ${next ? `<a href="apzvalga.html?d=${next.date}">Kita: ${fmtShort(next.date)}</a>` : "<span></span>"}
     </nav>`;
 }
 
@@ -174,6 +188,10 @@ async function pageArchive() {
 /* ---------- Pradžia ---------- */
 async function pageHome() {
   tickerTape($("#ticker"));
+  $("#demo-strip").innerHTML = stripHTML([
+    { k: "Technologijos", p: 0.5 }, { k: "Pasaulio indeksas", p: 0.2 }, { k: "Komunalinės", p: 0.12 },
+    { k: "Kriptovaliutos", p: 0.07 }, { k: "Finansai", p: 0.06 }, { k: "Grynieji", p: 0.05 },
+  ]);
   try {
     const idx = await getJSON("data/index.json");
     const d = await getJSON(`data/digests/${idx.latest}.json`);
@@ -183,7 +201,7 @@ async function pageHome() {
       <h3 class="latest-title"><a href="apzvalga.html">${esc(d.title)}</a></h3>
       <p>${esc(d.lead)}</p>
       <ul class="latest-list">${items.map((it) => `<li><span class="badge ${(STATUS[it.status] || STATUS.media).cls}">${(STATUS[it.status] || STATUS.media).label}</span> ${esc(it.headline)}</li>`).join("")}</ul>
-      <a class="btn" href="apzvalga.html">Skaityti visą apžvalgą →</a>`;
+      <a class="btn" href="apzvalga.html">Skaityti visą apžvalgą</a>`;
   } catch (e) {
     console.error(e);
     $("#latest").innerHTML = `<p class="muted">Apžvalgos įkelti nepavyko.</p>`;
