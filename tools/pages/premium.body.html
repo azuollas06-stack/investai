@@ -1,0 +1,75 @@
+<body data-page="premium">
+<main class="wrap wide pm">
+  <section id="pm-locked">
+    <h1>InvestAI Premium</h1>
+    <p class="lead">Daugiau įrankių tiems, kurie nori nuolat sekti savo investicijas. Šiuo metu – <b>bandomoji versija</b>, atrakinama slaptažodžiu.</p>
+    <div class="pm-plans">
+      <div class="card pm-plan">
+        <h2>Nemokamai</h2>
+        <p class="pm-price">0 €</p>
+        <ul>
+          <li>Portfelio analizė iš nuotraukos</li>
+          <li>Palyginimas su rinka ir nuosmukio scenarijai</li>
+          <li>Strategija ir akcijų atranka</li>
+          <li>Populiariausių akcijų „Kodėl kilo / krito?“</li>
+          <li>Dienos apžvalga</li>
+        </ul>
+      </div>
+      <div class="card pm-plan pm-pro">
+        <h2>Premium</h2>
+        <p class="pm-price">~5 € <small>/ mėn. (planuojama)</small></p>
+        <ul>
+          <li><b>Įspėjimai:</b> kurios tavo pozicijos šiandien ar per savaitę pajudėjo daugiausia</li>
+          <li><b>Analitikai apie tavo akcijas:</b> vertinimai ir tikslinės kainos vienoje vietoje</li>
+          <li><b>Portfelio istorija:</b> kaip keitėsi vertė ir rezultatas</li>
+          <li><b>PDF ataskaita</b> apie portfelį vienu paspaudimu</li>
+          <li><b>Pažangi atranka:</b> P/E, dividendai, įmonės dydis ir išsaugoti filtrai</li>
+          <li class="muted">Netrukus: paaiškinimai visoms tavo akcijoms, įspėjimai el. paštu, sinchronizavimas tarp įrenginių</li>
+        </ul>
+        <form id="pm-form" class="pm-form" autocomplete="off">
+          <label for="pm-pass" class="sr-only">Slaptažodis</label>
+          <input id="pm-pass" type="password" placeholder="Bandomosios versijos slaptažodis">
+          <button class="btn primary" type="submit">Atrakinti</button>
+        </form>
+        <p class="note" id="pm-err" hidden>Neteisingas slaptažodis.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="pm-unlocked" hidden>
+    <div class="pm-top">
+      <div><span class="badge primary">Premium aktyvus</span><h1 style="margin-top:8px">Tavo Premium</h1></div>
+      <div class="pm-actions">
+        <button class="btn" type="button" id="pm-print">Atsisiųsti ataskaitą (PDF)</button>
+        <button class="btn" type="button" id="pm-lock">Užrakinti</button>
+      </div>
+    </div>
+    <p class="note" id="pm-noportfolio" hidden>Premium funkcijos remiasi tavo portfeliu. <a href="portfelis.html">Įkelk portfelį</a> – ir čia atsiras įspėjimai, analitikų vertinimai bei istorija.</p>
+
+    <section class="card pf-section">
+      <div class="sec-head"><h2>Įspėjimai</h2>
+        <div class="seg" role="group" aria-label="Riba" id="al-th"><button type="button" data-th="3">≥ 3 %</button><button type="button" data-th="5" aria-pressed="true">≥ 5 %</button><button type="button" data-th="10">≥ 10 %</button></div>
+      </div>
+      <p class="muted">Tavo pozicijos, kurios per paskutinę prekybos dieną ar savaitę pajudėjo daugiau nei pasirinkta riba.</p>
+      <div id="alerts"></div>
+    </section>
+
+    <section class="card pf-section">
+      <h2>Analitikai apie tavo akcijas</h2>
+      <p class="muted">Bankų ir brokerių analitikų vertinimai bei vidutinės tikslinės kainos (Yahoo Finance). Tai trečiųjų šalių nuomonės, ne InvestAI rekomendacija.</p>
+      <div id="analysts"></div>
+    </section>
+
+    <section class="card pf-section">
+      <h2>Portfelio istorija</h2>
+      <p class="muted">Kiekvieną kartą atnaujinus portfelį, išsaugome jo vertę (tik šioje naršyklėje). Kuo dažniau atnaujinsi – tuo išsamesnė istorija.</p>
+      <div id="history"></div>
+    </section>
+
+    <section class="report" id="report" aria-hidden="true"></section>
+  </section>
+</main>
+<script src="assets/pf-insights.js" defer></script>
+<script src="assets/portfolio.js" defer></script>
+<script src="assets/premium.js" defer></script>
+<script src="assets/premium-tools.js" defer></script>

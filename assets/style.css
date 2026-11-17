@@ -420,7 +420,7 @@ details.pos[open] > summary::after { transform: rotate(180deg); }
 .install b { display: block; font-size: 15px; }
 .install span { color: var(--muted); }
 @media (max-width: 680px) {
-  .tabbar { display: grid; grid-template-columns: repeat(4, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); }
+  .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); }
   .tabbar a { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; color: var(--muted); text-decoration: none; font-size: 11px; font-weight: 600; border-radius: 12px; }
   .tabbar a svg { width: 24px; height: 24px; }
   .tabbar a[aria-current="page"] { color: var(--sea); }
@@ -501,6 +501,109 @@ details.pos[open] > summary::after { transform: rotate(180deg); }
   .dd-row { grid-template-columns: 36px 1fr 86px; }
   .dd-spark, .dd-row > .why-dot, .dd-row > span:last-child:empty { display: none; }
   .amount input { width: 140px; font-size: 26px; }
+}
+
+
+/* ---------- Atranka ---------- */
+.presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 18px; }
+.preset { font: 600 14px var(--font); color: var(--sea); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; cursor: pointer; }
+.preset:hover { border-color: var(--amber); }
+.scr-grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; align-items: start; }
+.filters { position: sticky; top: 82px; max-height: calc(100vh - 100px); overflow: auto; padding: 18px; }
+.f-group { margin-bottom: 16px; }
+.f-group h3 { font-size: 14px; font-weight: 700; margin: 0 0 8px; color: var(--sea-2); }
+.chipset { display: flex; flex-wrap: wrap; gap: 6px; }
+.fchip { font: 500 13px var(--font); color: var(--sea); background: var(--mist); border: 1px solid transparent; border-radius: 999px; padding: 6px 11px; cursor: pointer; }
+.fchip:hover { border-color: var(--line); }
+.fchip.on { background: var(--sea); color: var(--mist); }
+.scr-search { margin: 0 0 12px; }
+.res-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.res-count { margin: 0; color: var(--muted); }
+.res-count b { color: var(--sea); }
+.sort { font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.sort select { font: 500 14px var(--font); color: var(--sea); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px 10px; }
+.res-list { display: grid; background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow); overflow: hidden; }
+.res-row { display: grid; grid-template-columns: minmax(200px, 1.6fr) 96px 86px 110px minmax(150px, 1.1fr) auto; gap: 14px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.res-row:last-child { border-bottom: 0; }
+.res-row:hover { background: color-mix(in srgb, var(--mist) 60%, transparent); }
+.res-main { display: flex; align-items: center; gap: 12px; color: var(--sea); text-decoration: none; min-width: 0; }
+.res-name { display: flex; flex-direction: column; min-width: 0; }
+.res-name b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.res-name small { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mine { color: var(--amber-ink); background: var(--amber); padding: 0 6px; border-radius: 99px; font-weight: 700; }
+.res-num { display: flex; flex-direction: column; text-align: right; }
+.res-num small, .res-an small { font-size: 12px; color: var(--muted); }
+.res-an { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.an { display: flex; flex-direction: column; gap: 3px; }
+.an b { font-size: 14px; }
+.an-bar { display: flex; height: 6px; border-radius: 99px; overflow: hidden; gap: 1px; max-width: 160px; }
+.save-row { margin: 0 0 12px; }
+.saved { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.saved-item { display: inline-flex; align-items: center; }
+.saved-item .icon-btn { width: 28px; height: 28px; font-size: 16px; }
+/* Premium užraktas */
+.premium-only { position: relative; }
+html:not(.is-premium) .premium-only > :not(.premium-lock):not(h3) { opacity: .35; pointer-events: none; filter: grayscale(1); }
+.premium-lock { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; padding: 10px 12px; border-radius: var(--r-md); background: var(--amber-soft); border: 1px solid color-mix(in srgb, var(--amber) 50%, transparent); color: var(--sea); text-decoration: none; }
+.premium-lock small { display: block; font-size: 12px; color: var(--muted); }
+.pl-ico { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 8px; background: var(--amber); color: var(--amber-ink); font-weight: 800; }
+#main-nav a[href="premium.html"]::before { content: "★ "; color: var(--amber); }
+/* Premium puslapis */
+.pm-plans { display: grid; grid-template-columns: 1fr 1.3fr; gap: 16px; align-items: start; }
+.pm-plan h2 { margin: 0; }
+.pm-price { font-size: 36px; font-weight: 800; letter-spacing: -.03em; margin: 6px 0 12px; }
+.pm-price small { font-size: 15px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.pm-plan ul { margin: 0 0 16px; padding-left: 20px; }
+.pm-plan li { margin: 0 0 8px; }
+.pm-pro { border: 1px solid var(--amber); box-shadow: 0 0 0 2px var(--amber); }
+.pm-form { display: flex; gap: 8px; flex-wrap: wrap; }
+.pm-form input { flex: 1; min-width: 200px; font: 16px var(--font); padding: 11px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--sea); }
+.pm-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+.pm-top h1 { margin: 8px 0 0; }
+.pm-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.sec-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.sec-head h2 { margin: 0; }
+.sec-head .seg { margin: 0; }
+.alerts { list-style: none; padding: 0; margin: 0; }
+.alerts li { display: grid; grid-template-columns: 36px 1fr auto auto auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.alerts li:last-child { border-bottom: 0; }
+.al-name { display: flex; flex-direction: column; }
+.al-name small { font-size: 13px; color: var(--muted); }
+.al-eur { font-size: 14px; }
+.alerts .why-dot { margin: 0; text-decoration: none; }
+.hist { width: 100%; height: auto; }
+.hist .grid { stroke: var(--line); }
+.hist text { font-size: 11px; fill: var(--muted); font-family: var(--font); }
+.hist .line { fill: none; stroke: var(--amber); stroke-width: 2.5; }
+.hist .area { fill: color-mix(in srgb, var(--amber) 14%, transparent); }
+.report { display: none; }
+/* Strategijos aiškumas */
+.plan-why { font-size: 16px; line-height: 1.55; background: var(--mist); border-radius: var(--r-md); padding: 12px 16px; margin: 14px 0 0; }
+.plan-list li .btn { margin-left: 12px; }
+@media (max-width: 1000px) {
+  .scr-grid { grid-template-columns: 1fr; }
+  .filters { position: static; max-height: none; }
+  .res-row { grid-template-columns: 1fr auto; }
+  .res-spark, .res-row > .res-num:nth-of-type(1) { display: none; }
+  .res-an { grid-column: 1 / -1; }
+  .pm-plans { grid-template-columns: 1fr; }
+}
+@media (max-width: 680px) {
+  .alerts li { grid-template-columns: 36px 1fr auto; }
+  .alerts li .al-eur, .alerts li > a:last-child { display: none; }
+  .plan-list li { flex-wrap: wrap; }
+}
+/* PDF ataskaita */
+@media print {
+  body > *:not(main), .masthead, .tabbar, footer, .install { display: none !important; }
+  main.pm > section#pm-unlocked > *:not(.report) { display: none !important; }
+  #pm-locked { display: none !important; }
+  .report { display: block !important; color: #000; font-size: 12px; }
+  .report h1 { font-size: 22px; margin: 0 0 4px; }
+  .report h2 { font-size: 15px; margin: 16px 0 6px; }
+  .report table { width: 100%; border-collapse: collapse; }
+  .report td, .report th { border-bottom: 1px solid #ccc; padding: 4px 6px; text-align: left; }
+  body { background: #fff; padding: 0; }
 }
 
 /* ---------- Prisitaikymas ---------- */

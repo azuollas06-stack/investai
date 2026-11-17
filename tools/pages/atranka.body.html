@@ -1,0 +1,54 @@
+<body data-page="screener">
+<main class="wrap wide scr">
+  <h1>Akcijų atranka</h1>
+  <p class="lead">Nustatyk kriterijus – pamatysi akcijas, fondus ar kriptovaliutas, kurios juos atitinka. Sąrašą lemia <b>tavo</b> pasirinkti filtrai, o ne InvestAI rekomendacija.</p>
+
+  <div class="presets" id="presets" aria-label="Greiti filtrai"></div>
+
+  <div class="scr-grid">
+    <aside class="card filters" id="filters" aria-label="Filtrai">
+      <div class="f-group"><h3>Tipas</h3><div class="chipset" data-f="type"></div></div>
+      <div class="f-group"><h3>Regionas</h3><div class="chipset" data-f="region"></div></div>
+      <div class="f-group"><h3>Sektorius</h3><div class="chipset" data-f="sector"></div></div>
+      <div class="f-group"><h3>Kritimas nuo metų aukščiausios</h3><div class="chipset single" data-f="dd"></div></div>
+      <div class="f-group"><h3>Svyravimas per metus</h3><div class="chipset single" data-f="vol"></div></div>
+      <div class="f-group"><h3>Analitikų vertinimas</h3><div class="chipset single" data-f="an"></div></div>
+      <div class="f-group"><h3>Analitikų tikslinė kaina</h3><div class="chipset single" data-f="up"></div></div>
+      <div class="f-group"><h3>Mano portfelis</h3><div class="chipset single" data-f="pf"></div></div>
+      <div class="f-group premium-only" id="f-premium">
+        <h3>Premium kriterijai <span class="badge tag">Premium</span></h3>
+        <div class="chipset single" data-f="pe"></div>
+        <div class="chipset single" data-f="dy" style="margin-top:8px"></div>
+        <div class="chipset single" data-f="mcap" style="margin-top:8px"></div>
+      </div>
+      <button class="btn small" type="button" id="reset">Išvalyti filtrus</button>
+    </aside>
+
+    <section class="results">
+      <div class="search scr-search"><label for="scr-q" class="sr-only">Ieškoti</label><input id="scr-q" type="search" placeholder="Ieškoti pagal pavadinimą: Tesla, Nvidia, Ignitis…" autocomplete="off"></div>
+      <div class="res-head">
+        <p id="res-count" class="res-count"></p>
+        <label class="sort">Rūšiuoti
+          <select id="sort">
+            <option value="dd">Didžiausias kritimas nuo aukščiausios</option>
+            <option value="up">Didžiausias atotrūkis iki analitikų tikslo</option>
+            <option value="an">Geriausias analitikų vertinimas</option>
+            <option value="m1">Pokytis per mėnesį (didžiausias kritimas)</option>
+            <option value="m1d">Pokytis per mėnesį (didžiausias augimas)</option>
+            <option value="vol">Mažiausias svyravimas</option>
+            <option value="mcap">Didžiausia rinkos vertė</option>
+            <option value="name">Pavadinimas</option>
+          </select>
+        </label>
+      </div>
+      <div class="premium-only save-row" id="save-row"></div>
+      <div id="res" class="res-list"></div>
+      <p class="disclaimer">Analitikų vertinimai ir tikslinės kainos – trečiųjų šalių (bankų ir brokerių) nuomonės, surinktos iš Yahoo Finance; jos gali klysti ir keistis. Kainos – dienos uždarymo. Atranka nėra investavimo rekomendacija.</p>
+    </section>
+  </div>
+  <div id="help-slot"></div>
+</main>
+<script src="assets/pf-insights.js" defer></script>
+<script src="assets/portfolio.js" defer></script>
+<script src="assets/premium.js" defer></script>
+<script src="assets/screener.js" defer></script>

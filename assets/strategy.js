@@ -125,12 +125,34 @@ function renderPlan() {
         <div><p class="muted small" style="margin:0">Pagal strategiją „${esc(model.name)}“</p><h3 class="plan-title">${money(A)} paskirstymas</h3></div>
         <p class="muted small" style="margin:0">Portfelis ${money(T)} → ${money(T2)}</p>
       </div>
-      <ul class="plan-list">${spend.length ? spend.map((b) => `<li><i class="dot" style="background:${b.color}"></i><span>${b.name}</span><b>${money(alloc[b.id])}</b></li>`).join("") : `<li><span>Portfelis jau atitinka tavo strategiją – sumą gali skirstyti pagal tikslines dalis.</span></li>`}</ul>
+      <p class="plan-why">${whyText(rows, targets, v, T, alloc, A)}</p>
+      <ul class="plan-list">${spend.length ? spend.map((b) => `<li><i class="dot" style="background:${b.color}"></i><span>${b.name}</span><b>${money(alloc[b.id])}</b><a class="btn small" href="${screenLink(b.id, over)}">Žiūrėti sąrašą</a></li>`).join("") : `<li><span>Portfelis jau atitinka tavo strategiją – sumą gali skirstyti pagal tikslines dalis.</span></li>`}</ul>
       ${stockNote ? `<p class="plan-note">${stockNote}</p>` : ""}
       ${over.length ? `<div class="plan-avoid"><h4>Pagal tavo taisykles nedidintum</h4><ul>${over.map((o) => `<li><b>${esc(o.k)}</b> – ${pct(o.p)} portfelio, tavo riba ${pct(o.lim)}${o.s && EXPLAIN[o.s] ? ` · <a href="aktyvas.html?s=${encodeURIComponent(o.s)}">kodėl ${EXPLAIN[o.s].direction === "down" ? "krito" : "kilo"}?</a>` : ""}</li>`).join("")}</ul></div>` : holdings.length && !Object.keys(state.rules).length ? `<p class="plan-note">Nustatyk ribas 2 žingsnyje – tada matysi, ko pagal tavo taisykles nedidinti.</p>` : ""}
       <table class="pf-table plan-table"><thead><tr><th>Dalis</th><th class="num">Tikslas</th><th class="num">Dabar</th><th class="num">Po investavimo</th></tr></thead>
       <tbody>${rows.map((b) => `<tr><td><i class="dot" style="background:${b.color}"></i>${b.name}</td><td class="num">${pct(targets[b.id])}</td><td class="num">${pct(nowP(b))}</td><td class="num"><b>${pct(afterP(b))}</b></td></tr>`).join("")}</tbody></table>
     </div>`;
+}
+
+// Paprastas paaiškinimas, kodėl suma paskirstyta būtent taip
+function whyText(rows, targets, v, T, alloc, A) {
+  if (!T) return `Portfelio dar neturi, todėl suma paskirstoma tiesiog pagal strategijos dalis.`;
+  const gaps = rows.map((b) => ({ b, now: v[b.id] / T, tgt: targets[b.id] })).filter((x) => Math.abs(x.now - x.tgt) >= 0.03);
+  if (!gaps.length) return `Tavo portfelis jau artimas strategijai, todėl suma paskirstoma pagal tikslines dalis.`;
+  const under = gaps.filter((x) => x.now < x.tgt), over = gaps.filter((x) => x.now > x.tgt);
+  const s1 = under.length ? `Tau trūksta: ${under.map((x) => `${x.b.name.toLowerCase()} (turi ${pct(x.now)}, planuoji ${pct(x.tgt)})`).join(", ")}.` : "";
+  const s2 = over.length ? ` Per daug: ${over.map((x) => `${x.b.name.toLowerCase()} (${pct(x.now)} vietoj ${pct(x.tgt)})`).join(", ")}.` : "";
+  return `${s1}${s2} Todėl ${money(A)} nukreipiama ten, kur trūksta – taip portfelis priartėja prie tavo plano. Jei nori daugiau akcijų, pasirink kitą strategiją 1 žingsnyje.`;
+}
+// Nuoroda į atranką su šią dalį atitinkančiais aktyvais (ir tavo ribomis)
+function screenLink(bucket, over) {
+  const q = new URLSearchParams();
+  if (bucket === "stocks") { q.set("type", "Akcija,ETF"); if (over.length) q.set("pf", "fit"); }
+  else if (bucket === "bonds") q.set("type", "Obligacijos");
+  else if (bucket === "crypto") q.set("type", "Kriptovaliuta");
+  else if (bucket === "gold") q.set("type", "Auksas");
+  else if (bucket === "cash") { q.set("type", "Obligacijos"); }
+  return `atranka.html?${q}`;
 }
 
 /* ---------- 4. Pasitikrink prieš pirkdamas ---------- */
@@ -162,6 +184,11 @@ function renderChecks() {
   if (p) {
     facts.push(`<li>Nuo metų aukščiausios kainos: <b>${fmtPct(p.fromHigh)}</b>. Per metus: ${fmtPct(p.y1)}, per mėnesį: ${fmtPct(p.m1)}.</li>`);
     if (p.vol) facts.push(`<li>Svyravimas: ~${Math.round(p.vol)} % per metus${p.vol > 45 ? " – <b>labai didelis</b> (plataus pasaulio akcijų fondo ~15 %)" : p.vol > 25 ? " – didesnis nei plačios rinkos (~15 %)" : " – panašus į plačią rinką"}.</li>`);
+  }
+  const an = p && p.an;
+  if (an && an.n) {
+    const lbl = { strong_buy: "stipriai pirkti", buy: "pirkti", hold: "laikyti", underperform: "prasčiau už rinką", sell: "parduoti" }[an.key] || "–";
+    facts.push(`<li>Analitikų (${an.n}) vidutinis vertinimas: <b>${lbl}</b>${an.up !== undefined ? `, vidutinė tikslinė kaina ${fmtPct(an.up, 0)} nuo dabartinės` : ""}. <span class="muted">Trečiųjų šalių nuomonė (Yahoo Finance).</span></li>`);
   }
   const top = PFI.SCENARIOS[1];
   const shock = (top.shock[PFI.bucket({ ...m, value: 1 })] ?? 0) / 100;
@@ -217,4 +244,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderChecks();
   });
   $("#help-slot").innerHTML = helpHTML();
+  const pre = new URLSearchParams(location.search).get("check");
+  if (pre && (findAsset(pre) || SYMBOL_RE.test(pre))) {
+    checkPicked = pre;
+    $("#check-q").value = (findAsset(pre) || { n: pre }).n;
+    $("#check-out").dataset.s = pre; $("#check-out").dataset.v = $("#check-val").value || 100;
+    renderChecks();
+    setTimeout(() => $("#check-form").scrollIntoView({ block: "start" }), 300);
+  }
 });

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Premium – InvestAI</title>
+<meta name="description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
+<meta property="og:title" content="Premium – InvestAI">
+<meta property="og:description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#10233f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="InvestAI">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=a64e1170">
+<script src="assets/app.js?v=4ff515aa" defer></script>
+</head>
+<body data-page="premium">
+<main class="wrap wide pm">
+  <section id="pm-locked">
+    <h1>InvestAI Premium</h1>
+    <p class="lead">Daugiau įrankių tiems, kurie nori nuolat sekti savo investicijas. Šiuo metu – <b>bandomoji versija</b>, atrakinama slaptažodžiu.</p>
+    <div class="pm-plans">
+      <div class="card pm-plan">
+        <h2>Nemokamai</h2>
+        <p class="pm-price">0 €</p>
+        <ul>
+          <li>Portfelio analizė iš nuotraukos</li>
+          <li>Palyginimas su rinka ir nuosmukio scenarijai</li>
+          <li>Strategija ir akcijų atranka</li>
+          <li>Populiariausių akcijų „Kodėl kilo / krito?“</li>
+          <li>Dienos apžvalga</li>
+        </ul>
+      </div>
+      <div class="card pm-plan pm-pro">
+        <h2>Premium</h2>
+        <p class="pm-price">~5 € <small>/ mėn. (planuojama)</small></p>
+        <ul>
+          <li><b>Įspėjimai:</b> kurios tavo pozicijos šiandien ar per savaitę pajudėjo daugiausia</li>
+          <li><b>Analitikai apie tavo akcijas:</b> vertinimai ir tikslinės kainos vienoje vietoje</li>
+          <li><b>Portfelio istorija:</b> kaip keitėsi vertė ir rezultatas</li>
+          <li><b>PDF ataskaita</b> apie portfelį vienu paspaudimu</li>
+          <li><b>Pažangi atranka:</b> P/E, dividendai, įmonės dydis ir išsaugoti filtrai</li>
+          <li class="muted">Netrukus: paaiškinimai visoms tavo akcijoms, įspėjimai el. paštu, sinchronizavimas tarp įrenginių</li>
+        </ul>
+        <form id="pm-form" class="pm-form" autocomplete="off">
+          <label for="pm-pass" class="sr-only">Slaptažodis</label>
+          <input id="pm-pass" type="password" placeholder="Bandomosios versijos slaptažodis">
+          <button class="btn primary" type="submit">Atrakinti</button>
+        </form>
+        <p class="note" id="pm-err" hidden>Neteisingas slaptažodis.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="pm-unlocked" hidden>
+    <div class="pm-top">
+      <div><span class="badge primary">Premium aktyvus</span><h1 style="margin-top:8px">Tavo Premium</h1></div>
+      <div class="pm-actions">
+        <button class="btn" type="button" id="pm-print">Atsisiųsti ataskaitą (PDF)</button>
+        <button class="btn" type="button" id="pm-lock">Užrakinti</button>
+      </div>
+    </div>
+    <p class="note" id="pm-noportfolio" hidden>Premium funkcijos remiasi tavo portfeliu. <a href="portfelis.html">Įkelk portfelį</a> – ir čia atsiras įspėjimai, analitikų vertinimai bei istorija.</p>
+
+    <section class="card pf-section">
+      <div class="sec-head"><h2>Įspėjimai</h2>
+        <div class="seg" role="group" aria-label="Riba" id="al-th"><button type="button" data-th="3">≥ 3 %</button><button type="button" data-th="5" aria-pressed="true">≥ 5 %</button><button type="button" data-th="10">≥ 10 %</button></div>
+      </div>
+      <p class="muted">Tavo pozicijos, kurios per paskutinę prekybos dieną ar savaitę pajudėjo daugiau nei pasirinkta riba.</p>
+      <div id="alerts"></div>
+    </section>
+
+    <section class="card pf-section">
+      <h2>Analitikai apie tavo akcijas</h2>
+      <p class="muted">Bankų ir brokerių analitikų vertinimai bei vidutinės tikslinės kainos (Yahoo Finance). Tai trečiųjų šalių nuomonės, ne InvestAI rekomendacija.</p>
+      <div id="analysts"></div>
+    </section>
+
+    <section class="card pf-section">
+      <h2>Portfelio istorija</h2>
+      <p class="muted">Kiekvieną kartą atnaujinus portfelį, išsaugome jo vertę (tik šioje naršyklėje). Kuo dažniau atnaujinsi – tuo išsamesnė istorija.</p>
+      <div id="history"></div>
+    </section>
+
+    <section class="report" id="report" aria-hidden="true"></section>
+  </section>
+</main>
+<script src="assets/pf-insights.js?v=71f40392" defer></script>
+<script src="assets/portfolio.js?v=3c9a0809" defer></script>
+<script src="assets/premium.js?v=561eee41" defer></script>
+<script src="assets/premium-tools.js?v=685134ce" defer></script>
+</body>
+</html>

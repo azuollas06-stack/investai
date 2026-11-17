@@ -10,10 +10,11 @@ const STATUS = {
 const MONTHS = ["sausio", "vasario", "kovo", "balandžio", "gegužės", "birželio", "liepos", "rugpjūčio", "rugsėjo", "spalio", "lapkričio", "gruodžio"];
 const WEEKDAYS = ["sekmadienis", "pirmadienis", "antradienis", "trečiadienis", "ketvirtadienis", "penktadienis", "šeštadienis"];
 const NAV = [
-  ["markets", "rinkos.html", "Rinkos"],
-  ["digest", "apzvalga.html", "Dienos apžvalga"],
-  ["asset", "aktyvas.html", "Aktyvai"],
+  ["screener", "atranka.html", "Atranka"],
   ["strategy", "strategija.html", "Strategija"],
+  ["markets", "rinkos.html", "Rinkos"],
+  ["digest", "apzvalga.html", "Apžvalga"],
+  ["premium", "premium.html", "Premium"],
   ["portfolio", "portfelis.html", "Mano portfelis", "nav-cta"],
 ];
 // Portfelio juostos spalvos (tamsiam tekstui – šviesios spalvos)
@@ -81,7 +82,7 @@ function renderChrome(page) {
     <div class="wrap wide">
       <div class="foot-grid">
         <a class="logo" href="./"><span>Invest<b>AI</b></span></a>
-        <nav class="foot-links" aria-label="Kiti puslapiai"><a href="portfelis.html">Mano portfelis</a><a href="strategija.html">Strategija</a><a href="rinkos.html">Rinkos</a><a href="apzvalga.html">Dienos apžvalga</a><a href="archyvas.html">Archyvas</a><a href="apie.html">Apie InvestAI</a></nav>
+        <nav class="foot-links" aria-label="Kiti puslapiai"><a href="portfelis.html">Mano portfelis</a><a href="strategija.html">Strategija</a><a href="atranka.html">Atranka</a><a href="premium.html">Premium</a><a href="rinkos.html">Rinkos</a><a href="apzvalga.html">Dienos apžvalga</a><a href="archyvas.html">Archyvas</a><a href="apie.html">Apie InvestAI</a></nav>
       </div>
       <div class="legend">
         <span class="badge primary">Pirminis šaltinis</span><span>įmonės ar biržos pranešimas</span>
@@ -98,9 +99,10 @@ function renderChrome(page) {
     markets: '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
     digest: '<path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h4"/>',
     asset: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+    screener: '<path d="M3 5h18l-7 8v6l-4 2v-8z"/>',
     strategy: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
   };
-  const tabs = [["portfolio", "portfelis.html", "Portfelis"], ["strategy", "strategija.html", "Strategija"], ["markets", "rinkos.html", "Rinkos"], ["digest", "apzvalga.html", "Apžvalga"], ["asset", "aktyvas.html", "Paieška"]];
+  const tabs = [["portfolio", "portfelis.html", "Portfelis"], ["strategy", "strategija.html", "Strategija"], ["screener", "atranka.html", "Atranka"], ["markets", "rinkos.html", "Rinkos"], ["digest", "apzvalga.html", "Apžvalga"]];
   const bar = document.createElement("nav");
   bar.className = "tabbar";
   bar.setAttribute("aria-label", "Pagrindinė navigacija");

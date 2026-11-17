@@ -13,6 +13,8 @@ PAGES = {
     "aktyvas": "Aktyvai – InvestAI",
     "portfelis": "Mano portfelis – InvestAI",
     "strategija": "Strategija – InvestAI",
+    "atranka": "Akcijų atranka – InvestAI",
+    "premium": "Premium – InvestAI",
     "archyvas": "Archyvas – InvestAI",
     "apie": "Apie – InvestAI",
 }

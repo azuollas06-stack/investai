@@ -351,7 +351,19 @@ async function renderMentions(a) {
       : `<p class="muted">Paskutinėse apžvalgose tavo aktyvai neminėti. Kiekvieno aktyvo naujienas rasi jo puslapyje.</p>`;
   } catch { el.innerHTML = ""; }
 }
-function commit() { save(); renderResult(); }
+function snapshot() {
+  if (isDemo) return;
+  try {
+    const a = analyze(state.holdings);
+    if (!a.total) return;
+    const d = new Date().toISOString().slice(0, 10);
+    const list = JSON.parse(localStorage.getItem("investai.history.v1") || "[]").filter((x) => x.d !== d);
+    list.push({ d, v: Math.round(a.total * 100) / 100, pnl: a.pnl.known ? Math.round(a.pnl.pnl * 100) / 100 : null });
+    list.sort((x, y) => (x.d < y.d ? -1 : 1));
+    localStorage.setItem("investai.history.v1", JSON.stringify(list.slice(-400)));
+  } catch {}
+}
+function commit() { save(); snapshot(); renderResult(); }
 
 /* ---------- Paieškos laukas (aktyvo pasirinkimas) ---------- */
 function picker(input, onPick) {
