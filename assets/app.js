@@ -14,6 +14,7 @@ const NAV = [
   ["digest", "apzvalga.html", "Apžvalga"],
   ["markets", "rinkos.html", "Rinkos"],
   ["asset", "aktyvas.html", "Aktyvai"],
+  ["portfolio", "portfelis.html", "Mano portfelis"],
   ["archive", "archyvas.html", "Archyvas"],
   ["about", "apie.html", "Apie"],
 ];
@@ -218,7 +219,7 @@ const MARKET_TABS = {
     const baltic = data.groups.find((g) => g.id === "baltic").items;
     const group = (prefix, name) => ({
       name,
-      symbols: baltic.filter(([s]) => s.startsWith(prefix)).map(([s, n]) => ({ name: s, displayName: n })),
+      symbols: baltic.filter((a) => a.s.startsWith(prefix)).map((a) => ({ name: a.s, displayName: a.n })),
     });
     tv(el, "market-quotes", {
       width: "100%", height: 640, showSymbolLogo: true,
@@ -253,7 +254,7 @@ function pageMarkets() {
 /* ---------- Aktyvas ---------- */
 async function buildSearch(form) {
   const data = await getJSON("data/assets.json");
-  const all = data.groups.flatMap((g) => g.items.map(([s, n]) => ({ s, n, g: g.title })));
+  const all = data.groups.flatMap((g) => g.items.map((a) => ({ ...a, g: g.title })));
   const input = $("input", form);
   const list = $(".suggest", form);
   const go = (sym) => (location.href = assetUrl(sym));
@@ -289,14 +290,14 @@ async function pageAsset() {
   if (!sym) {
     $("#asset").hidden = true;
     $("#browse").insertAdjacentHTML("beforeend", data.groups
-      .map((g) => `<section><h2 class="kicker">${esc(g.title)}</h2><div class="chips">${g.items.map(([s, n]) => `<a class="chip" href="${assetUrl(s)}">${esc(n)}<span>${esc(s.split(":")[1])}</span></a>`).join("")}</div></section>`)
+      .map((g) => `<section><h2 class="kicker">${esc(g.title)}</h2><div class="chips">${g.items.map((a) => `<a class="chip" href="${assetUrl(a.s)}">${esc(a.n)}<span>${esc(a.s.split(":")[1])}</span></a>`).join("")}</div></section>`)
       .join(""));
     return;
   }
-  const known = all.find(([s]) => s === sym);
-  document.title = `${known ? known[1] : sym} – InvestAI`;
+  const known = all.find((a) => a.s === sym);
+  document.title = `${known ? known.n : sym} – InvestAI`;
   $("#browse").hidden = true;
-  $("#asset-title").textContent = known ? known[1] : sym;
+  $("#asset-title").textContent = known ? known.n : sym;
   $("#asset-symbol").textContent = sym;
   $("#tv-link").href = `https://www.tradingview.com/symbols/${sym.replace(":", "-")}/`;
 

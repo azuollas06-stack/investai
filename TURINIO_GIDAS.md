@@ -28,6 +28,7 @@ Savaitgaliais ir Baltijos biržų nedarbo dienomis apžvalga nerengiama.
 - Skaičius ir datas tikrinti pirminiame šaltinyje. Abejojant: `unverified` + `note`.
 - Antraštė (`title`): iki ~70 simbolių, apibendrina dieną. `lead`: 1–2 sakiniai.
 - 3–8 įrašai iš viso. Kokybė svarbiau nei kiekis.
+- **Žymos (`tags`) – privalomos įmonių įrašams:** pirmoji žyma visada yra biržos simbolis be biržos prefikso (pvz., `IGN1L`, `LHV1T`, `NVDA`). Pagal ją „Mano portfelis“ puslapis parodo vartotojui, kad apžvalgoje minimas jo turimas aktyvas. Jei įmonė turi tik obligacijas, pirmoji žyma – įmonės pavadinimas (pvz., `Civinity`).
 
 ## JSON struktūra
 

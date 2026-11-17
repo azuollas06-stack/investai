@@ -1,59 +1,526 @@
 {
-  "note": "Paieškos sąrašas. Bet kurį kitą simbolį galima įvesti formatu BIRŽA:SIMBOLIS (pvz., NYSE:KO).",
-  "groups": [
+ "note": "Paieškos ir portfelio analizės sąrašas. Sektoriai – apytiksliai (pagal pagrindinę veiklą). ETF ir fondai turi daug įmonių, todėl jų sektorius rodomas apibendrintai.",
+ "groups": [
+  {
+   "id": "us",
+   "title": "JAV didžiosios įmonės",
+   "items": [
     {
-      "id": "us",
-      "title": "JAV didžiosios įmonės",
-      "items": [
-        ["NASDAQ:NVDA", "Nvidia"], ["NASDAQ:AAPL", "Apple"], ["NASDAQ:MSFT", "Microsoft"],
-        ["NASDAQ:AMZN", "Amazon"], ["NASDAQ:GOOGL", "Alphabet (Google)"], ["NASDAQ:META", "Meta Platforms"],
-        ["NASDAQ:TSLA", "Tesla"], ["NASDAQ:AVGO", "Broadcom"], ["NYSE:BRK.B", "Berkshire Hathaway"],
-        ["NYSE:JPM", "JPMorgan Chase"], ["NYSE:LLY", "Eli Lilly"], ["NYSE:V", "Visa"],
-        ["NYSE:MA", "Mastercard"], ["NYSE:UNH", "UnitedHealth"], ["NYSE:XOM", "Exxon Mobil"],
-        ["NASDAQ:COST", "Costco"], ["NYSE:WMT", "Walmart"], ["NYSE:JNJ", "Johnson & Johnson"],
-        ["NYSE:PG", "Procter & Gamble"], ["NYSE:HD", "Home Depot"], ["NASDAQ:NFLX", "Netflix"],
-        ["NYSE:ORCL", "Oracle"], ["NASDAQ:AMD", "AMD"], ["NYSE:KO", "Coca-Cola"],
-        ["NASDAQ:PEP", "PepsiCo"], ["NYSE:BAC", "Bank of America"], ["NASDAQ:ADBE", "Adobe"],
-        ["NYSE:CRM", "Salesforce"], ["NASDAQ:INTC", "Intel"], ["NYSE:DIS", "Disney"],
-        ["NASDAQ:PLTR", "Palantir"], ["NYSE:MCD", "McDonald's"], ["NYSE:NKE", "Nike"],
-        ["NASDAQ:QCOM", "Qualcomm"], ["NYSE:IBM", "IBM"], ["NYSE:GS", "Goldman Sachs"]
-      ]
+     "s": "NASDAQ:NVDA",
+     "n": "Nvidia",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
     },
     {
-      "id": "etf",
-      "title": "Indeksai ir ETF",
-      "items": [
-        ["AMEX:SPY", "SPDR S&P 500 ETF"], ["NASDAQ:QQQ", "Invesco QQQ (Nasdaq 100)"],
-        ["AMEX:VTI", "Vanguard Total Stock Market"], ["AMEX:VT", "Vanguard Total World"],
-        ["XETR:EUNL", "iShares Core MSCI World (EUNL)"], ["XETR:SXR8", "iShares Core S&P 500 (SXR8)"],
-        ["AMEX:GLD", "SPDR Gold"]
-      ]
+     "s": "NASDAQ:AAPL",
+     "n": "Apple",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
     },
     {
-      "id": "crypto",
-      "title": "Kriptovaliutos",
-      "items": [
-        ["BITSTAMP:BTCUSD", "Bitcoin"], ["BITSTAMP:ETHUSD", "Ethereum"],
-        ["BINANCE:SOLUSDT", "Solana"], ["BINANCE:XRPUSDT", "XRP"]
-      ]
+     "s": "NASDAQ:MSFT",
+     "n": "Microsoft",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
     },
     {
-      "id": "baltic",
-      "title": "Baltijos akcijos",
-      "items": [
-        ["OMXVSE:IGN1L", "Ignitis grupė"], ["OMXVSE:TEL1L", "Telia Lietuva"],
-        ["OMXVSE:SAB1L", "Artea bankas (Šiaulių bankas)"], ["OMXVSE:APG1L", "Apranga"],
-        ["OMXVSE:KNF1L", "KN Energies"], ["OMXVSE:AKO1L", "Akola Group"],
-        ["OMXVSE:IVL1L", "Invalda INVL"], ["OMXVSE:ROE1L", "Rokiškio sūris"],
-        ["OMXVSE:VBL1L", "Vilkyškių pieninė"], ["OMXVSE:INC1L", "INVL Technology"],
-        ["OMXVSE:AMG1L", "Amber Grid"],
-        ["OMXTSE:LHV1T", "LHV Group"], ["OMXTSE:TAL1T", "Tallink Grupp"],
-        ["OMXTSE:TSM1T", "Tallinna Sadam"], ["OMXTSE:MRK1T", "Merko Ehitus"],
-        ["OMXTSE:TKM1T", "Tallinna Kaubamaja"], ["OMXTSE:HAE1T", "Harju Elekter"],
-        ["OMXTSE:TVE1T", "Tallinna Vesi"], ["OMXTSE:CPA1T", "Coop Pank"],
-        ["OMXTSE:INF1T", "Infortar"], ["OMXTSE:EFT1T", "EfTEN Real Estate Fund"],
-        ["OMXRSE:GRD1R", "Grindeks"], ["OMXRSE:SAF1R", "SAF Tehnika"], ["OMXRSE:DGR1R", "DelfinGroup"]
-      ]
+     "s": "NASDAQ:AMZN",
+     "n": "Amazon",
+     "type": "Akcija",
+     "sector": "Nebūtinos vartojimo prekės",
+     "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:GOOGL",
+     "n": "Alphabet (Google)",
+     "type": "Akcija",
+     "sector": "Komunikacijos",
+     "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:META",
+     "n": "Meta Platforms",
+     "type": "Akcija",
+     "sector": "Komunikacijos",
+     "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:TSLA",
+     "n": "Tesla",
+     "type": "Akcija",
+     "sector": "Nebūtinos vartojimo prekės",
+     "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:AVGO",
+     "n": "Broadcom",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:BRK.B",
+     "n": "Berkshire Hathaway",
+     "type": "Akcija",
+     "sector": "Finansai",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:JPM",
+     "n": "JPMorgan Chase",
+     "type": "Akcija",
+     "sector": "Finansai",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:LLY",
+     "n": "Eli Lilly",
+     "type": "Akcija",
+     "sector": "Sveikatos apsauga",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:V",
+     "n": "Visa",
+     "type": "Akcija",
+     "sector": "Finansai",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:MA",
+     "n": "Mastercard",
+     "type": "Akcija",
+     "sector": "Finansai",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:UNH",
+     "n": "UnitedHealth",
+     "type": "Akcija",
+     "sector": "Sveikatos apsauga",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:XOM",
+     "n": "Exxon Mobil",
+     "type": "Akcija",
+     "sector": "Energetika",
+     "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:COST",
+     "n": "Costco",
+     "type": "Akcija",
+     "sector": "Būtinos vartojimo prekės",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:WMT",
+     "n": "Walmart",
+     "type": "Akcija",
+     "sector": "Būtinos vartojimo prekės",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:JNJ",
+     "n": "Johnson & Johnson",
+     "type": "Akcija",
+     "sector": "Sveikatos apsauga",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:PG",
+     "n": "Procter & Gamble",
+     "type": "Akcija",
+     "sector": "Būtinos vartojimo prekės",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:HD",
+     "n": "Home Depot",
+     "type": "Akcija",
+     "sector": "Nebūtinos vartojimo prekės",
+     "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:NFLX",
+     "n": "Netflix",
+     "type": "Akcija",
+     "sector": "Komunikacijos",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:ORCL",
+     "n": "Oracle",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:AMD",
+     "n": "AMD",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:KO",
+     "n": "Coca-Cola",
+     "type": "Akcija",
+     "sector": "Būtinos vartojimo prekės",
+     "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:PEP",
+     "n": "PepsiCo",
+     "type": "Akcija",
+     "sector": "Būtinos vartojimo prekės",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:BAC",
+     "n": "Bank of America",
+     "type": "Akcija",
+     "sector": "Finansai",
+     "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:ADBE",
+     "n": "Adobe",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:CRM",
+     "n": "Salesforce",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:INTC",
+     "n": "Intel",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:DIS",
+     "n": "Disney",
+     "type": "Akcija",
+     "sector": "Komunikacijos",
+     "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:PLTR",
+     "n": "Palantir",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:MCD",
+     "n": "McDonald's",
+     "type": "Akcija",
+     "sector": "Nebūtinos vartojimo prekės",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:NKE",
+     "n": "Nike",
+     "type": "Akcija",
+     "sector": "Nebūtinos vartojimo prekės",
+     "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:QCOM",
+     "n": "Qualcomm",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:IBM",
+     "n": "IBM",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
+    },
+    {
+     "s": "NYSE:GS",
+     "n": "Goldman Sachs",
+     "type": "Akcija",
+     "sector": "Finansai",
+     "country": "JAV"
     }
-  ]
+   ]
+  },
+  {
+   "id": "etf",
+   "title": "Indeksai ir ETF",
+   "items": [
+    {
+     "s": "AMEX:SPY",
+     "n": "SPDR S&P 500 ETF",
+     "type": "ETF",
+     "sector": "Platus JAV indeksas",
+     "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:QQQ",
+     "n": "Invesco QQQ (Nasdaq 100)",
+     "type": "ETF",
+     "sector": "JAV technologijų indeksas",
+     "country": "JAV"
+    },
+    {
+     "s": "AMEX:VTI",
+     "n": "Vanguard Total Stock Market",
+     "type": "ETF",
+     "sector": "Platus JAV indeksas",
+     "country": "JAV"
+    },
+    {
+     "s": "AMEX:VT",
+     "n": "Vanguard Total World",
+     "type": "ETF",
+     "sector": "Pasaulio indeksas",
+     "country": "Pasaulis"
+    },
+    {
+     "s": "XETR:EUNL",
+     "n": "iShares Core MSCI World (EUNL)",
+     "type": "ETF",
+     "sector": "Pasaulio indeksas",
+     "country": "Pasaulis"
+    },
+    {
+     "s": "XETR:SXR8",
+     "n": "iShares Core S&P 500 (SXR8)",
+     "type": "ETF",
+     "sector": "Platus JAV indeksas",
+     "country": "JAV"
+    },
+    {
+     "s": "AMEX:GLD",
+     "n": "SPDR Gold",
+     "type": "Auksas",
+     "sector": "Auksas",
+     "country": "Pasaulis"
+    }
+   ]
+  },
+  {
+   "id": "crypto",
+   "title": "Kriptovaliutos",
+   "items": [
+    {
+     "s": "BITSTAMP:BTCUSD",
+     "n": "Bitcoin",
+     "type": "Kriptovaliuta",
+     "sector": "Kriptovaliutos",
+     "country": "Be šalies"
+    },
+    {
+     "s": "BITSTAMP:ETHUSD",
+     "n": "Ethereum",
+     "type": "Kriptovaliuta",
+     "sector": "Kriptovaliutos",
+     "country": "Be šalies"
+    },
+    {
+     "s": "BINANCE:SOLUSDT",
+     "n": "Solana",
+     "type": "Kriptovaliuta",
+     "sector": "Kriptovaliutos",
+     "country": "Be šalies"
+    },
+    {
+     "s": "BINANCE:XRPUSDT",
+     "n": "XRP",
+     "type": "Kriptovaliuta",
+     "sector": "Kriptovaliutos",
+     "country": "Be šalies"
+    }
+   ]
+  },
+  {
+   "id": "baltic",
+   "title": "Baltijos akcijos",
+   "items": [
+    {
+     "s": "OMXVSE:IGN1L",
+     "n": "Ignitis grupė",
+     "type": "Akcija",
+     "sector": "Komunalinės paslaugos",
+     "country": "Lietuva"
+    },
+    {
+     "s": "OMXVSE:TEL1L",
+     "n": "Telia Lietuva",
+     "type": "Akcija",
+     "sector": "Komunikacijos",
+     "country": "Lietuva"
+    },
+    {
+     "s": "OMXVSE:SAB1L",
+     "n": "Artea bankas (Šiaulių bankas)",
+     "type": "Akcija",
+     "sector": "Finansai",
+     "country": "Lietuva"
+    },
+    {
+     "s": "OMXVSE:APG1L",
+     "n": "Apranga",
+     "type": "Akcija",
+     "sector": "Nebūtinos vartojimo prekės",
+     "country": "Lietuva"
+    },
+    {
+     "s": "OMXVSE:KNF1L",
+     "n": "KN Energies",
+     "type": "Akcija",
+     "sector": "Energetika",
+     "country": "Lietuva"
+    },
+    {
+     "s": "OMXVSE:AKO1L",
+     "n": "Akola Group",
+     "type": "Akcija",
+     "sector": "Būtinos vartojimo prekės",
+     "country": "Lietuva"
+    },
+    {
+     "s": "OMXVSE:IVL1L",
+     "n": "Invalda INVL",
+     "type": "Akcija",
+     "sector": "Finansai",
+     "country": "Lietuva"
+    },
+    {
+     "s": "OMXVSE:ROE1L",
+     "n": "Rokiškio sūris",
+     "type": "Akcija",
+     "sector": "Būtinos vartojimo prekės",
+     "country": "Lietuva"
+    },
+    {
+     "s": "OMXVSE:VBL1L",
+     "n": "Vilkyškių pieninė",
+     "type": "Akcija",
+     "sector": "Būtinos vartojimo prekės",
+     "country": "Lietuva"
+    },
+    {
+     "s": "OMXVSE:INC1L",
+     "n": "INVL Technology",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "Lietuva"
+    },
+    {
+     "s": "OMXVSE:AMG1L",
+     "n": "Amber Grid",
+     "type": "Akcija",
+     "sector": "Komunalinės paslaugos",
+     "country": "Lietuva"
+    },
+    {
+     "s": "OMXTSE:LHV1T",
+     "n": "LHV Group",
+     "type": "Akcija",
+     "sector": "Finansai",
+     "country": "Estija"
+    },
+    {
+     "s": "OMXTSE:TAL1T",
+     "n": "Tallink Grupp",
+     "type": "Akcija",
+     "sector": "Pramonė",
+     "country": "Estija"
+    },
+    {
+     "s": "OMXTSE:TSM1T",
+     "n": "Tallinna Sadam",
+     "type": "Akcija",
+     "sector": "Pramonė",
+     "country": "Estija"
+    },
+    {
+     "s": "OMXTSE:MRK1T",
+     "n": "Merko Ehitus",
+     "type": "Akcija",
+     "sector": "Pramonė",
+     "country": "Estija"
+    },
+    {
+     "s": "OMXTSE:TKM1T",
+     "n": "Tallinna Kaubamaja",
+     "type": "Akcija",
+     "sector": "Nebūtinos vartojimo prekės",
+     "country": "Estija"
+    },
+    {
+     "s": "OMXTSE:HAE1T",
+     "n": "Harju Elekter",
+     "type": "Akcija",
+     "sector": "Pramonė",
+     "country": "Estija"
+    },
+    {
+     "s": "OMXTSE:TVE1T",
+     "n": "Tallinna Vesi",
+     "type": "Akcija",
+     "sector": "Komunalinės paslaugos",
+     "country": "Estija"
+    },
+    {
+     "s": "OMXTSE:CPA1T",
+     "n": "Coop Pank",
+     "type": "Akcija",
+     "sector": "Finansai",
+     "country": "Estija"
+    },
+    {
+     "s": "OMXTSE:INF1T",
+     "n": "Infortar",
+     "type": "Akcija",
+     "sector": "Energetika",
+     "country": "Estija"
+    },
+    {
+     "s": "OMXTSE:EFT1T",
+     "n": "EfTEN Real Estate Fund",
+     "type": "Akcija",
+     "sector": "Nekilnojamasis turtas",
+     "country": "Estija"
+    },
+    {
+     "s": "OMXRSE:GRD1R",
+     "n": "Grindeks",
+     "type": "Akcija",
+     "sector": "Sveikatos apsauga",
+     "country": "Latvija"
+    },
+    {
+     "s": "OMXRSE:SAF1R",
+     "n": "SAF Tehnika",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "Latvija"
+    },
+    {
+     "s": "OMXRSE:DGR1R",
+     "n": "DelfinGroup",
+     "type": "Akcija",
+     "sector": "Finansai",
+     "country": "Latvija"
+    }
+   ]
+  }
+ ]
 }
