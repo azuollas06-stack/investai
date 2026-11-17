@@ -154,6 +154,50 @@
     while (words.length > 1 && words[0].length <= 2 && !/^[A-Z]{2}$/.test(words[0]) && /[A-Za-zĄČĘĖĮŠŲŪŽąčęėįšųūž]{3,}/.test(words[1])) words.shift();
     return words.join(" ").replace(/[|•·]+$/, "").trim();
   }
+  // Rezultatas (pelnas/nuostolis) iš antrinių eilučių, pvz. „5,09 RKLB | + $55,30 ▲ 16,07 %“
+  const AMT_RE = /([+\-−–])\s*([€$]|eur|usd)?\s?(\d{1,3}(?:[ .,]\d{3})+(?:[.,]\d{1,2})?|\d+(?:[.,]\d{1,2})?)\s?(€|\$|eur|usd)?/gi;
+  const PCT_RE = /(?:([+\-−–])|(▲|▼|\^|¥|\bA\b|\bv\b|\bV\b))?\s*(\d{1,4}(?:[.,]\d{1,2})?)\s?%/g;
+  function extractPnl(lns) {
+    let amt = null, amtCur = null, pct = null, sign = null, qty = null;
+    for (const raw of lns) {
+      const l = raw.replace(/\|/g, " ");
+      let m;
+      AMT_RE.lastIndex = 0;
+      while ((m = AMT_RE.exec(l))) {
+        const cur = (m[2] || m[4] || "").toLowerCase();
+        if (!cur || amt !== null) continue;
+        const v = parseNumber(m[3]);
+        if (v === null) continue;
+        sign = m[1] === "+" ? 1 : -1;
+        amt = v; amtCur = cur === "$" || cur === "usd" ? "USD" : "EUR";
+      }
+      PCT_RE.lastIndex = 0;
+      while ((m = PCT_RE.exec(l))) {
+        if (pct !== null) break;
+        const v = parseNumber(m[3]);
+        if (v === null || v > 1000) continue;
+        let s = m[1] ? (m[1] === "+" ? 1 : -1) : m[2] ? (/[▲^A]/.test(m[2]) ? 1 : -1) : null;
+        if (s === null && sign === null) continue; // be ženklo – gali būti ne rezultatas (pvz., dalis portfelyje)
+        // OCR praradęs kablelį: „4,35 %“ → „435 %“
+        pct = v >= 100 && !/[.,]/.test(m[3]) && m[3].length >= 3 ? v / 100 : v;
+        if (s !== null && sign === null) sign = s;
+      }
+      if (qty === null) {
+        const q = l.match(/(?:^|\s)(\d+(?:[.,]\d+)?)\s*(?:vnt\.?|shares|akc\.?|x)?\s*([A-Z][A-Za-z]{1,5})\b/);
+        if (q && !STOP_TICKERS.has(q[2].toUpperCase()) && !/^(shares|akc|vnt)$/i.test(q[2])) qty = parseNumber(q[1]);
+      }
+    }
+    return { pnlAmt: amt === null ? null : sign * amt, pnlAmtCur: amtCur, pnlPct: pct === null || sign === null ? null : sign * pct, qty };
+  }
+  function attachPnl(row, lns) {
+    const r = extractPnl(lns);
+    row.qty = r.qty;
+    row.pnlPct = r.pnlPct;
+    if (r.pnlPct !== null && r.pnlPct > -100 && row.value > 0) row.pnl = Math.round((row.value - row.value / (1 + r.pnlPct / 100)) * 100) / 100;
+    else if (r.pnlAmt !== null && (r.pnlAmtCur === (row.cur || "EUR"))) row.pnl = r.pnlAmt;
+    else row.pnl = null;
+    if (row.pnl !== null && row.pnlPct === null && row.value - row.pnl > 0) row.pnlPct = Math.round((row.pnl / (row.value - row.pnl)) * 10000) / 100;
+  }
   function parse(input, assets) {
     const aliases = buildAliases(assets);
     const raw = Array.isArray(input) ? input : String(input).split(/\r?\n/);
@@ -171,6 +215,7 @@
       if (lastSeen.has(asset.s) && i - lastSeen.get(asset.s) <= 3) {
         used.add(i);
         const prev = found.get(asset.s);
+        if (prev) prev.idx.push(i);
         if (prev && !prev.ok) {
           const v = pickValue(numbersIn(line));
           if (v) Object.assign(prev, { value: v.v, cur: v.cur, ok: true });
@@ -183,9 +228,10 @@
       let best = pickValue(numbersIn(line));
       let from = i;
       let srcLine = line;
+      const idx = [i];
       if ((!best || !best.cur) && i > 0 && !used.has(i - 1) && !findAsset(lines[i - 1], aliases) && !SKIP_LINE.test(lines[i - 1])) {
         const prevVal = pickValue(numbersIn(lines[i - 1]));
-        if (prevVal && prevVal.cur) { best = prevVal; used.add(i - 1); srcLine = lines[i - 1]; }
+        if (prevVal && prevVal.cur) { best = prevVal; used.add(i - 1); srcLine = lines[i - 1]; idx.push(i - 1); }
       }
       for (let k = 1; k <= 2 && i + k < lines.length && !(best && best.cur); k++) {
         const nxt = lines[i + k];
@@ -196,11 +242,14 @@
       }
       if ((!best || !best.cur) && i > 0 && !used.has(i - 1) && !findAsset(lines[i - 1], aliases)) {
         const cand = pickValue(numbersIn(lines[i - 1]));
-        if (cand && cand.cur) { best = cand; used.add(i - 1); }
+        if (cand && cand.cur) { best = cand; used.add(i - 1); idx.push(i - 1); }
       }
-      for (let k = i; k <= from; k++) used.add(k);
+      for (let k = i; k <= from; k++) { used.add(k); if (!idx.includes(k)) idx.push(k); }
+      // Antrinė eilutė be simbolio, bet su rezultatu (+/− ar %)
+      const nx = lines[from + 1];
+      if (nx && !used.has(from + 1) && !findAsset(nx, aliases) && /[+\-−–]\s*[€$]|%/.test(nx) && !numbersIn(nx).some((x) => x.cur)) { used.add(from + 1); idx.push(from + 1); }
       const prev = found.get(asset.s);
-      found.set(asset.s, { s: asset.s, n: asset.n, value: (prev ? prev.value : 0) + (best ? best.v : 0), dec: best ? best.hasDec : true, cur: best ? best.cur : null, src: srcLine.replace(/ \| /g, "  "), ok: !!best || !!(prev && prev.ok) });
+      found.set(asset.s, { s: asset.s, n: asset.n, value: (prev ? prev.value : 0) + (best ? best.v : 0), dec: best ? best.hasDec : true, cur: best ? best.cur : null, src: srcLine.replace(/ \| /g, "  "), ok: !!best || !!(prev && prev.ok), idx: prev ? prev.idx.concat(idx) : idx });
     }
     // Eilutės su pinigų suma, bet be atpažinto aktyvo
     for (let i = 0; i < lines.length; i++) {
@@ -211,7 +260,7 @@
         const next = lines[i + 1] || "";
         const tk = (next.match(/(?:^|[^A-Z])([A-Z][A-Z0-9.]{1,5})(?=[^A-Za-z0-9]|$)/g) || [])
           .map((x) => x.replace(/^[^A-Z]/, "")).find((x) => !STOP_TICKERS.has(x)) || "";
-        unknown.push({ text: lines[i].replace(/ \| /g, "  "), name: guessName(lines[i]), ticker: tk, value: pickValue(nums).v, dec: pickValue(nums).hasDec, cur: pickValue(nums).cur });
+        unknown.push({ text: lines[i].replace(/ \| /g, "  "), name: guessName(lines[i]), ticker: tk, value: pickValue(nums).v, dec: pickValue(nums).hasDec, cur: pickValue(nums).cur, idx: [i, i + 1].filter((k) => k < lines.length && (k === i || !findAsset(lines[k], aliases))) });
         if (tk && !findAsset(next, aliases)) used.add(i + 1);
       }
     }
@@ -221,6 +270,8 @@
     if (all.length >= 3 && all.filter((r) => r.dec).length / all.length >= 0.6) {
       all.forEach((r) => { if (!r.dec && r.value >= 1000) { r.value = r.value / 100; r.fixed = true; } });
     }
+    rows.forEach((r) => { attachPnl(r, r.idx.map((k) => lines[k])); delete r.idx; });
+    unknown.forEach((r) => { attachPnl(r, r.idx.map((k) => lines[k])); delete r.idx; });
     const curs = rows.concat(unknown).map((r) => r.cur).filter(Boolean);
     const usd = curs.filter((c) => c === "USD").length;
     return { rows, unknown: unknown.slice(0, 12), currency: usd > curs.length / 2 ? "USD" : "EUR", lines: lines.length };

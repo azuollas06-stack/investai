@@ -51,18 +51,26 @@
   <!-- 3. Analizė -->
   <section id="v-result" hidden>
     <p class="note" id="demo-note" hidden>Tai išgalvotas pavyzdinis portfelis. <a href="portfelis.html">Analizuoti savo portfelį</a></p>
-    <div class="result-head">
-      <h1>Tavo portfelis</h1>
-      <div class="result-total">Iš viso<b id="r-total"></b></div>
+
+    <div class="pf-hero">
+      <div>
+        <p class="pf-hero-label">Portfelio vertė</p>
+        <p class="pf-hero-total" id="r-total"></p>
+        <p class="pf-hero-pnl" id="r-pnl"></p>
+        <p class="pf-hero-sub" id="r-pnl-sub"></p>
+      </div>
+      <dl class="pf-hero-stats" id="r-stats"></dl>
     </div>
+
     <div class="card">
       <div class="seg" role="group" aria-label="Rodyti pagal">
-        <button type="button" data-dim="bySector" aria-pressed="true">Sektoriai</button>
-        <button type="button" data-dim="byCountry" aria-pressed="false">Šalys</button>
+        <button type="button" data-dim="sectors" aria-pressed="true">Sektoriai</button>
+        <button type="button" data-dim="regions" aria-pressed="false">Regionai</button>
         <button type="button" data-dim="byAsset" aria-pressed="false">Pozicijos</button>
         <button type="button" data-dim="byType" aria-pressed="false">Tipai</button>
       </div>
       <div id="r-strip"></div>
+      <p class="muted small" id="r-strip-note" style="margin:12px 0 0">ETF fondai išskaidyti į sektorius ir regionus pagal jų indeksų struktūrą (apytiksliai).</p>
     </div>
 
     <div class="summary">
@@ -70,14 +78,37 @@
         <h2>Svarbiausia</h2>
         <ul class="facts" id="r-facts"></ul>
       </div>
-      <div class="card">
-        <h2>Detaliau</h2>
-        <div class="bars" id="r-bars"></div>
+      <div class="card" id="r-movers-card">
+        <h2>Daugiausiai uždirbo ir prarado</h2>
+        <div id="r-movers"></div>
       </div>
     </div>
 
+    <section class="card pf-section" id="r-compare-card">
+      <h2>Palyginimas su pasaulio akcijų rinka</h2>
+      <p class="muted">Kaip tavo akcijų dalis pasiskirsčiusi, palyginti su pasaulio akcijų indeksu (MSCI ACWI, apytiksliai). Tai ne norma ir ne rekomendacija, o atskaitos taškas.</p>
+      <div class="seg" role="group" aria-label="Palyginti pagal">
+        <button type="button" data-cmp="sectors" aria-pressed="true">Sektoriai</button>
+        <button type="button" data-cmp="regions" aria-pressed="false">Regionai</button>
+      </div>
+      <div class="cmp-legend"><span><i class="me"></i>Tavo portfelis</span><span><i class="mk"></i>Pasaulio rinka</span></div>
+      <div id="r-compare" class="cmp"></div>
+    </section>
+
+    <section class="card pf-section">
+      <h2>Kiek galėtum prarasti per nuosmukį?</h2>
+      <p class="muted">Pritaikome istorinių nuosmukių dydžius tavo portfeliui. Tai ne prognozė – tik pavyzdys, kaip portfelis elgtųsi panašioje situacijoje.</p>
+      <div class="seg" role="group" aria-label="Scenarijus" id="r-scn-tabs"></div>
+      <div id="r-scn"></div>
+    </section>
+
+    <section class="pf-section">
+      <h2>Tavo pozicijos</h2>
+      <div class="pos-grid" id="r-cards"></div>
+    </section>
+
     <details class="more" id="d-positions">
-      <summary><div><h2>Pozicijos</h2><p>Pataisyk sumas, pridėk ar pašalink aktyvus</p></div></summary>
+      <summary><div><h2>Redaguoti pozicijas</h2><p>Pataisyk sumas ir rezultatus, pridėk ar pašalink aktyvus</p></div></summary>
       <div class="more-body">
         <div id="r-table"></div>
         <form class="add-row" id="add-form" autocomplete="off">
@@ -135,8 +166,9 @@
       </div>
     </details>
 
-    <p class="disclaimer">„Mano portfelis“ – informacinis įrankis. Jis neteikia investavimo rekomendacijų ir nevertina, ar aktyvai tinka būtent tau. Sektoriai ir šalys priskiriami apytiksliai, o ETF fondai rodomi kaip viena grupė.</p>
+    <p class="disclaimer">„Mano portfelis“ – informacinis įrankis. Jis neteikia investavimo rekomendacijų ir nevertina, ar aktyvai tinka būtent tau. Sektoriai, šalys ir fondų sudėtis – apytiksliai. Rezultatas (pelnas ar nuostolis) imamas iš tavo programėlės nuotraukos.</p>
   </section>
 </main>
 <script src="assets/pf-parse.js" defer></script>
+<script src="assets/pf-insights.js" defer></script>
 <script src="assets/portfolio.js" defer></script>

@@ -16,19 +16,22 @@ const RULES = [
 const DEMO = {
   currency: "EUR",
   holdings: [
-    { s: "NASDAQ:NVDA", value: 2500 }, { s: "NASDAQ:AAPL", value: 1500 }, { s: "NASDAQ:MSFT", value: 1000 },
-    { s: "XETR:VWCE", value: 2000 }, { s: "OMXVSE:IGN1L", value: 1200 }, { s: "OMXTSE:LHV1T", value: 600 },
-    { s: "BITSTAMP:BTCUSD", value: 700 }, { s: CASH, value: 500 },
+    { s: "NASDAQ:NVDA", value: 2500, pnl: 620, pnlPct: 32.98 }, { s: "NASDAQ:AAPL", value: 1500, pnl: 85, pnlPct: 6.01 },
+    { s: "NASDAQ:MSFT", value: 1000, pnl: -42, pnlPct: -4.03 }, { s: "XETR:VWCE", value: 2000, pnl: 214, pnlPct: 11.98 },
+    { s: "OMXVSE:IGN1L", value: 1200, pnl: -36, pnlPct: -2.91 }, { s: "OMXTSE:LHV1T", value: 600, pnl: 48, pnlPct: 8.7 },
+    { s: "BITSTAMP:BTCUSD", value: 700, pnl: -128, pnlPct: -15.46 }, { s: CASH, value: 500 },
   ],
   rules: {},
 };
-const DIM_LABEL = { bySector: "sektorių", byCountry: "šalis", byAsset: "pozicijas", byType: "tipus" };
 
 let ASSETS = [];
 let state = { holdings: [], rules: {}, currency: "EUR" };
 let draft = [];          // peržiūros eilutės
 let isDemo = false;
-let dim = "bySector";
+let dim = "sectors";
+let cmpDim = "sectors";
+let scnId = "y2022";
+let animateNext = false;
 
 /* ---------- Saugojimas ---------- */
 function load() {
@@ -73,7 +76,8 @@ function analyze(holdings) {
   const byAsset = rows.map((r) => ({ k: r.n, s: r.s, v: r.value, p: total ? r.value / total : 0 })).sort((a, b) => b.v - a.v);
   const byType = group("type");
   const typeShare = (t) => (byType.find((x) => x.k === t) || { p: 0 }).p;
-  return { rows, total, byAsset, bySector: group("sector"), byCountry: group("country"), byType, typeShare };
+  const ex = PFI.exposures(rows);
+  return { rows, total, byAsset, bySector: group("sector"), byCountry: group("country"), byType, typeShare, sectors: ex.sectors, regions: ex.regions, ex, pnl: PFI.pnlSummary(rows) };
 }
 function checkRules(a, rules) {
   const out = [];
@@ -92,21 +96,26 @@ function checkRules(a, rules) {
   return out;
 }
 // Neutralūs faktai paprasta kalba – be vertinimų „per daug“ ar „per mažai“
+const signed = (v, cur) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${money(Math.abs(v), cur)}`;
+const signedPct = (v) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toLocaleString("lt-LT", { maximumFractionDigits: 1 })}\u00a0%`;
 function facts(a) {
   const out = [];
+  const P = a.pnl;
+  if (P.known) {
+    out.push(`Nuo pirkimo portfelis ${P.pnl >= 0 ? "uždirbo" : "prarado"} <b>${signed(P.pnl)}</b>${P.pct !== null ? ` (${signedPct(P.pct)})` : ""}.`);
+    if (P.best[0]) out.push(`Labiausiai paaugo <b>${esc(P.best[0].n)}</b> (${signedPct(P.best[0].pp)}), ${P.worst[0] ? `labiausiai krito <b>${esc(P.worst[0].n)}</b> (${signedPct(P.worst[0].pp)}).` : "nuostolingų pozicijų nėra."}`);
+  }
   const pos = a.byAsset.filter((x) => x.s !== CASH);
-  if (pos[0]) out.push(`Didžiausia pozicija – <b>${esc(pos[0].k)}</b>, ${pct(pos[0].p)} portfelio.`);
-  if (pos.length >= 4) out.push(`3 didžiausios pozicijos kartu sudaro <b>${pct(pos.slice(0, 3).reduce((t, x) => t + x.p, 0))}</b>.`);
-  const sec = a.bySector.filter((x) => x.k !== "Grynieji pinigai");
-  if (sec[0]) out.push(`Didžiausia sektoriaus grupė – <b>${esc(sec[0].k)}</b>: ${pct(sec[0].p)}.`);
-  const ctr = a.byCountry.filter((x) => x.k !== "Be šalies");
-  if (ctr[0]) out.push(`Pagal šalį daugiausia – <b>${esc(ctr[0].k)}</b> (${pct(ctr[0].p)})${ctr[1] ? `, toliau ${esc(ctr[1].k)} (${pct(ctr[1].p)})` : ""}.`);
-  const parts = [];
-  if (a.typeShare("ETF")) parts.push(`ETF fondai – ${pct(a.typeShare("ETF"))}`);
-  if (a.typeShare("Kriptovaliuta")) parts.push(`kriptovaliutos – ${pct(a.typeShare("Kriptovaliuta"))}`);
-  if (a.typeShare("Grynieji")) parts.push(`grynieji – ${pct(a.typeShare("Grynieji"))}`);
-  if (parts.length) out.push(parts.join(", ").replace(/^./, (c) => c.toUpperCase()) + ".");
-  return out;
+  if (pos[0]) out.push(`Didžiausia pozicija – <b>${esc(pos[0].k)}</b>, ${pct(pos[0].p)} portfelio. Jei ji nukristų perpus, prarastum <b>${money(pos[0].v / 2)}</b>.`);
+  const sec = a.sectors.filter((x) => !/Grynieji|Kriptovaliutos|Obligacijos|Auksas|Nežinomas/.test(x.k));
+  if (sec[0]) out.push(`Didžiausia sektoriaus dalis (įskaitant fondus) – <b>${esc(sec[0].k)}</b>: ${pct(sec[0].p)}.`);
+  const cmp = PFI.compare(a.ex).sectors.filter((x) => x.market > 0 || x.mine > 0.05);
+  const over = cmp.slice().sort((x, y) => y.diff - x.diff)[0];
+  const missing = cmp.filter((x) => x.mine < 0.005 && x.market >= 0.08).map((x) => x.k.toLowerCase());
+  if (a.ex.equity > 0 && over && over.diff > 0.1) out.push(`Palyginti su pasaulio rinka, labiausiai išsiskiria <b>${esc(over.k.toLowerCase())}</b>: ${pct(over.mine)} tavo akcijų, rinkoje ~${pct(over.market)}.${missing.length ? ` Portfelyje nėra šių sektorių akcijų: ${missing.slice(0, 3).join(", ")}.` : ""}`);
+  const crypto = a.typeShare("Kriptovaliuta");
+  if (crypto) out.push(`Kriptovaliutos sudaro ${pct(crypto)} portfelio.`);
+  return out.slice(0, 6);
 }
 
 /* ---------- Analizės vaizdas ---------- */
@@ -115,36 +124,129 @@ function renderResult() {
   if (a.total <= 0) { show("start"); return; }
   show("result");
   $("#demo-note").hidden = !isDemo;
-  $("#r-total").textContent = money(a.total);
+  renderHero(a);
   renderDim(a);
   $("#r-facts").innerHTML = facts(a).map((f) => `<li>${f}</li>`).join("");
+  renderMovers(a);
+  renderCompare(a);
+  renderScenarios(a);
+  renderCards(a);
   renderTable(a);
   renderRules(a);
   renderToday(a);
+  animateNext = false;
+}
+function countUp(el, to, fmt) {
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!animateNext || reduce) { el.textContent = fmt(to); return; }
+  const t0 = performance.now(), dur = 900;
+  const step = (t) => {
+    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = fmt(to * e);
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+function renderHero(a) {
+  countUp($("#r-total"), a.total, (v) => money(v));
+  const P = a.pnl, el = $("#r-pnl");
+  if (P.known) {
+    el.className = `pf-hero-pnl ${P.pnl >= 0 ? "up" : "down"}`;
+    countUp(el, P.pnl, (v) => `${signed(v)}${P.pct !== null ? ` (${signedPct(P.pct * (P.pnl ? v / P.pnl : 1))})` : ""} nuo pirkimo`);
+    $("#r-pnl-sub").textContent = `Pelne ${P.up} ${P.up === 1 ? "pozicija" : "pozicijos"}, nuostolyje ${P.down}${P.known < P.total ? ` · rezultatas žinomas ${P.known} iš ${P.total} pozicijų` : ""}`;
+  } else {
+    el.className = "pf-hero-pnl";
+    el.textContent = "Rezultatas nežinomas";
+    $("#r-pnl-sub").textContent = "Nuotraukoje neradome pelno ar nuostolio. Jį gali įrašyti skiltyje „Redaguoti pozicijas“.";
+  }
+  const pos = a.byAsset.filter((x) => x.s !== CASH);
+  const worst = PFI.scenario(a.rows, PFI.SCENARIOS[1].shock).loss;
+  $("#r-stats").innerHTML = [
+    ["Pozicijų", String(a.rows.length)],
+    ["Didžiausia", pos[0] ? `${pct(pos[0].p)}` : "–", pos[0] ? pos[0].k : ""],
+    ["Akcijų dalis", pct(a.ex.equity / a.total)],
+    ["Nuosmukis kaip 2022 m.", money(worst), `${signedPct((worst / a.total) * 100)}`],
+  ].map(([k, v, s]) => `<div><dt>${k}</dt><dd>${v}${s ? `<small>${esc(s)}</small>` : ""}</dd></div>`).join("");
 }
 function renderDim(a) {
   a = a || analyze(state.holdings);
-  document.querySelectorAll(".seg button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.dim === dim)));
-  const list = a[dim];
-  $("#r-strip").innerHTML = stripHTML(list);
-  $("#r-bars").innerHTML = list
-    .map((x, i) => `<div class="bar"><span class="bar-label"><i style="background:${i < 7 ? PALETTE[i % PALETTE.length] : "#8c9aab"}"></i><span>${esc(x.k)}</span></span><span class="bar-track"><span style="width:${Math.max(1, x.p * 100).toFixed(1)}%;background:${i < 7 ? PALETTE[i % PALETTE.length] : "#8c9aab"}"></span></span><span class="bar-val">${pct(x.p)}</span></div>`)
-    .join("");
+  document.querySelectorAll(".seg button[data-dim]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.dim === dim)));
+  $("#r-strip").innerHTML = stripHTML(a[dim]);
+  $("#r-strip-note").hidden = !(dim === "sectors" || dim === "regions");
+}
+function renderMovers(a) {
+  const P = a.pnl;
+  const card = $("#r-movers-card");
+  if (!P.known) {
+    card.querySelector("h2").textContent = "Pagal sektorius";
+    $("#r-movers").innerHTML = `<div class="bars">${a.sectors.map((x, i) => `<div class="bar"><span class="bar-label"><i style="background:${PALETTE[i % PALETTE.length]}"></i><span>${esc(x.k)}</span></span><span class="bar-track"><span style="width:${Math.max(1, x.p * 100).toFixed(1)}%;background:${PALETTE[i % PALETTE.length]}"></span></span><span class="bar-val">${pct(x.p)}</span></div>`).join("")}</div>`;
+    return;
+  }
+  card.querySelector("h2").textContent = "Daugiausiai uždirbo ir prarado";
+  const row = (r) => `<li><span class="mv-name">${isTv(r.s) ? `<a href="${assetUrl(r.s)}">${esc(r.n)}</a>` : esc(r.n)}</span><span class="mv-amt">${signed(r.pnl)}</span><span class="pill ${r.pp >= 0 ? "up" : "down"}">${signedPct(r.pp)}</span></li>`;
+  $("#r-movers").innerHTML = `${P.best.length ? `<h3 class="mv-h">Augo</h3><ul class="movers">${P.best.map(row).join("")}</ul>` : ""}${P.worst.length ? `<h3 class="mv-h">Krito</h3><ul class="movers">${P.worst.map(row).join("")}</ul>` : ""}<p class="muted small" style="margin:12px 0 0">Kodėl taip pasikeitė kainos, paaiškinsime netrukus. Kol kas naujienas rasi aktyvo puslapyje.</p>`;
+}
+function renderCompare(a) {
+  const card = $("#r-compare-card");
+  if (a.ex.equity <= 0) { card.hidden = true; return; }
+  card.hidden = false;
+  document.querySelectorAll(".seg button[data-cmp]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.cmp === cmpDim)));
+  const list = PFI.compare(a.ex)[cmpDim];
+  const max = Math.max(...list.map((x) => Math.max(x.mine, x.market)), 0.01);
+  $("#r-compare").innerHTML = list.map((x) => {
+    const ratio = x.market > 0.005 ? x.mine / x.market : null;
+    const tag = x.mine < 0.005 ? `<span class="cmp-tag">neturi</span>` : ratio !== null && ratio >= 1.8 ? `<span class="cmp-tag hi">×${ratio.toLocaleString("lt-LT", { maximumFractionDigits: 1 })} daugiau</span>` : ratio !== null && ratio <= 0.5 ? `<span class="cmp-tag">mažiau</span>` : x.market < 0.005 ? `<span class="cmp-tag hi">rinkoje beveik nėra</span>` : "";
+    return `<div class="cmp-row"><div class="cmp-label">${esc(x.k)} ${tag}</div>
+      <div class="cmp-bars"><span class="me" style="width:${(x.mine / max) * 100}%"></span><span class="mk" style="width:${(x.market / max) * 100}%"></span></div>
+      <div class="cmp-val"><b>${pct(x.mine)}</b><span>${pct(x.market)}</span></div></div>`;
+  }).join("") + (cmpDim === "sectors" && a.sectors.some((x) => x.k === "Gynyba ir aviacija") ? `<p class="muted small" style="margin:10px 0 0">Gynybos ir aviacijos įmonės čia įskaičiuotos į pramonę – taip jas klasifikuoja indeksai.</p>` : "");
+}
+function renderScenarios(a) {
+  $("#r-scn-tabs").innerHTML = PFI.SCENARIOS.map((s) => `<button type="button" data-scn="${s.id}" aria-pressed="${s.id === scnId}">${esc(s.name)}</button>`).join("");
+  $("#r-scn-tabs").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { scnId = b.dataset.scn; renderScenarios(analyze(state.holdings)); }));
+  const s = PFI.SCENARIOS.find((x) => x.id === scnId) || PFI.SCENARIOS[0];
+  const r = PFI.scenario(a.rows, s.shock);
+  const label = { stocks: "Akcijos ir akcijų fondai", crypto: "Kriptovaliutos", gold: "Auksas", bonds: "Obligacijos" };
+  const parts = Object.entries(r.by).filter(([k, v]) => k !== "cash" && v);
+  $("#r-scn").innerHTML = `<div class="scn">
+    <div class="scn-big"><b>${signed(r.loss)}</b><span>${signedPct((r.loss / a.total) * 100)} portfelio · liktų ${money(a.total + r.loss)}</span></div>
+    <ul class="scn-parts">${parts.map(([k, v]) => `<li><span>${label[k]} (${s.shock[k]}\u00a0%)</span><b>${signed(v)}</b></li>`).join("")}${a.typeShare("Grynieji") ? `<li><span>Grynieji pinigai</span><b>0 €</b></li>` : ""}</ul>
+  </div><p class="muted small" style="margin:12px 0 0">${esc(s.note)} Atskiros akcijos ir siauri sektorių fondai per nuosmukius dažnai krenta daugiau nei visa rinka.</p>`;
+}
+function renderCards(a) {
+  const total = a.total;
+  $("#r-cards").innerHTML = state.holdings.filter((h) => h.value > 0).slice().sort((x, y) => y.value - x.value).map((h) => {
+    const m = meta(h);
+    const sIdx = Math.abs([...m.sector].reduce((t, c) => t + c.charCodeAt(0), 0)) % PALETTE.length;
+    const initials = m.n.replace(/[^A-Za-zĄČĘĖĮŠŲŪŽąčęėįšųūž0-9 ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase() || "?";
+    const pp = typeof h.pnlPct === "number" ? h.pnlPct : typeof h.pnl === "number" && h.value - h.pnl > 0 ? (h.pnl / (h.value - h.pnl)) * 100 : null;
+    const inner = `<span class="pos-ava" style="background:${PALETTE[sIdx]}">${esc(initials)}</span>
+      <span class="pos-main"><b>${esc(m.n)}</b><small>${esc([isTv(h.s) ? ticker(h.s) : "", m.sector === "Kita" ? "Sektorius nežinomas" : m.sector].filter(Boolean).join(" · "))}</small></span>
+      <span class="pos-num"><b>${money(h.value)}</b><small>${pct(h.value / total)}${pp !== null ? ` · <span class="${pp >= 0 ? "up" : "down"}">${signedPct(pp)}</span>` : ""}</small></span>`;
+    return isTv(h.s) ? `<a class="pos" href="${assetUrl(h.s)}">${inner}</a>` : `<div class="pos">${inner}</div>`;
+  }).join("");
 }
 function renderTable(a) {
   $("#r-table").innerHTML = `<div class="pf-table-wrap"><table class="pf-table">
-    <thead><tr><th>Aktyvas</th><th>Sektorius</th><th class="num">Vertė, ${curSym()}</th><th class="num">Dalis</th><th></th></tr></thead>
+    <thead><tr><th>Aktyvas</th><th>Sektorius</th><th class="num">Vertė, ${curSym()}</th><th class="num">Rezultatas, ${curSym()}</th><th></th></tr></thead>
     <tbody>${state.holdings.map((h, i) => {
       const m = meta(h);
       const name = isTv(h.s) ? `<a href="${assetUrl(h.s)}">${esc(m.n)}</a>` : esc(m.n);
       return `<tr><td>${name}</td><td>${esc(m.sector)}</td>
         <td class="num"><input class="pf-edit" data-i="${i}" type="number" min="0" step="any" value="${Math.round(h.value * 100) / 100}" aria-label="${esc(m.n)} vertė"></td>
-        <td class="num">${pct(a.total ? (h.value || 0) / a.total : 0)}</td>
+        <td class="num"><input class="pf-edit pf-pnl" data-i="${i}" type="number" step="any" value="${typeof h.pnl === "number" ? Math.round(h.pnl * 100) / 100 : ""}" placeholder="–" aria-label="${esc(m.n)} rezultatas"></td>
         <td><button class="icon-btn" data-del="${i}" aria-label="Pašalinti ${esc(m.n)}">×</button></td></tr>`;
     }).join("")}</tbody>
-    <tfoot><tr><td>Iš viso</td><td></td><td class="num">${money(a.total)}</td><td class="num">100 %</td><td></td></tr></tfoot></table></div>`;
-  $("#r-table").querySelectorAll(".pf-edit").forEach((inp) => inp.addEventListener("change", () => {
+    <tfoot><tr><td>Iš viso</td><td></td><td class="num">${money(a.total)}</td><td class="num">${a.pnl.known ? signed(a.pnl.pnl) : "–"}</td><td></td></tr></tfoot></table></div>
+    <p class="muted small">Rezultatas – kiek pozicija uždirbo (+) ar prarado (−) nuo pirkimo.</p>`;
+  $("#r-table").querySelectorAll(".pf-edit:not(.pf-pnl)").forEach((inp) => inp.addEventListener("change", () => {
     state.holdings[+inp.dataset.i].value = Math.max(0, Number(inp.value) || 0);
+    commit();
+  }));
+  $("#r-table").querySelectorAll(".pf-pnl").forEach((inp) => inp.addEventListener("change", () => {
+    const h = state.holdings[+inp.dataset.i];
+    if (inp.value.trim() === "") { delete h.pnl; delete h.pnlPct; }
+    else { h.pnl = Number(inp.value); h.pnlPct = h.value - h.pnl > 0 ? Math.round((h.pnl / (h.value - h.pnl)) * 10000) / 100 : null; }
     commit();
   }));
   $("#r-table").querySelectorAll("[data-del]").forEach((b) => b.addEventListener("click", () => {
@@ -329,13 +431,13 @@ function mergeIntoDraft(results) {
       const ex = draft.find((d) => d.s === row.s);
       // Ta pati pozicija keliose nuotraukose su ta pačia suma – tikėtina, kad nuotraukos persidengia
       if (ex) { if (Math.abs(ex.value - row.value) > Math.max(1, ex.value * 0.01)) ex.value += row.value; }
-      else draft.push({ s: row.s, n: row.n, value: Math.round(row.value * 100) / 100, src: row.src, unknown: false, fixed: row.fixed });
+      else draft.push({ s: row.s, n: row.n, value: Math.round(row.value * 100) / 100, src: row.src, unknown: false, fixed: row.fixed, pnl: row.pnl, pnlPct: row.pnlPct, qty: row.qty });
     }
     for (const u of r.unknown) {
       all++; if (u.cur === "USD") usd++;
       if (draft.some((d) => d.src === u.text)) continue;
       const name = u.name || u.text;
-      draft.push({ s: name ? customId(name) : null, n: name, value: Math.round(u.value * 100) / 100, src: u.text, unknown: true, custom: true });
+      draft.push({ s: name ? customId(name) : null, n: name, value: Math.round(u.value * 100) / 100, src: u.text, unknown: true, custom: true, pnl: u.pnl, pnlPct: u.pnlPct, qty: u.qty });
     }
   }
   return { usd, all };
@@ -361,6 +463,7 @@ function renderReview(info) {
       <div class="field"><input type="search" aria-label="Aktyvas" placeholder="Kas tai? Pvz., Apple ar NYSE:KO" value="${esc(d.s ? (d.s === CASH ? "Grynieji pinigai" : d.n || meta(d).n) : d.n || "")}"></div>
       <div class="val" data-cur="${cur === "USD" ? "$" : "€"}"><input type="number" min="0" step="any" inputmode="decimal" aria-label="Vertė" value="${d.value}"></div>
       <button class="icon-btn" type="button" aria-label="Pašalinti eilutę">×</button>
+      ${typeof d.pnlPct === "number" ? `<p class="src">Rezultatas: <b class="${d.pnlPct >= 0 ? "up" : "down"}">${signedPct(d.pnlPct)}</b>${typeof d.pnl === "number" ? ` (${signed(d.pnl, cur)})` : ""}${d.qty ? ` · ${String(d.qty).replace(".", ",")} vnt.` : ""}</p>` : ""}
       ${d.custom ? `<p class="src">Šio aktyvo mūsų sąraše nėra – bus įtrauktas kaip „Kita“. Jei randi jį paieškoje, pasirink.</p>` : d.fixed ? `<p class="src">Suma pataisyta (nuotraukoje neperskaitytas kablelis) – patikrink.</p>` : d.src ? `<p class="src">Nuotraukoje: „${esc(d.src)}“</p>` : ""}
     </li>`).join("");
   list.querySelectorAll("li").forEach((li) => {
@@ -389,7 +492,11 @@ function finishReview() {
     const v = Number(d.value);
     if (!(v > 0)) return;
     if (!d.s) { missing++; li.classList.add("unknown"); return; }
-    items.push({ s: d.s, value: v, ...(findAsset(d.s) || d.s === CASH ? {} : { n: d.n || typed || ticker(d.s) }) });
+    const extra = {};
+    if (typeof d.pnl === "number") extra.pnl = d.pnl;
+    if (typeof d.pnlPct === "number") extra.pnlPct = d.pnlPct;
+    if (d.qty) extra.qty = d.qty;
+    items.push({ s: d.s, value: v, ...extra, ...(findAsset(d.s) || d.s === CASH ? {} : { n: d.n || typed || ticker(d.s) }) });
   });
   if (missing) {
     const note = $("#review-note");
@@ -400,13 +507,17 @@ function finishReview() {
   }
   if (!items.length) return;
   const merged = new Map();
-  items.forEach((it) => merged.set(it.s, merged.has(it.s) ? { ...it, value: merged.get(it.s).value + it.value } : it));
+  items.forEach((it) => {
+    const ex = merged.get(it.s);
+    merged.set(it.s, ex ? { ...ex, value: ex.value + it.value, pnl: (ex.pnl || 0) + (it.pnl || 0) || undefined, pnlPct: undefined } : it);
+  });
   isDemo = false;
   state.holdings = [...merged.values()];
   state.currency = $("#v-review").dataset.cur || "EUR";
   draft = [];
   $("#rule-inputs").dataset.ready = "";
   quotesKey = mentionsKey = "";
+  animateNext = true;
   commit();
 }
 
@@ -443,7 +554,8 @@ function setupInputs() {
   $("#review-add").addEventListener("click", () => { draft.push({ s: null, n: "", value: "", src: "", unknown: false }); renderReview(); const ins = $("#review-list").querySelectorAll("li:last-child input"); ins[0] && ins[0].focus(); });
   $("#review-done").addEventListener("click", finishReview);
   $("#review-cancel").addEventListener("click", () => { draft = []; state.holdings.length ? renderResult() : show("start"); });
-  document.querySelectorAll(".seg button").forEach((b) => b.addEventListener("click", () => { dim = b.dataset.dim; renderDim(); }));
+  document.querySelectorAll(".seg button[data-dim]").forEach((b) => b.addEventListener("click", () => { dim = b.dataset.dim; renderDim(); }));
+  document.querySelectorAll(".seg button[data-cmp]").forEach((b) => b.addEventListener("click", () => { cmpDim = b.dataset.cmp; renderCompare(analyze(state.holdings)); }));
 
   // Pridėti poziciją analizės vaizde
   let addPicked = null;
@@ -530,6 +642,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupInputs();
   if (new URLSearchParams(location.search).has("pavyzdys")) {
     isDemo = true;
+    animateNext = true;
     state = JSON.parse(JSON.stringify(DEMO));
     renderResult();
     return;
