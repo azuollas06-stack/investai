@@ -11,6 +11,9 @@
     "XETR:EUNL": ["msci world", "iwda", "eunl"],
     "XETR:SXR8": ["core s&p 500", "cspx", "sxr8"],
     "XETR:VWCE": ["ftse all-world", "all-world", "vwce", "vwrl"],
+    "X:ISHARES-GLOBAL-AEROSPACE-DEFENCE": ["global aerospace", "aerospace & defence", "aerospace defence"],
+    "XETR:DFEN": ["vaneck defense", "dfns"],
+    "XETR:ASWC": ["future of defence", "hanetf future of defence"],
     "AMEX:SPY": ["spdr s&p 500"],
     "NASDAQ:QQQ": ["nasdaq 100", "qqq"],
     "AMEX:VT": ["total world"],
@@ -121,7 +124,11 @@
       if (al.ticker.length < 3 && new RegExp(`^${al.ticker}(\\s|\\||$)`).test(line) && numbersIn(line).some((x) => x.cur)) {
         if (!best || 40 > best.score) best = { a: al.a, score: 40 };
       }
-      if (al.ticker.length >= 3 && new RegExp(`(^|[^A-Z])${al.ticker.replace(/[.]/g, "\\.")}([^A-Z0-9]|$)`).test(line)) {
+      const tre = al.ticker.replace(/[.]/g, "\\.");
+      const ci = al.ticker.length >= 4 ? line.match(new RegExp(`(?:^|[^A-Za-z])(${tre})(?=[^A-Za-z0-9]|$)`, "i")) : null;
+      const exact = new RegExp(`(^|[^A-Z])${tre}([^A-Z0-9]|$)`).test(line);
+      // OCR kartais sumaišo raidžių dydį („NvDA“), todėl ≥4 raidžių simboliams leidžiame, jei bent 2 raidės didžiosios
+      if (al.ticker.length >= 3 && (exact || (ci && (ci[1].match(/[A-Z]/g) || []).length >= 2))) {
         const score = 50 + al.ticker.length;
         if (!best || score > best.score) best = { a: al.a, score };
       }
@@ -139,7 +146,9 @@
   const STOP_TICKERS = new Set(["EUR", "USD", "ETF", "UCITS", "ACC", "DIST", "AB", "AS", "SA", "AG", "PLC", "INC", "NV"]);
   // Pavadinimas – tekstas iki pirmos sumos; pašaliname logotipų „šiukšles“ (1–2 raidžių žodžius pradžioje)
   function guessName(line) {
-    let s = line.split("|")[0];
+    const segs = line.split("|").map((x) => x.trim());
+    const numIdx = segs.findIndex((x) => /\d/.test(x) && /[€$]|eur|usd/i.test(x));
+    let s = (numIdx > 0 ? segs.slice(0, numIdx) : segs.slice(0, 1)).join(" ");
     s = s.replace(/([€$]|eur|usd)?\s?-?\d[\d\s.,]*\s?(€|\$|eur|usd)?.*$/i, "").trim();
     const words = s.split(/\s+/);
     while (words.length > 1 && words[0].length <= 2 && !/^[A-Z]{2}$/.test(words[0]) && /[A-Za-zĄČĘĖĮŠŲŪŽąčęėįšųūž]{3,}/.test(words[1])) words.shift();
