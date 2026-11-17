@@ -1,0 +1,78 @@
+{
+  "date": "2026-11-17",
+  "weekday": "antradienis",
+  "title": "Baltija rami, pasaulyje tęsiasi technologijų akcijų išpardavimas",
+  "lead": "Baltijos akcijų rinka beveik nepajudėjo, kol JAV ir Europoje krito technologijų bendrovių akcijos. Regione dėmesio centre – įmonių sandoriai ir obligacijų platinimai.",
+  "generated_at": "2026-11-17T21:40:00+02:00",
+  "prices_available": false,
+  "sections": [
+    {
+      "id": "rinka",
+      "title": "Rinkos nuotaika",
+      "items": [
+        {
+          "headline": "Baltijos birža – beveik be pokyčio",
+          "text": "Remiantis SEB analitiko rytine apžvalga, Baltijos akcijų indeksas smuktelėjo vos 0,09 %. Didžiosios Europos biržos krito daugiau: DAX −0,57 %, CAC −0,2 %, FTSE MIB −0,65 %.",
+          "why": "Baltijos rinkoje beveik nėra technologijų bendrovių, todėl pasaulinis šio sektoriaus išpardavimas regioną paveikė mažai.",
+          "status": "unverified",
+          "note": "Iš šaltinio neaišku, ar pokytis – pirmadienio uždarymo, ar antradienio ryto.",
+          "sources": [
+            { "name": "LRT / SEB „Biržos laikmatis“", "url": "https://www.lrt.lt/naujienos/verslas/4/3117123/birzos-laikmatis-akciju-rinkose-tesiasi-di-imoniu-ispardavimas", "type": "media", "published": "2026-11-17T10:57:00+02:00" }
+          ]
+        },
+        {
+          "headline": "JAV technologijos smunka, rinkos laukia FED palūkanų kėlimo",
+          "text": "NASDAQ indeksas krito 2,5 % ir yra daugiau nei 11 % žemiau spalio pradžios piko, puslaidininkių indeksas SOX nukrito 5 %. Rinkos kainose jau įskaičiuotas FED palūkanų kėlimas gruodžio 9 d.",
+          "why": "Brangesni pinigai dažniausiai labiausiai spaudžia augimo bendrovių vertinimus; Baltijos dividendinėms akcijoms poveikis paprastai būna netiesioginis – per obligacijų pajamingumą.",
+          "status": "media",
+          "sources": [
+            { "name": "LRT / SEB „Biržos laikmatis“", "url": "https://www.lrt.lt/naujienos/verslas/4/3117123/birzos-laikmatis-akciju-rinkose-tesiasi-di-imoniu-ispardavimas", "type": "media", "published": "2026-11-17T10:57:00+02:00" }
+          ]
+        },
+        {
+          "headline": "Nafta pigo, euras silpniausias nuo 2025 m. pavasario",
+          "text": "Brent naftos kaina sumažėjo daugiau nei 4 %, iki maždaug 92 $ už barelį. EUR/USD kursas nukrito iki 1,10.",
+          "why": "Silpnesnis euras padeda Baltijos eksportuotojams, kurių pajamos susijusios su doleriu.",
+          "status": "media",
+          "sources": [
+            { "name": "LRT / SEB „Biržos laikmatis“", "url": "https://www.lrt.lt/naujienos/verslas/4/3117123/birzos-laikmatis-akciju-rinkose-tesiasi-di-imoniu-ispardavimas", "type": "media", "published": "2026-11-17T10:57:00+02:00" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "imones",
+      "title": "Įmonių naujienos",
+      "items": [
+        {
+          "headline": "Civinity perka 51 % Estijos „Stell“",
+          "tags": ["Civinity", "obligacijos", "Vilnius"],
+          "text": "Pastatų priežiūros grupė Civinity pasirašė sutartį įsigyti kontrolinį 51 % paketą didžiausioje privačioje Estijos pastatų priežiūros bendrovėje Stell (apie 1 500 darbuotojų, 42,1 mln. € pajamų 2025 m.). Kaina neatskleista; dalis pirkimo bus finansuojama iš vykstančio obligacijų platinimo.",
+          "why": "Civinity obligacijų turėtojams tai rodo, kur keliauja pritraukti pinigai, ir didina grupės mastą (pro forma ~163 mln. € pajamų).",
+          "status": "primary",
+          "sources": [
+            { "name": "Civinity pranešimas (GlobeNewswire)", "url": "https://www.globenewswire.com/news-release/2026/11/16/3403165/0/en/civinity-enters-estonia-agrees-to-acquire-a-controlling-stake-in-market-leader-stell.html", "type": "primary", "published": "2026-11-16T08:59:00+02:00" }
+          ]
+        },
+        {
+          "headline": "Ignitis grupė: gruodžio 10 d. – neeilinis akcininkų susirinkimas",
+          "tags": ["IGN1L", "dividendai"],
+          "text": "Susirinkime bus tvirtinamos 9 mėnesių finansinės ataskaitos ir skiriami dividendai už laikotarpį iki rugsėjo 30 d. Bendrovės 9 mėn. rezultatų pranešime minimas ketinimas 10 % didinti dividendus.",
+          "why": "Dividendų dydis – vienas pagrindinių argumentų Ignitis akcijų investuotojams.",
+          "status": "unverified",
+          "note": "Tikslią dividendo sumą reikia patikrinti pačiame rezultatų pranešime.",
+          "sources": [
+            { "name": "Ignitis – papildytas finansinis kalendorius", "url": "https://www.globenewswire.com/news-release/2026/11/11/3400468/0/en/ignitis-group-s-updated-financial-calendar-2026.html", "type": "primary", "published": "2026-11-11T09:22:00+02:00" },
+            { "name": "Ignitis grupė – naujienos", "url": "https://ignitisgrupe.lt/en", "type": "primary" }
+          ]
+        }
+      ]
+    }
+  ],
+  "calendar": [
+    { "date": "2026-11-17", "text": "Baigiasi ALPPES Capital obligacijų platinimas (iki 15 mln. €, 8,75 % metinės palūkanos)", "url": "https://nasdaqbaltic.com/" },
+    { "date": "2026-11-20", "text": "Baigiasi Bigbank subordinuotų obligacijų pasirašymas (15:30 Talino laiku)", "url": "https://www.manilatimes.net/2026/11/10/tmt-newswire/globenewswire/notice-on-public-offering-of-subordinated-bonds-of-bigbank-as/2465960" },
+    { "date": "2026-12-09", "text": "FED palūkanų sprendimas", "url": "https://www.lrt.lt/naujienos/verslas/4/3117123/birzos-laikmatis-akciju-rinkose-tesiasi-di-imoniu-ispardavimas" },
+    { "date": "2026-12-10", "text": "Ignitis grupės neeilinis visuotinis akcininkų susirinkimas", "url": "https://www.globenewswire.com/news-release/2026/11/11/3400468/0/en/ignitis-group-s-updated-financial-calendar-2026.html" }
+  ]
+}

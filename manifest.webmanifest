@@ -1,0 +1,10 @@
+{
+  "name": "InvestAI – Baltijos rinkos apžvalga",
+  "short_name": "InvestAI",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f3ec",
+  "theme_color": "#0f5c4c",
+  "lang": "lt",
+  "icons": [{ "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
