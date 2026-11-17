@@ -12,6 +12,7 @@ from __future__ import annotations
 import json
 import math
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -128,9 +129,55 @@ def main() -> int:
         m["y"] = y
         out[tv] = m
 
+    # Analitikų vertinimai ir pagrindiniai rodikliai – tik akcijoms (ne ETF ir ne kriptovaliutoms)
+    stock_types = {a["s"]: a.get("type") for a in items}
+    fund_fail = 0
+    for tv, m in out.items():
+        if stock_types.get(tv) != "Akcija":
+            continue
+        y = m["y"]
+        info = {}
+        for attempt in range(3):
+            try:
+                info = yf.Ticker(y).info or {}
+                break
+            except Exception as e:  # noqa: BLE001
+                info = {}
+                time.sleep(2 + attempt * 3)
+        if not info:
+            fund_fail += 1
+            continue
+        an = {}
+        n = info.get("numberOfAnalystOpinions")
+        if n:
+            an = {
+                "n": int(n),
+                "key": info.get("recommendationKey"),          # strong_buy, buy, hold, underperform, sell
+                "mean": info.get("recommendationMean"),        # 1 (stiprus pirk) … 5 (parduok)
+                "tMean": info.get("targetMeanPrice"), "tLow": info.get("targetLowPrice"),
+                "tHigh": info.get("targetHighPrice"), "tMed": info.get("targetMedianPrice"),
+            }
+            try:
+                rs = yf.Ticker(y).recommendations_summary
+                if rs is not None and len(rs):
+                    row = rs.iloc[0]
+                    an["c"] = [int(row.get(k, 0) or 0) for k in ("strongBuy", "buy", "hold", "sell", "strongSell")]
+            except Exception:  # noqa: BLE001
+                pass
+            an = {k: (round(v, 4) if isinstance(v, float) else v) for k, v in an.items() if v is not None}
+            if an.get("tMean") and m.get("price"):
+                an["up"] = pct(an["tMean"], m["price"])
+            m["an"] = an
+        for src, dst in (("marketCap", "mcap"), ("trailingPE", "pe"), ("forwardPE", "fpe"), ("dividendYield", "dy")):
+            v = info.get(src)
+            if isinstance(v, (int, float)) and math.isfinite(v):
+                m[dst] = round(float(v), 4)
+        time.sleep(0.25)
+    print(f"Rodiklių nepavyko gauti: {fund_fail}")
+
     result = {
         "updated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
-        "source": "Yahoo Finance (yfinance), dienos uždarymo kainos",
+        "source": "Yahoo Finance (yfinance): dienos uždarymo kainos, analitikų vertinimai ir rodikliai",
         "count": len(out),
         "missing": missing,
         "items": out,
