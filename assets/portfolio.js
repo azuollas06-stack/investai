@@ -138,7 +138,9 @@ function renderResult() {
 }
 function countUp(el, to, fmt) {
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!animateNext || reduce) { el.textContent = fmt(to); return; }
+  if (!animateNext || reduce || document.hidden) { el.textContent = fmt(to); return; }
+  el.textContent = fmt(0);
+  setTimeout(() => (el.textContent = fmt(to)), 1100); // jei animacija sustabdoma (fone), vis tiek parodome galutinę reikšmę
   const t0 = performance.now(), dur = 900;
   const step = (t) => {
     const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
