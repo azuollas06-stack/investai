@@ -300,7 +300,7 @@ async function buildSearch(form) {
 }
 async function pageAsset() {
   const params = new URLSearchParams(location.search);
-  const raw = (params.get("s") || params.get("tvwidgetsymbol") || "").toUpperCase();
+  const raw = (params.get("s") || params.get("tvwidgetsymbol") || "").toUpperCase().replace(/^X:.*/, "");
   const data = await buildSearch($("#search"));
   const all = data.groups.flatMap((g) => g.items);
   const sym = SYMBOL_RE.test(raw) ? raw : null;
@@ -308,7 +308,7 @@ async function pageAsset() {
   if (!sym) {
     $("#asset").hidden = true;
     $("#browse").insertAdjacentHTML("beforeend", data.groups
-      .map((g) => `<section><h2 class="kicker">${esc(g.title)}</h2><div class="chips">${g.items.map((a) => `<a class="chip" href="${assetUrl(a.s)}">${esc(a.n)}<span>${esc(a.s.split(":")[1])}</span></a>`).join("")}</div></section>`)
+      .map((g) => `<section><h2 class="kicker">${esc(g.title)}</h2><div class="chips">${g.items.filter((a) => !a.s.startsWith("X:")).map((a) => `<a class="chip" href="${assetUrl(a.s)}">${esc(a.n)}<span>${esc(a.s.split(":")[1])}</span></a>`).join("")}</div></section>`)
       .join(""));
     return;
   }

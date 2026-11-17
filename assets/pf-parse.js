@@ -78,8 +78,8 @@
       while ((m = NUM_RE.exec(seg))) {
         const pre = (m[1] || "").toLowerCase(), post = (m[3] || "").toLowerCase();
         if (post === "%") continue;
-        const before = seg.slice(Math.max(0, m.index - 1), m.index);
-        if (/[+\-−]/.test(before) || m[2].startsWith("-")) continue; // pokyčiai, pvz. +12,30 ar -$1.20
+        const before = seg.slice(Math.max(0, m.index - 3), m.index);
+        if (/[+\-−–]\s*$/.test(before) || m[2].startsWith("-")) continue; // pokyčiai, pvz. +12,30, + $55,30 ar -$1.20
         const v = parseNumber(m[2]);
         if (v === null || v <= 0) continue;
         const cur = pre === "$" || pre === "usd" || post === "$" || post === "usd" ? "USD" : pre || post ? "EUR" : null;
@@ -121,7 +121,7 @@
       if (al.ticker.length < 3 && new RegExp(`^${al.ticker}(\\s|\\||$)`).test(line) && numbersIn(line).some((x) => x.cur)) {
         if (!best || 40 > best.score) best = { a: al.a, score: 40 };
       }
-      if (al.ticker.length >= 3 && new RegExp(`(^|[^A-Z0-9])${al.ticker.replace(/[.]/g, "\\.")}([^A-Z0-9]|$)`).test(line)) {
+      if (al.ticker.length >= 3 && new RegExp(`(^|[^A-Z])${al.ticker.replace(/[.]/g, "\\.")}([^A-Z0-9]|$)`).test(line)) {
         const score = 50 + al.ticker.length;
         if (!best || score > best.score) best = { a: al.a, score };
       }
@@ -136,6 +136,15 @@
     return best && best.a;
   }
 
+  const STOP_TICKERS = new Set(["EUR", "USD", "ETF", "UCITS", "ACC", "DIST", "AB", "AS", "SA", "AG", "PLC", "INC", "NV"]);
+  // Pavadinimas – tekstas iki pirmos sumos; pašaliname logotipų „šiukšles“ (1–2 raidžių žodžius pradžioje)
+  function guessName(line) {
+    let s = line.split("|")[0];
+    s = s.replace(/([€$]|eur|usd)?\s?-?\d[\d\s.,]*\s?(€|\$|eur|usd)?.*$/i, "").trim();
+    const words = s.split(/\s+/);
+    while (words.length > 1 && words[0].length <= 2 && !/^[A-Z]{2}$/.test(words[0]) && /[A-Za-zĄČĘĖĮŠŲŪŽąčęėįšųūž]{3,}/.test(words[1])) words.shift();
+    return words.join(" ").replace(/[|•·]+$/, "").trim();
+  }
   function parse(input, assets) {
     const aliases = buildAliases(assets);
     const raw = Array.isArray(input) ? input : String(input).split(/\r?\n/);
@@ -164,7 +173,12 @@
       // Vertė: ta pati eilutė, tada 1–2 kitos, tada ankstesnė (kai simbolis ir suma – eilute aukščiau)
       let best = pickValue(numbersIn(line));
       let from = i;
-      for (let k = 1; k <= 2 && i + k < lines.length; k++) {
+      let srcLine = line;
+      if ((!best || !best.cur) && i > 0 && !used.has(i - 1) && !findAsset(lines[i - 1], aliases) && !SKIP_LINE.test(lines[i - 1])) {
+        const prevVal = pickValue(numbersIn(lines[i - 1]));
+        if (prevVal && prevVal.cur) { best = prevVal; used.add(i - 1); srcLine = lines[i - 1]; }
+      }
+      for (let k = 1; k <= 2 && i + k < lines.length && !(best && best.cur); k++) {
         const nxt = lines[i + k];
         const other = findAsset(nxt, aliases);
         if ((other && other.s !== asset.s) || SKIP_LINE.test(nxt)) break;
@@ -177,16 +191,27 @@
       }
       for (let k = i; k <= from; k++) used.add(k);
       const prev = found.get(asset.s);
-      found.set(asset.s, { s: asset.s, n: asset.n, value: (prev ? prev.value : 0) + (best ? best.v : 0), cur: best ? best.cur : null, src: line.replace(/ \| /g, "  "), ok: !!best || !!(prev && prev.ok) });
+      found.set(asset.s, { s: asset.s, n: asset.n, value: (prev ? prev.value : 0) + (best ? best.v : 0), dec: best ? best.hasDec : true, cur: best ? best.cur : null, src: srcLine.replace(/ \| /g, "  "), ok: !!best || !!(prev && prev.ok) });
     }
     // Eilutės su pinigų suma, bet be atpažinto aktyvo
     for (let i = 0; i < lines.length; i++) {
       if (used.has(i) || SKIP_LINE.test(lines[i])) continue;
       const nums = numbersIn(lines[i]).filter((n) => n.cur);
       const letters = (lines[i].match(/[A-Za-zĄČĘĖĮŠŲŪŽąčęėįšųūž]{3,}/g) || []).join(" ");
-      if (nums.length && letters.length >= 3) unknown.push({ text: lines[i].replace(/ \| /g, "  "), value: pickValue(nums).v, cur: pickValue(nums).cur });
+      if (nums.length && letters.length >= 3) {
+        const next = lines[i + 1] || "";
+        const tk = (next.match(/(?:^|[^A-Z])([A-Z][A-Z0-9.]{1,5})(?=[^A-Za-z0-9]|$)/g) || [])
+          .map((x) => x.replace(/^[^A-Z]/, "")).find((x) => !STOP_TICKERS.has(x)) || "";
+        unknown.push({ text: lines[i].replace(/ \| /g, "  "), name: guessName(lines[i]), ticker: tk, value: pickValue(nums).v, dec: pickValue(nums).hasDec, cur: pickValue(nums).cur });
+        if (tk && !findAsset(next, aliases)) used.add(i + 1);
+      }
     }
     const rows = [...found.values()];
+    // OCR kartais praranda kablelį („1 742,10“ → „174210“). Jei beveik visos sumos su centais, o ši – ne, atkuriame centus.
+    const all = rows.concat(unknown).filter((r) => r.value > 0);
+    if (all.length >= 3 && all.filter((r) => r.dec).length / all.length >= 0.6) {
+      all.forEach((r) => { if (!r.dec && r.value >= 1000) { r.value = r.value / 100; r.fixed = true; } });
+    }
     const curs = rows.concat(unknown).map((r) => r.cur).filter(Boolean);
     const usd = curs.filter((c) => c === "USD").length;
     return { rows, unknown: unknown.slice(0, 12), currency: usd > curs.length / 2 ? "USD" : "EUR", lines: lines.length };

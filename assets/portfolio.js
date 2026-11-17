@@ -48,6 +48,9 @@ const money = (v, cur = state.currency) => new Intl.NumberFormat("lt-LT", { styl
 const pct = (p) => `${(p * 100).toLocaleString("lt-LT", { maximumFractionDigits: p < 0.1 ? 1 : 0 })}\u00a0%`;
 const ticker = (s) => (s === CASH ? "" : s.split(":")[1] || s);
 const findAsset = (s) => ASSETS.find((a) => a.s === s);
+// „X:“ – aktyvai be TradingView simbolio (pvz., atpažinti iš nuotraukos, bet nežinomi)
+const isTv = (s) => s && s !== CASH && !s.startsWith("X:") && SYMBOL_RE.test(s);
+const customId = (name) => "X:" + name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().replace(/[^A-Z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
 function meta(h) {
   if (h.s === CASH) return { n: "Grynieji pinigai", sector: "Grynieji pinigai", country: "Be šalies", type: "Grynieji" };
   const a = findAsset(h.s) || {};
@@ -133,7 +136,7 @@ function renderTable(a) {
     <thead><tr><th>Aktyvas</th><th>Sektorius</th><th class="num">Vertė, ${curSym()}</th><th class="num">Dalis</th><th></th></tr></thead>
     <tbody>${state.holdings.map((h, i) => {
       const m = meta(h);
-      const name = h.s === CASH ? esc(m.n) : `<a href="${assetUrl(h.s)}">${esc(m.n)}</a>`;
+      const name = isTv(h.s) ? `<a href="${assetUrl(h.s)}">${esc(m.n)}</a>` : esc(m.n);
       return `<tr><td>${name}</td><td>${esc(m.sector)}</td>
         <td class="num"><input class="pf-edit" data-i="${i}" type="number" min="0" step="any" value="${Math.round(h.value * 100) / 100}" aria-label="${esc(m.n)} vertė"></td>
         <td class="num">${pct(a.total ? (h.value || 0) / a.total : 0)}</td>
@@ -176,7 +179,7 @@ function renderToday(a) {
   const d = $("#d-today");
   const draw = () => {
     if (!d.open) return;
-    const syms = a.rows.filter((r) => r.s !== CASH && SYMBOL_RE.test(r.s)).map((r) => ({ name: r.s, displayName: r.n }));
+    const syms = a.rows.filter((r) => isTv(r.s)).map((r) => ({ name: r.s, displayName: r.n }));
     const key = syms.map((s) => s.name).join(",");
     if (key !== quotesKey) {
       quotesKey = key;
@@ -246,7 +249,7 @@ function resolveTyped(text) {
   if (!q) return null;
   const raw = text.trim().toUpperCase();
   if (SYMBOL_RE.test(raw)) return raw;
-  const hit = ASSETS.find((a) => a.n.toLowerCase() === q) || ASSETS.find((a) => a.n.toLowerCase().startsWith(q)) || ASSETS.find((a) => a.n.toLowerCase().includes(q));
+  const hit = ASSETS.find((a) => a.n.toLowerCase() === q) || ASSETS.find((a) => ticker(a.s).toLowerCase() === q) || ASSETS.find((a) => a.n.toLowerCase().startsWith(q) && q.length >= 4);
   return hit ? hit.s : null;
 }
 
@@ -326,11 +329,13 @@ function mergeIntoDraft(results) {
       const ex = draft.find((d) => d.s === row.s);
       // Ta pati pozicija keliose nuotraukose su ta pačia suma – tikėtina, kad nuotraukos persidengia
       if (ex) { if (Math.abs(ex.value - row.value) > Math.max(1, ex.value * 0.01)) ex.value += row.value; }
-      else draft.push({ s: row.s, n: row.n, value: Math.round(row.value * 100) / 100, src: row.src, unknown: false });
+      else draft.push({ s: row.s, n: row.n, value: Math.round(row.value * 100) / 100, src: row.src, unknown: false, fixed: row.fixed });
     }
     for (const u of r.unknown) {
       all++; if (u.cur === "USD") usd++;
-      if (!draft.some((d) => d.unknown && d.src === u.text)) draft.push({ s: null, n: "", value: Math.round(u.value * 100) / 100, src: u.text, unknown: true });
+      if (draft.some((d) => d.src === u.text)) continue;
+      const name = u.name || u.text;
+      draft.push({ s: name ? customId(name) : null, n: name, value: Math.round(u.value * 100) / 100, src: u.text, unknown: true, custom: true });
     }
   }
   return { usd, all };
@@ -352,18 +357,18 @@ function renderReview(info) {
   } else note.hidden = true;
   const list = $("#review-list");
   list.innerHTML = draft.map((d, i) => `
-    <li class="${d.unknown && !d.s ? "unknown" : ""}" data-i="${i}">
-      <div class="field"><input type="search" aria-label="Aktyvas" placeholder="Kas tai? Pvz., Apple ar NYSE:KO" value="${esc(d.s ? (d.s === CASH ? "Grynieji pinigai" : d.n || meta(d).n) : "")}"></div>
+    <li class="${d.custom || !d.s ? "unknown" : ""}" data-i="${i}">
+      <div class="field"><input type="search" aria-label="Aktyvas" placeholder="Kas tai? Pvz., Apple ar NYSE:KO" value="${esc(d.s ? (d.s === CASH ? "Grynieji pinigai" : d.n || meta(d).n) : d.n || "")}"></div>
       <div class="val" data-cur="${cur === "USD" ? "$" : "€"}"><input type="number" min="0" step="any" inputmode="decimal" aria-label="Vertė" value="${d.value}"></div>
       <button class="icon-btn" type="button" aria-label="Pašalinti eilutę">×</button>
-      ${d.src ? `<p class="src">Nuotraukoje: „${esc(d.src)}“</p>` : ""}
+      ${d.custom ? `<p class="src">Šio aktyvo mūsų sąraše nėra – bus įtrauktas kaip „Kita“. Jei randi jį paieškoje, pasirink.</p>` : d.fixed ? `<p class="src">Suma pataisyta (nuotraukoje neperskaitytas kablelis) – patikrink.</p>` : d.src ? `<p class="src">Nuotraukoje: „${esc(d.src)}“</p>` : ""}
     </li>`).join("");
   list.querySelectorAll("li").forEach((li) => {
     const i = +li.dataset.i;
     const [nameIn, valIn] = li.querySelectorAll("input");
     picker(nameIn, (s) => {
-      draft[i].s = s;
-      if (s) { draft[i].n = findAsset(s) ? findAsset(s).n : s === CASH ? "Grynieji pinigai" : ticker(s); li.classList.remove("unknown"); }
+      if (s) { draft[i].s = s; draft[i].custom = false; draft[i].n = findAsset(s) ? findAsset(s).n : s === CASH ? "Grynieji pinigai" : ticker(s); li.classList.remove("unknown"); }
+      else { draft[i].s = null; draft[i].custom = false; draft[i].n = nameIn.value.trim(); }
     });
     valIn.addEventListener("input", () => (draft[i].value = valIn.value));
     li.querySelector(".icon-btn").addEventListener("click", () => { draft.splice(i, 1); renderReview(); });
@@ -376,16 +381,20 @@ function finishReview() {
   rows.forEach((li) => {
     const d = draft[+li.dataset.i];
     const nameIn = li.querySelector("input");
-    if (!d.s && nameIn.value.trim()) d.s = resolveTyped(nameIn.value);
+    const typed = nameIn.value.trim();
+    if (!d.s && typed) {
+      d.s = resolveTyped(typed);
+      if (!d.s) { d.s = customId(typed); d.n = typed; d.custom = true; }
+    }
     const v = Number(d.value);
     if (!(v > 0)) return;
     if (!d.s) { missing++; li.classList.add("unknown"); return; }
-    items.push({ s: d.s, value: v, ...(findAsset(d.s) || d.s === CASH ? {} : { n: ticker(d.s) }) });
+    items.push({ s: d.s, value: v, ...(findAsset(d.s) || d.s === CASH ? {} : { n: d.n || typed || ticker(d.s) }) });
   });
   if (missing) {
     const note = $("#review-note");
     note.hidden = false;
-    note.textContent = `${missing} eilutėms nepriskirtas aktyvas. Pasirink aktyvą arba pašalink eilutę.`;
+    note.textContent = `${missing} eilutėse neįrašytas aktyvo pavadinimas. Įrašyk jį arba pašalink eilutę.`;
     note.scrollIntoView({ block: "center" });
     return;
   }
@@ -493,7 +502,7 @@ function setupInputs() {
       if (!Array.isArray(d.holdings)) throw new Error();
       isDemo = false;
       state = {
-        holdings: d.holdings.filter((h) => h && typeof h.s === "string" && (h.s === CASH || SYMBOL_RE.test(h.s))).map((h) => ({ ...h, value: Math.max(0, Number(h.value) || 0) })),
+        holdings: d.holdings.filter((h) => h && typeof h.s === "string" && (h.s === CASH || SYMBOL_RE.test(h.s) || /^X:[A-Z0-9-]{1,40}$/.test(h.s))).map((h) => ({ ...h, value: Math.max(0, Number(h.value) || 0) })),
         rules: d.rules && typeof d.rules === "object" ? d.rules : {},
         currency: d.currency === "USD" ? "USD" : "EUR",
       };
