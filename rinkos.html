@@ -19,21 +19,28 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=a64e1170">
-<script src="assets/app.js?v=4ff515aa" defer></script>
+<script>try{var t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css?v=28c41146">
+<script src="assets/viz.js?v=1cb6438f" defer></script>
+<script src="assets/app.js?v=95096e8e" defer></script>
+<script src="assets/pages.js?v=1d637ce6" defer></script>
 </head>
 <body data-page="markets">
-<div id="ticker" class="ticker"></div>
 <main class="wrap wide">
   <h1>Rinkos</h1>
   <p class="lead">Kas šiandien vyksta pasaulio ir Baltijos rinkose. Paspaudus įmonę atsidaro jos puslapis.</p>
   <div class="tabs" role="tablist">
-    <button role="tab" data-tab="us">S&amp;P 500 žemėlapis</button>
+    <button role="tab" data-tab="map">Žemėlapis</button>
+    <button role="tab" data-tab="us">S&amp;P 500 (TradingView)</button>
     <button role="tab" data-tab="world">Indeksai, žaliavos, valiutos</button>
     <button role="tab" data-tab="baltic">Baltijos akcijos</button>
     <button role="tab" data-tab="crypto">Kriptovaliutos</button>
   </div>
-  <section data-panel="us" role="tabpanel">
+  <section data-panel="map" role="tabpanel">
+    <p class="panel-help">Apie 280 didžiausių JAV, Europos ir Baltijos įmonių, sugrupuotų pagal sektorius. Dydis – įmonės vertė, spalva – kainos pokytis pasirinktu laikotarpiu. Paspausk įmonę, kad atidarytum jos puslapį.</p>
+    <div class="widget"><div class="skel" style="height:520px"></div></div>
+  </section>
+  <section data-panel="us" role="tabpanel" hidden>
     <p class="panel-help">Kiekvienas stačiakampis – viena iš 500 didžiausių JAV įmonių. Dydis rodo įmonės vertę, spalva – šiandienos kainos pokytį (žalia – kilo, raudona – krito).</p>
     <div class="widget tall"></div>
   </section>

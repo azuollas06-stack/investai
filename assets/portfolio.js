@@ -128,6 +128,7 @@ function renderResult() {
   $("#demo-note").hidden = !isDemo;
   renderHero(a);
   renderDim(a);
+  renderTreemap(a);
   $("#r-facts").innerHTML = facts(a).map((f) => `<li>${f}</li>`).join("");
   renderMovers(a);
   renderCompare(a);
@@ -178,6 +179,65 @@ function renderDim(a) {
   $("#r-strip").innerHTML = stripHTML(a[dim]);
   $("#r-strip-note").hidden = !(dim === "sectors" || dim === "regions");
 }
+let tmMode = "pnl";
+function renderTreemap(a) {
+  a = a || analyze(state.holdings);
+  const P = a.pnl;
+  if (tmMode === "pnl" && !P.known) tmMode = "d1";
+  const known = new Map(PFI.pnlSummary(a.rows).best.concat(PFI.pnlSummary(a.rows).worst).map((r) => [r.s, r.pp]));
+  const items = a.rows.filter((r) => r.s !== CASH).map((r) => {
+    const pr = PRICES_PF.items[r.s] || {};
+    const pp = typeof r.pnlPct === "number" ? r.pnlPct : typeof r.pnl === "number" && r.value - r.pnl > 0 ? (r.pnl / (r.value - r.pnl)) * 100 : known.get(r.s);
+    const c = tmMode === "pnl" ? pp : pr.d1;
+    return { label: isTv(r.s) ? r.s.split(":")[1] : r.n, sub: `${pct(r.value / a.total)} · ${c === undefined || c === null ? "–" : fmtPct(c)}`, v: r.value, c, href: isTv(r.s) ? assetUrl(r.s) : null, title: `${r.n}: ${money(r.value)}, ${c === undefined || c === null ? "pokytis nežinomas" : fmtPct(c)}` };
+  });
+  $("#r-tm").innerHTML = items.length ? treemapHTML(items, { scale: tmMode === "pnl" ? 30 : 4, ratio: window.innerWidth < 680 ? 0.9 : 0.42 }) + tmLegend(tmMode === "pnl" ? 30 : 4, " %") : "";
+  document.querySelectorAll("#tm-mode [data-tm]").forEach((b) => { b.setAttribute("aria-pressed", String(b.dataset.tm === tmMode)); if (b.dataset.tm === "pnl") b.disabled = !P.known; });
+}
+
+/* ---------- Dalinimosi kortelė (tik procentai, be sumų) ---------- */
+async function shareCard() {
+  const a = analyze(state.holdings);
+  const W = 1080, H = 1350, c = document.createElement("canvas");
+  c.width = W; c.height = H;
+  const g = c.getContext("2d");
+  try { await document.fonts.load("700 40px Onest"); } catch {}
+  const F = (w, s) => `${w} ${s}px Onest, system-ui, sans-serif`;
+  g.fillStyle = "#10233f"; g.fillRect(0, 0, W, H);
+  const grd = g.createRadialGradient(W, 0, 50, W, 0, 900); grd.addColorStop(0, "rgba(227,155,27,.28)"); grd.addColorStop(1, "rgba(227,155,27,0)"); g.fillStyle = grd; g.fillRect(0, 0, W, H);
+  // logotipas
+  const bars = [[0, 24, 10, "#2c8c99"], [17, 16, 18, "#ffffff"], [34, 4, 30, "#e39b1b"]];
+  bars.forEach(([x, y, h, col]) => { g.fillStyle = col; g.beginPath(); g.roundRect(80 + x, 80 + y, 12, h, 3); g.fill(); });
+  g.fillStyle = "#fff"; g.font = F(700, 40); g.fillText("Invest", 138, 116); const iw = g.measureText("Invest").width; g.fillStyle = "#e39b1b"; g.fillText("AI", 138 + iw, 116);
+  g.fillStyle = "#b9c7da"; g.font = F(500, 34); g.fillText("Mano portfelis", 80, 230);
+  const P = a.pnl;
+  g.font = F(800, 120);
+  if (P.known && P.pct !== null) { g.fillStyle = P.pct >= 0 ? "#45c08f" : "#f07a70"; g.fillText(`${P.pct >= 0 ? "+" : "−"}${Math.abs(P.pct).toLocaleString("lt-LT", { maximumFractionDigits: 1 })} %`, 80, 360); g.fillStyle = "#b9c7da"; g.font = F(500, 30); g.fillText("nuo pirkimo", 80, 410); }
+  else { g.fillStyle = "#fff"; g.fillText(`${a.rows.length} poz.`, 80, 360); }
+  // sektorių juosta
+  const list = a.sectors.slice(0, 6), rest = a.sectors.slice(6).reduce((t, x) => t + x.p, 0);
+  if (rest > 0.005) list.push({ k: "Kiti", p: rest });
+  let x = 80; const y = 480, bw = W - 160;
+  g.fillStyle = "#fff"; g.font = F(600, 32); g.fillText("Pagal sektorius", 80, y - 24);
+  list.forEach((s, i) => { const w = bw * s.p; g.fillStyle = PALETTE[i % PALETTE.length] === "#1d3a63" ? "#4c7dbf" : PALETTE[i % PALETTE.length]; g.beginPath(); g.roundRect(x, y, Math.max(2, w - 4), 70, 10); g.fill(); x += w; });
+  g.font = F(500, 28);
+  list.forEach((s, i) => { const col = i % 2, row = Math.floor(i / 2), lx = 80 + col * 470, ly = y + 130 + row * 50; g.fillStyle = PALETTE[i % PALETTE.length] === "#1d3a63" ? "#4c7dbf" : PALETTE[i % PALETTE.length]; g.beginPath(); g.roundRect(lx, ly - 22, 24, 24, 6); g.fill(); g.fillStyle = "#e8eef6"; g.fillText(`${s.k} ${Math.round(s.p * 100)} %`, lx + 38, ly); });
+  // didžiausios pozicijos
+  const top = a.byAsset.filter((r) => r.s !== CASH).slice(0, 5);
+  let ty = y + 140 + Math.ceil(list.length / 2) * 50 + 40;
+  g.fillStyle = "#fff"; g.font = F(600, 32); g.fillText("Didžiausios pozicijos", 80, ty); ty += 56;
+  top.forEach((r) => { g.font = F(500, 30); g.fillStyle = "#e8eef6"; g.fillText(r.k.length > 30 ? r.k.slice(0, 29) + "…" : r.k, 80, ty); g.font = F(700, 30); g.textAlign = "right"; g.fillText(`${Math.round(r.p * 100)} %`, W - 80, ty); g.textAlign = "left"; ty += 50; });
+  g.fillStyle = "#93a3b8"; g.font = F(400, 24); g.fillText("Sukurta su InvestAI · tai ne investavimo rekomendacija", 80, H - 70);
+  const blob = await new Promise((r) => c.toBlob(r, "image/png"));
+  const file = new File([blob], "investai-portfelis.png", { type: "image/png" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: "Mano portfelis – InvestAI" }); return; } catch (e) { if (e.name === "AbortError") return; }
+  }
+  const url = URL.createObjectURL(blob), link = document.createElement("a");
+  link.href = url; link.download = file.name; document.body.append(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
 function renderMovers(a) {
   const P = a.pnl;
   const card = $("#r-movers-card");
@@ -605,6 +665,8 @@ function setupInputs() {
   $("#review-done").addEventListener("click", finishReview);
   $("#review-cancel").addEventListener("click", () => { draft = []; state.holdings.length ? renderResult() : show("start"); });
   document.querySelectorAll(".seg button[data-dim]").forEach((b) => b.addEventListener("click", () => { dim = b.dataset.dim; renderDim(); }));
+  document.querySelectorAll("#tm-mode [data-tm]").forEach((b) => b.addEventListener("click", () => { tmMode = b.dataset.tm; renderTreemap(); }));
+  $("#share-btn").addEventListener("click", () => shareCard().catch((e) => { console.error(e); alert("Nepavyko sukurti paveikslėlio."); }));
   document.querySelectorAll(".seg button[data-cmp]").forEach((b) => b.addEventListener("click", () => { cmpDim = b.dataset.cmp; renderCompare(analyze(state.holdings)); }));
 
   // Pridėti poziciją analizės vaizde

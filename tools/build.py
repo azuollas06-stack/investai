@@ -9,6 +9,8 @@ DESC = "Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&
 PAGES = {
     "index": "InvestAI – suprask, kas vyksta rinkose",
     "apzvalga": "Dienos apžvalga – InvestAI",
+    "naujienos": "Naujienos ir įvykiai – InvestAI",
+    "irankiai": "Skaičiuoklės – InvestAI",
     "rinkos": "Rinkos – InvestAI",
     "aktyvas": "Aktyvai – InvestAI",
     "portfelis": "Mano portfelis – InvestAI",

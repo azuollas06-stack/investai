@@ -105,3 +105,45 @@ Raktas – tikslus `s` simbolis iš `data/assets.json` (pvz., `NASDAQ:NVDA`, `XE
 - Jei priežastis neaiški – taip ir parašyti („aiškios priežasties šaltiniuose nerasta; krito kartu su visu sektoriumi“) ir `status: "unverified"`.
 - Jautrias asmenines detales (pvz., vadovų privatus gyvenimas) minėti tik tiek, kiek būtina, neutraliai.
 - `move` ir procentai turi atitikti šaltinių duomenis; jei skaičiuoji pats (pvz., nuo piko), naudok šaltinių kainas.
+
+---
+
+# Naujienos ir įvykiai (`data/news.json`)
+
+Puslapis `naujienos.html`, pradžios puslapio blokas „Naujienos ir įvykiai“ ir aktyvo puslapio nuorodos ima duomenis iš `data/news.json`. Kasdienė užduotis jį atnaujina kartu su apžvalga.
+
+## Struktūra
+
+```json
+{
+  "updated": "YYYY-MM-DD",
+  "events": [
+    { "date": "YYYY-MM-DD", "kind": "ipo | earnings | macro | company | bonds | dividend", "title": "Trumpai, kas vyks", "symbols": ["NASDAQ:NVDA"], "url": "https://šaltinis" }
+  ],
+  "stories": [
+    {
+      "id": "trumpas-id-be-tarpu",
+      "date": "YYYY-MM-DD",
+      "kind": "ipo | earnings | macro | company | bonds | dividend",
+      "title": "Antraštė",
+      "symbols": ["NASDAQ:NVDA"],
+      "lead": "2–3 sakiniai: kas nutiko ar nutiks",
+      "facts": ["3–6 faktai su skaičiais, savais žodžiais"],
+      "pro": [{ "who": "Kas taip mano", "text": "Jų argumentas savais žodžiais", "source": "Leidinys" }],
+      "con": [{ "who": "Kas taip mano", "text": "Jų argumentas savais žodžiais", "source": "Leidinys" }],
+      "disclosure": "Neprivaloma – interesų konflikto atskleidimas",
+      "status": "primary | media | unverified",
+      "sources": [{ "name": "Šaltinis: tema", "url": "https://...", "published": "YYYY-MM-DD" }]
+    }
+  ]
+}
+```
+
+## Taisyklės
+
+- **Įvykiai:** tik su konkrečia data ir šaltiniu. Praėjusius įvykius, senesnius nei 14 d., pašalinti. Laikyti ~6–12 artimiausių įvykių (IPO, didžiųjų įmonių rezultatai, FED/ECB sprendimai, Baltijos įmonių susirinkimai, dividendų datos, obligacijų emisijos).
+- **Istorijos:** 2–5 svarbiausios, naujausia viršuje. Senesnes nei ~10 d. pašalinti, nebent tema vis dar aktuali.
+- **Nuomonės:** `pro` ir `con` – abi pusės, kiekviena su konkrečiu autoriumi ar leidiniu. Savais žodžiais, citatos – ne ilgesnės nei kelios žodžių. InvestAI pats nevertina.
+- **Jokių rekomendacijų** („pirkti“, „verta“, „gera proga“) ir kainų prognozių.
+- **Anthropic interesų konfliktas:** turinį rengia Claude (Anthropic modelis). Bet kuriai istorijai apie Anthropic (pvz., ANT akcijas) privalomas laukas `disclosure`; pateikti tik faktus ir subalansuotas trečiųjų šalių nuomones, be jokio savo vertinimo, ir vienodai detaliai abi puses.
+- Jei istorijos aktyvo nėra `data/assets.json`, jį pridėti (kaip ir paaiškinimams).

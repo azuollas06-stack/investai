@@ -256,6 +256,13 @@
      "type": "Akcija",
      "sector": "Finansai",
      "country": "JAV"
+    },
+    {
+     "s": "NASDAQ:ANT",
+     "n": "Anthropic",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
     }
    ]
   },

@@ -1,5 +1,4 @@
 <body data-page="home">
-<div id="ticker" class="ticker"></div>
 <main>
   <section class="hero">
     <div class="wrap wide hero-grid">
@@ -24,6 +23,22 @@
     </div>
   </section>
 
+  <section class="wrap wide block" id="today">
+    <div class="sec-head"><h2 class="section-title">Šiandien rinkose</h2><span class="muted small" id="today-date"></span></div>
+    <div class="pulse" id="pulse"><div class="skel" style="height:96px"></div><div class="skel" style="height:96px"></div><div class="skel" style="height:96px"></div></div>
+    <div class="movers-grid">
+      <div class="card"><h3>Labiausiai kilo</h3><ul class="mv-list" id="gainers"><li><div class="skel" style="height:220px"></div></li></ul></div>
+      <div class="card"><h3>Labiausiai krito</h3><ul class="mv-list" id="losers"><li><div class="skel" style="height:220px"></div></li></ul></div>
+      <div id="watch-home"></div>
+    </div>
+    <p class="more-link"><a href="rinkos.html">Visos rinkos žemėlapis</a> · <a href="atranka.html">Akcijų atranka</a></p>
+  </section>
+
+  <section class="wrap wide block">
+    <div class="sec-head"><h2 class="section-title">Naujienos ir įvykiai</h2><a class="small" href="naujienos.html">Visos naujienos</a></div>
+    <div class="home-news" id="home-news"><div class="skel" style="height:220px"></div><div class="skel" style="height:220px"></div></div>
+  </section>
+
   <section class="wrap wide block">
     <div class="paths">
       <a class="card path" href="portfelis.html">
@@ -31,10 +46,10 @@
         <p>Įkelk ekrano nuotrauką iš Revolut, Swedbank, SEB, Lightyear ar kitos programėlės ir pamatyk, kaip paskirstyti tavo pinigai.</p>
         <span class="go">Analizuoti portfelį</span>
       </a>
-      <a class="card path" href="rinkos.html">
-        <h3>Rinkos</h3>
-        <p>Visos 500 didžiausių JAV įmonių viename žemėlapyje, Baltijos akcijos, indeksai, žaliavos ir kriptovaliutos.</p>
-        <span class="go">Žiūrėti rinkas</span>
+      <a class="card path" href="irankiai.html">
+        <h3>Skaičiuoklės</h3>
+        <p>Kiek užaugtų kas mėnesį atidedami pinigai, kiek atneštų dividendai ir kiek būtum uždirbęs ar praradęs prieš metus.</p>
+        <span class="go">Skaičiuoti</span>
       </a>
       <a class="card path" href="apzvalga.html">
         <h3>Dienos apžvalga</h3>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Skaičiuoklės – InvestAI</title>
+<meta name="description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
+<meta property="og:title" content="Skaičiuoklės – InvestAI">
+<meta property="og:description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#10233f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="InvestAI">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css?v=28c41146">
+<script src="assets/viz.js?v=1cb6438f" defer></script>
+<script src="assets/app.js?v=95096e8e" defer></script>
+<script src="assets/pages.js?v=1d637ce6" defer></script>
+</head>
+<body data-page="tools">
+<main class="wrap wide">
+  <h1>Skaičiuoklės</h1>
+  <p class="lead">Paprasti įrankiai, padedantys suprasti skaičius: kiek būtum uždirbęs ar praradęs, kiek gali užaugti santaupos ir kiek atneša dividendai.</p>
+  <div class="tabs" role="tablist">
+    <button role="tab" data-tab="jei">O jei būčiau investavęs?</button>
+    <button role="tab" data-tab="taupymas">Taupymas</button>
+    <button role="tab" data-tab="dividendai">Dividendai</button>
+    <button role="tab" data-tab="palyginti">Palyginti</button>
+  </div>
+  <datalist id="asset-list"></datalist>
+
+  <section data-panel="jei" role="tabpanel" class="calc">
+    <form class="card calc-form" id="f-jei">
+      <label>Aktyvas<input name="a" list="asset-list" placeholder="Pvz., Nvidia" required></label>
+      <label>Suma<input name="sum" type="number" min="1" step="1" value="1000" inputmode="decimal"></label>
+      <div class="seg" role="group" aria-label="Kada"><button type="button" data-k="m1">Prieš mėnesį</button><button type="button" data-k="m3">Prieš 3 mėn.</button><button type="button" data-k="ytd">Metų pradžioje</button><button type="button" data-k="y1" aria-pressed="true">Prieš metus</button></div>
+    </form>
+    <div class="card calc-out" id="o-jei" aria-live="polite"></div>
+  </section>
+
+  <section data-panel="taupymas" role="tabpanel" class="calc" hidden>
+    <form class="card calc-form" id="f-sav">
+      <label>Pradinė suma, €<input name="init" type="number" min="0" step="10" value="1000" inputmode="decimal"></label>
+      <label>Kas mėnesį, €<input name="mon" type="number" min="0" step="10" value="100" inputmode="decimal"></label>
+      <label>Laikotarpis: <b id="yrs-l">20 metų</b><input name="yrs" type="range" min="1" max="40" value="20"></label>
+    </form>
+    <div class="card calc-out" id="o-sav" aria-live="polite"></div>
+  </section>
+
+  <section data-panel="dividendai" role="tabpanel" class="calc" hidden>
+    <form class="card calc-form" id="f-div">
+      <label>Aktyvas<input name="a" list="asset-list" placeholder="Pvz., Ignitis grupė"></label>
+      <label>Investuojama suma, €<input name="sum" type="number" min="1" step="10" value="5000" inputmode="decimal"></label>
+      <label>Dividendų pajamingumas, %<input name="dy" type="number" min="0" max="30" step="0.1" value="4" inputmode="decimal"></label>
+      <p class="muted small" style="margin:0">Pasirinkus aktyvą pajamingumas užpildomas pagal paskutinius duomenis.</p>
+      <div id="div-picks"></div>
+    </form>
+    <div class="card calc-out" id="o-div" aria-live="polite"></div>
+  </section>
+
+  <section data-panel="palyginti" role="tabpanel" hidden>
+    <form class="card cmp-form" id="f-cmp">
+      <label>Pirmas<input name="a0" list="asset-list" placeholder="Pvz., Nvidia"></label>
+      <label>Antras<input name="a1" list="asset-list" placeholder="Pvz., AMD"></label>
+      <label>Trečias (nebūtina)<input name="a2" list="asset-list" placeholder="Pvz., S&amp;P 500"></label>
+    </form>
+    <div id="o-cmp" aria-live="polite"></div>
+  </section>
+
+  <p class="muted small">Skaičiavimai iliustraciniai: neįtraukti mokesčiai, brokerio mokesčiai ir valiutų kursų pokyčiai. Praeities rezultatai negarantuoja ateities. Tai ne investavimo rekomendacija.</p>
+</main>
+<script src="assets/tools.js?v=2b6f8232" defer></script>
+</body>
+</html>

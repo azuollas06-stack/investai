@@ -10,10 +10,11 @@ const STATUS = {
 const MONTHS = ["sausio", "vasario", "kovo", "balandžio", "gegužės", "birželio", "liepos", "rugpjūčio", "rugsėjo", "spalio", "lapkričio", "gruodžio"];
 const WEEKDAYS = ["sekmadienis", "pirmadienis", "antradienis", "trečiadienis", "ketvirtadienis", "penktadienis", "šeštadienis"];
 const NAV = [
+  ["news", "naujienos.html", "Naujienos"],
+  ["markets", "rinkos.html", "Rinkos"],
   ["screener", "atranka.html", "Atranka"],
   ["strategy", "strategija.html", "Strategija"],
-  ["markets", "rinkos.html", "Rinkos"],
-  ["digest", "apzvalga.html", "Apžvalga"],
+  ["tools", "irankiai.html", "Skaičiuoklės"],
   ["premium", "premium.html", "Premium"],
   ["portfolio", "portfelis.html", "Mano portfelis", "nav-cta"],
 ];
@@ -30,8 +31,6 @@ function stripHTML(list, max = 7) {
     .map((x) => `<span style="flex:${x.p};background:${x.c}" class="${LIGHT_COLORS.has(x.c) ? "ink-dark" : ""}">${x.p >= 0.09 ? pctS(x.p) : ""}</span>`)
     .join("")}</div><ul class="strip-legend">${items.map((x) => `<li><i style="background:${x.c}"></i>${esc(x.k)} <b>${pctS(x.p)}</b></li>`).join("")}</ul>`;
 }
-const DARK = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-const THEME = DARK ? "dark" : "light";
 const TV_LOCALE = "en";
 const SYMBOL_RE = /^[A-Z0-9_]{1,20}:[A-Z0-9._!\-]{1,24}$/;
 
@@ -67,10 +66,11 @@ function renderChrome(page) {
         <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#10233f"/><rect x="12" y="38" width="10" height="14" rx="3" fill="#2c8c99"/><rect x="27" y="28" width="10" height="24" rx="3" fill="#ffffff"/><rect x="42" y="14" width="10" height="38" rx="3" fill="#e39b1b"/></svg>
         <span>Invest<b>AI</b></span>
       </a>
-      <button class="menu-btn" aria-expanded="false" aria-controls="main-nav">Meniu</button>
+      <div class="head-actions"><button class="icon-btn theme-btn" type="button" aria-label="${currentTheme() === "dark" ? "Įjungti šviesią temą" : "Įjungti tamsią temą"}">${THEME_ICON}</button><button class="menu-btn" aria-expanded="false" aria-controls="main-nav">Meniu</button></div>
       <nav id="main-nav">${NAV.map(([id, href, label, cls]) => `<a href="${href}"${cls ? ` class="${cls}"` : ""}${id === page ? ' aria-current="page"' : ""}>${label}</a>`).join("")}</nav>
     </div>`;
   document.body.prepend(header);
+  $(".theme-btn", header).addEventListener("click", toggleTheme);
   const btn = $(".menu-btn", header);
   btn.addEventListener("click", () => {
     const open = header.classList.toggle("open");
@@ -82,7 +82,7 @@ function renderChrome(page) {
     <div class="wrap wide">
       <div class="foot-grid">
         <a class="logo" href="./"><span>Invest<b>AI</b></span></a>
-        <nav class="foot-links" aria-label="Kiti puslapiai"><a href="portfelis.html">Mano portfelis</a><a href="strategija.html">Strategija</a><a href="atranka.html">Atranka</a><a href="premium.html">Premium</a><a href="rinkos.html">Rinkos</a><a href="apzvalga.html">Dienos apžvalga</a><a href="archyvas.html">Archyvas</a><a href="apie.html">Apie InvestAI</a></nav>
+        <nav class="foot-links" aria-label="Kiti puslapiai"><a href="portfelis.html">Mano portfelis</a><a href="naujienos.html">Naujienos ir įvykiai</a><a href="apzvalga.html">Dienos apžvalga</a><a href="rinkos.html">Rinkos</a><a href="atranka.html">Atranka</a><a href="strategija.html">Strategija</a><a href="irankiai.html">Skaičiuoklės</a><a href="premium.html">Premium</a><a href="archyvas.html">Archyvas</a><a href="apie.html">Apie InvestAI</a></nav>
       </div>
       <div class="legend">
         <span class="badge primary">Pirminis šaltinis</span><span>įmonės ar biržos pranešimas</span>
@@ -100,9 +100,10 @@ function renderChrome(page) {
     digest: '<path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h4"/>',
     asset: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
     screener: '<path d="M3 5h18l-7 8v6l-4 2v-8z"/>',
+    news: '<path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M8 9h5M8 13h5"/>',
     strategy: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
   };
-  const tabs = [["portfolio", "portfelis.html", "Portfelis"], ["strategy", "strategija.html", "Strategija"], ["screener", "atranka.html", "Atranka"], ["markets", "rinkos.html", "Rinkos"], ["digest", "apzvalga.html", "Apžvalga"]];
+  const tabs = [["portfolio", "portfelis.html", "Portfelis"], ["strategy", "strategija.html", "Strategija"], ["screener", "atranka.html", "Atranka"], ["markets", "rinkos.html", "Rinkos"], ["news", "naujienos.html", "Naujienos"]];
   const bar = document.createElement("nav");
   bar.className = "tabbar";
   bar.setAttribute("aria-label", "Pagrindinė navigacija");
@@ -230,7 +231,7 @@ function tv(el, name, cfg) {
   s.type = "text/javascript";
   s.async = true;
   s.src = `https://s3.tradingview.com/external-embedding/embed-widget-${name}.js`;
-  s.innerHTML = JSON.stringify({ locale: TV_LOCALE, colorTheme: THEME, isTransparent: true, ...cfg });
+  s.innerHTML = JSON.stringify({ locale: TV_LOCALE, colorTheme: currentTheme(), isTransparent: true, ...cfg });
   box.appendChild(s);
   el.appendChild(box);
 }
@@ -310,30 +311,7 @@ async function pageArchive() {
       .join("")}</ul>`;
 }
 
-/* ---------- Pradžia ---------- */
-async function pageHome() {
-  tickerTape($("#ticker"));
-  $("#home-help").innerHTML = helpHTML();
-  $("#demo-strip").innerHTML = stripHTML([
-    { k: "Technologijos", p: 0.5 }, { k: "Pasaulio indeksas", p: 0.2 }, { k: "Komunalinės", p: 0.12 },
-    { k: "Kriptovaliutos", p: 0.07 }, { k: "Finansai", p: 0.06 }, { k: "Grynieji", p: 0.05 },
-  ]);
-  try {
-    const idx = await getJSON("data/index.json");
-    const d = await getJSON(`data/digests/${idx.latest}.json`);
-    const items = (d.sections || []).flatMap((s) => s.items || []).slice(0, 3);
-    $("#latest").innerHTML = `
-      <div class="dateline">${fmtDate(d.date, true)}</div>
-      <h3 class="latest-title"><a href="apzvalga.html">${esc(d.title)}</a></h3>
-      <p>${esc(d.lead)}</p>
-      <ul class="latest-list">${items.map((it) => `<li><span class="badge ${(STATUS[it.status] || STATUS.media).cls}">${(STATUS[it.status] || STATUS.media).label}</span> ${esc(it.headline)}</li>`).join("")}</ul>
-      <a class="btn" href="apzvalga.html">Skaityti visą apžvalgą</a>`;
-  } catch (e) {
-    console.error(e);
-    $("#latest").innerHTML = `<p class="muted">Apžvalgos įkelti nepavyko.</p>`;
-  }
-}
-
+/* ---------- Pradžia: žr. žemiau (pageHome) ---------- */
 /* ---------- Rinkos ---------- */
 const MARKET_TABS = {
   us: (el) =>
@@ -377,24 +355,6 @@ const MARKET_TABS = {
       width: "100%", height: 600,
     }),
 };
-function pageMarkets() {
-  tickerTape($("#ticker"));
-  const tabs = document.querySelectorAll("[data-tab]");
-  const loaded = new Set();
-  const show = (id) => {
-    if (!MARKET_TABS[id]) id = "us";
-    tabs.forEach((t) => t.setAttribute("aria-selected", String(t.dataset.tab === id)));
-    document.querySelectorAll("[data-panel]").forEach((p) => (p.hidden = p.dataset.panel !== id));
-    if (!loaded.has(id)) {
-      loaded.add(id);
-      MARKET_TABS[id]($(`[data-panel="${id}"] .widget`));
-    }
-    history.replaceState(null, "", `#${id}`);
-  };
-  tabs.forEach((t) => t.addEventListener("click", () => show(t.dataset.tab)));
-  show(location.hash.slice(1) || "us");
-}
-
 /* ---------- Aktyvas ---------- */
 async function buildSearch(form) {
   const data = await getJSON("data/assets.json");
@@ -424,42 +384,7 @@ async function buildSearch(form) {
   document.addEventListener("click", (e) => { if (!form.contains(e.target)) list.hidden = true; });
   return data;
 }
-async function pageAsset() {
-  const params = new URLSearchParams(location.search);
-  const raw = (params.get("s") || params.get("tvwidgetsymbol") || "").toUpperCase().replace(/^X:.*/, "");
-  const data = await buildSearch($("#search"));
-  const all = data.groups.flatMap((g) => g.items);
-  const sym = SYMBOL_RE.test(raw) ? raw : null;
-
-  if (!sym) {
-    $("#asset").hidden = true;
-    $("#browse").insertAdjacentHTML("beforeend", data.groups
-      .map((g) => `<section><h2 class="kicker">${esc(g.title)}</h2><div class="chips">${g.items.filter((a) => !a.s.startsWith("X:")).map((a) => `<a class="chip" href="${assetUrl(a.s)}">${esc(a.n)}<span>${esc(a.s.split(":")[1])}</span></a>`).join("")}</div></section>`)
-      .join(""));
-    return;
-  }
-  const known = all.find((a) => a.s === sym);
-  document.title = `${known ? known.n : sym} – InvestAI`;
-  $("#browse").hidden = true;
-  $("#asset-title").textContent = known ? known.n : sym;
-  $("#asset-symbol").textContent = sym;
-  $("#tv-link").href = `https://www.tradingview.com/symbols/${sym.replace(":", "-")}/`;
-
-  tv($("#w-info"), "symbol-info", { symbol: sym, width: "100%" });
-  loadExplain().then((ex) => { if (ex[sym]) $("#w-explain").innerHTML = explainHTML(ex[sym]); });
-  tv($("#w-chart"), "advanced-chart", {
-    symbol: sym, width: "100%", height: 520, interval: "D", timezone: "Europe/Vilnius", theme: THEME,
-    style: "1", allow_symbol_change: false, calendar: false, hide_volume: false, support_host: "https://www.tradingview.com",
-  });
-  const isCrypto = /^(BITSTAMP|BINANCE|COINBASE|KRAKEN|CRYPTO)/.test(sym);
-  if (isCrypto) {
-    $("#fundamentals").hidden = true;
-  } else {
-    tv($("#w-profile"), "symbol-profile", { symbol: sym, width: "100%", height: 420 });
-    tv($("#w-fin"), "financials", { symbol: sym, width: "100%", height: 520, displayMode: "regular" });
-  }
-  tv($("#w-news"), "timeline", { feedMode: "symbol", symbol: sym, width: "100%", height: 520, displayMode: "regular" });
-}
+/* pageAsset – žr. žemiau */
 
 /* ---------- Paleidimas ---------- */
 document.addEventListener("DOMContentLoaded", async () => {
@@ -469,7 +394,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (page === "home") await pageHome();
     if (page === "digest") await pageDigest();
     if (page === "archive") await pageArchive();
-    if (page === "markets") pageMarkets();
+    if (page === "markets") await pageMarkets();
+    if (page === "news") await pageNews();
     if (page === "asset") await pageAsset();
   } catch (e) {
     console.error(e);

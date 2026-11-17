@@ -13,21 +13,33 @@
   </div>
 
   <div id="asset">
-    <div class="asset-head">
-      <h1 id="asset-title">…</h1>
-      <span class="badge tag" id="asset-symbol"></span>
+    <div class="ah">
+      <div class="ah-id"><span id="asset-logo"></span><div><h1 id="asset-title">…</h1><p class="ah-sub"><span class="badge tag" id="asset-symbol"></span> <span id="asset-meta"></span></p></div></div>
+      <div id="asset-star"></div>
     </div>
-    <div id="w-info" class="widget"></div>
+    <div id="asset-native">
+      <div class="ah-price"><span id="ap-price" class="ap-price"><span class="skel" style="display:inline-block;width:160px;height:40px"></span></span><span id="ap-d1"></span><span class="muted small" id="ap-date"></span></div>
+      <div class="asset-grid">
+        <div class="card" id="ap-chart"><div class="skel" style="height:260px"></div></div>
+        <aside class="ap-side">
+          <div class="card"><h3>Metų kainų intervalas</h3><div id="ap-range"></div><p class="muted small" style="margin:8px 0 0">Žemiausia ir aukščiausia kaina per 52 savaites. Taškas – dabartinė kaina.</p></div>
+          <div class="card" id="ap-an-card"><h3>Analitikų nuomonės</h3><div id="ap-an"></div><p class="muted small" style="margin:10px 0 0">Trečiųjų šalių analitikų vertinimų vidurkis (Yahoo Finance). Tai ne InvestAI nuomonė ir ne rekomendacija.</p></div>
+        </aside>
+      </div>
+      <div class="stat-cards" id="ap-stats"></div>
+    </div>
+    <div id="w-info" class="widget" hidden></div>
     <div id="w-explain"></div>
-    <h2 class="kicker">Kainos grafikas</h2>
-    <div id="w-chart" class="widget"></div>
+    <div id="ap-news"></div>
+    <div class="ap-actions" id="ap-actions"></div>
+    <details class="card tv-more" id="tv-more"><summary>Detalus grafikas su indikatoriais (TradingView)</summary><div id="w-chart" class="widget"></div></details>
     <div id="fundamentals" class="two-col">
       <section><h2 class="kicker">Apie įmonę</h2><div id="w-profile" class="widget"></div></section>
       <section><h2 class="kicker">Finansiniai rodikliai</h2><div id="w-fin" class="widget"></div></section>
     </div>
-    <h2 class="kicker">Naujienos</h2>
-    <p class="panel-help">Naujienų srautas iš TradingView partnerių (anglų k.). InvestAI apžvalgose pateikiami patikrinti ir paaiškinti svarbiausi įvykiai.</p>
+    <h2 class="kicker">Naujienų srautas</h2>
+    <p class="panel-help">Naujienos iš TradingView partnerių (anglų k.). Svarbiausius įvykius su šaltiniais rasite skiltyje <a href="naujienos.html">Naujienos</a>.</p>
     <div id="w-news" class="widget"></div>
-    <p class="muted small">Daugiau duomenų: <a id="tv-link" href="#" target="_blank" rel="noopener">šis aktyvas TradingView svetainėje</a>. Duomenys gali vėluoti. Tai ne investavimo rekomendacija.</p>
+    <p class="muted small">Daugiau duomenų: <a id="tv-link" href="#" target="_blank" rel="noopener">šis aktyvas TradingView svetainėje</a>. Kainos – paskutinės prekybos dienos uždarymo. Tai ne investavimo rekomendacija.</p>
   </div>
 </main>

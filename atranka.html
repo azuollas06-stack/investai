@@ -19,8 +19,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=a64e1170">
-<script src="assets/app.js?v=4ff515aa" defer></script>
+<script>try{var t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css?v=28c41146">
+<script src="assets/viz.js?v=1cb6438f" defer></script>
+<script src="assets/app.js?v=95096e8e" defer></script>
+<script src="assets/pages.js?v=1d637ce6" defer></script>
 </head>
 <body data-page="screener">
 <main class="wrap wide scr">
@@ -38,7 +41,7 @@
       <div class="f-group"><h3>Svyravimas per metus</h3><div class="chipset single" data-f="vol"></div></div>
       <div class="f-group"><h3>Analitikų vertinimas</h3><div class="chipset single" data-f="an"></div></div>
       <div class="f-group"><h3>Analitikų tikslinė kaina</h3><div class="chipset single" data-f="up"></div></div>
-      <div class="f-group"><h3>Mano portfelis</h3><div class="chipset single" data-f="pf"></div></div>
+      <div class="f-group"><h3>Mano portfelis ir stebimi</h3><div class="chipset single" data-f="pf"></div></div>
       <div class="f-group premium-only" id="f-premium">
         <h3>Premium kriterijai <span class="badge tag">Premium</span></h3>
         <div class="chipset single" data-f="pe"></div>
@@ -73,8 +76,8 @@
   <div id="help-slot"></div>
 </main>
 <script src="assets/pf-insights.js?v=71f40392" defer></script>
-<script src="assets/portfolio.js?v=3c9a0809" defer></script>
+<script src="assets/portfolio.js?v=3d5501aa" defer></script>
 <script src="assets/premium.js?v=561eee41" defer></script>
-<script src="assets/screener.js?v=0eb05d3e" defer></script>
+<script src="assets/screener.js?v=02def4a8" defer></script>
 </body>
 </html>

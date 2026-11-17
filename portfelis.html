@@ -19,8 +19,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=a64e1170">
-<script src="assets/app.js?v=4ff515aa" defer></script>
+<script>try{var t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css?v=28c41146">
+<script src="assets/viz.js?v=1cb6438f" defer></script>
+<script src="assets/app.js?v=95096e8e" defer></script>
+<script src="assets/pages.js?v=1d637ce6" defer></script>
 </head>
 <body data-page="portfolio">
 <main class="wrap wide pf">
@@ -84,6 +87,7 @@
         <p class="pf-hero-sub" id="r-pnl-sub"></p>
       </div>
       <dl class="pf-hero-stats" id="r-stats"></dl>
+      <button type="button" class="btn small share-btn" id="share-btn"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v7h14v-7"/></svg>Dalintis be sumų</button>
     </div>
 
     <div class="card">
@@ -95,6 +99,12 @@
       </div>
       <div id="r-strip"></div>
       <p class="muted small" id="r-strip-note" style="margin:12px 0 0">ETF fondai išskaidyti į sektorius ir regionus pagal jų indeksų struktūrą (apytiksliai).</p>
+    </div>
+
+    <div class="card" id="r-tm-card">
+      <div class="sec-head"><h2>Portfelio žemėlapis</h2><div class="seg" role="group" aria-label="Spalva pagal" id="tm-mode"><button type="button" data-tm="pnl" aria-pressed="true">Nuo pirkimo</button><button type="button" data-tm="d1" aria-pressed="false">Paskutinė diena</button></div></div>
+      <p class="muted small" style="margin:0 0 12px">Stačiakampio dydis – pozicijos vertė, spalva – pokytis (žalia – pelnas, raudona – nuostolis).</p>
+      <div id="r-tm"></div>
     </div>
 
     <div class="summary">
@@ -201,6 +211,6 @@
 </main>
 <script src="assets/pf-parse.js?v=f0a19f83" defer></script>
 <script src="assets/pf-insights.js?v=71f40392" defer></script>
-<script src="assets/portfolio.js?v=3c9a0809" defer></script>
+<script src="assets/portfolio.js?v=3d5501aa" defer></script>
 </body>
 </html>

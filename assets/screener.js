@@ -12,7 +12,7 @@ const OPTIONS = {
   vol: [["", "Bet koks"], ["25", "Ramesni (≤ 25 %)"], ["40", "Vidutiniai (≤ 40 %)"], ["hi", "Labai svyruojantys (> 40 %)"]],
   an: [["", "Bet koks"], ["buy", "Dauguma „pirkti“"], ["hold", "Dauguma „laikyti“"], ["n10", "Bent 10 analitikų"]],
   up: [["", "Bet kokia"], ["10", "≥ 10 % aukščiau kainos"], ["25", "≥ 25 % aukščiau kainos"], ["neg", "Žemiau dabartinės kainos"]],
-  pf: [["", "Rodyti viską"], ["notOwned", "Tik neturimi"], ["newSector", "Sektoriai, kurių neturiu"], ["fit", "Atitinka mano ribas"], ["owned", "Tik turimi"]],
+  pf: [["", "Rodyti viską"], ["watch", "★ Stebimi"], ["notOwned", "Tik neturimi"], ["newSector", "Sektoriai, kurių neturiu"], ["fit", "Atitinka mano ribas"], ["owned", "Tik turimi"]],
   pe: [["", "P/E: bet koks"], ["15", "P/E ≤ 15"], ["25", "P/E ≤ 25"], ["40", "P/E ≤ 40"]],
   dy: [["", "Dividendai: nesvarbu"], ["any", "Moka dividendus"], ["3", "Dividendai ≥ 3 %"]],
   mcap: [["", "Dydis: bet koks"], ["big", "Didelės (> 100 mlrd. $)"], ["mid", "Vidutinės (10–100 mlrd.)"], ["small", "Mažesnės (< 10 mlrd.)"]],
@@ -89,6 +89,7 @@ function passes(a, pi) {
   if (F.an === "hold" && !(an.mean && an.mean > 2.2 && an.mean <= 3.2)) return false;
   if (F.an === "n10" && !(an.n >= 10)) return false;
   if (F.up === "neg" ? !(an.up !== undefined && an.up < 0) : F.up && !(an.up !== undefined && an.up >= Number(F.up))) return false;
+  if (F.pf === "watch" && !isWatched(a.s)) return false;
   if (F.pf === "notOwned" && pi.owned.has(a.s)) return false;
   if (F.pf === "owned" && !pi.owned.has(a.s)) return false;
   if (F.pf === "newSector" && (pi.sectorsOwned.has(a.sector) || pi.owned.has(a.s))) return false;
@@ -144,7 +145,7 @@ function update() {
       <span class="res-num"><small>Per mėn.</small><b class="${(p.m1 ?? 0) >= 0 ? "up" : "down"}">${fmtPct(p.m1)}</b></span>
       <span class="res-num"><small>Nuo aukščiausios</small><b class="${(p.fromHigh ?? 0) < -0.5 ? "down" : ""}">${fmtPct(p.fromHigh)}</b></span>
       <span class="res-an">${anHTML(an)}${an.up !== undefined ? `<small>Tikslinė kaina: <b class="${an.up >= 0 ? "up" : "down"}">${fmtPct(an.up, 0)}</b></small>` : ""}</span>
-      <a class="btn small" href="strategija.html?check=${encodeURIComponent(a.s)}#check-form">Patikrinti</a>
+      <span class="res-act">${starHTML(a.s, a.n)}<a class="btn small" href="strategija.html?check=${encodeURIComponent(a.s)}#check-form">Patikrinti</a></span>
     </div>`;
   }).join("") || `<div class="card"><p style="margin:0"><b>Nieko nerasta.</b> Pabandyk sušvelninti kai kuriuos filtrus.</p></div>`;
   renderSaved();
@@ -182,5 +183,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   $("#scr-q").addEventListener("input", () => { F.q = $("#scr-q").value.trim(); update(); });
   $("#reset").addEventListener("click", () => { F = {}; SORT = "dd"; $("#scr-q").value = ""; update(); });
   $("#help-slot").innerHTML = helpHTML();
+  document.addEventListener("watchchange", () => { if (F.pf === "watch") update(); });
   update();
 });
