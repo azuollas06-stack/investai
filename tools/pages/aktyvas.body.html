@@ -1,0 +1,32 @@
+<body data-page="asset">
+<main class="wrap wide">
+  <form id="search" class="search" role="search" autocomplete="off">
+    <label for="q" class="sr-only">Ieškoti įmonės ar simbolio</label>
+    <input id="q" name="q" type="search" placeholder="Ieškoti: Nvidia, Apple, Ignitis, BTC…" autocomplete="off">
+    <button class="btn primary" type="submit">Ieškoti</button>
+    <ul class="suggest" hidden></ul>
+  </form>
+
+  <div id="browse">
+    <h1>Aktyvai</h1>
+    <p class="lead">Pasirinkite įmonę, ETF ar kriptovaliutą. Bet kurį kitą aktyvą galite įvesti formatu BIRŽA:SIMBOLIS, pvz., <code>NYSE:KO</code>.</p>
+  </div>
+
+  <div id="asset">
+    <div class="asset-head">
+      <h1 id="asset-title">…</h1>
+      <span class="badge tag" id="asset-symbol"></span>
+    </div>
+    <div id="w-info" class="widget"></div>
+    <h2 class="kicker">Kainos grafikas</h2>
+    <div id="w-chart" class="widget"></div>
+    <div id="fundamentals" class="two-col">
+      <section><h2 class="kicker">Apie įmonę</h2><div id="w-profile" class="widget"></div></section>
+      <section><h2 class="kicker">Finansiniai rodikliai</h2><div id="w-fin" class="widget"></div></section>
+    </div>
+    <h2 class="kicker">Naujienos</h2>
+    <p class="panel-help">Naujienų srautas iš TradingView partnerių (anglų k.). InvestAI apžvalgose pateikiami patikrinti ir paaiškinti svarbiausi įvykiai.</p>
+    <div id="w-news" class="widget"></div>
+    <p class="muted small">Daugiau duomenų: <a id="tv-link" href="#" target="_blank" rel="noopener">šis aktyvas TradingView svetainėje</a>. Duomenys gali vėluoti. Tai ne investavimo rekomendacija.</p>
+  </div>
+</main>

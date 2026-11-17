@@ -1,0 +1,28 @@
+<body data-page="markets">
+<div id="ticker" class="ticker"></div>
+<main class="wrap wide">
+  <h1>Rinkos</h1>
+  <p class="lead">Kas šiandien vyksta pasaulio ir Baltijos rinkose. Paspaudus įmonę atsidaro jos puslapis.</p>
+  <div class="tabs" role="tablist">
+    <button role="tab" data-tab="us">S&amp;P 500 žemėlapis</button>
+    <button role="tab" data-tab="world">Indeksai, žaliavos, valiutos</button>
+    <button role="tab" data-tab="baltic">Baltijos akcijos</button>
+    <button role="tab" data-tab="crypto">Kriptovaliutos</button>
+  </div>
+  <section data-panel="us" role="tabpanel">
+    <p class="panel-help">Kiekvienas stačiakampis – viena iš 500 didžiausių JAV įmonių. Dydis rodo įmonės vertę, spalva – šiandienos kainos pokytį (žalia – kilo, raudona – krito).</p>
+    <div class="widget tall"></div>
+  </section>
+  <section data-panel="world" role="tabpanel" hidden>
+    <p class="panel-help">Pagrindiniai pasaulio akcijų indeksai, žaliavų kainos, valiutų kursai ir obligacijų pajamingumas per paskutinius 12 mėnesių.</p>
+    <div class="widget tall"></div>
+  </section>
+  <section data-panel="baltic" role="tabpanel" hidden>
+    <p class="panel-help">Nasdaq Vilnius, Talino ir Rygos biržų likvidžiausios akcijos. Duomenys gali vėluoti.</p>
+    <div class="widget tall"></div>
+  </section>
+  <section data-panel="crypto" role="tabpanel" hidden>
+    <p class="panel-help">Didžiausios kriptovaliutos pagal rinkos vertę ir dienos pokytį. Kriptovaliutos itin svyruoja.</p>
+    <div class="widget tall"></div>
+  </section>
+</main>

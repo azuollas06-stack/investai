@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rinkos – InvestAI</title>
+<meta name="description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
+<meta property="og:title" content="Rinkos – InvestAI">
+<meta property="og:description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0f5c4c">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js" defer></script>
+</head>
+<body data-page="markets">
+<div id="ticker" class="ticker"></div>
+<main class="wrap wide">
+  <h1>Rinkos</h1>
+  <p class="lead">Kas šiandien vyksta pasaulio ir Baltijos rinkose. Paspaudus įmonę atsidaro jos puslapis.</p>
+  <div class="tabs" role="tablist">
+    <button role="tab" data-tab="us">S&amp;P 500 žemėlapis</button>
+    <button role="tab" data-tab="world">Indeksai, žaliavos, valiutos</button>
+    <button role="tab" data-tab="baltic">Baltijos akcijos</button>
+    <button role="tab" data-tab="crypto">Kriptovaliutos</button>
+  </div>
+  <section data-panel="us" role="tabpanel">
+    <p class="panel-help">Kiekvienas stačiakampis – viena iš 500 didžiausių JAV įmonių. Dydis rodo įmonės vertę, spalva – šiandienos kainos pokytį (žalia – kilo, raudona – krito).</p>
+    <div class="widget tall"></div>
+  </section>
+  <section data-panel="world" role="tabpanel" hidden>
+    <p class="panel-help">Pagrindiniai pasaulio akcijų indeksai, žaliavų kainos, valiutų kursai ir obligacijų pajamingumas per paskutinius 12 mėnesių.</p>
+    <div class="widget tall"></div>
+  </section>
+  <section data-panel="baltic" role="tabpanel" hidden>
+    <p class="panel-help">Nasdaq Vilnius, Talino ir Rygos biržų likvidžiausios akcijos. Duomenys gali vėluoti.</p>
+    <div class="widget tall"></div>
+  </section>
+  <section data-panel="crypto" role="tabpanel" hidden>
+    <p class="panel-help">Didžiausios kriptovaliutos pagal rinkos vertę ir dienos pokytį. Kriptovaliutos itin svyruoja.</p>
+    <div class="widget tall"></div>
+  </section>
+</main>
+</body>
+</html>

@@ -3,8 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>InvestAI – Baltijos rinkos apžvalga</title>
-<meta name="description" content="Kasdienė Baltijos akcijų rinkos apžvalga lietuviškai – su pirminiais šaltiniais ir aiškiai pažymėtu patikimumu.">
+<title>InvestAI – suprask, kas vyksta rinkose</title>
+<meta name="description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
+<meta property="og:title" content="InvestAI – suprask, kas vyksta rinkose">
+<meta property="og:description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
+<meta property="og:type" content="website">
 <meta name="theme-color" content="#0f5c4c">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
@@ -15,24 +18,69 @@
 <script src="assets/app.js" defer></script>
 </head>
 <body data-page="home">
-<header class="masthead"><div class="wrap">
-  <a class="logo" href="./">Invest<span>AI</span></a>
-  <nav>
-    <a href="./" aria-current="page">Šiandien</a>
-    <a href="archyvas.html">Archyvas</a>
-    <a href="apie.html">Apie</a>
-  </nav>
-</div></header>
-<div class="wrap"><div class="tagline">Baltijos rinkos apžvalga · kasdien po biržos uždarymo</div>
-<main id="app"><p class="loading">Įkeliama…</p></main>
-<footer>
-  <div class="legend">
-    <span class="badge primary">Pirminis šaltinis</span> įmonės ar biržos pranešimas
-    <span class="badge media">Žiniasklaida</span> naujienų agentūra ar analitikas
-    <span class="badge unverified">Reikia patikrinti</span> šaltiniai neaiškūs ar nesutaria
-  </div>
-  InvestAI teikia informaciją, o ne investavimo rekomendacijas. Turinį rengia dirbtinis intelektas pagal nurodytus šaltinius; galimos klaidos. Prieš priimdami sprendimus, pasitikrinkite pirminius šaltinius.
-</footer>
-</div>
+<div id="ticker" class="ticker"></div>
+<main>
+  <section class="hero">
+    <div class="wrap wide hero-grid">
+      <div>
+        <p class="eyebrow">Rinkų tyrimų įrankis lietuvių kalba</p>
+        <h1 class="hero-title">Suprask, kas vyksta rinkose, per 5 minutes.</h1>
+        <p class="hero-lead">InvestAI – dirbtinio intelekto pagalbininkas investuotojui. Jis kasdien perskaito įmonių pranešimus ir naujienas, atrenka svarbiausias, paaiškina jas paprastai ir <b>visada parodo, iš kur informacija</b>.</p>
+        <div class="cta">
+          <a class="btn primary" href="apzvalga.html">Šiandienos apžvalga</a>
+          <a class="btn" href="rinkos.html">Žiūrėti rinkas</a>
+        </div>
+      </div>
+      <aside class="card latest" id="latest" aria-live="polite"><p class="muted">Įkeliama naujausia apžvalga…</p></aside>
+    </div>
+  </section>
+
+  <section class="wrap wide block">
+    <h2 class="section-title">Kaip veikia InvestAI</h2>
+    <ol class="steps">
+      <li><span class="step-n">1</span><h3>Surenka</h3><p>Kiekvieną darbo dieną po biržų uždarymo AI peržiūri įmonių pranešimus, biržų skelbimus ir patikimas naujienas. Pirmenybė – pirminiams šaltiniams.</p></li>
+      <li><span class="step-n">2</span><h3>Pažymi patikimumą</h3><p>Prie kiekvienos naujienos – žyma: <span class="badge primary">Pirminis šaltinis</span> <span class="badge media">Žiniasklaida</span> arba <span class="badge unverified">Reikia patikrinti</span>, jei šaltiniai neaiškūs.</p></li>
+      <li><span class="step-n">3</span><h3>Paaiškina</h3><p>Faktai atskirti nuo analizės: skiltis „Kodėl svarbu“ paaiškina, ką naujiena gali reikšti investuotojui – be pirk / parduok patarimų.</p></li>
+    </ol>
+  </section>
+
+  <section class="wrap wide block">
+    <h2 class="section-title">Ką rasi</h2>
+    <div class="features">
+      <a class="card feature" href="apzvalga.html"><span class="f-ico">📰</span><h3>Dienos apžvalga</h3><p>Baltijos ir pasaulio rinkų svarbiausi įvykiai su šaltiniais ir artimiausių datų kalendoriumi.</p></a>
+      <a class="card feature" href="rinkos.html"><span class="f-ico">🗺️</span><h3>Rinkos</h3><p>Visų S&amp;P 500 įmonių žemėlapis, pasaulio indeksai, žaliavos, valiutos, kriptovaliutos ir Baltijos akcijos.</p></a>
+      <a class="card feature" href="aktyvas.html"><span class="f-ico">🔎</span><h3>Aktyvų puslapiai</h3><p>Nvidia, Apple, Ignitis ar bet kuri kita įmonė: grafikas, finansiniai rodikliai, aprašymas ir naujienos.</p></a>
+      <div class="card feature soon"><span class="f-ico">🧩</span><h3>Portfelio rentgenas <span class="badge tag">Netrukus</span></h3><p>Įkelk portfelio nuotrauką – pamatysi, kaip jis paskirstytas pagal sektorius, šalis ir rizikas, bei kokios naujienos liečia tavo akcijas.</p></div>
+    </div>
+  </section>
+
+  <section class="wrap wide block">
+    <h2 class="section-title">Populiarūs aktyvai</h2>
+    <div class="chips">
+      <a class="chip" href="aktyvas.html?s=NASDAQ:NVDA">Nvidia<span>NVDA</span></a>
+      <a class="chip" href="aktyvas.html?s=NASDAQ:AAPL">Apple<span>AAPL</span></a>
+      <a class="chip" href="aktyvas.html?s=NASDAQ:MSFT">Microsoft<span>MSFT</span></a>
+      <a class="chip" href="aktyvas.html?s=NASDAQ:TSLA">Tesla<span>TSLA</span></a>
+      <a class="chip" href="aktyvas.html?s=NASDAQ:AMZN">Amazon<span>AMZN</span></a>
+      <a class="chip" href="aktyvas.html?s=AMEX:SPY">S&amp;P 500 ETF<span>SPY</span></a>
+      <a class="chip" href="aktyvas.html?s=BITSTAMP:BTCUSD">Bitcoin<span>BTC</span></a>
+      <a class="chip" href="aktyvas.html?s=OMXVSE:IGN1L">Ignitis grupė<span>IGN1L</span></a>
+      <a class="chip" href="aktyvas.html?s=OMXTSE:LHV1T">LHV Group<span>LHV1T</span></a>
+      <a class="chip" href="aktyvas.html?s=OMXVSE:TEL1L">Telia Lietuva<span>TEL1L</span></a>
+    </div>
+  </section>
+
+  <section class="wrap wide block">
+    <div class="card honest">
+      <h2 class="section-title">Ko InvestAI nedaro</h2>
+      <ul>
+        <li><b>Nepataria, ką pirkti ar parduoti.</b> Tai informacija, ne investavimo rekomendacija.</li>
+        <li><b>Neprognozuoja kainų.</b> Niekas patikimai nežino, kur kaina bus rytoj – ir mes to neapsimetame.</li>
+        <li><b>Nevykdo sandorių</b> ir nesaugo jūsų duomenų.</li>
+      </ul>
+      <p class="muted">AI gali klysti. Todėl prie kiekvieno teiginio yra šaltinis – svarbius dalykus visada pasitikrinkite.</p>
+    </div>
+  </section>
+</main>
 </body>
 </html>

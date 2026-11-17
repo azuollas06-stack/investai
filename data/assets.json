@@ -1,0 +1,59 @@
+{
+  "note": "Paieškos sąrašas. Bet kurį kitą simbolį galima įvesti formatu BIRŽA:SIMBOLIS (pvz., NYSE:KO).",
+  "groups": [
+    {
+      "id": "us",
+      "title": "JAV didžiosios įmonės",
+      "items": [
+        ["NASDAQ:NVDA", "Nvidia"], ["NASDAQ:AAPL", "Apple"], ["NASDAQ:MSFT", "Microsoft"],
+        ["NASDAQ:AMZN", "Amazon"], ["NASDAQ:GOOGL", "Alphabet (Google)"], ["NASDAQ:META", "Meta Platforms"],
+        ["NASDAQ:TSLA", "Tesla"], ["NASDAQ:AVGO", "Broadcom"], ["NYSE:BRK.B", "Berkshire Hathaway"],
+        ["NYSE:JPM", "JPMorgan Chase"], ["NYSE:LLY", "Eli Lilly"], ["NYSE:V", "Visa"],
+        ["NYSE:MA", "Mastercard"], ["NYSE:UNH", "UnitedHealth"], ["NYSE:XOM", "Exxon Mobil"],
+        ["NASDAQ:COST", "Costco"], ["NYSE:WMT", "Walmart"], ["NYSE:JNJ", "Johnson & Johnson"],
+        ["NYSE:PG", "Procter & Gamble"], ["NYSE:HD", "Home Depot"], ["NASDAQ:NFLX", "Netflix"],
+        ["NYSE:ORCL", "Oracle"], ["NASDAQ:AMD", "AMD"], ["NYSE:KO", "Coca-Cola"],
+        ["NASDAQ:PEP", "PepsiCo"], ["NYSE:BAC", "Bank of America"], ["NASDAQ:ADBE", "Adobe"],
+        ["NYSE:CRM", "Salesforce"], ["NASDAQ:INTC", "Intel"], ["NYSE:DIS", "Disney"],
+        ["NASDAQ:PLTR", "Palantir"], ["NYSE:MCD", "McDonald's"], ["NYSE:NKE", "Nike"],
+        ["NASDAQ:QCOM", "Qualcomm"], ["NYSE:IBM", "IBM"], ["NYSE:GS", "Goldman Sachs"]
+      ]
+    },
+    {
+      "id": "etf",
+      "title": "Indeksai ir ETF",
+      "items": [
+        ["AMEX:SPY", "SPDR S&P 500 ETF"], ["NASDAQ:QQQ", "Invesco QQQ (Nasdaq 100)"],
+        ["AMEX:VTI", "Vanguard Total Stock Market"], ["AMEX:VT", "Vanguard Total World"],
+        ["XETR:EUNL", "iShares Core MSCI World (EUNL)"], ["XETR:SXR8", "iShares Core S&P 500 (SXR8)"],
+        ["AMEX:GLD", "SPDR Gold"]
+      ]
+    },
+    {
+      "id": "crypto",
+      "title": "Kriptovaliutos",
+      "items": [
+        ["BITSTAMP:BTCUSD", "Bitcoin"], ["BITSTAMP:ETHUSD", "Ethereum"],
+        ["BINANCE:SOLUSDT", "Solana"], ["BINANCE:XRPUSDT", "XRP"]
+      ]
+    },
+    {
+      "id": "baltic",
+      "title": "Baltijos akcijos",
+      "items": [
+        ["OMXVSE:IGN1L", "Ignitis grupė"], ["OMXVSE:TEL1L", "Telia Lietuva"],
+        ["OMXVSE:SAB1L", "Artea bankas (Šiaulių bankas)"], ["OMXVSE:APG1L", "Apranga"],
+        ["OMXVSE:KNF1L", "KN Energies"], ["OMXVSE:AKO1L", "Akola Group"],
+        ["OMXVSE:IVL1L", "Invalda INVL"], ["OMXVSE:ROE1L", "Rokiškio sūris"],
+        ["OMXVSE:VBL1L", "Vilkyškių pieninė"], ["OMXVSE:INC1L", "INVL Technology"],
+        ["OMXVSE:AMG1L", "Amber Grid"],
+        ["OMXTSE:LHV1T", "LHV Group"], ["OMXTSE:TAL1T", "Tallink Grupp"],
+        ["OMXTSE:TSM1T", "Tallinna Sadam"], ["OMXTSE:MRK1T", "Merko Ehitus"],
+        ["OMXTSE:TKM1T", "Tallinna Kaubamaja"], ["OMXTSE:HAE1T", "Harju Elekter"],
+        ["OMXTSE:TVE1T", "Tallinna Vesi"], ["OMXTSE:CPA1T", "Coop Pank"],
+        ["OMXTSE:INF1T", "Infortar"], ["OMXTSE:EFT1T", "EfTEN Real Estate Fund"],
+        ["OMXRSE:GRD1R", "Grindeks"], ["OMXRSE:SAF1R", "SAF Tehnika"], ["OMXRSE:DGR1R", "DelfinGroup"]
+      ]
+    }
+  ]
+}
