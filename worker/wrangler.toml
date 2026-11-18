@@ -1,0 +1,23 @@
+# InvestAI AI serveris (Cloudflare Worker). Įkeliamas automatiškai: .github/workflows/ai.yml
+name = "investai-ai"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+account_id = "ce18265d90a54347cdf321594ee75966"
+workers_dev = true
+
+[vars]
+# Tiekėją ir modelį galima pakeisti čia: PROVIDER = "openai" | "anthropic"
+PROVIDER = "openai"
+MODEL = "gpt-6-luna"
+ALLOWED_ORIGINS = "https://azuollas06-stack.github.io,http://localhost:8765"
+# Kiek klausimų per dieną vienam lankytojui ir visiems kartu (biudžeto apsauga)
+PER_USER_DAY = "25"
+GLOBAL_DAY = "600"
+
+[[durable_objects.bindings]]
+name = "LIMITER"
+class_name = "Limiter"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Limiter"]

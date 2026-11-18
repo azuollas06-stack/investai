@@ -1,0 +1,73 @@
+name: AI serveris
+
+on:
+  push:
+    branches: [main]
+    paths: ["worker/**", ".github/workflows/ai.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ai-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ce18265d90a54347cdf321594ee75966
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Patikrinti raktus
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then echo "::error::Nėra CLOUDFLARE_API_TOKEN paslapties"; exit 1; fi
+          curl -fsS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" https://api.cloudflare.com/client/v4/user/tokens/verify | python3 -c "import sys,json; d=json.load(sys.stdin); print('Cloudflare raktas:', d['result']['status'])" || \
+          curl -fsS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/tokens/verify" | python3 -c "import sys,json; d=json.load(sys.stdin); print('Cloudflare raktas:', d['result']['status'])"
+
+      - name: workers.dev adresas
+        run: |
+          API="https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/workers/subdomain"
+          SUB=$(curl -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" "$API" | python3 -c "import sys,json; d=json.load(sys.stdin); print((d.get('result') or {}).get('subdomain') or '')")
+          if [ -z "$SUB" ]; then
+            for name in investai investai-lt investai-ai investai-$RANDOM; do
+              R=$(curl -sS -X PUT -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" -H "Content-Type: application/json" --data "{\"subdomain\":\"$name\"}" "$API")
+              if echo "$R" | grep -q '"success":true'; then SUB=$name; break; fi
+              echo "$R"
+            done
+          fi
+          echo "workers.dev subdomenas: $SUB"
+
+      - name: Įkelti serverį
+        working-directory: worker
+        run: npx --yes wrangler@4 deploy 2>&1 | tee ../deploy.log
+
+      - name: Perduoti AI raktus serveriui
+        working-directory: worker
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -n "$OPENAI_API_KEY" ]; then printf '%s' "$OPENAI_API_KEY" | npx --yes wrangler@4 secret put OPENAI_API_KEY; else echo "OPENAI_API_KEY nėra"; fi
+          if [ -n "$ANTHROPIC_API_KEY" ]; then printf '%s' "$ANTHROPIC_API_KEY" | npx --yes wrangler@4 secret put ANTHROPIC_API_KEY; else echo "ANTHROPIC_API_KEY nėra"; fi
+
+      - name: Išsaugoti adresą svetainei
+        run: |
+          URL=$(grep -oE 'https://[a-z0-9.-]+\.workers\.dev' deploy.log | head -1)
+          if [ -z "$URL" ]; then echo "::error::Neradome serverio adreso"; exit 1; fi
+          echo "Serveris: $URL"
+          curl -sS "$URL/" || true
+          printf '{"url": "%s"}\n' "$URL" > data/ai.json
+          git config user.name "investai-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/ai.json
+          if git diff --cached --quiet; then echo "Adresas nepasikeitė"; exit 0; fi
+          git commit -m "AI serverio adresas"
+          for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
