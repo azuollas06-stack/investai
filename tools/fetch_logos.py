@@ -122,6 +122,7 @@ def wiki_logo(page: str) -> bytes | None:
         src = (r.json().get("thumbnail") or {}).get("source") if r.status_code == 200 else None
     except Exception:  # noqa: BLE001
         src = None
+    print(f"  wiki {page}: {src}")
     if not src:
         return None
     src = re.sub(r"/(\d+)px-", "/240px-", src)  # didesnė miniatiūra
@@ -192,6 +193,12 @@ def main() -> int:
             if not ok and tv in WIKI:
                 data = wiki_logo(WIKI[tv])
                 ok = bool(data and save(data, dest, 32))
+                if data and not ok:
+                    try:
+                        im = Image.open(io.BytesIO(data))
+                        print(f"  wiki atmesta: {im.size} {im.mode}")
+                    except Exception as e:  # noqa: BLE001
+                        print(f"  wiki ne paveikslėlis: {e}")
             if not ok and g["id"] == "etf":
                 # To paties valdytojo fondai – tas pats logotipas
                 key = next((k for k, _ in ISSUERS if a["n"].startswith(k) or k in a["n"]), None)
