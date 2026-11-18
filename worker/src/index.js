@@ -232,7 +232,7 @@ async function guard(env) {
 }
 
 /* ===== Naujienos ===== */
-const NEWS_VER = 4;
+const NEWS_VER = 5;
 const TOPICS = {
   markets: { q: "stock market", feeds: ["https://www.cnbc.com/id/100003114/device/rss/rss.html", "https://feeds.content.dowjones.io/public/rss/mw_topstories", "https://feeds.finance.yahoo.com/rss/2.0/headline?s=^GSPC,^IXIC&region=US&lang=en-US"] },
   tech: { q: "tech stocks", feeds: ["https://www.cnbc.com/id/19854910/device/rss/rss.html", "https://feeds.finance.yahoo.com/rss/2.0/headline?s=NVDA,AAPL,MSFT,GOOGL,AMZN,META&region=US&lang=en-US"] },
@@ -245,7 +245,7 @@ const BAD_SRC = /coinpedia|changelly|benzinga pro|motley fool|fool\.com|zacks|in
 const newsKey = (o) => new Request(`https://investai-cache/news?t=${o.t}&q=${encodeURIComponent((o.q || "").toLowerCase())}&s=${o.s || ""}&v=${NEWS_VER}`);
 function xmlPick(blk, tag) {
   const m = blk.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`));
-  return m ? m[1].replace(/<!\[CDATA\[|\]\]>/g, "").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;|&#039;|&apos;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#8217;/g, "’").replace(/<[^>]+>/g, "").trim() : "";
+  return m ? m[1].replace(/<!\[CDATA\[|\]\]>/g, "").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;|&#039;|&apos;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16))).replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(+d)).replace(/&nbsp;/g, " ").replace(/<[^>]+>/g, "").trim() : "";
 }
 async function readFeed(feed, lt) {
   const rss = await fetch(feed, { headers: { "User-Agent": "Mozilla/5.0 (compatible; InvestAI/1.0; +https://azuollas06-stack.github.io/investai/)", Accept: "application/rss+xml, application/xml, text/xml" }, cf: { cacheTtl: 300 }, signal: AbortSignal.timeout(6000) });
