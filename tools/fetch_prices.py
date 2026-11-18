@@ -248,7 +248,10 @@ def main() -> int:
             if an.get("tMean") and m.get("price"):
                 an["up"] = pct(an["tMean"], m["price"])
             m["an"] = an
-        for src, dst in (("marketCap", "mcap"), ("trailingPE", "pe"), ("forwardPE", "fpe"), ("dividendYield", "dy"), ("dividendRate", "dr")):
+        for src, dst in (("marketCap", "mcap"), ("trailingPE", "pe"), ("forwardPE", "fpe"), ("dividendYield", "dy"), ("dividendRate", "dr"),
+                         ("profitMargins", "pm"), ("operatingMargins", "om"), ("revenueGrowth", "rg"), ("earningsGrowth", "eg"),
+                         ("debtToEquity", "de"), ("returnOnEquity", "roe"), ("trailingEps", "eps"), ("beta", "beta"),
+                         ("freeCashflow", "fcf"), ("totalCash", "cash"), ("totalDebt", "debt"), ("totalRevenue", "rev")):
             v = info.get(src)
             if isinstance(v, (int, float)) and math.isfinite(v):
                 m[dst] = round(float(v), 4)
@@ -260,6 +263,48 @@ def main() -> int:
             m[dst] = datetime.fromtimestamp(v, timezone.utc).strftime("%Y-%m-%d")
         time.sleep(0.25)
     print(f"Rodiklių nepavyko gauti: {fund_fail}")
+
+    # Kartą per savaitę: kelerių metų finansiniai rezultatai (grynasis pelnas, pajamos, akcijų skaičius)
+    fund_path = ROOT / "data" / "fund.json"
+    try:
+        fund_old = json.loads(fund_path.read_text()) if fund_path.exists() else {}
+    except Exception:  # noqa: BLE001
+        fund_old = {}
+    age_days = 999
+    if fund_old.get("updated"):
+        try:
+            age_days = (datetime.now(timezone.utc) - datetime.strptime(fund_old["updated"], "%Y-%m-%d").replace(tzinfo=timezone.utc)).days
+        except Exception:  # noqa: BLE001
+            pass
+    if age_days >= 6:
+        fund = {}
+        def row(df, *names):
+            for n in names:
+                if df is not None and n in df.index:
+                    vals = [(str(c)[:4], float(v)) for c, v in df.loc[n].items() if v == v]
+                    return sorted(vals)[-5:]
+            return []
+        for tv, m in out.items():
+            if stock_types.get(tv) != "Akcija":
+                continue
+            try:
+                t = yf.Ticker(m["y"])
+                inc = t.income_stmt
+                bs = t.balance_sheet
+                f = {
+                    "ni": row(inc, "Net Income", "Net Income Common Stockholders"),
+                    "rev": row(inc, "Total Revenue", "Operating Revenue"),
+                    "sh": row(bs, "Ordinary Shares Number", "Share Issued"),
+                }
+                f = {k: [[y, round(v)] for y, v in vals] for k, vals in f.items() if vals}
+                if f:
+                    fund[tv] = f
+            except Exception:  # noqa: BLE001
+                pass
+            time.sleep(0.3)
+        if fund:
+            fund_path.write_text(json.dumps({"updated": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "note": "Metiniai duomenys (Yahoo Finance): ni – grynasis pelnas, rev – pajamos, sh – akcijų skaičius. Valiuta – įmonės ataskaitų valiuta.", "items": fund}, ensure_ascii=False, separators=(",", ":")))
+            print(f"Finansiniai rezultatai: {len(fund)} įmonių")
 
     # Valiutų kursai: kiek eurų už vieną valiutos vienetą (portfelio vertėms)
     fx = {"EUR": 1}

@@ -95,6 +95,10 @@ const PFAI = (() => {
     if (ev.length) lines.push("Artimiausios ataskaitos: " + ev.map((x) => `${x.r.n} ${x.p.ed}`).join(", "));
     const mv = a.rows.map((r) => ({ r, w: (P[r.s] || {}).w1 })).filter((x) => typeof x.w === "number");
     if (mv.length) lines.push("Savaitės pokyčiai: " + mv.sort((x, y) => Math.abs(y.w) - Math.abs(x.w)).slice(0, 6).map((x) => `${x.r.n} ${x.w > 0 ? "+" : ""}${x.w.toLocaleString("lt-LT", { maximumFractionDigits: 1 })} %`).join(", "));
+    if (typeof holdingChecks === "function") {
+      const fl = a.rows.map((r) => ({ r, c: holdingChecks(r).filter((c) => c.lvl !== "green") })).filter((x) => x.c.length);
+      if (fl.length) lines.push("Faktai apie įmones (Yahoo Finance):\n" + fl.map((x) => `- ${x.r.n}: ${x.c.map((c) => c.t).join(" ")}`).join("\n"));
+    }
     return lines.join("\n");
   }
   function mdLite(t) {

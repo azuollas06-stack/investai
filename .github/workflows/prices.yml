@@ -33,7 +33,7 @@ jobs:
         run: |
           git config user.name "investai-bot"
           git config user.email "investai-bot@users.noreply.github.com"
-          git add data/prices.json data/hist
+          git add data/prices.json data/hist data/fund.json 2>/dev/null || git add data/prices.json data/hist
           if git diff --cached --quiet; then echo "Nėra pakeitimų"; exit 0; fi
           git commit -m "Kainų duomenys $(date -u +%Y-%m-%d)"
           for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 5; done

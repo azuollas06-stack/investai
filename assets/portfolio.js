@@ -139,6 +139,7 @@ function renderResult() {
   renderCards(a);
   renderDivs(a);
   renderWeek(a);
+  renderNext(a);
   if (typeof PFAI !== "undefined") { PFAI.renderReview(a); PFAI.renderAlerts(a); }
   decorateHeads();
   renderTable(a);
@@ -374,6 +375,7 @@ function renderScenarios(a) {
 }
 let EXPLAIN = {};
 let PRICES_PF = { items: {} };
+let FUND = {};
 function renderCards(a) {
   const total = a.total;
   const list = state.holdings.filter((h) => h.value > 0).slice().sort((x, y) => y.value - x.value);
@@ -878,6 +880,76 @@ function autoStamp() {
   return h && !isDemo ? ` · vertė pagal kainas: ${priceStamp(PRICES_PF.items[h.s]).toLowerCase()}` : "";
 }
 
+/* ---------- Kas toliau? Faktai apie pozicijas ir ekspertų nuomonės (ne rekomendacijos) ---------- */
+const AN_TXT = { strong_buy: "stipriai pirkti", buy: "pirkti", hold: "laikyti", underperform: "prasčiau už rinką", sell: "parduoti" };
+const pct0 = (v) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toLocaleString("lt-LT", { maximumFractionDigits: 0 })} %`;
+function holdingChecks(r) {
+  const p = PRICES_PF.items[r.s] || {}, f = FUND[r.s] || {};
+  const out = []; // { lvl: "red" | "amber" | "green", t }
+  const ni = (f.ni || []).map((x) => x[1]), rev = (f.rev || []).map((x) => x[1]), sh = (f.sh || []).map((x) => x[1]);
+  const type = (findAsset(r.s) || {}).type;
+  if (type === "Akcija") {
+    if (ni.length >= 2) {
+      const losses = ni.filter((v) => v < 0).length;
+      if (losses === ni.length) {
+        const rg = rev.length >= 2 && rev[0] > 0 ? (Math.pow(rev[rev.length - 1] / rev[0], 1 / (rev.length - 1)) - 1) * 100 : null;
+        out.push({ lvl: "red", t: `Nuostolinga visus ${ni.length} pastaruosius metus${rg !== null ? ` (pajamos ${rg >= 0 ? "augo" : "mažėjo"} vidutiniškai ${pct0(rg)} per metus)` : ""}.` });
+      } else if (ni[ni.length - 1] < 0) out.push({ lvl: "amber", t: `Paskutiniais metais dirbo nuostolingai (${losses} iš ${ni.length} metų – nuostolis).` });
+      else if (losses === 0 && typeof p.pm === "number") out.push({ lvl: "green", t: `Pelninga visus ${ni.length} metus, pelno marža ${pct0(p.pm * 100).replace("+", "")}.` });
+    } else if (typeof p.pm === "number" && p.pm < 0) out.push({ lvl: "amber", t: `Šiuo metu nuostolinga (pelno marža ${pct0(p.pm * 100)}).` });
+    if (sh.length >= 2 && sh[0] > 0) {
+      const dil = (sh[sh.length - 1] / sh[0] - 1) * 100;
+      if (dil >= 20) out.push({ lvl: "amber", t: `Akcijų skaičius per ${sh.length - 1} m. išaugo ${pct0(dil)} – įmonė leido naujas akcijas, todėl kiekvieno akcininko dalis mažėjo.` });
+    }
+    if (typeof p.de === "number" && p.de > 200) out.push({ lvl: "amber", t: `Didelė skola: skolos ir nuosavo kapitalo santykis ${(p.de / 100).toLocaleString("lt-LT", { maximumFractionDigits: 1 })}.` });
+    if (typeof p.fcf === "number" && p.fcf < 0 && !(ni.length && ni.every((v) => v < 0))) out.push({ lvl: "amber", t: "Laisvieji pinigų srautai neigiami – veiklai pinigų išleidžia daugiau, nei uždirba." });
+  }
+  if (typeof p.vol === "number" && p.vol >= 60) out.push({ lvl: "amber", t: `Labai svyruoja: metinis kintamumas ~${Math.round(p.vol)} % (S&P 500 – apie 15–20 %).` });
+  if (typeof p.fromHigh === "number" && p.fromHigh <= -50) out.push({ lvl: "amber", t: `Kaina ${pct0(p.fromHigh)} nuo 52 savaičių aukščiausio taško.` });
+  return out;
+}
+function analystLine(r) {
+  const an = (PRICES_PF.items[r.s] || {}).an;
+  if (!an || !an.n) return "";
+  return `Analitikai (${an.n}, Yahoo Finance): sutarimas „${AN_TXT[an.key] || "–"}“${typeof an.up === "number" ? `, vidutinė tikslinė kaina ${pct0(an.up)} nuo dabartinės` : ""}. Tai jų nuomonė, ne faktas.`;
+}
+function renderNext(a) {
+  const el = $("#r-next");
+  if (!el) return;
+  const rows = a.rows.filter((r) => r.s !== CASH);
+  const list = rows.map((r) => ({ r, w: r.value / a.total, c: holdingChecks(r) }));
+  const sev = (x) => x.c.filter((c) => c.lvl === "red").length * 3 + x.c.filter((c) => c.lvl === "amber").length;
+  const watch = list.filter((x) => sev(x) > 0).sort((x, y) => sev(y) * (0.5 + y.w) - sev(x) * (0.5 + x.w));
+  const strong = list.filter((x) => sev(x) === 0 && x.c.some((c) => c.lvl === "green")).sort((x, y) => y.w - x.w);
+  const unknown = list.filter((x) => !x.c.length);
+  const P = a.pnl, single = rows.slice().sort((x, y) => y.value - x.value)[0];
+  const bondShare = a.typeShare("Obligacijos") + a.typeShare("Obligacijų fondas");
+  const sec = a.sectors.filter((x) => !/Grynieji|Obligacijos|Auksas|Nežinomas/.test(x.k))[0];
+  const port = [];
+  if (single && single.value / a.total > 0.25) port.push(`Viena pozicija – <b>${esc(single.n)}</b> – sudaro ${pct(single.value / a.total)} portfelio. Jei ji smarkiai kristų, tai pajustum visame portfelyje.`);
+  if (sec && sec.p > 0.4) port.push(`<b>${esc(sec.k)}</b> sudaro ${pct(sec.p)} – portfelis labai priklauso nuo vieno sektoriaus.`);
+  if (bondShare < 0.01 && a.typeShare("Akcija") + a.typeShare("ETF") > 0.9) port.push("Beveik visas portfelis – akcijos. Nuosmukio metais svyravimai gali būti dideli; daliai žmonių tai tinka, daliai – ne.");
+  const item = (x) => `<li class="nx-item">
+      <div class="nx-top">${logoHTML(x.r.s, x.r.n, "#1d3a63", 36)}<div class="nx-name"><b>${esc(x.r.n)}</b><small>${pct(x.w)} portfelio${typeof x.r.pnlPct === "number" ? ` · ${signedPct(x.r.pnlPct)} nuo pirkimo` : ""}</small></div>${isTv(x.r.s) ? `<a class="nx-go" href="${assetUrl(x.r.s)}" aria-label="Atidaryti ${esc(x.r.n)}">${icon("chevron", 18)}</a>` : ""}</div>
+      <ul class="nx-flags">${x.c.map((c) => `<li class="nx-${c.lvl}">${esc(c.t)}</li>`).join("")}</ul>
+      ${analystLine(x.r) ? `<p class="nx-an">${esc(analystLine(x.r))}</p>` : ""}
+    </li>`;
+  el.innerHTML = `
+    <div class="nx-hero"><span class="nx-ico">${icon("target", 24)}</span><div><h2>Kas toliau?</h2><p>Faktai apie tavo pozicijas ir ekspertų nuomonės vienoje vietoje. Ką daryti – sprendi tu: InvestAI neteikia asmeninių rekomendacijų.</p></div></div>
+    ${port.length ? `<section class="nx-sec"><h3>Visas portfelis</h3><ul class="nx-port">${port.map((t) => `<li>${t}</li>`).join("")}</ul></section>` : ""}
+    <section class="nx-sec"><h3>Verta pasitikrinti${watch.length ? ` <span class="nx-count">${watch.length}</span>` : ""}</h3>
+      ${watch.length ? `<ul class="nx-list">${watch.map(item).join("")}</ul>` : `<p class="muted">Tarp tavo pozicijų neradome nuostolingų, labai prasiskolinusių ar itin smarkiai svyruojančių įmonių.</p>`}</section>
+    ${strong.length ? `<section class="nx-sec"><h3>Stiprios pusės</h3><ul class="nx-list">${strong.slice(0, 6).map(item).join("")}</ul></section>` : ""}
+    <section class="nx-sec nx-links"><h3>Kur ieškoti toliau</h3>
+      <a class="nx-link" href="strategija.html">${icon("strategy", 20)}<span><b>Turi pinigų investuoti?</b><small>Pasirink strategiją – pamatysi, kurias portfelio dalis ji siūlo didinti</small></span>${icon("chevron", 18)}</a>
+      <a class="nx-link" href="atranka.html">${icon("screener", 20)}<span><b>Atranka</b><small>Pelningos įmonės, plačios rinkos fondai, sektoriai, kurių dar neturi</small></span>${icon("chevron", 18)}</a>
+      <a class="nx-link" href="${"#"}" data-ai-ask="Kurios mano portfelio įmonės dirba nuostolingai ir ką tai reiškia investuotojui?">${icon("ai", 20)}<span><b>Paklausk AI</b><small>„Kurios mano įmonės nuostolingos ir ką tai reiškia?“</small></span>${icon("chevron", 18)}</a>
+    </section>
+    ${unknown.length ? `<p class="muted small">Neturime duomenų apie: ${unknown.slice(0, 8).map((x) => esc(x.r.n)).join(", ")}. Fondams įmonių rodikliai netaikomi.</p>` : ""}
+    <p class="disclaimer">Duomenys – Yahoo Finance (metinės ataskaitos atnaujinamos kas savaitę). Nuostolinga įmonė nebūtinai bloga investicija, o pelninga – nebūtinai gera: tai tik faktai, į kuriuos verta atsižvelgti.</p>`;
+  el.querySelectorAll("[data-ai-ask]").forEach((b) => b.addEventListener("click", (e) => { e.preventDefault(); if (window.openAI) window.openAI(b.dataset.aiAsk); else location.href = "strategija.html"; }));
+}
+
 /* ---------- Skilčių antraščių ikonos ---------- */
 const HEAD_ICONS = [[/žemėlapis/i, "grid"], [/^Svarbiausia/i, "digest"], [/uždirbo/i, "markets"], [/Diversifikacijos/i, "target"], [/Tavo savaitė/i, "calendar"], [/Tavo pozicijos/i, "portfolio"], [/Palyginimas/i, "screener"], [/nuosmukį/i, "strategy"], [/taisyklės/i, "about"], [/Kas būtų/i, "tools"], [/investuoti\?/i, "upload"], [/aktyvai šiandien/i, "news"], [/^Duomenys/i, "archive"], [/Redaguoti/i, "tools"]];
 const FACT_ICONS = [[/uždirbo|prarado|rezultat/i, "markets"], [/paaugo|krito/i, "strategy"], [/Didžiausia pozicija/i, "portfolio"], [/sektoriaus|sektori/i, "grid"], [/pasaulio rink/i, "screener"], [/paaiškinim/i, "news"], [/Kripto/i, "asset"], [/obligacij|grynų|grynieji/i, "premium"], [/valiut|dolerio|USD/i, "tools"]];
@@ -1148,7 +1220,7 @@ function flag(input, msg) {
 document.addEventListener("DOMContentLoaded", async () => {
   if (document.body.dataset.page !== "portfolio") return;
   try { ASSETS = (await getJSON("data/assets.json")).groups.flatMap((g) => g.items); } catch (e) { console.error(e); }
-  [EXPLAIN, PRICES_PF] = await Promise.all([loadExplain(), loadPrices()]);
+  [EXPLAIN, PRICES_PF, FUND] = await Promise.all([loadExplain(), loadPrices(), getJSON("data/fund.json").then((d) => d.items || {}).catch(() => ({}))]);
   const slot = $("#pf-help"); if (slot) slot.innerHTML = helpHTML();
   setupInputs();
   if (new URLSearchParams(location.search).has("pavyzdys")) {
