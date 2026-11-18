@@ -249,7 +249,7 @@ export default {
     if (url.pathname === "/news" && req.method === "GET") {
       const q = (url.searchParams.get("q") || "").slice(0, 80).trim();
       if (!q) return json({ error: "Nėra užklausos." }, 400, c.headers);
-      const cacheKey = new Request(`https://investai-cache/news?q=${encodeURIComponent(q.toLowerCase())}&v=2`);
+      const cacheKey = new Request(`https://investai-cache/news?q=${encodeURIComponent(q.toLowerCase())}&v=3`);
       const cache = caches.default;
       const hit = await cache.match(cacheKey);
       if (hit) { const d = await hit.json(); return json(d, 200, { ...c.headers, "Cache-Control": "public, max-age=600" }); }
@@ -275,7 +275,7 @@ export default {
             if (!src) { try { src = new URL(link).hostname.replace(/^www\./, ""); } catch {} }
             const d = new Date(pick(blk, "pubDate"));
             return { title, link, source: src, time: isNaN(d) ? null : d.toISOString() };
-          }).filter((x) => x.title && /^https?:/.test(x.link));
+          }).filter((x) => x.title && /^https?:/.test(x.link) && !/prediction|forecast 20|should you buy|stocks? to buy|buy now|millionaire|could make you|price target 20\d\d/i.test(x.title) && !/coinpedia|changelly|benzinga pro|motley fool/i.test(x.source || ""));
           if (got.length) { items = got; break; }
         } catch (e) { dbg.push(`${name}:err:${String(e).slice(0, 80)}`); }
       }
