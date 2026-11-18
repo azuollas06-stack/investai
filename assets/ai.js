@@ -102,7 +102,7 @@
   const isPrem = () => { try { return !!localStorage.getItem("investai.premium.v1"); } catch { return false; } };
 
   /* ---------- Langas ---------- */
-  const SPARK = `<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2.5l1.9 5.1 5.1 1.9-5.1 1.9L12 16.5l-1.9-5.1L5 9.5l5.1-1.9zM18.5 14l.95 2.55L22 17.5l-2.55.95L18.5 21l-.95-2.55L15 17.5l2.55-.95z"/></svg>`;
+  const SPARK = typeof icon === "function" ? icon("ai", 22) : "";
   const ORB = (cls = "") => `<span class="ai-orb ${cls}" aria-hidden="true">${SPARK}</span>`;
   function bubbles() {
     if (!chat.length) return `<div class="ai-hello">${ORB("big")}<h2>Labas! Ko nori paklausti?</h2><p>Paaiškinu terminus, rinkos įvykius ir tavo portfelio sudėtį – paprastai ir lietuviškai.</p></div>
@@ -117,7 +117,7 @@
     log.innerHTML = bubbles();
     log.scrollTop = log.scrollHeight;
     const sub = dlg.querySelector(".ai-left");
-    sub.innerHTML = `${left === null ? "Pasiruošęs" : `Liko ${left} ${ltN(left, "klausimas", "klausimai", "klausimų")} šiandien`}${prem ? ' <span class="ai-prem">★ Premium</span>' : ""}`;
+    sub.innerHTML = `${left === null ? "Pasiruošęs" : `Liko ${left} ${ltN(left, "klausimas", "klausimai", "klausimų")} šiandien`}${prem ? ' <span class="ai-prem">${ico("gem", 11)} Premium</span>' : ""}`;
     dlg.querySelector(".ai-send").disabled = busy;
     dlg.querySelector(".ai-clear").hidden = !chat.length || busy;
     dlg.classList.toggle("is-busy", busy);
@@ -129,7 +129,7 @@
     dlg.setAttribute("aria-label", "InvestAI asistentas");
     const hasPf = holdings().length > 0;
     prem = !!premiumToken();
-    const upsell = !prem ? (isPrem() ? `<a class="ai-up" href="premium.html">★ Premium: dar kartą įvesk slaptažodį ir gausi 2× daugiau klausimų</a>` : `<a class="ai-up" href="premium.html">★ Premium nariams – 2× daugiau klausimų per dieną</a>`) : "";
+    const upsell = !prem ? (isPrem() ? `<a class="ai-up" href="premium.html">${ico("gem", 14)} Premium: įvesk slaptažodį iš naujo</a>` : `<a class="ai-up" href="premium.html">${ico("gem", 14)} Premium – 2× daugiau klausimų</a>`) : "";
     dlg.innerHTML = `<div class="ai-inner"><div class="ai-aurora" aria-hidden="true"></div>
       <header class="ai-head">${ORB()}<div><b>InvestAI asistentas</b><small class="ai-left"></small></div>
         <button type="button" class="icon-btn ai-clear" hidden aria-label="Naujas pokalbis" title="Naujas pokalbis"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>

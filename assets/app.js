@@ -96,7 +96,15 @@ const ICONS = {
   menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
   close: '<path d="M6 6l12 12M18 6 6 18"/>',
 };
-const icon = (id, size = 22) => `<svg viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS[id] || ""}</svg>`;
+// Ikonos, nupieštos Figmoje (failas „InvestAI ikonos“), 96 × 96 tinklelyje
+const FIG = {
+  ai: '<path d="M27 16H69C76.18 16 82 21.82 82 29V57C82 64.18 76.18 70 69 70H43L25 82V70C18.92 69.05 14 63.35 14 57V29C14 21.82 19.82 16 27 16Z"/><path d="M29 55L42 43L52 49L67 32M67 43V32H56"/>',
+  bell: '<path d="M43 22V19C43 17.67 43.53 16.4 44.46 15.46C45.4 14.53 46.67 14 48 14C49.33 14 50.6 14.53 51.54 15.46C52.47 16.4 53 17.67 53 19V22"/><path d="M48 22C36 22 27 31 27 44V54C27 60 24 64 20 68C19 69 19 72 22 72H74C77 72 77 69 76 68C72 64 69 60 69 54V44C69 31 60 22 48 22Z"/><path d="M40 79C42 85 54 85 56 79"/>',
+  target: '<path d="M64 40C64 35.25 62.59 30.61 59.96 26.67C57.32 22.72 53.57 19.64 49.18 17.83C44.8 16.01 39.97 15.54 35.32 16.46C30.66 17.39 26.39 19.67 23.03 23.03C19.67 26.39 17.39 30.66 16.46 35.32C15.54 39.97 16.01 44.8 17.83 49.18C19.64 53.57 22.72 57.32 26.67 59.96C30.61 62.59 35.25 64 40 64"/><path d="M40 50C45.52 50 50 45.52 50 40C50 34.48 45.52 30 40 30C34.48 30 30 34.48 30 40C30 45.52 34.48 50 40 50Z"/><path d="M40 8V20M8 40H20M60 40H72M40 60V72"/><path d="M56 56H72L88 72L72 88L56 72V56Z"/><path d="M66 66H66.1"/>',
+  report: '<path d="M56 12H28C25.88 12 23.84 12.84 22.34 14.34C20.84 15.84 20 17.88 20 20V76C20 78.12 20.84 80.16 22.34 81.66C23.84 83.16 25.88 84 28 84H68C70.12 84 72.16 83.16 73.66 81.66C75.16 80.16 76 78.12 76 76V32L56 12Z"/><path d="M56 12V32H76"/><path d="M32 64L44 52L54 60L64 48"/>',
+  gem: '<path d="M32 24H64L84 44L48 80L12 44L32 24Z"/><path d="M12 44H84M32 24L36 44L48 80L60 44L64 24"/>',
+};
+const icon = (id, size = 22) => FIG[id] ? `<svg viewBox="0 0 96 96" width="${size}" height="${size}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">${FIG[id]}</svg>` : `<svg viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS[id] || ""}</svg>`;
 const MENU = [
   ["home", "./", "Pradžia"], ["morning", "rytas.html", "Mano rytas"], ["portfolio", "portfelis.html", "Mano portfelis"],
   ["news", "naujienos.html", "Naujienos"], ["calendar", "naujienos.html#kalendorius", "Kalendorius"], ["digest", "apzvalga.html", "Dienos apžvalga"],

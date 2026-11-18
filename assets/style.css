@@ -1713,3 +1713,27 @@ details.pos .logo-ava { border-radius: 50%; }
 @media (max-width: 760px) { .res-an { flex-direction: row !important; align-items: center !important; } }
 .pmx-th { font-size: 12px; }
 @media (max-width: 420px) { .pmx-tr { grid-template-columns: 1fr 74px 62px; } }
+
+/* v11: Figmos ikonos – AI ženklas mėlynai violetinis, Premium – auksinis deimantas */
+.ai-fab-ico, .ai-orb, .ai-send { background: linear-gradient(140deg, #6aa5ff 0%, #3b6dff 45%, #7a4dff 100%); color: #fff; }
+.ai-fab-ico { border-radius: 50%; box-shadow: 0 0 22px -4px rgba(77,141,255,.75); }
+.ai-fab { background: linear-gradient(#0d1729, #0d1729) padding-box, conic-gradient(from var(--ai-a), #6aa5ff, #7a4dff, #f5b335, #6aa5ff) border-box; box-shadow: 0 14px 40px -12px rgba(77,141,255,.6); }
+.ai-orb { border-radius: 32%; box-shadow: 0 8px 24px -8px rgba(77,141,255,.8); }
+.ai-orb::after { border-radius: 36%; background: conic-gradient(from var(--ai-a), transparent 0 65%, rgba(167,123,255,.9), transparent); }
+.ai-orb.sm { border-radius: 30%; box-shadow: none; }
+.ai-orb.big { border-radius: 30%; box-shadow: 0 20px 60px -14px rgba(77,141,255,.85), 0 0 120px -30px rgba(167,123,255,.7); }
+.ai-send { box-shadow: 0 6px 18px -6px rgba(77,141,255,.9); }
+.ai-row:focus-within { box-shadow: 0 0 0 1.5px rgba(106,165,255,.8), 0 0 30px -8px rgba(77,141,255,.55); }
+.ai-card-ico { color: #8bb4ff; background: color-mix(in srgb, #4d8dff 16%, transparent); }
+:root[data-theme="light"] .ai-card-ico { color: #2f6bff; }
+.ai-hello h2 { background: linear-gradient(100deg, var(--sea) 35%, #6aa5ff 70%, #a77bff); -webkit-background-clip: text; background-clip: text; }
+.ai-msg li::marker { color: #6aa5ff; }
+.ai-up { display: inline-flex; align-items: center; gap: 6px; }
+.ai-prem { display: inline-flex; align-items: center; gap: 4px; vertical-align: 1px; }
+.pmx-badge { display: inline-flex; align-items: center; gap: 7px; }
+.pmx-badge svg { width: 15px; height: 15px; }
+.pmx-ico svg { width: 24px; height: 24px; }
+.pmx-perk-ai .pmx-ico { color: #fff; background: linear-gradient(140deg, #6aa5ff, #3b6dff 45%, #7a4dff); }
+.pmx-perk-ai { background: linear-gradient(135deg, color-mix(in srgb, #4d8dff 14%, var(--surface)), var(--surface)); box-shadow: inset 0 0 0 1px color-mix(in srgb, #6aa5ff 40%, transparent); }
+.ai-up { white-space: nowrap; }
+.ai-hello h2 { background: none; color: var(--sea); -webkit-text-fill-color: currentColor; }
