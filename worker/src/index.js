@@ -254,17 +254,33 @@ export default {
       const hit = await cache.match(cacheKey);
       if (hit) { const d = await hit.json(); return json(d, 200, { ...c.headers, "Cache-Control": "public, max-age=600" }); }
       let items = [];
-      try {
-        const rss = await fetch(`https://news.google.com/rss/search?q=${encodeURIComponent(q)}+when:7d&hl=en-US&gl=US&ceid=US:en`, { headers: { "User-Agent": "Mozilla/5.0 InvestAI" }, cf: { cacheTtl: 600 } });
-        const xml = await rss.text();
-        const pick = (blk, tag) => { const m = blk.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`)); return m ? m[1].replace(/<!\[CDATA\[|\]\]>/g, "").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").trim() : ""; };
-        items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].slice(0, 12).map((m) => {
-          const b = m[1], src = pick(b, "source");
-          let title = pick(b, "title");
-          if (src && title.endsWith(" - " + src)) title = title.slice(0, -(src.length + 3));
-          return { title, link: pick(b, "link"), source: src, time: new Date(pick(b, "pubDate")).toISOString() };
-        }).filter((x) => x.title && x.link);
-      } catch (e) { console.log("rss klaida", String(e)); }
+      const dbg = [];
+      const pick = (blk, tag) => { const m = blk.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`)); return m ? m[1].replace(/<!\[CDATA\[|\]\]>/g, "").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/<[^>]+>/g, "").trim() : ""; };
+      const feeds = [
+        ["google", `https://news.google.com/rss/search?q=${encodeURIComponent(q + " when:7d")}&hl=en-US&gl=US&ceid=US:en`],
+        ["bing", `https://www.bing.com/news/search?q=${encodeURIComponent(q)}&format=rss&setlang=en-US`],
+      ];
+      for (const [name, feed] of feeds) {
+        try {
+          const rss = await fetch(feed, { headers: { "User-Agent": "Mozilla/5.0 (compatible; InvestAI/1.0; +https://azuollas06-stack.github.io/investai/)", Accept: "application/rss+xml, application/xml, text/xml" }, cf: { cacheTtl: 600 } });
+          const xml = await rss.text();
+          dbg.push(`${name}:${rss.status}:${xml.length}`);
+          const got = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].slice(0, 12).map((m) => {
+            const blk = m[1];
+            let src = pick(blk, "source") || pick(blk, "News:Source");
+            let title = pick(blk, "title");
+            if (src && title.endsWith(" - " + src)) title = title.slice(0, -(src.length + 3));
+            let link = pick(blk, "link");
+            const real = link.match(/[?&]url=([^&]+)/); if (name === "bing" && real) link = decodeURIComponent(real[1]);
+            if (!src) { try { src = new URL(link).hostname.replace(/^www\./, ""); } catch {} }
+            const d = new Date(pick(blk, "pubDate"));
+            return { title, link, source: src, time: isNaN(d) ? null : d.toISOString() };
+          }).filter((x) => x.title && /^https?:/.test(x.link));
+          if (got.length) { items = got; break; }
+        } catch (e) { dbg.push(`${name}:err:${String(e).slice(0, 80)}`); }
+      }
+      items.sort((x, y) => (y.time || "").localeCompare(x.time || ""));
+      if (url.searchParams.get("debug")) return json({ dbg, n: items.length }, 200, c.headers);
       // Antraščių vertimas (vienas pigus užklausimas visoms)
       if (items.length && env.OPENAI_API_KEY) {
         try {
