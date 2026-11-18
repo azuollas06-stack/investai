@@ -7,7 +7,7 @@ const REGION_OF = (c) => (c === "JAV" ? "JAV" : ["Lietuva", "Latvija", "Estija"]
 const AN_LABEL = { strong_buy: "Stipriai pirkti", buy: "Pirkti", hold: "Laikyti", underperform: "Prasčiau už rinką", sell: "Parduoti", none: "–" };
 const OPTIONS = {
   type: [["Akcija", "Akcijos"], ["ETF", "ETF fondai"], ["Kriptovaliuta", "Kriptovaliutos"], ["Auksas", "Auksas"], ["Obligacijos", "Obligacijos"]],
-  region: [["JAV", "JAV"], ["Europa", "Europa"], ["Baltija", "Baltija"], ["Pasaulis", "Pasaulis"], ["Kita", "Kita"]],
+  region: [["JAV", "🇺🇸 JAV"], ["Europa", "🇪🇺 Europa"], ["Baltija", "🇱🇹 Baltija"], ["Pasaulis", "🌍 Pasaulis"], ["Kita", "🌐 Kita"]],
   dd: [["", "Bet koks"], ["10", "≥ 10 %"], ["20", "≥ 20 %"], ["30", "≥ 30 %"], ["50", "≥ 50 %"]],
   vol: [["", "Bet koks"], ["25", "Ramesni (≤ 25 %)"], ["40", "Vidutiniai (≤ 40 %)"], ["hi", "Labai svyruojantys (> 40 %)"]],
   an: [["", "Bet koks"], ["buy", "Dauguma „pirkti“"], ["hold", "Dauguma „laikyti“"], ["n10", "Bent 10 analitikų"]],
@@ -44,7 +44,7 @@ function writeURL() {
 
 function renderFilters() {
   const sectors = [...new Set(ALL.map((a) => a.sector))].filter((s) => s && s !== "Kita").sort((a, b) => a.localeCompare(b, "lt"));
-  const opts = { ...OPTIONS, sector: sectors.map((s) => [s, s]) };
+  const opts = { ...OPTIONS, sector: sectors.map((s) => [s, `${keyIcon(s)} ${s}`.trim()]) };
   document.querySelectorAll(".chipset").forEach((box) => {
     const k = box.dataset.f, single = box.classList.contains("single");
     box.innerHTML = opts[k].map(([v, l]) => {

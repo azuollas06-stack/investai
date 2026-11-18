@@ -33,6 +33,19 @@ function stripHTML(list, max = 7) {
 }
 const SECTOR_SHORT = { "Nebūtinos vartojimo prekės": "Vartojimas", "Būtinos vartojimo prekės": "Būtinos prekės", "Sveikatos apsauga": "Sveikata", "Komunalinės paslaugos": "Komunalinės", "Gynyba ir aviacija": "Gynyba", "Nekilnojamasis turtas": "NT", "Komunikacijos": "Komunikacijos", "Technologijos": "Technologijos" };
 const shortSector = (k) => SECTOR_SHORT[k] || k;
+// Sektorių ikonos ir šalių vėliavos (emoji – telefonuose rodomos spalvotai)
+const KEY_ICON = {
+  "Technologijos": "💻", "Finansai": "🏦", "Nebūtinos vartojimo prekės": "🛍️", "Būtinos vartojimo prekės": "🛒", "Sveikatos apsauga": "💊",
+  "Pramonė": "🏭", "Komunikacijos": "📡", "Energetika": "🛢️", "Komunalinės paslaugos": "⚡", "Žaliavos": "⛏️", "Nekilnojamasis turtas": "🏠",
+  "Gynyba ir aviacija": "🛡️", "Kriptovaliutos": "🪙", "Grynieji pinigai": "💶", "Auksas": "🥇", "Obligacijos": "📜", "Obligacijos ir pinigų rinka": "📜", "Pinigų rinka": "💶",
+  "Platus JAV indeksas": "🇺🇸", "Pasaulio indeksas": "🌍", "JAV technologijų indeksas": "💻", "Europos indeksas": "🇪🇺", "Besivystančių rinkų indeksas": "🌏",
+  "JAV": "🇺🇸", "Europa": "🇪🇺", "Baltija": "🇱🇹", "Japonija": "🇯🇵", "Azija ir besivystančios": "🌏", "Kitos išsivysčiusios": "🌐", "Be šalies": "🌐", "Nežinoma": "❔", "Kita": "❔",
+  "Lietuva": "🇱🇹", "Estija": "🇪🇪", "Latvija": "🇱🇻", "Vokietija": "🇩🇪", "Didžioji Britanija": "🇬🇧", "Prancūzija": "🇫🇷", "Nyderlandai": "🇳🇱", "Švedija": "🇸🇪",
+  "Italija": "🇮🇹", "Kinija": "🇨🇳", "Šveicarija": "🇨🇭", "Danija": "🇩🇰", "Kanada": "🇨🇦", "Norvegija": "🇳🇴", "Suomija": "🇫🇮", "Taivanas": "🇹🇼",
+  "Singapūras": "🇸🇬", "Argentina": "🇦🇷", "Pietų Korėja": "🇰🇷", "Pasaulis": "🌍", "Besivystančios rinkos": "🌏",
+  "Akcija": "📈", "Akcijos": "📈", "ETF": "🧺", "Kriptovaliuta": "🪙", "Grynieji": "💶",
+};
+const keyIcon = (k) => KEY_ICON[k] || "";
 const TV_LOCALE = "en";
 const SYMBOL_RE = /^[A-Z0-9_]{1,20}:[A-Z0-9._!\-]{1,24}$/;
 
@@ -77,6 +90,7 @@ const ICONS = {
   asset: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
   upload: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 15v4a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-4"/>',
   chevron: '<path d="m9 6 6 6-6 6"/>',
+  grid: '<rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/>',
   styles: '<circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2a10 10 0 1 0 0 20c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1.1.9-2 2-2h2.4A5.6 5.6 0 0 0 22 9.8C22 5.5 17.5 2 12 2z"/>',
   back: '<path d="M15 5l-7 7 7 7"/>',
   menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
@@ -97,6 +111,52 @@ function goBack(page) {
   if (same && history.length > 1) history.back();
   else location.href = PARENT[page] || "./";
 }
+/* ---------- Paieška (iš bet kurio puslapio) ---------- */
+const norm = (t) => String(t || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+let _search;
+async function openSearch() {
+  if (!_search) {
+    _search = document.createElement("dialog");
+    _search.className = "sheet search-sheet";
+    _search.setAttribute("aria-label", "Paieška");
+    _search.innerHTML = `<div class="ss-top"><label class="ss-field">${icon("asset", 20)}<input type="search" placeholder="Įmonė, fondas, kriptovaliuta…" autocomplete="off" enterkeyhint="search" aria-label="Ieškoti"></label><button type="button" class="ss-cancel">Atšaukti</button></div><div class="ss-body"><ul class="grp" id="ss-res"></ul></div>`;
+    document.body.append(_search);
+    const close = () => _search.close();
+    $(".ss-cancel", _search).addEventListener("click", close);
+    _search.addEventListener("click", (e) => { if (e.target === _search) close(); });
+    const input = $("input", _search);
+    const [all, P] = await Promise.all([allAssets(), loadPrices()]);
+    const list = all.filter((a) => !a.s.startsWith("X:"));
+    const draw = () => {
+      const q = norm(input.value.trim());
+      let res;
+      if (!q) {
+        const wl = watchList().map((s) => list.find((a) => a.s === s)).filter(Boolean);
+        const pop = ["NASDAQ:NVDA", "NASDAQ:AAPL", "NASDAQ:TSLA", "NASDAQ:MSFT", "XETR:VWCE", "OMXVSE:IGN1L", "BITSTAMP:BTCUSD", "XETR:RHM"].map((s) => list.find((a) => a.s === s)).filter(Boolean);
+        res = [...wl, ...pop.filter((a) => !wl.includes(a))].slice(0, 12);
+        $("#ss-res").dataset.label = wl.length ? "Stebimi ir populiarūs" : "Populiarūs";
+      } else {
+        const score = (a) => { const t = norm(a.s.split(":")[1]), n = norm(a.n); return t === q ? 0 : t.startsWith(q) ? 1 : n.startsWith(q) ? 2 : n.split(/[\s(]+/).some((w) => w.startsWith(q)) ? 3 : n.includes(q) || t.includes(q) ? 4 : 9; };
+        res = list.map((a) => [score(a), a]).filter(([sc]) => sc < 9).sort((x, y) => x[0] - y[0] || ((P.items[y[1].s] || {}).mcap || 0) - ((P.items[x[1].s] || {}).mcap || 0)).slice(0, 30).map(([, a]) => a);
+        $("#ss-res").dataset.label = res.length ? "Rezultatai" : "";
+      }
+      $("#ss-res").innerHTML = res.length ? res.map((a) => P.items[a.s] ? assetRow(a, P.items[a.s], { spark: false, sub: `${a.s.split(":")[1]} · ${a.type || ""}` }) : rowHTML({ href: assetUrl(a.s), ava: logoHTML(a.s, a.n, "#1d3a63", 40), title: esc(a.n), sub: esc(a.s) })).join("")
+        : `<li class="row row-empty"><span>Nieko nerasta. Bet kurį aktyvą galima atidaryti formatu BIRŽA:SIMBOLIS, pvz., <a href="aktyvas.html?s=NYSE:KO">NYSE:KO</a>.</span></li>`;
+    };
+    input.addEventListener("input", draw);
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") { e.preventDefault(); close(); return; }
+      if (e.key !== "Enter") return;
+      const v = input.value.trim().toUpperCase();
+      const first = $("#ss-res a.row-main");
+      if (SYMBOL_RE.test(v)) location.href = assetUrl(v); else if (first) location.href = first.getAttribute("href");
+    });
+    draw();
+  }
+  _search.showModal();
+  const inp = $("input", _search); inp.value = ""; inp.dispatchEvent(new Event("input")); setTimeout(() => inp.focus(), 30);
+}
+
 function renderChrome(page) {
   const header = document.createElement("header");
   header.className = "masthead";
@@ -109,10 +169,11 @@ function renderChrome(page) {
         <span>Invest<b>AI</b></span>
       </a>
       <nav id="main-nav">${NAV.map(([id, href, label, cls]) => `<a href="${href}"${cls ? ` class="${cls}"` : ""}${id === page ? ' aria-current="page"' : ""}>${label}</a>`).join("")}</nav>
-      <div class="head-actions"><button class="icon-btn theme-btn" type="button" aria-label="${currentTheme() === "dark" ? "Įjungti šviesią temą" : "Įjungti tamsią temą"}">${THEME_ICON}</button><button class="icon-btn menu-open" type="button" aria-label="Visi puslapiai" aria-haspopup="dialog">${icon("menu", 24)}</button></div>
+      <div class="head-actions"><button class="icon-btn search-open" type="button" aria-label="Ieškoti akcijų, fondų ir kriptovaliutų">${icon("asset", 22)}</button><button class="icon-btn theme-btn" type="button" aria-label="${currentTheme() === "dark" ? "Įjungti šviesią temą" : "Įjungti tamsią temą"}">${THEME_ICON}</button><button class="icon-btn menu-open" type="button" aria-label="Visi puslapiai" aria-haspopup="dialog">${icon("menu", 24)}</button></div>
     </div>`;
   document.body.prepend(header);
   $(".theme-btn", header).addEventListener("click", toggleTheme);
+  $(".search-open", header).addEventListener("click", openSearch);
   if (showBack) $(".back-btn", header).addEventListener("click", () => goBack(page));
 
   const sheet = document.createElement("dialog");
@@ -143,12 +204,15 @@ function renderChrome(page) {
   document.body.append(footer);
 
   // Apatinė navigacija telefone
-  const tabs = [["portfolio", "portfelis.html", "Portfelis"], ["strategy", "strategija.html", "Strategija"], ["screener", "atranka.html", "Atranka"], ["markets", "rinkos.html", "Rinkos"], ["news", "naujienos.html", "Naujienos"]];
+  const tabs = [["home", "./", "Pradžia"], ["portfolio", "portfelis.html", "Portfelis"], ["markets", "rinkos.html", "Rinkos"], ["news", "naujienos.html", "Naujienos"]];
+  const inTabs = tabs.some(([id]) => id === page) || page === "asset";
   const bar = document.createElement("nav");
   bar.className = "tabbar";
   bar.setAttribute("aria-label", "Pagrindinė navigacija");
-  bar.innerHTML = tabs.map(([id, href, label]) => `<a href="${href}"${id === page ? ' aria-current="page"' : ""}><span class="tab-ico">${icon(id, 23)}</span><span>${label}</span></a>`).join("");
+  bar.innerHTML = tabs.map(([id, href, label]) => `<a href="${href}"${id === page || (page === "asset" && id === "markets") ? ' aria-current="page"' : ""}><span class="tab-ico">${icon(id, 23)}</span><span>${label}</span></a>`).join("")
+    + `<button type="button" class="tab-more"${inTabs ? "" : ' aria-current="page"'}><span class="tab-ico">${icon("grid", 23)}</span><span>Daugiau</span></button>`;
   document.body.append(bar);
+  $(".tab-more", bar).addEventListener("click", () => sheet.showModal());
   setupInstall(page);
 }
 

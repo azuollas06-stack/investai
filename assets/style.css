@@ -2,30 +2,35 @@
    Spalvos: Baltijos jūra (navy), gintaras (akcentas), rūkas (fonas).
    Šriftas: Onest. Įsimenamas elementas – portfelio juosta (.strip). */
 :root {
-  /* Šviesi tema */
-  --sea: #0e1f3a;
-  --sea-2: #33476a;
-  --mist: #f1f4f9;
+  /* Šviesi tema (ta pati programėlės kalba, šviesiomis spalvomis) */
+  --sea: #0d1320;
+  --sea-2: #3b4659;
+  --mist: #f2f4f7;
   --surface: #ffffff;
-  --surface-2: #f6f8fc;
-  --line: #dde4ee;
-  --muted: #5d6f8a;
-  --amber: #e9a321;
-  --amber-ink: #241600;
-  --amber-soft: #fcf0d6;
-  --up: #0f9d63;
-  --down: #e0353f;
-  --info: #1f6fd1;
+  --surface-2: #eef1f5;
+  --line: #e4e8ee;
+  --muted: #6b7588;
+  --amber: #2f6bff;
+  --amber-ink: #ffffff;
+  --amber-soft: #e6edff;
+  --ai: #b7791f;
+  --up: #0e9f6e;
+  --down: #e5394a;
+  --info: #2f6bff;
   --warn: #9a5b00;
   --warn-soft: #fdf1dc;
-  --brand: #0e1f3a;
+  --brand: #0d1320;
   --font: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --ai: #b7791f;
-  --r-lg: 16px;
-  --r-md: 12px;
-  --r-sm: 8px;
-  --shadow: 0 0 0 1px var(--line), 0 1px 2px rgba(14,31,58,.04);
-  --lift: 0 0 0 1px var(--line), 0 12px 28px -14px rgba(14,31,58,.25);
+  --r-lg: 20px;
+  --r-md: 14px;
+  --r-sm: 10px;
+  --btn-radius: 999px;
+  --shadow: 0 1px 2px rgba(13,19,32,.05);
+  --lift: 0 0 0 1px #d5dbe4, 0 10px 24px -14px rgba(13,19,32,.25);
+  --card-bg: var(--surface);
+  --page-bg: var(--mist);
+  --hero-bg: transparent;
+  --hero-ink: var(--sea);
   --tile-0: #5c6b80; --tile-up: #16a35f; --tile-down: #e0353f;
 }
 :root[data-theme="dark"] {
@@ -1278,7 +1283,7 @@ h1, h2, h3, .section-title { font-weight: var(--display-weight, 750); letter-spa
 /* =====================================================================
    v6 – programėlės išdėstymas (Revolut / Trading 212 kryptis)
    ===================================================================== */
-:root[data-theme="dark"] body::before { background: none; }
+:root body::before { background: none; }
 .app { padding-top: 8px; padding-bottom: 20px; }
 .app-hero { display: flex; justify-content: center; padding: 26px 0 8px; }
 .bal { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; color: var(--sea); text-decoration: none; }
@@ -1339,8 +1344,8 @@ a.row-main:hover { background: color-mix(in srgb, var(--surface-2) 60%, transpar
 .app-foot a { color: var(--muted); }
 #home-map .treemap { border-radius: 12px; }
 .seg-sm button { padding: 6px 12px; }
-:root[data-theme="dark"] .seg { background: var(--surface); box-shadow: none; }
-:root[data-theme="dark"] .seg button[aria-pressed="true"] { background: var(--surface-2); color: var(--sea); }
+:root .seg { background: var(--surface); box-shadow: none; }
+:root .seg button[aria-pressed="true"] { background: var(--surface-2); color: var(--sea); }
 @media (max-width: 860px) { .app-grid { grid-template-columns: 1fr; } }
 @media (max-width: 680px) {
   .app-hero { padding: 18px 0 4px; }
@@ -1362,8 +1367,8 @@ a.row-main:hover { background: color-mix(in srgb, var(--surface-2) 60%, transpar
 .kv b small { color: var(--muted); font-weight: 600; font-size: 13px; }
 .kv-date b { color: var(--ai); }
 @media (max-width: 680px) { .kv-list { grid-template-columns: 1fr; } .kv:nth-child(2) { border-top: 1px solid var(--line); } }
-:root[data-theme="dark"] #ap-chart { background: transparent; padding: 0; box-shadow: none; }
-:root[data-theme="dark"] .ap-side .card { background: var(--surface); }
+:root #ap-chart { background: transparent; padding: 0; box-shadow: none; }
+:root .ap-side .card { background: var(--surface); }
 .ap-actions .btn { border-radius: 999px; }
 .ah-price { margin-bottom: 8px; }
 .ap-price { font-weight: 800; letter-spacing: -.04em; }
@@ -1375,7 +1380,7 @@ body[data-page="apzvalga"] footer .legend, body[data-page="digest"] footer .lege
 .mv-list .mv + .mv::before { content: ""; position: absolute; top: 0; left: 50px; right: 0; height: 1px; background: var(--line); }
 .mv .logo-ava { border-radius: 50%; }
 .card { border-radius: var(--r-lg); }
-:root[data-theme="dark"] .card { box-shadow: none; }
+:root .card { box-shadow: none; }
 .m-h { font-size: 20px; color: var(--sea); font-weight: 800; letter-spacing: -.025em; margin: 18px 4px 10px; }
 .card-head h2 { font-size: 19px; font-weight: 800; letter-spacing: -.02em; }
 .card-link::after { display: none; }
@@ -1398,13 +1403,13 @@ body[data-page="apzvalga"] footer .legend, body[data-page="digest"] footer .lege
   .res-main .logo-ava { border-radius: 50%; }
 }
 /* Portfelio viršus – kaip balansas programėlėje */
-:root[data-theme="dark"] .pf-hero { background: transparent; box-shadow: none; padding: 18px 4px 6px; }
-:root[data-theme="dark"] .pf-hero-stats { gap: 0; background: var(--surface); border-radius: var(--r-lg); padding: 4px 0; }
-:root[data-theme="dark"] .pf-hero-stats div { background: none; box-shadow: none; border-radius: 0; padding: 12px 16px; }
+:root .pf-hero { background: transparent; box-shadow: none; padding: 18px 4px 6px; }
+:root .pf-hero-stats { gap: 0; background: var(--surface); border-radius: var(--r-lg); padding: 4px 0; }
+:root .pf-hero-stats div { background: none; box-shadow: none; border-radius: 0; padding: 12px 16px; }
 @media (max-width: 680px) {
-  :root[data-theme="dark"] .pf-hero > div:first-child { text-align: center; display: flex; flex-direction: column; align-items: center; }
-  :root[data-theme="dark"] .pf-hero-stats { grid-template-columns: 1fr 1fr; }
-  :root[data-theme="dark"] .share-btn { justify-self: center; }
+  :root .pf-hero > div:first-child { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  :root .pf-hero-stats { grid-template-columns: 1fr 1fr; }
+  :root .share-btn { justify-self: center; }
 }
 @media (max-width: 760px) {
   .res-an { justify-content: flex-start !important; font-size: 13px; color: var(--muted); }
@@ -1415,3 +1420,117 @@ body[data-page="apzvalga"] footer .legend, body[data-page="digest"] footer .lege
   .save-row { display: none; }
 }
 .logo-ava.has-img { background: #fff; }
+
+/* ---------- v7: navigacija, paieška ---------- */
+.tabbar .tab-more { font: inherit; border: 0; background: none; cursor: pointer; }
+@media (max-width: 680px) {
+  .tabbar button.tab-more { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 4px 0 2px; font-size: 11px; font-weight: 600; color: var(--muted); flex: 1; }
+  .tabbar .tab-more[aria-current="page"] { color: var(--sea); }
+  .tabbar .tab-more[aria-current="page"] .tab-ico { background: color-mix(in srgb, var(--amber) 22%, transparent); color: var(--amber); }
+  .menu-open { display: none !important; }
+  .tabbar a, .tabbar button.tab-more { flex: 1; }
+}
+.home-search { display: flex; align-items: center; gap: 10px; width: 100%; max-width: 560px; margin: 14px auto 0; padding: 12px 16px; border: 0; border-radius: 999px; background: var(--surface); color: var(--muted); font: 600 15px var(--font); cursor: text; text-align: left; }
+.home-search span { display: grid; color: var(--muted); }
+.home-search:hover { background: var(--surface-2); }
+dialog.search-sheet { margin: 0 auto auto; width: 100%; max-width: 640px; max-height: 100dvh; height: 100dvh; border-radius: 0; background: var(--mist); animation: ssIn .18s ease-out; padding: env(safe-area-inset-top) 0 0; }
+@media (min-width: 681px) { dialog.search-sheet { margin: 70px auto auto; height: auto; max-height: 76vh; border-radius: 22px; background: var(--surface-2); } }
+@keyframes ssIn { from { opacity: 0; transform: translateY(-10px); } }
+.ss-top { display: flex; align-items: center; gap: 10px; padding: 12px 14px; position: sticky; top: 0; background: inherit; z-index: 1; }
+.ss-field { flex: 1; display: flex; align-items: center; gap: 8px; padding: 0 14px; border-radius: 999px; background: var(--surface); color: var(--muted); }
+.ss-field input { flex: 1; min-width: 0; border: 0; background: none; color: var(--sea); font: 600 16px var(--font); padding: 12px 0; outline: none; }
+.ss-cancel { border: 0; background: none; color: var(--amber); font: 700 15px var(--font); cursor: pointer; padding: 8px 4px; }
+.ss-body { padding: 4px 14px 24px; overflow-y: auto; max-height: calc(100dvh - 80px); }
+#ss-res::before { content: attr(data-label); display: block; font-size: 13px; font-weight: 700; color: var(--muted); padding: 8px 16px 4px; }
+#ss-res[data-label=""]::before { display: none; }
+
+/* ---------- Portfelis v7 ---------- */
+.pf-chart-wrap { margin: 0 0 14px; }
+.pf-chart-chg { text-align: center; margin: 0 0 4px; font-weight: 700; font-size: 15px; color: var(--muted); }
+.pf-chart-box { height: 170px; }
+.pf-ranges { display: flex; justify-content: center; margin: 8px auto 0; width: max-content; max-width: 100%; }
+.pf-chart-note { text-align: center; margin: 6px 0 0; font-size: 12px; }
+:root .pf-hero { grid-template-columns: 1fr; text-align: center; justify-items: center; gap: 10px; padding-bottom: 0; margin-bottom: 0; }
+:root .pf-hero > div:first-child { display: flex; flex-direction: column; align-items: center; }
+.pf-hero-stats { margin: 0 0 18px; }
+.ptabs { display: flex; width: 100%; margin: 0 0 16px; position: sticky; top: 64px; z-index: 6; }
+.ptabs button { flex: 1; }
+.ptabs button[aria-selected="true"] { background: var(--surface-2); color: var(--sea); }
+:root .ptabs { background: var(--surface); }
+.ptab > * + * { margin-top: 16px; }
+.donut-wrap { display: grid; grid-template-columns: 220px 1fr; gap: 20px; align-items: center; margin-top: 14px; }
+.donut { position: relative; width: 220px; height: 220px; }
+.donut svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.dn-arc { cursor: pointer; transition: stroke-width .15s, opacity .15s; }
+.dn-arc:hover, .dn-arc.sel { stroke-width: 28; }
+.dn-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 44px; }
+.dn-center b { font-size: 28px; font-weight: 800; letter-spacing: -.03em; }
+.dn-center span { font-size: 13px; color: var(--muted); font-weight: 600; line-height: 1.2; }
+.dn-legend { background: transparent !important; padding: 0 !important; }
+.dn-legend .row { cursor: pointer; }
+.dn-legend .row-main { padding: 9px 6px; gap: 12px; }
+.dn-legend .row + .row::before { left: 30px; right: 6px; }
+.dn-legend .row.sel .row-main { background: var(--surface-2); border-radius: 12px; }
+.dn-dot { width: 14px; height: 14px; border-radius: 50%; flex: none; }
+.dn-legend .row-val span { font-weight: 600; }
+/* Pozicijos – sąrašas kaip Trading 212 */
+.pos-grid { gap: 0; background: var(--surface); border-radius: var(--r-lg); overflow: hidden; }
+details.pos { background: transparent; border-radius: 0; box-shadow: none; position: relative; }
+details.pos + details.pos::before { content: ""; position: absolute; top: 0; left: 72px; right: 16px; height: 1px; background: var(--line); }
+details.pos[open] { box-shadow: none; background: color-mix(in srgb, var(--surface-2) 50%, transparent); }
+details.pos > summary { grid-template-columns: 44px minmax(0, 1fr) auto; padding: 12px 16px; }
+details.pos > summary::after { display: none; }
+details.pos .logo-ava { border-radius: 50%; }
+.pos-spark { display: none; }
+.pos-num b { font-size: 15.5px; }
+.pos-chart .pchart-box { height: 220px; }
+.pos-widgets { grid-template-columns: 1fr; }
+.pos-widgets > div { min-height: 0; background: transparent; }
+.pos-news { min-height: 300px; }
+@media (max-width: 680px) {
+  .donut-wrap { grid-template-columns: 1fr; justify-items: center; }
+  .donut { width: 200px; height: 200px; }
+  .dn-legend { width: 100%; }
+  .ptabs { top: 56px; }
+  .pos-stats { grid-template-columns: 1fr 1fr; }
+}
+.dn-ico { font-size: 18px; line-height: 1; flex: none; width: 22px; text-align: center; }
+.share-btn { margin: 4px 0 12px; }
+/* Aktyvo skirtukai ir prilipusi kaina */
+.atabs { display: flex; width: 100%; margin: 18px 0 14px; position: sticky; top: 64px; z-index: 6; }
+.atabs button { flex: 1; }
+.atabs button[aria-selected="true"] { background: var(--surface-2); color: var(--sea); }
+:root .atabs { background: var(--surface); }
+.atab > * + * { margin-top: 16px; }
+.atab .card h3 { margin: 0 0 12px; font-size: 17px; }
+#ap-chart .pchart-box { height: 300px; }
+.asset-sticky { position: fixed; left: 0; right: 0; top: 0; z-index: 35; display: flex; align-items: center; gap: 10px; padding: calc(10px + env(safe-area-inset-top)) 16px 10px; background: color-mix(in srgb, var(--mist) 94%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); transform: translateY(-110%); transition: transform .2s ease; font-size: 15px; }
+.asset-sticky.on { transform: none; }
+.asset-sticky b { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.asset-sticky .as-price { font-weight: 800; }
+.asset-sticky span:last-child { font-weight: 700; font-size: 14px; }
+.asset-sticky .logo-ava { border-radius: 50%; }
+.asset-sticky:not(.on) { pointer-events: none; }
+@media (min-width: 681px) { .asset-sticky { left: 50%; right: auto; width: min(1180px, 100%); transform: translate(-50%, -110%); border-radius: 0 0 16px 16px; } .asset-sticky.on { transform: translate(-50%, 0); } }
+@media (max-width: 680px) { .atabs { top: 56px; } #ap-chart .pchart-box { height: 240px; } }
+
+/* Sklandūs perėjimai tarp puslapių (naršyklės, kurios palaiko) */
+@view-transition { navigation: auto; }
+.masthead { view-transition-name: masthead; }
+.tabbar { view-transition-name: tabbar; }
+::view-transition-old(root) { animation: vtOut .16s ease-in both; }
+::view-transition-new(root) { animation: vtIn .24s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes vtOut { to { opacity: 0; transform: translateY(-6px); } }
+@keyframes vtIn { from { opacity: 0; transform: translateY(10px); } }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+:root:not([data-theme="dark"]) .card, :root:not([data-theme="dark"]) .grp, :root:not([data-theme="dark"]) .pos-grid { box-shadow: var(--shadow); }
+:root:not([data-theme="dark"]) .qa a span { background: var(--surface); box-shadow: var(--shadow); }
+:root:not([data-theme="dark"]) .qa a:first-child span { background: var(--amber); }
+:root:not([data-theme="dark"]) .home-search, :root:not([data-theme="dark"]) .ss-field { box-shadow: inset 0 0 0 1px var(--line); }
+
+:root .pf-hero { background: transparent; color: var(--sea); }
+.pf-hero-label, .pf-hero-sub { color: var(--muted) !important; }

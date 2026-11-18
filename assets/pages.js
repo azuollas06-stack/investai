@@ -78,6 +78,7 @@ function marketRows(P) {
   return PULSE.filter(([s]) => P.items[s]).map(([s, n, t]) => { const p = P.items[s], [txt, bg] = IDX_BADGE[s] || ["•", "#3a4558"]; return rowHTML({ href: assetUrl(s), ava: LOGOS[s] ? logoHTML(s, n, "#1d3a63", 40) : `<span class="row-badge" style="background:${bg}">${txt}</span>`, title: esc(n), sub: t, val: fmtPrice(p.price, p.cur), chg: p.d1, spark: sparkSVG(sparkTail(p.spark, 0.09), 56, 22) }); }).join("");
 }
 async function pageHome() {
+  $(".home-search").addEventListener("click", openSearch);
   const [P, all] = await Promise.all([loadPrices(), allAssets()]);
   $("#data-stamp").textContent = dataStamp(P).replace("Kainos atnaujintos ", "").replace(" · uždelstos iki ~15 min", "");
   // Rinkos
@@ -216,7 +217,7 @@ async function pageAsset() {
   $("#browse").hidden = true;
   $("#asset-title").textContent = name;
   $("#asset-symbol").textContent = sym;
-  $("#asset-meta").textContent = known ? [known.type, known.sector, known.country].filter(Boolean).join(" · ") : "";
+  $("#asset-meta").textContent = known ? [known.type, `${keyIcon(known.sector)} ${known.sector || ""}`.trim(), `${keyIcon(known.country)} ${known.country || ""}`.trim()].filter((x) => x && x.trim()).join(" · ") : "";
   $("#asset-logo").innerHTML = logoHTML(sym, name, "#1d3a63", 52);
   $("#asset-star").innerHTML = `<button type="button" class="icon-btn search-toggle" aria-label="Ieškoti kito aktyvo">${icon("asset", 22)}</button>` + starHTML(sym, name, true);
   document.body.classList.add("has-asset");
@@ -256,12 +257,29 @@ async function pageAsset() {
   });
   if (!p) { chartBox.open = true; loadChart(); } else chartBox.addEventListener("toggle", () => { if (chartBox.open && !$("#w-chart").children.length) loadChart(); });
   const isCrypto = /^(BITSTAMP|BINANCE|COINBASE|KRAKEN|CRYPTO)/.test(sym);
-  if (isCrypto) $("#fundamentals").hidden = true;
-  else {
-    tv($("#w-profile"), "symbol-profile", { symbol: sym, width: "100%", height: 420 });
-    tv($("#w-fin"), "financials", { symbol: sym, width: "100%", height: 520, displayMode: "regular" });
+  // Skirtukai: TradingView valdikliai įkeliami tik atidarius skiltį (paslėptame bloke jie neišsidėsto)
+  const loaded = new Set();
+  const loadTab = (id) => {
+    if (loaded.has(id)) return; loaded.add(id);
+    if (id === "news") tv($("#w-news"), "timeline", { feedMode: "symbol", symbol: sym, width: "100%", height: 560, displayMode: "regular" });
+    if (id === "about") {
+      if (isCrypto) $("#fundamentals").hidden = true;
+      else { tv($("#w-profile"), "symbol-profile", { symbol: sym, width: "100%", height: 420 }); tv($("#w-fin"), "financials", { symbol: sym, width: "100%", height: 520, displayMode: "regular" }); }
+    }
+  };
+  const showTab = (id) => {
+    document.querySelectorAll(".atabs [data-atab]").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.atab === id)));
+    document.querySelectorAll(".atab[data-apanel]").forEach((p) => (p.hidden = p.dataset.apanel !== id));
+    loadTab(id);
+  };
+  document.querySelectorAll(".atabs [data-atab]").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.atab)));
+  if (!(p && p.an && p.an.n) && !(p && p.hi52)) $('.atabs [data-atab="analysts"]').hidden = true;
+  // Prilipusi kaina, kai nuslenki žemiau
+  if (p) {
+    $("#asset-sticky").innerHTML = `${logoHTML(sym, name, "#1d3a63", 28)}<b>${esc(name)}</b><span class="as-price">${fmtPrice(p.price, p.cur)}</span><span class="${(p.d1 ?? 0) >= 0 ? "up" : "down"}">${fmtPct(p.d1, 2)}</span>`;
+    const target = $(".ah-price");
+    if (window.IntersectionObserver && target) new IntersectionObserver(([en]) => $("#asset-sticky").classList.toggle("on", !en.isIntersecting && en.boundingClientRect.top < 0), { rootMargin: "-60px 0px 0px 0px" }).observe(target);
   }
-  tv($("#w-news"), "timeline", { feedMode: "symbol", symbol: sym, width: "100%", height: 520, displayMode: "regular" });
   // Susijusios naujienos iš InvestAI naujienų sąrašo
   getJSON("data/news.json").then((n) => {
     const st = (n.stories || []).filter((x) => (x.symbols || []).includes(sym));

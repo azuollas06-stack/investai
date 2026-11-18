@@ -1,6 +1,6 @@
 // InvestAI service worker: veikia kaip programėlė ir be interneto rodo paskutinį turinį.
 // Puslapiai ir duomenys – pirmiausia iš tinklo (kad visada būtų naujausi), CSS/JS su ?v= ir OCR failai – iš talpyklos.
-const VERSION = "v7";
+const VERSION = "v8";
 const SHELL = `investai-shell-${VERSION}`;
 const STATIC = `investai-static-${VERSION}`;
 const OCR = "investai-ocr-v1";

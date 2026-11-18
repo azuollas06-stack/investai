@@ -17,29 +17,44 @@
       <div class="ah-id"><span id="asset-logo"></span><div><h1 id="asset-title">…</h1><p class="ah-sub"><span class="badge tag" id="asset-symbol"></span> <span id="asset-meta"></span></p></div></div>
       <div id="asset-star"></div>
     </div>
+    <div class="asset-sticky" id="asset-sticky" aria-hidden="true"></div>
     <div id="asset-native">
       <div class="ah-price"><span id="ap-price" class="ap-price"><span class="skel" style="display:inline-block;width:160px;height:40px"></span></span><span id="ap-d1"></span><span class="muted small" id="ap-date"></span></div>
-      <div class="asset-grid">
-        <div class="card" id="ap-chart"><div class="skel" style="height:260px"></div></div>
-        <aside class="ap-side">
-          <div class="card"><h3><button type="button" class="term" data-term="range52">Metų kainų intervalas</button></h3><div id="ap-range"></div></div>
-          <div class="card" id="ap-an-card"><h3><button type="button" class="term" data-term="analitikai">Analitikų nuomonės</button></h3><div id="ap-an"></div><p class="muted small" style="margin:10px 0 0">Trečiųjų šalių vidurkis (Yahoo Finance), ne InvestAI nuomonė.</p></div>
-        </aside>
-      </div>
-      <h2 class="sec-h">Rodikliai</h2>
-      <ul class="grp kv-list" id="ap-stats"></ul>
+      <div id="ap-chart"><div class="skel" style="height:260px"></div></div>
     </div>
     <div id="w-info" class="widget" hidden></div>
-    <div id="w-explain"></div>
-    <div id="ap-news"></div>
-    <div class="ap-actions" id="ap-actions"></div>
-    <details class="card tv-more" id="tv-more"><summary>Detalus grafikas su indikatoriais (TradingView)</summary><div id="w-chart" class="widget"></div></details>
-    <div id="fundamentals" class="two-col">
-      <section><h2 class="kicker">Apie įmonę</h2><div id="w-profile" class="widget"></div></section>
-      <section><h2 class="kicker">Finansiniai rodikliai</h2><div id="w-fin" class="widget"></div></section>
+
+    <div class="seg atabs" role="tablist" aria-label="Aktyvo skiltys">
+      <button type="button" role="tab" data-atab="overview" aria-selected="true">Apžvalga</button>
+      <button type="button" role="tab" data-atab="analysts" aria-selected="false">Analitikai</button>
+      <button type="button" role="tab" data-atab="news" aria-selected="false">Naujienos</button>
+      <button type="button" role="tab" data-atab="about" aria-selected="false">Apie</button>
     </div>
-    <h2 class="kicker">Naujienų srautas</h2>
-    <div id="w-news" class="widget"></div>
-    <p class="muted small">Daugiau duomenų: <a id="tv-link" href="#" target="_blank" rel="noopener">šis aktyvas TradingView svetainėje</a>. Kainos – paskutinės prekybos dienos uždarymo. Tai ne investavimo rekomendacija.</p>
+
+    <div class="atab" data-apanel="overview">
+      <div id="w-explain"></div>
+      <h2 class="sec-h">Rodikliai</h2>
+      <ul class="grp kv-list" id="ap-stats"></ul>
+      <div class="ap-actions" id="ap-actions"></div>
+    </div>
+
+    <div class="atab" data-apanel="analysts" hidden>
+      <div class="card"><h3><button type="button" class="term" data-term="range52">Metų kainų intervalas</button></h3><div id="ap-range"></div></div>
+      <div class="card" id="ap-an-card"><h3><button type="button" class="term" data-term="analitikai">Analitikų nuomonės</button></h3><div id="ap-an"></div><p class="muted small" style="margin:10px 0 0">Trečiųjų šalių vidurkis (Yahoo Finance), ne InvestAI nuomonė ir ne rekomendacija.</p></div>
+    </div>
+
+    <div class="atab" data-apanel="news" hidden>
+      <div id="ap-news"></div>
+      <div id="w-news" class="widget"></div>
+    </div>
+
+    <div class="atab" data-apanel="about" hidden>
+      <div id="fundamentals">
+        <section><h2 class="sec-h">Apie įmonę</h2><div id="w-profile" class="widget"></div></section>
+        <section><h2 class="sec-h">Finansiniai rodikliai</h2><div id="w-fin" class="widget"></div></section>
+      </div>
+      <details class="card tv-more" id="tv-more"><summary>Detalus grafikas su indikatoriais (TradingView)</summary><div id="w-chart" class="widget"></div></details>
+      <p class="muted small">Daugiau duomenų: <a id="tv-link" href="#" target="_blank" rel="noopener">šis aktyvas TradingView svetainėje</a>.</p>
+    </div>
   </div>
 </main>

@@ -20,11 +20,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>try{var d=document.documentElement,t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";d.dataset.theme=t;try{localStorage.removeItem("investai.style")}catch(e){}}catch(e){}</script>
-<link rel="stylesheet" href="assets/style.css?v=16959f76">
+<link rel="stylesheet" href="assets/style.css?v=45b6c050">
 <script src="assets/viz.js?v=2a3cee52" defer></script>
-<script src="assets/app.js?v=2f49d083" defer></script>
+<script src="assets/app.js?v=951b1488" defer></script>
 <script src="assets/glossary.js?v=be0fc5e9" defer></script>
-<script src="assets/pages.js?v=047b1d8e" defer></script>
+<script src="assets/pages.js?v=45e03e73" defer></script>
 </head>
 <body data-page="portfolio">
 <main class="wrap wide pf">
@@ -87,10 +87,20 @@
         <p class="pf-hero-pnl" id="r-pnl"></p>
         <p class="pf-hero-sub" id="r-pnl-sub"></p>
       </div>
-      <dl class="pf-hero-stats" id="r-stats"></dl>
       <button type="button" class="btn small share-btn" id="share-btn"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v7h14v-7"/></svg>Dalintis be sumų</button>
     </div>
 
+    <div class="pf-chart-wrap"><p class="pf-chart-chg" id="r-chart-chg"></p><div id="r-chart"></div><p class="muted small pf-chart-note">Kaip keistųsi dabartinio portfelio vertė, jei visą laiką turėtum tas pačias pozicijas.</p></div>
+    <dl class="pf-hero-stats" id="r-stats"></dl>
+
+    <div class="seg ptabs" role="tablist" aria-label="Portfelio skiltys">
+      <button type="button" role="tab" data-ptab="overview" aria-selected="true">Apžvalga</button>
+      <button type="button" role="tab" data-ptab="positions" aria-selected="false">Pozicijos</button>
+      <button type="button" role="tab" data-ptab="risk" aria-selected="false">Rizika</button>
+      <button type="button" role="tab" data-ptab="more" aria-selected="false">Daugiau</button>
+    </div>
+
+    <div class="ptab" data-panel="overview">
     <div class="card">
       <div class="seg" role="group" aria-label="Rodyti pagal">
         <button type="button" data-dim="sectors" aria-pressed="true">Sektoriai</button>
@@ -99,14 +109,13 @@
         <button type="button" data-dim="byType" aria-pressed="false">Tipai</button>
       </div>
       <div id="r-strip"></div>
-      <p class="muted small" id="r-strip-note" style="margin:12px 0 0">ETF fondai išskaidyti į sektorius ir regionus pagal jų indeksų struktūrą (apytiksliai).</p>
+      <p class="muted small" id="r-strip-note" style="margin:12px 0 0">Fondai išskaidyti apytiksliai. Paspausk dalį – pamatysi, kas ją sudaro.</p>
     </div>
 
     <section class="card health" id="r-health" aria-labelledby="health-h"></section>
 
     <div class="card" id="r-tm-card">
       <div class="sec-head"><h2>Portfelio žemėlapis</h2><div class="seg" role="group" aria-label="Spalva pagal" id="tm-mode"><button type="button" data-tm="pnl" aria-pressed="true">Nuo pirkimo</button><button type="button" data-tm="d1" aria-pressed="false">Diena</button><button type="button" data-tm="w1" aria-pressed="false">Savaitė</button><button type="button" data-tm="m1" aria-pressed="false">Mėnuo</button></div></div>
-      <p class="muted small" style="margin:0 0 12px">Stačiakampio dydis – pozicijos vertė, spalva – pokytis (žalia – pelnas, raudona – nuostolis).</p>
       <div id="r-tm"></div>
     </div>
 
@@ -121,29 +130,9 @@
       </div>
     </div>
 
-    <section class="card pf-section" id="r-compare-card">
-      <h2>Palyginimas su pasaulio akcijų rinka</h2>
-      <p class="muted">Kaip tavo akcijų dalis pasiskirsčiusi, palyginti su pasaulio akcijų indeksu (MSCI ACWI, apytiksliai). Tai ne norma ir ne rekomendacija, o atskaitos taškas.</p>
-      <div class="seg" role="group" aria-label="Palyginti pagal">
-        <button type="button" data-cmp="sectors" aria-pressed="true">Sektoriai</button>
-        <button type="button" data-cmp="regions" aria-pressed="false">Regionai</button>
-      </div>
-      <div class="cmp-legend"><span><i class="me"></i>Tavo portfelis</span><span><i class="mk"></i>Pasaulio rinka</span></div>
-      <div id="r-compare" class="cmp"></div>
-    </section>
+    </div>
 
-    <section class="card pf-section">
-      <h2>Kiek galėtum prarasti per nuosmukį?</h2>
-      <p class="muted">Pritaikome istorinių nuosmukių dydžius tavo portfeliui. Tai ne prognozė – tik pavyzdys, kaip portfelis elgtųsi panašioje situacijoje.</p>
-      <div class="seg" role="group" aria-label="Scenarijus" id="r-scn-tabs"></div>
-      <div id="r-scn"></div>
-    </section>
-
-    <section class="card pf-section stg-cta">
-      <div><h2>Turi pinigų investuoti?</h2><p class="muted" style="margin:0">Pasirink strategiją ir pamatyk, kur skirti sumą, kad portfelis priartėtų prie tavo plano – ir ko pagal tavo taisykles nedidinti.</p></div>
-      <a class="btn primary" href="strategija.html">Atidaryti strategiją</a>
-    </section>
-
+    <div class="ptab" data-panel="positions" hidden>
     <section class="pf-section">
       <h2>Tavo pozicijos</h2>
       <div class="pos-grid" id="r-cards"></div>
@@ -164,6 +153,27 @@
         </div>
       </div>
     </details>
+
+    </div>
+
+    <div class="ptab" data-panel="risk" hidden>
+    <section class="card pf-section" id="r-compare-card">
+      <h2>Palyginimas su pasaulio akcijų rinka</h2>
+      <p class="muted">Kaip tavo akcijų dalis pasiskirsčiusi, palyginti su pasaulio akcijų indeksu (MSCI ACWI, apytiksliai). Tai ne norma ir ne rekomendacija, o atskaitos taškas.</p>
+      <div class="seg" role="group" aria-label="Palyginti pagal">
+        <button type="button" data-cmp="sectors" aria-pressed="true">Sektoriai</button>
+        <button type="button" data-cmp="regions" aria-pressed="false">Regionai</button>
+      </div>
+      <div class="cmp-legend"><span><i class="me"></i>Tavo portfelis</span><span><i class="mk"></i>Pasaulio rinka</span></div>
+      <div id="r-compare" class="cmp"></div>
+    </section>
+
+    <section class="card pf-section">
+      <h2>Kiek galėtum prarasti per nuosmukį?</h2>
+      <p class="muted">Pritaikome istorinių nuosmukių dydžius tavo portfeliui. Tai ne prognozė – tik pavyzdys, kaip portfelis elgtųsi panašioje situacijoje.</p>
+      <div class="seg" role="group" aria-label="Scenarijus" id="r-scn-tabs"></div>
+      <div id="r-scn"></div>
+    </section>
 
     <details class="more" id="d-rules">
       <summary><div><h2>Mano taisyklės</h2><p id="rules-sum">Nustatyk ribas, kurių pats nori laikytis</p></div></summary>
@@ -186,6 +196,14 @@
         <p class="muted small">Skaičiuoklė nieko nerekomenduoja – ji tik parodo, kaip pasikeistų portfelio dalys ir tavo taisyklių atitiktis.</p>
       </div>
     </details>
+
+    </div>
+
+    <div class="ptab" data-panel="more" hidden>
+    <section class="card pf-section stg-cta">
+      <div><h2>Turi pinigų investuoti?</h2><p class="muted" style="margin:0">Pasirink strategiją ir pamatyk, kur skirti sumą, kad portfelis priartėtų prie tavo plano – ir ko pagal tavo taisykles nedidinti.</p></div>
+      <a class="btn primary" href="strategija.html">Atidaryti strategiją</a>
+    </section>
 
     <details class="more" id="d-today">
       <summary><div><h2>Tavo aktyvai šiandien</h2><p>Kainos ir paminėjimai InvestAI apžvalgose</p></div></summary>
@@ -210,10 +228,11 @@
 
     <div id="pf-help"></div>
     <p class="disclaimer">„Mano portfelis“ – informacinis įrankis. Jis neteikia investavimo rekomendacijų ir nevertina, ar aktyvai tinka būtent tau. Sektoriai, šalys ir fondų sudėtis – apytiksliai. Rezultatas (pelnas ar nuostolis) imamas iš tavo programėlės nuotraukos.</p>
+    </div>
   </section>
 </main>
 <script src="assets/pf-parse.js?v=f0a19f83" defer></script>
 <script src="assets/pf-insights.js?v=71f40392" defer></script>
-<script src="assets/portfolio.js?v=245c7098" defer></script>
+<script src="assets/portfolio.js?v=240249c5" defer></script>
 </body>
 </html>

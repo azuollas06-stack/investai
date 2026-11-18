@@ -127,6 +127,7 @@ function renderResult() {
   show("result");
   $("#demo-note").hidden = !isDemo;
   renderHero(a);
+  renderPfChart(a).catch((e) => console.error(e));
   renderDim(a);
   renderHealth(a);
   renderTreemap(a);
@@ -177,8 +178,26 @@ function renderHero(a) {
 function renderDim(a) {
   a = a || analyze(state.holdings);
   document.querySelectorAll(".seg button[data-dim]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.dim === dim)));
-  $("#r-strip").innerHTML = stripHTML(a[dim]) + `<div class="drill" id="r-drill" hidden></div>`;
+  $("#r-strip").innerHTML = donutHTML(a[dim], a.total) + `<div class="drill" id="r-drill" hidden></div>`;
   $("#r-strip-note").hidden = !(dim === "sectors" || dim === "regions");
+}
+// Spurgos diagrama + legenda sąrašu (paspaudus – kas sudaro dalį)
+function donutHTML(list, total) {
+  let items = list.slice(0, 7);
+  const rest = list.slice(7).reduce((t, x) => t + x.p, 0);
+  if (rest > 0.0005) items.push({ k: "Kiti", p: rest, other: true });
+  items = items.map((x, i) => ({ ...x, c: x.other ? "#8fa3c0" : PALETTE[i % PALETTE.length] }));
+  const R = 70, C = 2 * Math.PI * R, gap = items.length > 1 ? 2.5 : 0;
+  let off = 0;
+  const arcs = items.map((x) => {
+    const len = Math.max(0, x.p * C - gap);
+    const el = `<circle cx="90" cy="90" r="${R}" fill="none" stroke="${x.c}" stroke-width="22" stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" data-k="${esc(x.k)}" class="dn-arc"><title>${esc(x.k)} ${pct(x.p)}</title></circle>`;
+    off += x.p * C;
+    return el;
+  }).join("");
+  const top = items[0] || { k: "", p: 0 };
+  return `<div class="donut-wrap"><div class="donut"><svg viewBox="0 0 180 180" role="img" aria-label="Paskirstymas">${arcs}</svg><div class="dn-center"><b>${pct(top.p)}</b><span>${esc(top.k)}</span></div></div>
+    <ul class="grp dn-legend">${items.map((x) => `<li class="row" data-k="${esc(x.k)}"><div class="row-main"><i class="dn-dot" style="background:${x.c}"></i>${keyIcon(x.k) ? `<span class="dn-ico" aria-hidden="true">${keyIcon(x.k)}</span>` : ""}<span class="row-txt"><b>${esc(x.k)}</b></span><span class="row-val">${pct(x.p)}<span class="muted">${money(x.p * total)}</span></span></div></li>`).join("")}</ul></div>`;
 }
 // Paspaudus sektorių / regioną – kurios pozicijos jį sudaro (fondai išskaidomi apytiksliai)
 function drillDown(k) {
@@ -380,17 +399,58 @@ function renderCards(a) {
     if (!d.open || d.dataset.loaded || !isTv(d.dataset.s)) return;
     d.dataset.loaded = "1";
     const sym = d.dataset.s;
-    tv(d.querySelector(".pos-chart"), "symbol-overview", {
-      symbols: [[sym.split(":")[1], `${sym}|1M`]], chartOnly: false, width: "100%", height: 300, autosize: false,
-      showVolume: false, hideDateRanges: false, scalePosition: "right", scaleMode: "Normal", lineWidth: 2, chartType: "area",
-      dateRanges: ["1d|1", "1m|30", "3m|60", "12m|1D", "60m|1W"],
-    });
+    const pr = PRICES_PF.items[sym];
+    if (pr) mountPriceChart(d.querySelector(".pos-chart"), sym, pr, { cur: CUR_SIGN[pr.cur] || pr.cur });
+    else d.querySelector(".pos-chart").remove();
     tv(d.querySelector(".pos-news"), "timeline", { feedMode: "symbol", symbol: sym, width: "100%", height: 300, displayMode: "compact" });
   }));
+}
+/* Portfelio vertė laike: dabartinės pozicijos × istorinės kainos (apytiksliai) */
+const PF_RANGES = [["1 mėn.", 30], ["3 mėn.", 91], ["6 mėn.", 182], ["1 m.", 365]];
+let pfChart = null, pfRange = 3;
+async function renderPfChart(a) {
+  const el = $("#r-chart");
+  if (!el) return;
+  const rows = a.rows.filter((r) => isTv(r.s) && PRICES_PF.items[r.s]);
+  const fixed = a.total - rows.reduce((t, r) => t + r.value, 0);
+  if (!rows.length) { el.closest(".pf-chart-wrap").hidden = true; return; }
+  const [LW, hs] = await Promise.all([loadLWC(), Promise.all(rows.map((r) => loadHist(r.s, PRICES_PF.items[r.s])))]);
+  const series = rows.map((r, i) => { const d = hs[i].d; const last = d.length ? d[d.length - 1].value : 0; return { r, d, last }; }).filter((x) => x.d.length && x.last);
+  const dates = [...new Set(series.flatMap((x) => x.d.map((p) => p.time)))].sort();
+  const idx = series.map(() => 0);
+  const pts = dates.map((t) => {
+    let v = fixed;
+    series.forEach((x, i) => { while (idx[i] + 1 < x.d.length && x.d[idx[i] + 1].time <= t) idx[i]++; const p = x.d[idx[i]]; v += x.r.value * ((p.time <= t ? p.value : x.d[0].value) / x.last); });
+    return { time: t, value: Math.round(v * 100) / 100 };
+  });
+  el.innerHTML = `<div class="pf-chart-box"></div><div class="seg seg-sm pf-ranges">${PF_RANGES.map(([l], i) => `<button type="button" data-r="${i}" aria-pressed="${i === pfRange}">${l}</button>`).join("")}</div>`;
+  const chart = LW.createChart($(".pf-chart-box", el), { ...chartTheme(), autoSize: true, rightPriceScale: { visible: false }, leftPriceScale: { visible: false }, timeScale: { visible: false, fixLeftEdge: true, fixRightEdge: true }, grid: { vertLines: { visible: false }, horzLines: { visible: false } }, handleScale: false, handleScroll: false });
+  const ser = chart.addSeries(LW.AreaSeries, { lineWidth: 2, priceLineVisible: false, lastValueVisible: false, crosshairMarkerRadius: 4 });
+  const draw = () => {
+    const from = addDays(pts[pts.length - 1].time, -PF_RANGES[pfRange][1]);
+    const data = pts.filter((p) => p.time >= from);
+    const up = data[data.length - 1].value >= data[0].value, col = cssVar(up ? "--up" : "--down");
+    ser.applyOptions({ lineColor: col, topColor: col + "40", bottomColor: col + "00" });
+    ser.setData(data);
+    chart.timeScale().fitContent();
+    const ch = data[data.length - 1].value - data[0].value;
+    $("#r-chart-chg").innerHTML = `<span class="${up ? "up" : "down"}">${ch >= 0 ? "+" : "−"}${money(Math.abs(ch))} · ${fmtPct((data[data.length - 1].value / data[0].value - 1) * 100)}</span> per ${{ 0: "mėnesį", 1: "3 mėnesius", 2: "pusmetį", 3: "metus" }[pfRange]}`;
+    el.querySelectorAll("[data-r]").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.r === pfRange)));
+  };
+  el.querySelector(".pf-ranges").addEventListener("click", (e) => { const b = e.target.closest("[data-r]"); if (b) { pfRange = +b.dataset.r; draw(); } });
+  draw();
+}
+
+let ptab = "overview";
+function showPTab(id) {
+  ptab = id;
+  document.querySelectorAll(".ptabs [data-ptab]").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.ptab === id)));
+  document.querySelectorAll(".ptab[data-panel]").forEach((p) => (p.hidden = p.dataset.panel !== id));
 }
 function openCard(s) {
   const d = [...document.querySelectorAll("#r-cards details.pos")].find((x) => x.dataset.s === s);
   if (!d) return;
+  showPTab("positions");
   d.open = true;
   d.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -736,9 +796,10 @@ function setupInputs() {
   $("#review-cancel").addEventListener("click", () => { draft = []; state.holdings.length ? renderResult() : show("start"); });
   document.querySelectorAll(".seg button[data-dim]").forEach((b) => b.addEventListener("click", () => { dim = b.dataset.dim; renderDim(); }));
   document.querySelectorAll("#tm-mode [data-tm]").forEach((b) => b.addEventListener("click", () => { tmMode = b.dataset.tm; renderTreemap(); }));
+  document.querySelectorAll(".ptabs [data-ptab]").forEach((b) => b.addEventListener("click", () => { showPTab(b.dataset.ptab); if (b.dataset.ptab === "overview") fitTreemaps($("#r-tm")); }));
   $("#r-strip").addEventListener("click", (e) => {
     if (e.target.closest(".drill-x")) { $("#r-drill").hidden = true; document.querySelectorAll("#r-strip .sel").forEach((x) => x.classList.remove("sel")); return; }
-    const el = e.target.closest("[data-k]"); if (el && !e.target.closest(".drill")) drillDown(el.dataset.k);
+    const el = e.target.closest("[data-k]"); if (el && el.dataset.k !== "Kiti" && !e.target.closest(".drill")) drillDown(el.dataset.k);
   });
 
   $("#share-btn").addEventListener("click", () => shareCard().catch((e) => { console.error(e); alert("Nepavyko sukurti paveikslėlio."); }));
@@ -757,6 +818,7 @@ function setupInputs() {
     if (ex) ex.value += v; else state.holdings.push({ s, value: v, ...(findAsset(s) || s === CASH ? {} : { n: ticker(s) }) });
     $("#add-q").value = ""; $("#add-val").value = ""; addPicked = null;
     commit();
+    showPTab("positions");
     $("#d-positions").open = true;
   });
 
