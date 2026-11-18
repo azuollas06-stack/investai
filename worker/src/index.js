@@ -194,6 +194,43 @@ async function callAnthropic(env, system, msgs) {
 }
 
 /* ---------- Maršrutai ---------- */
+/* ===== Duomenų šviežumo sargas ===== */
+const REPO = "azuollas06-stack/investai";
+const SITE_URL = "https://azuollas06-stack.github.io/investai/";
+async function freshness() {
+  const get = (f) => fetch(`${SITE_URL}data/${f}?t=${Date.now()}`, { cf: { cacheTtl: 0 } }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  const [live, prices] = await Promise.all([get("live.json"), get("prices.json")]);
+  const age = (d) => (d && d.updated ? Math.round((Date.now() - new Date(d.updated.replace(/Z?$/, "Z"))) / 60000) : null);
+  const now = new Date(), wd = now.getUTCDay() >= 1 && now.getUTCDay() <= 5, h = now.getUTCHours() + now.getUTCMinutes() / 60;
+  const open = wd && h >= 7.5 && h < 21.25;
+  const liveMin = age(live), pricesMin = age(prices);
+  // Kada turėjo būti paskutinis dienos kainų atnaujinimas: šiandien 16:15 UTC (jei jau 17 val.) arba paskutinės darbo dienos 21:40 UTC
+  let exp = new Date(now);
+  if (wd && h >= 17 && h < 22.5) exp.setUTCHours(16, 15, 0, 0);
+  else {
+    if (!(wd && h >= 22.5)) do exp.setUTCDate(exp.getUTCDate() - 1); while (exp.getUTCDay() === 0 || exp.getUTCDay() === 6);
+    exp.setUTCHours(21, 40, 0, 0);
+  }
+  const pricesStale = pricesMin === null || Date.now() - pricesMin * 60000 < exp.getTime() - 30 * 60000;
+  return { open, liveMin, pricesMin, liveStale: open && (liveMin === null || liveMin > 40), pricesStale };
+}
+async function dispatch(env, wf) {
+  if (!env.GH_DISPATCH_TOKEN) return "no-token";
+  const r = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/${wf}/dispatches`, {
+    method: "POST", headers: { Authorization: `Bearer ${env.GH_DISPATCH_TOKEN}`, Accept: "application/vnd.github+json", "User-Agent": "investai-worker", "X-GitHub-Api-Version": "2022-11-28" },
+    body: JSON.stringify({ ref: "main" }),
+  });
+  return r.status;
+}
+async function guard(env) {
+  const f = await freshness();
+  const out = { ...f };
+  if (f.liveStale) out.live = await dispatch(env, "live.yml");
+  // Dienos kainos: po Europos uždarymo (16:15 UTC) arba po JAV (21:40 UTC), jei jos dar neatnaujintos
+  if (f.pricesStale && new Date().getUTCMinutes() < 15) out.prices = await dispatch(env, "prices.yml");
+  return out;
+}
+
 /* ===== Naujienos ===== */
 const NEWS_VER = 4;
 const TOPICS = {
@@ -203,7 +240,7 @@ const TOPICS = {
   baltic: { q: "Nasdaq Baltic OR Lithuania economy OR Baltic stocks", feeds: ["https://www.lrt.lt/naujienos/verslas?rss", "https://www.vz.lt/rss"], lt: true },
 };
 const SRC_NAMES = { "cnbc.com": "CNBC", "marketwatch.com": "MarketWatch", "finance.yahoo.com": "Yahoo Finance", "coindesk.com": "CoinDesk", "cointelegraph.com": "Cointelegraph", "lrt.lt": "LRT", "vz.lt": "Verslo žinios", "reuters.com": "Reuters", "bloomberg.com": "Bloomberg" };
-const BAD_TITLE = /prediction|forecast 20|should you buy|stocks? to buy|buy now|millionaire|could make you|price target 20\d\d|sponsored|\bpromo\b/i;
+const BAD_TITLE = /prediction|forecast 20|should you buy|stocks? to buy|buy now|millionaire|could make you|price target 20\d\d|sponsored|\bpromo\b|will .{1,40} hit \$|or \$\d+ first|\bto the moon\b/i;
 const BAD_SRC = /coinpedia|changelly|benzinga pro|motley fool|fool\.com|zacks|investorplace/i;
 const newsKey = (o) => new Request(`https://investai-cache/news?t=${o.t}&q=${encodeURIComponent((o.q || "").toLowerCase())}&s=${o.s || ""}&v=${NEWS_VER}`);
 function xmlPick(blk, tag) {
@@ -221,6 +258,7 @@ async function readFeed(feed, lt) {
     let link = xmlPick(blk, "link") || ((blk.match(/<link[^>]*href="([^"]+)"/) || [])[1] || "");
     const real = link.match(/[?&]url=([^&]+)/); if (/bing\.com/.test(link) && real) link = decodeURIComponent(real[1]);
     let host = ""; try { host = new URL(link).hostname.replace(/^www\./, ""); } catch {}
+    if (SRC_NAMES[src]) src = SRC_NAMES[src];
     if (!src) src = SRC_NAMES[host] || SRC_NAMES[Object.keys(SRC_NAMES).find((k) => host.endsWith(k)) || ""] || host;
     const d = new Date(xmlPick(blk, "pubDate") || xmlPick(blk, "dc:date") || xmlPick(blk, "updated"));
     return { title, link, source: src, time: isNaN(d) ? null : d.toISOString(), ...(lt && /\.lt$/.test(host) ? { lt: title } : {}) };
@@ -267,6 +305,8 @@ async function refreshNews(env, o, old) {
   await translateNews(env, items, old);
   const out = { t: o.t, q: o.q, items, at: new Date().toISOString() };
   await caches.default.put(newsKey(o), new Response(JSON.stringify(out), { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=21600" } }));
+  // Pagrindinės temos saugomos ir centralizuotai, kad būtų greitos visuose Cloudflare duomenų centruose
+  if (o.t && !o.q && !o.s) await env.PUSH.get(env.PUSH.idFromName("push")).kvPut(`news:${o.t}`, out).catch(() => {});
   return out;
 }
 async function cachedNews(env, ctx, o) {
@@ -276,6 +316,14 @@ async function cachedNews(env, ctx, o) {
     // Senesnis nei 10 min.: grąžiname iškart, o fone atnaujiname
     if (Date.now() - new Date(d.at) > 10 * 60000 && ctx) ctx.waitUntil(refreshNews(env, o, d).catch(() => {}));
     return d;
+  }
+  if (o.t && !o.q && !o.s) {
+    const d = await env.PUSH.get(env.PUSH.idFromName("push")).kvGet(`news:${o.t}`).catch(() => null);
+    if (d && d.items && d.items.length) {
+      ctx && ctx.waitUntil(caches.default.put(newsKey(o), new Response(JSON.stringify(d), { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=21600" } })));
+      if (Date.now() - new Date(d.at) > 10 * 60000 && ctx) ctx.waitUntil(refreshNews(env, o, d).catch(() => {}));
+      return d;
+    }
   }
   return refreshNews(env, o);
 }
@@ -330,6 +378,10 @@ export default {
         return json({ error: msg }, 502, c.headers);
       }
       return new Response(res.stream, { status: 200, headers: { ...c.headers, "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store", "X-Left": String(lim.left) } });
+    }
+    if (url.pathname === "/status" && req.method === "GET") {
+      const f = await freshness();
+      return json({ ...f, guard: env.GH_DISPATCH_TOKEN ? "on" : "watch-only" }, 200, c.headers);
     }
     /* ----- Naujienų antraštės: keli šaltiniai, vertimas, talpykla (iškart grąžinama, atnaujinama fone) ----- */
     if (url.pathname === "/news" && req.method === "GET") {
@@ -428,6 +480,7 @@ export default {
     else if (event.cron === "0 17 * * 0") ctx.waitUntil(push.weekly().then((r) => console.log("weekly", JSON.stringify(r))));
     else {
       ctx.waitUntil(push.check().then((r) => console.log("push check", JSON.stringify(r))));
+      ctx.waitUntil(guard(env).then((r) => console.log("guard", JSON.stringify(r))).catch((e) => console.log("guard err", String(e))));
       // Iš anksto atnaujiname pagrindines naujienų temas, kad lankytojai jas gautų akimirksniu
       ctx.waitUntil(Promise.all(Object.keys(TOPICS).map((t) => refreshNews(env, { t, q: "", s: "" }).catch((e) => console.log("news", t, String(e))))));
     }

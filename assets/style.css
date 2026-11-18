@@ -1981,3 +1981,24 @@ em.why-move.ex-down { color: var(--down); } em.why-move.ex-up { color: var(--up)
 .foot-legal a{color:var(--muted,#6b7280);text-decoration:underline;text-underline-offset:2px}
 .chip.on{background:var(--sea);color:#fff;box-shadow:none}
 .hl-more{width:100%;margin-top:8px}
+
+/* v18: atsarginė kopija */
+.bk-note{border:1px solid color-mix(in srgb,var(--amber,#d97706) 35%,var(--line));background:color-mix(in srgb,var(--amber,#d97706) 6%,var(--surface))}
+.bk-row{display:flex;gap:12px;align-items:flex-start}
+.bk-row p{margin:4px 0 10px}
+.bk-ico{flex:none;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--amber,#d97706) 16%,transparent);color:var(--amber,#b45309)}
+.bk-btns{display:flex;gap:8px;flex-wrap:wrap}
+.pf-toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--sea,#0f2a3d);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;z-index:200;box-shadow:0 6px 24px rgba(0,0,0,.2)}
+
+/* v18: pasenusių kainų perspėjimas */
+.stale-note{display:flex;gap:8px;align-items:flex-start;margin:0 0 14px;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.4;background:color-mix(in srgb,var(--amber,#d97706) 12%,var(--surface));color:var(--sea);border:1px solid color-mix(in srgb,var(--amber,#d97706) 35%,transparent)}
+.stale-note svg{flex:none;margin-top:2px;color:var(--amber,#b45309)}
+
+/* v18: pirmo apsilankymo kvietimas */
+.ob-invite{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0}
+.ob-invite p{margin:2px 0 0}
+.ob-inv-btns{display:flex;align-items:center;gap:6px;flex:none}
+.ob-invite .ob-x{background:none;border:0;color:var(--muted);font-size:22px;line-height:1;width:36px;height:36px;border-radius:10px;cursor:pointer}
+.stale-note{background:color-mix(in srgb,#f5b335 12%,var(--surface));border-color:color-mix(in srgb,#f5b335 40%,transparent)}
+.stale-note svg{color:#f5b335}
+.bal-lead{display:block;max-width:34ch;margin:-4px auto 14px;color:var(--muted);font-size:15px;line-height:1.45;text-align:center}

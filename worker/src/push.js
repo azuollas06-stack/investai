@@ -145,6 +145,8 @@ export class Push extends DurableObject {
   }
 
   // Atsiliepimai ir pranešimai apie klaidas (be asmens duomenų)
+  async kvGet(k) { return (await this.ctx.storage.get(k)) || null; }
+  async kvPut(k, v) { await this.ctx.storage.put(k, v); return true; }
   async addFeedback(f) {
     const id = `fb:${Date.now()}:${Math.random().toString(36).slice(2, 7)}`;
     await this.ctx.storage.put(id, f);

@@ -106,6 +106,7 @@ async function pageHome() {
   } else {
     $("#hero").innerHTML = `<div class="bal bal-cta"><span class="bal-label">${esc(greeting())}</span>
       <span class="bal-title">Sužinok, kur iš tikrųjų tavo pinigai</span>
+      <span class="bal-lead">Nemokama portfelio analizė, rinkų naujienos ir AI asistentas – lietuviškai ir be reklamų.</span>
       <a class="btn primary" href="portfelis.html">${icon("upload", 18)} Įkelti portfelio nuotrauką</a>
       <a class="bal-sub" href="portfelis.html?pavyzdys=1">arba žiūrėti pavyzdį</a></div>`;
   }
@@ -351,7 +352,7 @@ function agoLT(iso) {
 function headlinesHTML(items, n = 8) {
   if (!items.length) return `<p class="muted">Šiuo metu naujų antraščių nerasta.</p>`;
   return `<ul class="hl-list">${items.slice(0, n).map((x) => `<li><a href="${esc(x.link)}" target="_blank" rel="noopener"><b>${esc(x.lt || x.title)}</b><small>${esc(x.source || "")}${x.time ? ` · ${agoLT(x.time)}` : ""}</small></a></li>`).join("")}</ul>
-    ${items.length > n ? `<button type="button" class="btn ghost hl-more" data-n="${n}">Rodyti daugiau (${items.length - n})</button>` : ""}
+    ${items.length > n ? `<button type="button" class="btn small hl-more" data-n="${n}">Rodyti daugiau (${items.length - n})</button>` : ""}
     <p class="muted small hl-note">Antraštės iš CNBC, MarketWatch, Yahoo Finance, Bing News ir kitų šaltinių, išverstos AI, todėl galimi netikslumai. Paspaudęs atsidarysi originalų straipsnį.</p>`;
 }
 // „Rodyti daugiau“ bet kuriame antraščių bloke
@@ -601,6 +602,7 @@ async function pageNews() {
     seg.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) show(+b.dataset.i); });
     // Kol puslapis atidarytas – kas 5 min. tyliai atnaujiname
     setInterval(() => { if (!document.hidden) show(cur, true); }, 5 * 60000);
+    show(0);
   })();
   const [n, assets, P] = await Promise.all([getJSON("data/news.json"), allAssets(), loadPrices()]);
   $("#news-updated").textContent = n.updated ? `Atnaujinta ${fmtDate(n.updated)}` : "";

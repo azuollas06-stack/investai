@@ -88,6 +88,7 @@ const ICONS = {
   glossary: '<path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H19v17H7.5A2.5 2.5 0 0 0 5 21.5z"/><path d="M5 19.5V4.5M9 7h6"/>',
   calendar: '<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   asset: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
   upload: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 15v4a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-4"/>',
   chevron: '<path d="m9 6 6 6-6 6"/>',
   grid: '<rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/>',
@@ -243,7 +244,23 @@ async function loadPrices() {
       Object.assign(p, { price, d1, date, ts: l.updated, live: fresh && date === l.updated.slice(0, 10) });
     }
   }
+  staleNote(_prices);
   return _prices;
+}
+// Jei kainų atnaujinimas vėluoja – aiškiai pasakome (geriau nei tyliai rodyti senas kainas)
+function staleNote(P) {
+  const ts = [P.live, P.updated].filter(Boolean).map((x) => new Date(x).getTime()).filter((x) => !isNaN(x));
+  const last = ts.length ? Math.max(...ts) : 0;
+  const now = new Date(), wd = now.getUTCDay() >= 1 && now.getUTCDay() <= 5, h = now.getUTCHours() + now.getUTCMinutes() / 60;
+  const open = wd && h >= 8 && h < 21.25;
+  const mins = (Date.now() - last) / 60000;
+  if (!last || !(open ? mins > 90 : mins > 4 * 1440) || document.querySelector(".stale-note")) return;
+  const main = document.querySelector("main"); if (!main) return;
+  const ago = mins < 1440 ? `prieš ${Math.round(mins / 60)} val.` : `prieš ${Math.round(mins / 1440)} d.`;
+  const el = document.createElement("p");
+  el.className = "stale-note"; el.setAttribute("role", "status");
+  el.innerHTML = `${icon("clock", 16)}<span>Kainų atnaujinimas vėluoja (paskutinis – ${ago}), todėl rodomos paskutinės turimos kainos.</span>`;
+  main.prepend(el);
 }
 // Aiški žyma: uždelsta kaina prekybos metu arba paskutinė uždarymo kaina
 function priceStamp(p) {

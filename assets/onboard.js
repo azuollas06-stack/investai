@@ -76,8 +76,15 @@ const ONBOARD = (() => {
     const p = get();
     let returning = false;
     try { returning = !!localStorage.getItem("investai.portfolio.v1") || (JSON.parse(localStorage.getItem("investai.watch.v1") || "[]").length > 0); } catch {}
-    if (!p && !returning) setTimeout(() => open(render), 700);
-    else render(p);
+    if (!p && !returning) {
+      const qa = document.querySelector("main .qa"); const at = qa || host;
+      // Pirmą kartą: ne iššokantis langas, o kvietimas – žmogus pirma pamato, kas čia yra
+      at.insertAdjacentHTML("afterend", `<section class="card ob-invite" id="ob-card"><div><b>Pritaikyk InvestAI sau</b><p class="muted small">3 klausimai, 20 sekundžių – ir matysi tau tinkamą kelią bei paaiškinimus.</p></div>
+        <div class="ob-inv-btns"><button type="button" class="btn primary small" id="ob-go">Pradėti</button><button type="button" class="ob-x" aria-label="Nerodyti">×</button></div></section>`);
+      const c = document.getElementById("ob-card");
+      c.querySelector("#ob-go").addEventListener("click", () => open(render));
+      c.querySelector(".ob-x").addEventListener("click", () => { set({ skip: true }); c.remove(); });
+    } else render(p);
   }
   return { get, describe, open, mountHome };
 })();

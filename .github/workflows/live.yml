@@ -4,7 +4,7 @@ name: Kainos biržų darbo metu
 # Duomenys uždelsti ~15 min (Yahoo Finance); svetainėje taip ir pažymėta.
 on:
   schedule:
-    - cron: "*/15 7-21 * * 1-5"   # UTC: ~9–24 val. Vilniaus laiku (Europos ir JAV biržos)
+    - cron: "4,19,34,49 7-21 * * 1-5"   # UTC: ~9–24 val. Vilniaus laiku (Europos ir JAV biržos)
   workflow_dispatch:
 
 permissions:

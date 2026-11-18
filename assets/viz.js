@@ -117,13 +117,13 @@ function fitTreemaps(root = document) {
       const w = t.clientWidth, h = t.clientHeight, b = t.querySelector(":scope > b"), sp = t.querySelector(":scope > span");
       const len = Math.max(3, b.textContent.length);
       let fs = Math.min((w - 10) / (len * 0.7), h * 0.36, 24);
-      if (fs < 9.5) { t.classList.add("tm-none"); return; }
+      if (fs < 11.5) { t.classList.add("tm-none"); return; }
       t.classList.remove("tm-none");
       const ic = t.querySelector(".tm-ico");
       if (ic) { const isz = Math.min(44, Math.max(22, Math.min(w, h) * 0.26)); const show = h > isz + fs * 2.6 && w > isz + 12; ic.style.display = show ? "" : "none"; ic.style.setProperty("--isz", `${isz.toFixed(0)}px`); if (show) fs = Math.min(fs, (h - isz) * 0.3); b.style.fontSize = `${fs.toFixed(1)}px`; }
       b.style.fontSize = `${fs.toFixed(1)}px`;
       if (sp) {
-        const sfs = Math.max(10, Math.min(fs * 0.62, 15));
+        const sfs = Math.max(11, Math.min(fs * 0.62, 15));
         const fits = h > fs * 1.25 + sfs * 1.35 + 6 && w > sp.textContent.length * sfs * 0.6 + 10;
         sp.style.display = fits ? "" : "none";
         sp.style.fontSize = `${sfs.toFixed(1)}px`;

@@ -20,13 +20,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>try{var d=document.documentElement,t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";d.dataset.theme=t;try{localStorage.removeItem("investai.style")}catch(e){}}catch(e){}</script>
-<link rel="stylesheet" href="assets/style.css?v=07c4fa6a">
-<script src="assets/viz.js?v=4ac1511d" defer></script>
-<script src="assets/app.js?v=c387e7a2" defer></script>
+<link rel="stylesheet" href="assets/style.css?v=42c93ec8">
+<script src="assets/viz.js?v=6bbfcc39" defer></script>
+<script src="assets/app.js?v=c06a00f8" defer></script>
 <script src="assets/glossary.js?v=be0fc5e9" defer></script>
-<script src="assets/pages.js?v=e030e95c" defer></script>
+<script src="assets/pages.js?v=5c7a746f" defer></script>
 <script src="assets/alerts.js?v=f0085f96" defer></script>
-<script src="assets/onboard.js?v=5d7c8b27" defer></script>
+<script src="assets/onboard.js?v=6633349e" defer></script>
 <script src="assets/ai.js?v=a19a3eff" defer></script>
 </head>
 <body data-page="portfolio">
@@ -123,6 +123,7 @@
     </div>
 
     <div class="ptab" data-panel="overview">
+    <section class="card bk-note" id="r-backup" hidden></section>
     <section class="card rai" id="r-ai" hidden aria-live="polite"></section>
     <section class="card wk" id="r-week" hidden></section>
     <section class="card wk real" id="r-real" hidden></section>
@@ -254,10 +255,10 @@
     <details class="more" id="d-data">
       <summary><div><h2>Duomenys</h2><p>Duomenys saugomi tik šioje naršyklėje</p></div></summary>
       <div class="more-body">
-        <p class="muted small">Norėdamas matyti portfelį kitame įrenginyje, eksportuok failą ir importuok jį ten.</p>
+        <p class="muted small">Portfelis saugomas tik šioje naršyklėje. Atsarginėje kopijoje – pozicijos, sandoriai, dividendai, taisyklės, istorija ir įspėjimų nustatymai. Ją atkūręs, viską matysi kitame telefone ar kompiuteryje. <span id="bk-last"></span></p>
         <div class="data-actions">
-          <button class="btn" type="button" id="export">Eksportuoti failą</button>
-          <label class="btn" for="import">Importuoti failą</label>
+          <button class="btn primary" type="button" id="export">Atsisiųsti atsarginę kopiją</button>
+          <label class="btn" for="import">Atkurti iš kopijos</label>
           <input id="import" type="file" accept="application/json,.json,.csv,text/csv" class="sr-only">
           <button class="btn danger" type="button" id="clear">Ištrinti portfelį</button>
         </div>
@@ -273,6 +274,6 @@
 <script src="assets/pf-csv.js?v=d7d79b26" defer></script>
 <script src="assets/pf-ai.js?v=42047ad0" defer></script>
 <script src="assets/pf-insights.js?v=71f40392" defer></script>
-<script src="assets/portfolio.js?v=feba99ce" defer></script>
+<script src="assets/portfolio.js?v=0ed1ba0e" defer></script>
 </body>
 </html>

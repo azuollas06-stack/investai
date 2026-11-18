@@ -54,9 +54,11 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_DISPATCH_TOKEN: ${{ secrets.GH_DISPATCH_TOKEN }}
         run: |
           if [ -n "$OPENAI_API_KEY" ]; then printf '%s' "$OPENAI_API_KEY" | npx --yes wrangler@4 secret put OPENAI_API_KEY; else echo "OPENAI_API_KEY nėra"; fi
           if [ -n "$ANTHROPIC_API_KEY" ]; then printf '%s' "$ANTHROPIC_API_KEY" | npx --yes wrangler@4 secret put ANTHROPIC_API_KEY; else echo "ANTHROPIC_API_KEY nėra"; fi
+          if [ -n "$GH_DISPATCH_TOKEN" ]; then printf '%s' "$GH_DISPATCH_TOKEN" | npx --yes wrangler@4 secret put GH_DISPATCH_TOKEN; else echo "GH_DISPATCH_TOKEN nėra – kainų sargas tik stebės"; fi
 
       - name: Išsaugoti adresą svetainei
         run: |

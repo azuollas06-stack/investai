@@ -139,6 +139,7 @@ function renderResult() {
   renderCards(a);
   renderDivs(a);
   renderWeek(a);
+  renderBackup();
   renderReal(a);
   renderTax();
   renderNext(a);
@@ -567,6 +568,51 @@ function snapshot() {
   } catch {}
 }
 function commit() { save(); snapshot(); renderResult(); }
+/* ---------- Atsarginė kopija ---------- */
+const BK_KEY = "investai.backup.v1";
+const BACKUP_KEYS = ["investai.history.v1", "investai.pf.snap.v1", "investai.watch.v1", "investai.alerts.v1", "investai.profile.v1", "investai.pf.review.v1", "investai.co.v1"];
+function bkInfo() { try { return JSON.parse(localStorage.getItem(BK_KEY) || "{}"); } catch { return {}; } }
+function toastPf(msg) {
+  const t = document.createElement("div"); t.className = "pf-toast"; t.setAttribute("role", "status"); t.textContent = msg;
+  document.body.append(t); setTimeout(() => t.remove(), 3200);
+}
+async function backupDownload() {
+  const extra = {};
+  for (const k of BACKUP_KEYS) { try { const v = localStorage.getItem(k); if (v) extra[k] = v; } catch {} }
+  const data = { app: "InvestAI", version: 2, exported: new Date().toISOString(), portfolio: state, extra };
+  const name = `investai-kopija-${new Date().toISOString().slice(0, 10)}.json`;
+  const file = new File([JSON.stringify(data)], name, { type: "application/json" });
+  let done = false;
+  // Telefone (ypač iPhone programėlėje) patogiau per bendrinimo meniu – galima išsaugoti „Failuose“ ar el. laiške
+  if (/iPhone|iPad|Android/i.test(navigator.userAgent) && navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: "InvestAI atsarginė kopija" }); done = true; } catch (e) { if (e && e.name === "AbortError") return; }
+  }
+  if (!done) {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(file); a.download = name; document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+  }
+  try { localStorage.setItem(BK_KEY, JSON.stringify({ at: new Date().toISOString() })); } catch {}
+  renderBackup();
+  toastPf("Atsarginė kopija paruošta.");
+}
+function renderBackup() {
+  const box = $("#r-backup"), last = $("#bk-last");
+  const info = bkInfo();
+  if (last) last.textContent = info.at ? `Paskutinė kopija: ${new Date(info.at).toLocaleDateString("lt-LT")}.` : "Kopijos dar nedarei.";
+  if (!box) return;
+  const days = (iso) => (iso ? (Date.now() - new Date(iso)) / 864e5 : Infinity);
+  const first = (state.tx && state.tx.length) || state.holdings.length >= 3;
+  const show = !isDemo && state.holdings.length && first && days(info.at) > 30 && days(info.snooze) > 7;
+  box.hidden = !show;
+  if (!show) return;
+  box.innerHTML = `<div class="bk-row"><span class="bk-ico">${icon("upload", 20)}</span><div><b>${info.at ? "Laikas atnaujinti atsarginę kopiją" : "Pasidaryk atsarginę kopiją"}</b>
+    <p class="muted small">Portfelis saugomas tik šioje naršyklėje. Išvalius naršyklę ar pakeitus telefoną, jis dingtų – kopija užtrunka 2 sekundes.</p>
+    <div class="bk-btns"><button type="button" class="btn primary small" id="bk-go">Atsisiųsti kopiją</button><button type="button" class="btn small" id="bk-later">Vėliau</button></div></div></div>`;
+  $("#bk-go").addEventListener("click", backupDownload);
+  $("#bk-later").addEventListener("click", () => { try { localStorage.setItem(BK_KEY, JSON.stringify({ ...bkInfo(), snooze: new Date().toISOString() })); } catch {} box.hidden = true; });
+}
+
 
 /* ---------- Paieškos laukas (aktyvo pasirinkimas) ---------- */
 function picker(input, onPick) {
@@ -1342,29 +1388,32 @@ function setupInputs() {
   });
 
   // Duomenys
-  $("#export").addEventListener("click", () => {
-    const blob = new Blob([JSON.stringify({ app: "InvestAI", version: 1, exported: new Date().toISOString(), ...state }, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob); a.download = "investai-portfelis.json"; a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  });
+  $("#export").addEventListener("click", () => backupDownload());
   $("#import").addEventListener("change", async (e) => {
     const f = e.target.files[0];
     if (!f) return;
     if (isCSV(f)) { handleCSV(f); e.target.value = ""; return; }
     try {
       const d = JSON.parse(await f.text());
-      if (!Array.isArray(d.holdings)) throw new Error();
+      const pf = d.version >= 2 && d.portfolio ? d.portfolio : d;
+      if (!Array.isArray(pf.holdings)) throw new Error();
+      if (state.holdings.length && !isDemo && !confirm(`Atkurti kopiją${d.exported ? ` (${new Date(d.exported).toLocaleDateString("lt-LT")})` : ""}? Dabartinis portfelis šioje naršyklėje bus pakeistas.`)) { e.target.value = ""; return; }
       isDemo = false;
       state = {
-        holdings: d.holdings.filter((h) => h && typeof h.s === "string" && (h.s === CASH || SYMBOL_RE.test(h.s) || /^X:[A-Z0-9-]{1,40}$/.test(h.s))).map((h) => ({ ...h, value: Math.max(0, Number(h.value) || 0) })),
-        rules: d.rules && typeof d.rules === "object" ? d.rules : {},
-        currency: d.currency === "USD" ? "USD" : "EUR",
-        divs: Array.isArray(d.divs) ? d.divs.filter((x) => x && typeof x.d === "string" && Number.isFinite(x.eur)) : [],
+        holdings: pf.holdings.filter((h) => h && typeof h.s === "string" && (h.s === CASH || SYMBOL_RE.test(h.s) || /^X:[A-Z0-9-]{1,40}$/.test(h.s))).map((h) => ({ ...h, value: Math.max(0, Number(h.value) || 0) })),
+        rules: pf.rules && typeof pf.rules === "object" ? pf.rules : {},
+        currency: pf.currency === "USD" ? "USD" : "EUR",
+        divs: Array.isArray(pf.divs) ? pf.divs.filter((x) => x && typeof x.d === "string" && Number.isFinite(x.eur)) : [],
+        tx: Array.isArray(pf.tx) ? pf.tx.filter((x) => x && typeof x.d === "string") : [],
+        txBroker: typeof pf.txBroker === "string" ? pf.txBroker : "",
       };
+      // Kiti nustatymai (istorija, stebimi, įspėjimai, profilis)
+      if (d.extra && typeof d.extra === "object") for (const [k, v] of Object.entries(d.extra)) if (BACKUP_KEYS.includes(k) && typeof v === "string") { try { localStorage.setItem(k, v); } catch {} }
+      try { localStorage.setItem(BK_KEY, JSON.stringify({ at: new Date().toISOString() })); } catch {}
       $("#rule-inputs").dataset.ready = "";
       commit();
-    } catch { alert("Šis failas netinka. Importuoti galima tik InvestAI eksportuotą failą."); }
+      toastPf("Kopija atkurta.");
+    } catch { alert("Šis failas netinka. Atkurti galima tik iš InvestAI atsarginės kopijos (.json) arba brokerio CSV."); }
     e.target.value = "";
   });
   $("#clear").addEventListener("click", () => {

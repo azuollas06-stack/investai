@@ -92,6 +92,7 @@
     </div>
 
     <div class="ptab" data-panel="overview">
+    <section class="card bk-note" id="r-backup" hidden></section>
     <section class="card rai" id="r-ai" hidden aria-live="polite"></section>
     <section class="card wk" id="r-week" hidden></section>
     <section class="card wk real" id="r-real" hidden></section>
@@ -223,10 +224,10 @@
     <details class="more" id="d-data">
       <summary><div><h2>Duomenys</h2><p>Duomenys saugomi tik šioje naršyklėje</p></div></summary>
       <div class="more-body">
-        <p class="muted small">Norėdamas matyti portfelį kitame įrenginyje, eksportuok failą ir importuok jį ten.</p>
+        <p class="muted small">Portfelis saugomas tik šioje naršyklėje. Atsarginėje kopijoje – pozicijos, sandoriai, dividendai, taisyklės, istorija ir įspėjimų nustatymai. Ją atkūręs, viską matysi kitame telefone ar kompiuteryje. <span id="bk-last"></span></p>
         <div class="data-actions">
-          <button class="btn" type="button" id="export">Eksportuoti failą</button>
-          <label class="btn" for="import">Importuoti failą</label>
+          <button class="btn primary" type="button" id="export">Atsisiųsti atsarginę kopiją</button>
+          <label class="btn" for="import">Atkurti iš kopijos</label>
           <input id="import" type="file" accept="application/json,.json,.csv,text/csv" class="sr-only">
           <button class="btn danger" type="button" id="clear">Ištrinti portfelį</button>
         </div>
