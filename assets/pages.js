@@ -29,7 +29,8 @@ function myHoldings() {
 }
 // Kiek portfelis pasikeitė per paskutinę prekybos dieną (pagal kiekvienos pozicijos dienos pokytį)
 function portfolioToday(P) {
-  const hs = myHoldings().filter((h) => h.value > 0);
+  // CSV pozicijos (žinomas kiekis) – vertė pagal naujausią kainą
+  const hs = myHoldings().map((h) => { const p = P.items[h.s]; return h.auto && h.qty && p && p.price && TO_EUR[p.cur] ? { ...h, value: h.qty * p.price * TO_EUR[p.cur] } : h; }).filter((h) => h.value > 0);
   if (!hs.length) return null;
   let total = 0, known = 0, chg = 0;
   const rows = [];

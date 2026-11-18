@@ -16,12 +16,28 @@
       <div class="progress-bar"><span></span></div>
       <p id="progress-text">Ruošiama…</p>
     </div>
+    <div class="csv-opt">
+      <div><b>Turi brokerio CSV failą?</b><span>Tiksliausia: kiekiai, pirkimo kainos ir dividendai</span></div>
+      <label class="btn" for="csv">Importuoti CSV</label>
+      <input id="csv" type="file" accept=".csv,.txt,text/csv,text/plain" class="sr-only">
+    </div>
+    <details class="csv-help">
+      <summary>Kaip gauti CSV failą?</summary>
+      <ul>
+        <li><b>Trading 212:</b> skiltis „History“ → eksporto ikona → pasirink laikotarpį nuo sąskaitos atidarymo.</li>
+        <li><b>Revolut:</b> Investicijos → ⋯ → Dokumentai → „Account statement“ → formatas „Excel“ (CSV).</li>
+        <li><b>Lightyear:</b> Paskyra → „Statements“ → „Account statement“ → CSV.</li>
+        <li><b>Interactive Brokers:</b> „Performance &amp; Reports“ → „Statements“ → „Activity“ → formatas CSV.</li>
+        <li><b>Kitas bankas:</b> tinka bet kuri lentelė su stulpeliais „Pavadinimas“ ar „Ticker“ ir „Kiekis“ ar „Vertė“.</li>
+      </ul>
+      <p>Meniu pavadinimai programėlėse kartais keičiasi. Svarbu, kad sandorių istorija apimtų visą laikotarpį nuo pirmojo pirkimo.</p>
+    </details>
     <div class="alt-actions">
       <button type="button" class="linkish" id="manual">Suvesti pozicijas ranka</button>
       <a href="portfelis.html?pavyzdys=1">Žiūrėti pavyzdį</a>
     </div>
     <ul class="trust">
-      <li>Nuotrauka apdorojama tavo naršyklėje ir niekur nesiunčiama</li>
+      <li>Nuotrauka ir CSV failas apdorojami tavo naršyklėje ir niekur nesiunčiami</li>
       <li>Tinka Revolut, Swedbank, SEB, Lightyear, Trading 212 ir kt.</li>
       <li>Prieš analizę galėsi viską pataisyti</li>
     </ul>
@@ -68,6 +84,7 @@
     <div class="seg ptabs" role="tablist" aria-label="Portfelio skiltys">
       <button type="button" role="tab" data-ptab="overview" aria-selected="true">Apžvalga</button>
       <button type="button" role="tab" data-ptab="positions" aria-selected="false">Pozicijos</button>
+      <button type="button" role="tab" data-ptab="divs" aria-selected="false">Dividendai</button>
       <button type="button" role="tab" data-ptab="risk" aria-selected="false">Rizika</button>
       <button type="button" role="tab" data-ptab="more" aria-selected="false">Daugiau</button>
     </div>
@@ -122,10 +139,16 @@
         <div class="review-actions">
           <label class="btn" for="file3">Įkelti naują nuotrauką</label>
           <input id="file3" type="file" accept="image/*" multiple class="sr-only">
+          <label class="btn" for="csv2">Importuoti CSV</label>
+          <input id="csv2" type="file" accept=".csv,.txt,text/csv,text/plain" class="sr-only">
         </div>
       </div>
     </details>
 
+    </div>
+
+    <div class="ptab" data-panel="divs" hidden>
+      <section id="r-div" class="pf-div"></section>
     </div>
 
     <div class="ptab" data-panel="risk" hidden>
@@ -192,7 +215,7 @@
         <div class="data-actions">
           <button class="btn" type="button" id="export">Eksportuoti failą</button>
           <label class="btn" for="import">Importuoti failą</label>
-          <input id="import" type="file" accept="application/json,.json" class="sr-only">
+          <input id="import" type="file" accept="application/json,.json,.csv,text/csv" class="sr-only">
           <button class="btn danger" type="button" id="clear">Ištrinti portfelį</button>
         </div>
       </div>
@@ -204,5 +227,6 @@
   </section>
 </main>
 <script src="assets/pf-parse.js" defer></script>
+<script src="assets/pf-csv.js" defer></script>
 <script src="assets/pf-insights.js" defer></script>
 <script src="assets/portfolio.js" defer></script>

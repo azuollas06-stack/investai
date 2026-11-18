@@ -222,6 +222,7 @@ async function loadPrices() {
   if (_prices) return _prices;
   const [d, l] = await Promise.all([getJSON("data/prices.json").catch(() => null), getJSON("data/live.json").catch(() => null)]);
   _prices = { updated: d ? d.updated : null, live: l ? l.updated : null, items: (d && d.items) || {} };
+  if (d && d.fx && typeof TO_EUR === "object") Object.assign(TO_EUR, d.fx); // naujausi valiutų kursai
   // Biržų darbo metu kas ~15 min atnaujinama kaina (uždelsta) perrašo dienos uždarymo kainą
   if (l && l.items) {
     const fresh = Date.now() - new Date(l.updated).getTime() < 40 * 60e3;

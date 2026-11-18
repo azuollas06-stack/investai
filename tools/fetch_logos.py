@@ -45,6 +45,11 @@ DOMAINS = {
     "NASDAQ:ANT": "anthropic.com", "NYSE:OKLO": "oklo.com", "NASDAQ:MRVL": "marvell.com", "OMXSTO:VOLV_B": "volvogroup.com",
     "AMEX:ARKK": "ark-funds.com",
 }
+# Vikipedijos straipsniai, kurių pagrindinis paveikslėlis – įmonės logotipas (atsarginis šaltinis)
+WIKI = {
+    "NASDAQ:MRVL": "en/Marvell_Technology", "OMXSTO:VOLV_B": "en/Volvo_Group", "AMEX:ARKK": "en/Ark_Invest",
+    "OMXTSE:MRK1T": "et/Merko_Ehitus", "OMXTSE:HAE1T": "et/Harju_Elekter", "OMXRSE:GRD1R": "en/Grindeks",
+}
 # Šiuos perrašyti net jei logotipas jau yra (buvo neteisingas)
 REFRESH = {"NYSE:OKLO"}
 
@@ -97,7 +102,8 @@ def save(data: bytes, dest: Path, min_side: int = 40) -> bool:
 def favicon(domain: str, min_side: int = 48) -> bytes | None:
     # Pirmiausia didelės „apple-touch-icon“ ikonos (180×180), tada paieškos sistemų ikonos
     for url in (f"https://{domain}/apple-touch-icon.png", f"https://www.{domain}/apple-touch-icon.png", f"https://{domain}/apple-touch-icon-precomposed.png", f"https://icon.horse/icon/{domain}",
-                f"https://www.google.com/s2/favicons?domain={domain}&sz=128", f"https://icons.duckduckgo.com/ip3/{domain}.ico"):
+                f"https://www.google.com/s2/favicons?domain={domain}&sz=128", f"https://icons.duckduckgo.com/ip3/{domain}.ico",
+                f"https://unavatar.io/{domain}?fallback=false", f"https://favicone.com/{domain}?s=256"):
         data = get(url)
         if data:
             try:
@@ -107,6 +113,19 @@ def favicon(domain: str, min_side: int = 48) -> bytes | None:
             except Exception:  # noqa: BLE001
                 pass
     return None
+
+
+def wiki_logo(page: str) -> bytes | None:
+    lang, title = page.split("/", 1)
+    try:
+        r = requests.get(f"https://{lang}.wikipedia.org/api/rest_v1/page/summary/{title}", headers=UA, timeout=15)
+        src = (r.json().get("thumbnail") or {}).get("source") if r.status_code == 200 else None
+    except Exception:  # noqa: BLE001
+        src = None
+    if not src:
+        return None
+    src = re.sub(r"/(\d+)px-", "/240px-", src)  # didesnė miniatiūra
+    return get(src)
 
 
 def main() -> int:
@@ -170,6 +189,16 @@ def main() -> int:
                         ok = bool(data and save(data, dest, 32))
                     except Exception:  # noqa: BLE001
                         pass
+            if not ok and tv in WIKI:
+                data = wiki_logo(WIKI[tv])
+                ok = bool(data and save(data, dest, 32))
+            if not ok and g["id"] == "etf":
+                # To paties valdytojo fondai – tas pats logotipas
+                key = next((k for k, _ in ISSUERS if a["n"].startswith(k) or k in a["n"]), None)
+                sib = next((x for x in g["items"] if x["s"] != tv and key and (x["n"].startswith(key) or key in x["n"]) and (OUT / f"{name_of(x['s'])}.png").exists()), None)
+                if sib:
+                    dest.write_bytes((OUT / f"{name_of(sib['s'])}.png").read_bytes())
+                    ok = True
             if ok:
                 found[tv] = rel
             print(("✓" if ok else "✗"), tv, a["n"])

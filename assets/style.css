@@ -1534,3 +1534,43 @@ details.pos .logo-ava { border-radius: 50%; }
 
 :root .pf-hero { background: transparent; color: var(--sea); }
 .pf-hero-label, .pf-hero-sub { color: var(--muted) !important; }
+
+/* v8: CSV importas ir dividendai */
+.csv-opt { display: flex; align-items: center; gap: 14px; margin: 14px 0 0; padding: 14px 16px; border-radius: var(--r-lg); background: var(--surface); }
+.csv-opt > div { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.csv-opt b { font-size: 15.5px; }
+.csv-opt span { font-size: 13.5px; color: var(--muted); }
+.csv-opt .btn { flex: none; }
+.csv-help { margin: 10px 0 0; padding: 0 4px; font-size: 14px; color: var(--muted); }
+.csv-help summary { cursor: pointer; font-weight: 700; color: var(--amber); padding: 6px 0; }
+.csv-help ul { margin: 6px 0 8px; padding-left: 18px; display: grid; gap: 6px; }
+.csv-help b { color: var(--sea); }
+.csv-help p { margin: 0 0 6px; font-size: 13px; }
+.pos-qty { margin: 0 0 12px; font-size: 13.5px; color: var(--muted); font-weight: 600; }
+
+.pf-div { display: block; }
+.div-hero { padding: 6px 4px 14px; }
+.div-label { margin: 0; font-size: 14px; font-weight: 700; color: var(--muted); }
+.div-num { margin: 2px 0 2px; font-size: 38px; font-weight: 800; letter-spacing: -.03em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.div-sub { margin: 0; font-size: 14.5px; color: var(--muted); font-weight: 600; }
+.div-bars { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; align-items: end; height: 150px; padding: 14px 10px 8px; border-radius: var(--r-lg); background: var(--surface); }
+.div-bar { all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: stretch; gap: 6px; height: 100%; min-width: 0; }
+.div-bar:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; border-radius: 6px; }
+.div-col { flex: 1; display: flex; align-items: flex-end; }
+.div-col span { display: block; width: 100%; border-radius: 6px 6px 3px 3px; background: color-mix(in srgb, var(--up) 55%, var(--surface-2)); transition: background .15s; }
+.div-bar.sel .div-col span { background: var(--up); }
+.div-bar small { text-align: center; font-size: 10.5px; font-weight: 700; color: var(--muted); }
+.div-bar.now small { color: var(--sea); }
+.div-tip { margin: 10px 4px 4px; font-size: 15px; color: var(--muted); font-weight: 600; }
+.div-tip b { color: var(--sea); }
+.pf-div > .muted.small { margin: 6px 4px 22px; }
+.pf-div .grp-wrap { margin-top: 4px; }
+.pf-div .row-val .muted { color: var(--muted); font-weight: 600; font-size: 12.5px; }
+@media (max-width: 420px) {
+  .csv-opt { flex-wrap: wrap; }
+  .csv-opt .btn { width: 100%; justify-content: center; }
+  .div-bars { gap: 2px; padding: 12px 6px 8px; }
+  .div-bar small { font-size: 9.5px; letter-spacing: -.02em; }
+}
+.pf-hero-pnl.up { color: var(--up); background: color-mix(in srgb, var(--up) 15%, transparent); }
+.pf-hero-pnl.down { color: var(--down); background: color-mix(in srgb, var(--down) 15%, transparent); }

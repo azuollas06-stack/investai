@@ -161,8 +161,9 @@ def main() -> int:
     # Istorija grafikams rašoma vakare penktadieniais (arba jei failo dar nėra), kad repozitorija neaugtų per greitai
     want_hist = "--hist" in sys.argv or datetime.now(timezone.utc).weekday() == 4
 
-    data = yf.download(ysyms, period="2y", interval="1d", auto_adjust=True, group_by="ticker", progress=False, threads=True)
+    data = yf.download(ysyms, period="2y", interval="1d", auto_adjust=True, actions=True, group_by="ticker", progress=False, threads=True)
     wdata = None
+    year_ago = (datetime.now(timezone.utc) - timedelta(days=365)).strftime("%Y-%m-%d")
     currency = {}
     out, missing = {}, []
     for tv, y in mapping.items():
@@ -185,6 +186,17 @@ def main() -> int:
                 currency[y] = None
         m["cur"] = currency[y]
         m["y"] = y
+        # Dividendai per paskutinius 12 mėn.: [nukirpimo data, suma vienai akcijai kainos valiuta]
+        try:
+            dvs = data[y]["Dividends"].dropna()
+            dv = [[idx.strftime("%Y-%m-%d"), round(float(v), 4)] for idx, v in dvs.items() if v and float(v) > 0 and idx.strftime("%Y-%m-%d") >= year_ago]
+            if dv and m.get("price"):
+                dy12 = sum(x[1] for x in dv) / m["price"] * 100
+                if 0 < dy12 < 25:  # kitokiu atveju tikėtina valiutų (pvz., GBp/GBP) painiava
+                    m["dv"] = dv
+                    m["dy12"] = round(dy12, 2)
+        except Exception:  # noqa: BLE001
+            pass
         out[tv] = m
         hp = ROOT / f"data/hist/{hist_name(tv)}.json"
         if want_hist or not hp.exists():
@@ -249,8 +261,26 @@ def main() -> int:
         time.sleep(0.25)
     print(f"Rodiklių nepavyko gauti: {fund_fail}")
 
+    # Valiutų kursai: kiek eurų už vieną valiutos vienetą (portfelio vertėms)
+    fx = {"EUR": 1}
+    pairs = {"USD": "EURUSD=X", "GBP": "EURGBP=X", "SEK": "EURSEK=X", "NOK": "EURNOK=X", "DKK": "EURDKK=X", "CHF": "EURCHF=X", "JPY": "EURJPY=X", "KRW": "EURKRW=X", "PLN": "EURPLN=X", "CAD": "EURCAD=X"}
+    try:
+        fxd = yf.download(list(pairs.values()), period="5d", interval="1d", auto_adjust=True, group_by="ticker", progress=False, threads=True)
+        for cur, sym in pairs.items():
+            try:
+                rate = float(fxd[sym]["Close"].dropna().iloc[-1])
+                if rate > 0:
+                    fx[cur] = round(1 / rate, 6)
+            except Exception:  # noqa: BLE001
+                pass
+        if "GBP" in fx:
+            fx["GBp"] = round(fx["GBP"] / 100, 8)
+    except Exception as e:  # noqa: BLE001
+        print(f"Valiutų kursų gauti nepavyko: {e}", file=sys.stderr)
+
     result = {
         "updated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
+        "fx": fx,
         "source": "Yahoo Finance (yfinance): dienos uždarymo kainos, analitikų vertinimai ir rodikliai",
         "count": len(out),
         "missing": missing,
