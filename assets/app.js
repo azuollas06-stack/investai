@@ -75,6 +75,8 @@ const ICONS = {
   glossary: '<path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H19v17H7.5A2.5 2.5 0 0 0 5 21.5z"/><path d="M5 19.5V4.5M9 7h6"/>',
   calendar: '<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   asset: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+  upload: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 15v4a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-4"/>',
+  chevron: '<path d="m9 6 6 6-6 6"/>',
   styles: '<circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2a10 10 0 1 0 0 20c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1.1.9-2 2-2h2.4A5.6 5.6 0 0 0 22 9.8C22 5.5 17.5 2 12 2z"/>',
   back: '<path d="M15 5l-7 7 7 7"/>',
   menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
@@ -86,7 +88,7 @@ const MENU = [
   ["news", "naujienos.html", "Naujienos"], ["calendar", "naujienos.html#kalendorius", "Kalendorius"], ["digest", "apzvalga.html", "Dienos apžvalga"],
   ["markets", "rinkos.html", "Rinkos"], ["screener", "atranka.html", "Atranka"], ["strategy", "strategija.html", "Strategija"],
   ["tools", "irankiai.html", "Skaičiuoklės"], ["glossary", "zodynas.html", "Žodynas"], ["premium", "premium.html", "Premium"],
-  ["archive", "archyvas.html", "Archyvas"], ["styles", "stiliai.html", "Stiliai"], ["about", "apie.html", "Apie InvestAI"],
+  ["archive", "archyvas.html", "Archyvas"], ["about", "apie.html", "Apie InvestAI"],
 ];
 // Kur grįžti, jei naršyklės istorijos nėra (pvz., atidaryta iš nuorodos)
 const PARENT = { asset: "rinkos.html", digest: "naujienos.html", archive: "apzvalga.html", tools: "./", premium: "./", about: "./", glossary: "./" };
@@ -474,7 +476,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (page === "news") await pageNews();
     if (page === "asset") await pageAsset();
     if (page === "morning") await pageMorning();
-    if (page === "styles") pageStyles();
     if (page === "glossary") pageGlossary();
   } catch (e) {
     console.error(e);

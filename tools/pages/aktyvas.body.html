@@ -9,7 +9,7 @@
 
   <div id="browse">
     <h1>Aktyvai</h1>
-    <p class="lead">Pasirinkite įmonę, ETF ar kriptovaliutą. Bet kurį kitą aktyvą galite įvesti formatu BIRŽA:SIMBOLIS, pvz., <code>NYSE:KO</code>.</p>
+
   </div>
 
   <div id="asset">
@@ -22,11 +22,12 @@
       <div class="asset-grid">
         <div class="card" id="ap-chart"><div class="skel" style="height:260px"></div></div>
         <aside class="ap-side">
-          <div class="card"><h3><button type="button" class="term" data-term="range52">Metų kainų intervalas</button></h3><div id="ap-range"></div><p class="muted small" style="margin:8px 0 0">Žemiausia ir aukščiausia kaina per 52 savaites. Taškas – dabartinė kaina.</p></div>
-          <div class="card" id="ap-an-card"><h3><button type="button" class="term" data-term="analitikai">Analitikų nuomonės</button></h3><div id="ap-an"></div><p class="muted small" style="margin:10px 0 0">Trečiųjų šalių analitikų vertinimų vidurkis (Yahoo Finance). Tai ne InvestAI nuomonė ir ne rekomendacija.</p></div>
+          <div class="card"><h3><button type="button" class="term" data-term="range52">Metų kainų intervalas</button></h3><div id="ap-range"></div></div>
+          <div class="card" id="ap-an-card"><h3><button type="button" class="term" data-term="analitikai">Analitikų nuomonės</button></h3><div id="ap-an"></div><p class="muted small" style="margin:10px 0 0">Trečiųjų šalių vidurkis (Yahoo Finance), ne InvestAI nuomonė.</p></div>
         </aside>
       </div>
-      <div class="stat-cards" id="ap-stats"></div>
+      <h2 class="sec-h">Rodikliai</h2>
+      <ul class="grp kv-list" id="ap-stats"></ul>
     </div>
     <div id="w-info" class="widget" hidden></div>
     <div id="w-explain"></div>
@@ -38,7 +39,6 @@
       <section><h2 class="kicker">Finansiniai rodikliai</h2><div id="w-fin" class="widget"></div></section>
     </div>
     <h2 class="kicker">Naujienų srautas</h2>
-    <p class="panel-help">Naujienos iš TradingView partnerių (anglų k.). Svarbiausius įvykius su šaltiniais rasite skiltyje <a href="naujienos.html">Naujienos</a>.</p>
     <div id="w-news" class="widget"></div>
     <p class="muted small">Daugiau duomenų: <a id="tv-link" href="#" target="_blank" rel="noopener">šis aktyvas TradingView svetainėje</a>. Kainos – paskutinės prekybos dienos uždarymo. Tai ne investavimo rekomendacija.</p>
   </div>

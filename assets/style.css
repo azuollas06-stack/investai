@@ -19,7 +19,8 @@
   --warn: #9a5b00;
   --warn-soft: #fdf1dc;
   --brand: #0e1f3a;
-  --font: "Onest", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ai: #b7791f;
   --r-lg: 16px;
   --r-md: 12px;
   --r-sm: 8px;
@@ -28,26 +29,32 @@
   --tile-0: #5c6b80; --tile-up: #16a35f; --tile-down: #e0353f;
 }
 :root[data-theme="dark"] {
-  /* Tamsiai mėlyna – numatytoji */
-  --sea: #eef3fb;
-  --sea-2: #c1cee2;
-  --mist: #0a1930;
-  --surface: #10223e;
-  --surface-2: #162c4d;
-  --line: #213a5f;
-  --muted: #8fa3c0;
-  --amber: #f5b335;
-  --amber-ink: #1c1200;
-  --amber-soft: #2d240f;
-  --up: #2fd389;
-  --down: #ff5a64;
-  --info: #6cb2ff;
+  /* Numatytoji tamsi tema (Revolut / Trading 212 kryptis): beveik juodas mėlynas fonas, pilkšvos grupės, mėlyni veiksmai, auksas tik DI */
+  --sea: #f3f5f9;
+  --sea-2: #c3cad6;
+  --mist: #0a0d13;
+  --surface: #141922;
+  --surface-2: #1c2330;
+  --line: #232b38;
+  --muted: #8a94a6;
+  --amber: #4d8dff;
+  --amber-ink: #ffffff;
+  --amber-soft: #16264a;
+  --ai: #f5b335;
+  --up: #1fc77e;
+  --down: #ff4d5e;
+  --info: #6aa8ff;
   --warn: #f5b335;
-  --warn-soft: #2c2410;
-  --brand: #0a1930;
-  --shadow: 0 0 0 1px var(--line);
-  --lift: 0 0 0 1px #2c4a75, 0 16px 34px -16px rgba(0,0,0,.6);
-  --tile-0: #34445c; --tile-up: #1db86b; --tile-down: #f0434d;
+  --warn-soft: #2a2410;
+  --brand: #0a0d13;
+  --shadow: none;
+  --lift: 0 0 0 1px #2f3a4b;
+  --card-bg: var(--surface);
+  --page-bg: var(--mist);
+  --hero-bg: radial-gradient(500px 220px at 100% 0, rgba(77,141,255,.22), transparent 65%), linear-gradient(160deg, #18233a, #121823);
+  --tile-0: #3f4b5e; --tile-up: #1db86b; --tile-down: #f0434d;
+  --font: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r-lg: 20px; --r-md: 14px; --r-sm: 10px; --btn-radius: 999px;
   color-scheme: dark;
 }
 
@@ -870,7 +877,7 @@ a.tm-tile:hover { outline: 2px solid var(--amber); outline-offset: -2px; z-index
    v4 – „Navy terminal“: tamsiai mėlyna, auksas DI, ryški žalia/raudona
    ===================================================================== */
 body { background: var(--mist); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
-:root[data-theme="dark"] { --page-bg: radial-gradient(1200px 500px at 85% -120px, rgba(108,178,255,.10), transparent 60%), var(--mist); }
+
 body { background: var(--page-bg, var(--mist)); background-attachment: fixed; }
 h1, h2, h3, .section-title, .logo span { font-family: var(--font-display, var(--font)); }
 .ap-price, .calc-big, .me-num b, .pf-hero-total, .pulse-item b, .stat b, .ring b, .mv-num b, .pchart-legend b, .sav-card b, .cmp-table td, .tm-tile, .pill, .pill-up, .pill-down { font-family: var(--font-num, inherit); }
@@ -931,7 +938,7 @@ h1 { font-size: clamp(28px, 4vw, 42px); margin: 28px 0 10px; letter-spacing: -.0
 /* Kortelės ir mygtukai */
 .card { border-radius: var(--r-lg); box-shadow: var(--shadow); }
 .card, .stat, .pulse-item, details.more, details.pos { background: var(--card-bg, var(--surface)); }
-:root[data-theme="dark"] { --card-bg: linear-gradient(180deg, color-mix(in srgb, var(--surface-2) 70%, var(--surface)) 0%, var(--surface) 60%); }
+
 .btn { border-radius: 12px; min-height: 44px; font-weight: 650; transition: transform .08s, background .15s, border-color .15s; }
 .btn:active { transform: scale(.98); }
 .btn.primary { box-shadow: 0 8px 20px -10px color-mix(in srgb, var(--amber) 80%, transparent); }
@@ -1264,204 +1271,146 @@ img, svg, video, canvas { max-width: 100%; }
 .pulse-item { animation: rise .45s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i, 0) * 55ms); } @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
 .stat-date b { color: var(--amber); } @media (max-width: 680px) { .stat-date small { display: block !important; } }
 
-/* =====================================================================
-   10 stilių variantai (pasirenkami puslapyje stiliai.html)
-   :root[data-style] – visai svetainei, .style-prev[data-style] – peržiūrai.
-   Kiekvienas stilius turi savo šriftą, pagrindines spalvas, formas ir diagramų paletę.
-   ===================================================================== */
 .masthead { background: var(--head-bg, color-mix(in srgb, var(--mist) 82%, transparent)); }
-h1, h2, h3, .section-title { font-weight: var(--display-weight, 750); text-transform: var(--display-case, none); letter-spacing: var(--display-track, -.03em); }
-.btn { border-radius: var(--btn-radius, 12px); text-transform: var(--btn-case, none); }
-body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: -1; background: var(--pattern, none); }
+h1, h2, h3, .section-title { font-weight: var(--display-weight, 750); letter-spacing: var(--display-track, -.03em); }
+.btn { border-radius: var(--btn-radius, 12px); }
 
-/* 2. TERMINALAS – viskas lygiaplotis šriftas, juoda, gintaro tekstas, jokių apvalinimų */
-:root[data-style="terminal"], .style-prev[data-style="terminal"] {
-  --page-bg: #000; --mist: #000; --surface: #050505; --surface-2: #111; --line: #333; --card-bg: #050505; --head-bg: #000;
-  --sea: #ffb000; --sea-2: #e6c27a; --muted: #9a8a66; --amber: #ffb000; --amber-ink: #000; --amber-soft: #2a1d00;
-  --up: #00ff7f; --down: #ff3b30; --info: #00d0ff; --warn: #ffb000; --warn-soft: #1f1600;
-  --r-lg: 0; --r-md: 0; --r-sm: 0; --btn-radius: 0; --btn-case: uppercase; --shadow: 0 0 0 1px #333; --lift: 0 0 0 1px #ffb000;
-  --font: "IBM Plex Mono", ui-monospace, monospace; --font-display: "IBM Plex Mono", ui-monospace, monospace; --font-num: "IBM Plex Mono", ui-monospace, monospace;
-  --display-weight: 600; --display-case: uppercase; --display-track: .02em;
-  --pattern: repeating-linear-gradient(0deg, rgba(255,176,0,.035) 0 1px, transparent 1px 4px);
-  --hero-bg: #000; --hero-ink: #ffb000;
-  --palette: #ffb000,#00d0ff,#ff4fd8,#7dff6b,#d0d0d0,#ff6a00,#8a7dff,#fff26b,#5ad1ff,#888888;
-  --palette-light: #ffb000,#00d0ff,#7dff6b,#d0d0d0,#fff26b,#5ad1ff,#ff6a00,#ff4fd8;
-  color-scheme: dark;
+/* =====================================================================
+   v6 – programėlės išdėstymas (Revolut / Trading 212 kryptis)
+   ===================================================================== */
+:root[data-theme="dark"] body::before { background: none; }
+.app { padding-top: 8px; padding-bottom: 20px; }
+.app-hero { display: flex; justify-content: center; padding: 26px 0 8px; }
+.bal { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; color: var(--sea); text-decoration: none; }
+.bal-label { display: inline-flex; align-items: center; gap: 2px; color: var(--muted); font-weight: 600; font-size: 15px; }
+.bal-num { font-size: clamp(42px, 9vw, 60px); font-weight: 800; letter-spacing: -.045em; line-height: 1.02; }
+.bal-chg { font-weight: 700; font-size: 16px; }
+.bal-chg small { color: var(--muted); font-weight: 600; font-size: 14px; }
+.bal-title { font-size: clamp(28px, 6vw, 40px); font-weight: 800; letter-spacing: -.04em; line-height: 1.08; max-width: 15ch; margin-bottom: 10px; }
+.bal-cta .btn { gap: 8px; padding: 13px 22px; font-size: 16px; }
+.bal-sub { font-size: 14px; color: var(--muted); font-weight: 600; text-decoration: none; margin-top: 2px; }
+.bal-sub:hover { color: var(--sea); }
+
+/* Greiti veiksmai – apvalūs mygtukai */
+.qa { display: flex; justify-content: center; gap: clamp(14px, 5vw, 40px); padding: 18px 0 26px; }
+.qa a { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 13px; font-weight: 650; color: var(--sea); text-decoration: none; width: 72px; text-align: center; }
+.qa a span { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; background: var(--surface-2); color: var(--sea); transition: background .15s, transform .1s; }
+.qa a:hover span { background: color-mix(in srgb, var(--amber) 25%, var(--surface-2)); }
+.qa a:active span { transform: scale(.94); }
+.qa a:first-child span { background: var(--amber); color: var(--amber-ink); }
+
+.app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; align-items: start; }
+.app-col { min-width: 0; }
+.grp-wrap { margin-bottom: 26px; }
+.grp-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 0 4px 10px; min-height: 34px; }
+.grp-head h2 { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -.025em; }
+.grp-head .seg { margin: 0; }
+.grp-note { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.grp-link { font-size: 14.5px; font-weight: 700; color: var(--amber); text-decoration: none; }
+.grp { list-style: none; margin: 0; padding: 4px 0; border-radius: var(--r-lg); background: var(--surface); }
+.grp-pad { padding: 12px; display: block; }
+.row { display: flex; align-items: center; position: relative; }
+.row + .row::before { content: ""; position: absolute; top: 0; left: 70px; right: 16px; height: 1px; background: var(--line); }
+.row-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 14px; padding: 11px 16px; color: var(--sea); text-decoration: none; }
+a.row-main:hover { background: color-mix(in srgb, var(--surface-2) 60%, transparent); }
+.grp > .row:first-child > .row-main { border-radius: var(--r-lg) var(--r-lg) 0 0; }
+.grp > .row:last-child > .row-main { border-radius: 0 0 var(--r-lg) var(--r-lg); }
+.row-main .logo-ava { border-radius: 50%; flex: none; }
+.row-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.row-txt b { font-size: 15.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row-txt small { font-size: 13px; color: var(--muted); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row-spark { flex: none; width: 56px; opacity: .9; }
+.row-val { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-size: 15.5px; font-weight: 700; white-space: nowrap; }
+.row-val span { font-size: 13.5px; font-weight: 700; }
+.row .star { margin-right: 6px; }
+.row-empty { gap: 10px; padding: 14px 16px; color: var(--muted); font-size: 14.5px; }
+.row-empty .star { pointer-events: none; margin: 0; }
+.row-ico { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--surface-2); font-size: 11px; font-weight: 800; color: var(--amber); }
+.row-date { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; background: var(--surface-2); font-size: 10.5px; font-weight: 700; color: var(--muted); line-height: 1; }
+.row-date b { font-size: 16px; color: var(--sea); margin-bottom: 1px; }
+.row-date.soon { background: var(--ai); color: #1c1200; } .row-date.soon b { color: #1c1200; }
+.row-mine .row-txt small { color: var(--ai); }
+#news .row-txt b, #events .row-txt b { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: 15px; line-height: 1.3; }
+.digest-mini { display: flex; flex-direction: column; gap: 6px; color: var(--sea); text-decoration: none; padding: 16px; }
+.digest-mini b { font-size: 16.5px; line-height: 1.3; }
+.digest-lead { color: var(--muted); font-size: 14.5px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ai-label { color: var(--ai, var(--amber)) !important; }
+.app-foot { text-align: center; color: var(--muted); font-size: 13px; margin: 6px 0 0; }
+.app-foot a { color: var(--muted); }
+#home-map .treemap { border-radius: 12px; }
+.seg-sm button { padding: 6px 12px; }
+:root[data-theme="dark"] .seg { background: var(--surface); box-shadow: none; }
+:root[data-theme="dark"] .seg button[aria-pressed="true"] { background: var(--surface-2); color: var(--sea); }
+@media (max-width: 860px) { .app-grid { grid-template-columns: 1fr; } }
+@media (max-width: 680px) {
+  .app-hero { padding: 18px 0 4px; }
+  .qa { padding: 16px 0 22px; gap: 10px; justify-content: space-around; }
+  .grp-wrap { margin-bottom: 22px; }
+  .row-main { padding: 10px 14px; gap: 12px; }
+  .row + .row::before { left: 66px; right: 14px; }
+  .row-spark { display: none; }
+  .grp { margin: 0 -2px; }
 }
-[data-style="terminal"] h1 { font-size: clamp(22px, 3vw, 30px); }
-[data-style="terminal"] .pf-hero { box-shadow: 0 0 0 1px #ffb000; }
-
-/* 3. PRIVATI BANKININKYSTĖ – šviesu, tamsiai mėlyna antraštės juosta, serifinės antraštės */
-:root[data-style="bank"], .style-prev[data-style="bank"] {
-  --page-bg: #eef1f6; --mist: #eef1f6; --surface: #fff; --surface-2: #f2f5fa; --line: #dfe5ee; --card-bg: #fff; --head-bg: #0b1f44;
-  --sea: #0b1f44; --sea-2: #34476b; --muted: #6a7891; --amber: #2453ff; --amber-ink: #fff; --amber-soft: #e3eaff;
-  --up: #0a8f5b; --down: #d6303b; --info: #2453ff; --warn: #9a5b00; --warn-soft: #fdf1dc;
-  --r-lg: 22px; --r-md: 14px; --r-sm: 10px; --btn-radius: 10px; --shadow: 0 1px 2px rgba(11,31,68,.06), 0 14px 34px -18px rgba(11,31,68,.28); --lift: 0 2px 4px rgba(11,31,68,.08), 0 22px 44px -18px rgba(11,31,68,.38);
-  --font: "Manrope", system-ui, sans-serif; --font-display: "DM Serif Display", Georgia, serif; --font-num: "Manrope", system-ui, sans-serif;
-  --display-weight: 400; --display-track: -.01em;
-  --hero-bg: linear-gradient(135deg, #0b1f44, #24418a); --hero-ink: #fff;
-  --palette: #0b1f44,#2453ff,#8aa2ff,#00a3a3,#c9a227,#6c7a96,#c7d4ff,#1b998b,#e07a5f,#a4adbd;
-  --palette-light: #8aa2ff,#c9a227,#c7d4ff,#a4adbd,#e07a5f;
-  color-scheme: light;
+.row-badge { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: #fff; font-size: 13px; font-weight: 800; letter-spacing: -.02em; }
+/* Aktyvo puslapis – programėlės stilius */
+.sec-h { font-size: 20px; font-weight: 800; letter-spacing: -.025em; margin: 24px 4px 10px; }
+.kv-list { display: grid; grid-template-columns: 1fr 1fr; column-gap: 0; padding: 4px 0; }
+.kv { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 13px 18px; border-top: 1px solid var(--line); font-size: 15px; }
+.kv:nth-child(-n+2) { border-top: 0; }
+.kv span { color: var(--muted); font-weight: 600; }
+.kv b { font-weight: 750; font-size: 15.5px; white-space: nowrap; }
+.kv b small { color: var(--muted); font-weight: 600; font-size: 13px; }
+.kv-date b { color: var(--ai); }
+@media (max-width: 680px) { .kv-list { grid-template-columns: 1fr; } .kv:nth-child(2) { border-top: 1px solid var(--line); } }
+:root[data-theme="dark"] #ap-chart { background: transparent; padding: 0; box-shadow: none; }
+:root[data-theme="dark"] .ap-side .card { background: var(--surface); }
+.ap-actions .btn { border-radius: 999px; }
+.ah-price { margin-bottom: 8px; }
+.ap-price { font-weight: 800; letter-spacing: -.04em; }
+/* Poraštė – trumpiau */
+footer .legend { display: none; }
+body[data-page="apzvalga"] footer .legend, body[data-page="digest"] footer .legend { display: flex; }
+/* Sąrašai kortelėse – kaip programėlėje */
+.mv-list .mv { border-bottom: 0; position: relative; }
+.mv-list .mv + .mv::before { content: ""; position: absolute; top: 0; left: 50px; right: 0; height: 1px; background: var(--line); }
+.mv .logo-ava { border-radius: 50%; }
+.card { border-radius: var(--r-lg); }
+:root[data-theme="dark"] .card { box-shadow: none; }
+.m-h { font-size: 20px; color: var(--sea); font-weight: 800; letter-spacing: -.025em; margin: 18px 4px 10px; }
+.card-head h2 { font-size: 19px; font-weight: 800; letter-spacing: -.02em; }
+.card-link::after { display: none; }
+.card-link { color: var(--amber); }
+#m-lead:empty { display: none; }
+#ap-chart { overflow: hidden; max-width: 100%; }
+#asset-logo .logo-ava { border-radius: 50%; }
+.ah-sub .badge.tag { border-radius: 999px; }
+/* Atranka telefone – kompaktiška eilutė kaip Trading 212 */
+@media (max-width: 760px) {
+  .res-row { grid-template-columns: minmax(0, 1fr) auto auto !important; grid-template-areas: "main num2 act" "an an an" !important; gap: 4px 10px !important; padding: 12px 14px !important; }
+  .res-main { grid-area: main; }
+  .res-spark, .res-num:nth-of-type(3) { display: none !important; }
+  .res-num { grid-area: num2; text-align: right; }
+  .res-num small { font-size: 11px; }
+  .res-an { grid-area: an; display: flex !important; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding-left: 52px; }
+  .res-an .an-bar, .res-an > small:first-of-type { display: none !important; }
+  .res-act { grid-area: act; }
+  .res-act .btn { display: none; }
+  .res-main .logo-ava { border-radius: 50%; }
 }
-:root[data-style="bank"] .masthead, :root[data-style="bank"] .tabbar { --amber: #8aa2ff; --sea: #fff; --sea-2: #c9d4ea; --muted: #9fb0d0; --surface-2: rgba(255,255,255,.1); --line: rgba(255,255,255,.14); --surface: #0b1f44; }
-:root[data-style="bank"] .tabbar a[aria-current="page"] .tab-ico { color: #fff; background: #2453ff; }
-
-/* 4. GINTARAS – šiltas popierius, Fraunces antraštės, ruda ir gintaras */
-:root[data-style="amber"], .style-prev[data-style="amber"] {
-  --page-bg: radial-gradient(900px 500px at 100% -10%, rgba(224,160,48,.28), transparent 60%), #f4ead8; --mist: #f4ead8; --surface: #fffaf0; --surface-2: #efe1c8; --line: #dcc6a0; --card-bg: #fffaf0; --head-bg: #f4ead8;
-  --sea: #2b1708; --sea-2: #5c3d22; --muted: #8a6c4c; --amber: #c46a00; --amber-ink: #fff; --amber-soft: #f6dfbd;
-  --up: #3d7a1f; --down: #b3261e; --info: #8a4b08; --warn: #8a4b08; --warn-soft: #f6dfbd;
-  --r-lg: 6px; --r-md: 4px; --r-sm: 3px; --btn-radius: 4px; --shadow: 0 0 0 1px #dcc6a0, 0 2px 0 #e7d5b5; --lift: 0 0 0 1px #c46a00, 0 4px 0 #e0a030;
-  --font: "Work Sans", system-ui, sans-serif; --font-display: "Fraunces", Georgia, serif; --font-num: "Work Sans", system-ui, sans-serif;
-  --display-weight: 700; --display-track: -.02em;
-  --hero-bg: radial-gradient(500px 240px at 100% 0, rgba(255,190,90,.4), transparent 65%), linear-gradient(150deg, #6b3a10, #2b1708); --hero-ink: #fff4e3;
-  --palette: #c46a00,#7a3e10,#e0a030,#5f7f3a,#a23b2a,#d9b36c,#3f5e7a,#8c6a4f,#e07b39,#b9a184;
-  --palette-light: #e0a030,#d9b36c,#e07b39,#b9a184;
-  color-scheme: light;
+/* Portfelio viršus – kaip balansas programėlėje */
+:root[data-theme="dark"] .pf-hero { background: transparent; box-shadow: none; padding: 18px 4px 6px; }
+:root[data-theme="dark"] .pf-hero-stats { gap: 0; background: var(--surface); border-radius: var(--r-lg); padding: 4px 0; }
+:root[data-theme="dark"] .pf-hero-stats div { background: none; box-shadow: none; border-radius: 0; padding: 12px 16px; }
+@media (max-width: 680px) {
+  :root[data-theme="dark"] .pf-hero > div:first-child { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  :root[data-theme="dark"] .pf-hero-stats { grid-template-columns: 1fr 1fr; }
+  :root[data-theme="dark"] .share-btn { justify-self: center; }
 }
-
-/* 5. KRIPTO NEONAS – violetinė naktis, neoninis tinklelis, platus Unbounded šriftas */
-:root[data-style="neon"], .style-prev[data-style="neon"] {
-  --page-bg: radial-gradient(900px 500px at 90% -10%, rgba(255,43,214,.28), transparent 60%), radial-gradient(700px 500px at -10% 40%, rgba(0,240,255,.18), transparent 60%), #07021a;
-  --mist: #07021a; --surface: #120a2e; --surface-2: #1d1145; --line: #3a2a78; --card-bg: linear-gradient(160deg, rgba(0,240,255,.07), rgba(255,43,214,.06) 60%, #120a2e); --head-bg: rgba(7,2,26,.85);
-  --sea: #f5f0ff; --sea-2: #d6cbff; --muted: #a294d8; --amber: #00f0ff; --amber-ink: #04011a; --amber-soft: #0b2d3d;
-  --up: #00ff9c; --down: #ff2b6b; --info: #ff2bd6; --warn: #ffe600; --warn-soft: #2a1d4d;
-  --r-lg: 20px; --r-md: 14px; --r-sm: 10px; --btn-radius: 999px; --shadow: 0 0 0 1px #3a2a78, 0 0 30px -14px rgba(255,43,214,.6); --lift: 0 0 0 1px #00f0ff, 0 0 36px -8px rgba(0,240,255,.7);
-  --font: "Space Grotesk", system-ui, sans-serif; --font-display: "Unbounded", system-ui, sans-serif; --font-num: "Space Grotesk", system-ui, sans-serif;
-  --display-weight: 700; --display-track: -.01em;
-  --pattern: linear-gradient(rgba(0,240,255,.05) 1px, transparent 1px) 0 0 / 34px 34px, linear-gradient(90deg, rgba(0,240,255,.05) 1px, transparent 1px) 0 0 / 34px 34px;
-  --hero-bg: linear-gradient(135deg, #5b16c9, #0b6f9c); --hero-ink: #fff;
-  --palette: #00f0ff,#ff2bd6,#8a5cff,#00ff9c,#ffe600,#ff7a00,#4d7cff,#ff5e7e,#9dfcff,#b3a6ff;
-  --palette-light: #00f0ff,#00ff9c,#ffe600,#9dfcff,#b3a6ff,#ff7a00;
-  color-scheme: dark;
+@media (max-width: 760px) {
+  .res-an { justify-content: flex-start !important; font-size: 13px; color: var(--muted); }
+  .res-an .an { display: inline-flex; gap: 6px; align-items: center; }
+  .res-an .an small, .res-an .an-bar { display: none !important; }
+  .res-an .an b { font-size: 13px; font-weight: 700; color: var(--sea-2); }
+  .res-an > small { font-size: 13px; }
+  .save-row { display: none; }
 }
-[data-style="neon"] .btn.primary, .style-prev[data-style="neon"] .sp-btns span:first-child { background: linear-gradient(90deg, #00f0ff, #ff2bd6); color: #04011a; box-shadow: 0 0 26px -6px rgba(255,43,214,.9); border: 0; }
-[data-style="neon"] h1 { font-size: clamp(24px, 3.4vw, 36px); }
-
-/* 6. ŽALIAS MINIMALIZMAS – baltas, didžiuliai skaičiai, juodi apvalūs mygtukai */
-:root[data-style="green"], .style-prev[data-style="green"] {
-  --page-bg: #fff; --mist: #fff; --surface: #f4f6f5; --surface-2: #eaeeec; --line: #e3e8e5; --card-bg: #f4f6f5; --head-bg: #fff;
-  --sea: #0a0b0a; --sea-2: #3a403d; --muted: #6b726e; --amber: #00c805; --amber-ink: #fff; --amber-soft: #e0f8e1;
-  --up: #00b305; --down: #ff5000; --info: #00a805; --warn: #a85f00; --warn-soft: #fff3e0;
-  --r-lg: 28px; --r-md: 18px; --r-sm: 12px; --btn-radius: 999px; --shadow: none; --lift: 0 0 0 2px #0a0b0a;
-  --font: "Inter Tight", system-ui, sans-serif; --font-display: "Inter Tight", system-ui, sans-serif; --font-num: "Inter Tight", system-ui, sans-serif;
-  --display-weight: 800; --display-track: -.05em;
-  --hero-bg: #0a0b0a; --hero-ink: #fff;
-  --palette: #00c805,#0a0b0a,#7fe08a,#2e7d32,#b7c4bd,#00897b,#cddc39,#4caf50,#9e9e9e,#1b5e20;
-  --palette-light: #7fe08a,#b7c4bd,#cddc39,#9e9e9e;
-  color-scheme: light;
-}
-[data-style="green"] h1 { font-size: clamp(34px, 5vw, 54px); }
-[data-style="green"] .btn:not(.primary) { background: #0a0b0a; color: #fff; border-color: #0a0b0a; }
-[data-style="green"] .ap-price, [data-style="green"] .me-num b, [data-style="green"] .pf-hero-total { font-weight: 800; letter-spacing: -.05em; }
-
-/* 7. STIKLAS – ryškus spalvotas fonas ir permatomos kortelės */
-:root[data-style="glass"], .style-prev[data-style="glass"] {
-  --page-bg: radial-gradient(700px 500px at 0% 0%, #ff6cab 0%, transparent 60%), radial-gradient(800px 600px at 100% 20%, #00c2ff 0%, transparent 55%), radial-gradient(900px 700px at 50% 100%, #7366ff 0%, transparent 60%), #4b3bd6;
-  --mist: #3f35b8; --surface: #3a3299; --surface-2: rgba(255,255,255,.16); --line: rgba(255,255,255,.28); --card-bg: rgba(255,255,255,.14); --head-bg: rgba(255,255,255,.12);
-  --sea: #fff; --sea-2: #f0edff; --muted: #dcd6ff; --amber: #fff; --amber-ink: #2d1f8f; --amber-soft: rgba(255,255,255,.2);
-  --up: #7dffb2; --down: #ffb3c1; --info: #a0e7ff; --warn: #ffe08a; --warn-soft: rgba(255,224,138,.18);
-  --r-lg: 28px; --r-md: 18px; --r-sm: 12px; --btn-radius: 999px; --shadow: 0 0 0 1px rgba(255,255,255,.3), 0 20px 40px -24px rgba(20,0,80,.6); --lift: 0 0 0 1px rgba(255,255,255,.6), 0 24px 50px -24px rgba(20,0,80,.7);
-  --font: "Sora", system-ui, sans-serif; --font-display: "Sora", system-ui, sans-serif; --font-num: "Sora", system-ui, sans-serif;
-  --display-weight: 700; --hero-bg: rgba(255,255,255,.16); --hero-ink: #fff;
-  --palette: #ffffff,#ffd166,#7dffb2,#ffb3c1,#a0e7ff,#c3b5ff,#ffe0f0,#b8f2e6,#fff3b0,#d0d0ff;
-  --palette-light: #ffffff,#ffd166,#7dffb2,#ffb3c1,#a0e7ff,#c3b5ff,#ffe0f0,#b8f2e6,#fff3b0,#d0d0ff;
-  color-scheme: dark;
-}
-[data-style="glass"] .card, [data-style="glass"] .stat, [data-style="glass"] .pulse-item, [data-style="glass"] .pf-hero, [data-style="glass"] .masthead, [data-style="glass"] .tabbar, .style-prev[data-style="glass"] .sp-hero, .style-prev[data-style="glass"] .sp-stats div { backdrop-filter: blur(22px) saturate(1.4); -webkit-backdrop-filter: blur(22px) saturate(1.4); }
-:root[data-style="glass"] dialog.sheet, :root[data-style="glass"] .term-pop { background: #3a3299; }
-[data-style="glass"] .pulse-item.is-up, [data-style="glass"] .pulse-item.is-down { background: rgba(255,255,255,.14); }
-
-/* 8. FINANSŲ LAIKRAŠTIS – lašišinis popierius, serifinis tekstas, linijos vietoj kortelių */
-:root[data-style="paper"], .style-prev[data-style="paper"] {
-  --page-bg: #fff1e5; --mist: #fff1e5; --surface: #fff1e5; --surface-2: #f2dfce; --line: #ccc1b7; --card-bg: transparent; --head-bg: #fff1e5;
-  --sea: #33302e; --sea-2: #4d4845; --muted: #75706b; --amber: #990f3d; --amber-ink: #fff; --amber-soft: #f6dbe2;
-  --up: #09784d; --down: #cc0000; --info: #0f5499; --warn: #8a4b08; --warn-soft: #f7e3c4;
-  --r-lg: 0; --r-md: 0; --r-sm: 0; --btn-radius: 0; --shadow: inset 0 4px 0 #33302e; --lift: inset 0 4px 0 #990f3d;
-  --font: "Source Serif 4", Georgia, serif; --font-display: "Playfair Display", Georgia, serif; --font-num: "Source Serif 4", Georgia, serif;
-  --display-weight: 800; --display-track: -.01em;
-  --hero-bg: #33302e; --hero-ink: #fff1e5;
-  --palette: #0f5499,#990f3d,#0d7680,#96cc28,#ff8833,#593380,#ffc35c,#00a0dd,#a6a6a6,#33302e;
-  --palette-light: #96cc28,#ff8833,#ffc35c,#00a0dd,#a6a6a6;
-  color-scheme: light;
-}
-[data-style="paper"] .card, [data-style="paper"] .stat { padding-top: 22px; }
-[data-style="paper"] h1 { font-size: clamp(32px, 4.6vw, 50px); }
-
-/* 9. GRAFITAS – grynai juoda, pilkos kortelės, sisteminis šriftas, mėlynas akcentas */
-:root[data-style="graphite"], .style-prev[data-style="graphite"] {
-  --page-bg: #000; --mist: #000; --surface: #1c1c1e; --surface-2: #2c2c2e; --line: #38383a; --card-bg: #1c1c1e; --head-bg: rgba(0,0,0,.8);
-  --sea: #fff; --sea-2: #d1d1d6; --muted: #8e8e93; --amber: #0a84ff; --amber-ink: #fff; --amber-soft: #0a2a4d;
-  --up: #30d158; --down: #ff453a; --info: #0a84ff; --warn: #ff9f0a; --warn-soft: #2b2000;
-  --r-lg: 14px; --r-md: 10px; --r-sm: 8px; --btn-radius: 10px; --shadow: none; --lift: 0 0 0 1px #48484a;
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; --font-num: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-  --display-weight: 700; --hero-bg: #1c1c1e; --hero-ink: #fff;
-  --palette: #0a84ff,#30d158,#ff9f0a,#bf5af2,#ff375f,#64d2ff,#ffd60a,#5e5ce6,#ac8e68,#8e8e93;
-  --palette-light: #30d158,#ff9f0a,#64d2ff,#ffd60a,#ac8e68,#8e8e93;
-  color-scheme: dark;
-}
-
-/* 10. BALTIJOS JŪRA – žalsvai mėlyna gelmė, apvalus Nunito, labai apvalios formos */
-:root[data-style="sea"], .style-prev[data-style="sea"] {
-  --page-bg: radial-gradient(900px 600px at 100% -10%, rgba(46,230,197,.22), transparent 60%), linear-gradient(180deg, #05414c 0%, #032b33 60%); --mist: #032b33; --surface: #08414c; --surface-2: #0d5260; --line: #1a6a78; --card-bg: linear-gradient(180deg, #0b4a57, #08414c); --head-bg: rgba(3,43,51,.85);
-  --sea: #eafffb; --sea-2: #bdeee6; --muted: #86c3bb; --amber: #2ee6c5; --amber-ink: #002621; --amber-soft: #0d5550;
-  --up: #6cf59e; --down: #ff7a6b; --info: #7bdff2; --warn: #ffd166; --warn-soft: #224034;
-  --r-lg: 30px; --r-md: 20px; --r-sm: 14px; --btn-radius: 999px; --shadow: 0 0 0 1px #1a6a78; --lift: 0 0 0 2px #2ee6c5;
-  --font: "Nunito", system-ui, sans-serif; --font-display: "Nunito", system-ui, sans-serif; --font-num: "Nunito", system-ui, sans-serif;
-  --display-weight: 900; --display-track: -.02em;
-  --hero-bg: linear-gradient(150deg, #0e6b78, #043540); --hero-ink: #eafffb;
-  --palette: #2ee6c5,#0fb5d6,#ffd166,#ff8c69,#7bdff2,#4361ee,#a7f3d0,#f9c74f,#90be6d,#b0c4c8;
-  --palette-light: #2ee6c5,#0fb5d6,#ffd166,#ff8c69,#7bdff2,#a7f3d0,#f9c74f,#90be6d,#b0c4c8;
-  color-scheme: dark;
-}
-
-/* Stiliaus pasirinkimo puslapis */
-.style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px; margin: 20px 0 30px; }
-.sp-card { border-radius: 20px; overflow: hidden; box-shadow: 0 0 0 1px var(--line); background: var(--surface); display: flex; flex-direction: column; }
-.sp-card.current { box-shadow: 0 0 0 3px var(--amber); }
-.style-prev { background: var(--page-bg, var(--mist)); color: var(--sea); font-family: var(--font); padding: 14px; display: grid; gap: 10px; }
-.sp-top { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display, var(--font)); font-weight: 800; font-size: 17px; }
-.sp-top b { color: var(--amber); }
-.sp-top span { display: flex; gap: 6px; }
-.sp-top i { width: 22px; height: 6px; border-radius: 3px; background: var(--line); }
-.sp-hero { border-radius: var(--r-lg); padding: 14px; background: var(--card-bg, var(--surface)); box-shadow: var(--shadow); }
-.sp-label { font-size: 12px; color: var(--muted); font-weight: 600; }
-.sp-row { display: flex; align-items: baseline; gap: 10px; margin: 2px 0 6px; flex-wrap: wrap; }
-.sp-price { font-family: var(--font-num, var(--font)); font-size: 28px; font-weight: 800; letter-spacing: -.03em; }
-.sp-pill { font-family: var(--font-num, var(--font)); font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; color: var(--up); background: color-mix(in srgb, var(--up) 16%, transparent); }
-.sp-pill.dn { color: var(--down); background: color-mix(in srgb, var(--down) 16%, transparent); }
-.sp-hero svg { display: block; width: 100%; height: 54px; }
-.sp-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.sp-stats div { border-radius: var(--r-md); padding: 8px; background: var(--card-bg, var(--surface)); box-shadow: var(--shadow); display: flex; flex-direction: column; font-size: 11px; color: var(--muted); }
-.sp-stats b { font-family: var(--font-num, var(--font)); font-size: 15px; color: var(--sea); }
-.sp-stats b.u { color: var(--up); } .sp-stats b.d { color: var(--down); }
-.sp-btns { display: flex; gap: 6px; }
-.sp-btns span { flex: 1; text-align: center; font-size: 12.5px; font-weight: 700; padding: 8px 6px; border-radius: var(--r-sm); box-shadow: inset 0 0 0 1px var(--line); }
-.sp-btns span:first-child { background: var(--amber); color: var(--amber-ink); box-shadow: none; }
-.sp-ai { font-size: 12px; color: var(--amber); font-weight: 700; display: flex; gap: 6px; align-items: center; }
-.sp-info { padding: 14px 16px 16px; display: grid; gap: 6px; background: var(--surface); color: var(--sea); font-family: Onest, system-ui, sans-serif; }
-.sp-info h2 { margin: 0; font-size: 18px; font-family: Onest, system-ui, sans-serif; }
-.sp-info p { margin: 0; font-size: 14px; color: var(--muted); }
-.sp-info .btn { margin-top: 6px; }
-.style-bar { position: sticky; top: 62px; z-index: 6; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 14px; border-radius: 14px; background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line); font-size: 14.5px; }
-:root[data-style] .theme-btn { display: none; }
-:root[data-style="glass"] dialog.sheet, :root[data-style="glass"] .term-pop { background: #1d2a5a; }
-.style-prev[data-style="navy"] {
-  --palette: #4f8cff,#f5b335,#2ec4b6,#ff7a59,#a77bff,#8bd450,#ff6fae,#5ad1ff,#c9a227,#8fa3c0;
-  --page-bg: radial-gradient(600px 300px at 85% -60px, rgba(108,178,255,.14), transparent 60%), #0a1930; --mist: #0a1930; --surface: #10223e; --surface-2: #162c4d; --line: #213a5f;
-  --card-bg: linear-gradient(180deg, #142949 0%, #10223e 60%); --sea: #eef3fb; --sea-2: #c1cee2; --muted: #8fa3c0; --amber: #f5b335; --amber-ink: #1c1200;
-  --up: #2fd389; --down: #ff5a64; --info: #6cb2ff; --r-lg: 16px; --r-md: 12px; --r-sm: 8px; --shadow: 0 0 0 1px #213a5f; --font: "Onest", system-ui, sans-serif; --font-display: "Onest", system-ui, sans-serif; --font-num: "Onest", system-ui, sans-serif;
-}
-@media (max-width: 680px) { .me-cta .cta .btn { white-space: nowrap; padding: 10px 8px; font-size: 14.5px; } }
-@media (max-width: 480px) { .style-grid { grid-template-columns: 1fr 1fr; gap: 10px; } .style-prev { padding: 10px; } .sp-price { font-size: 20px; } .sp-stats b { font-size: 12.5px; } .sp-stats div { padding: 6px; } .sp-btns span { font-size: 11px; padding: 6px 4px; } .sp-ai { font-size: 10.5px; } .sp-info { padding: 10px 12px 12px; } .sp-info h2 { font-size: 15px; } .sp-info p { font-size: 12.5px; } }
-
-.sp-h { font-family: var(--font-display, var(--font)); font-weight: var(--display-weight, 750); text-transform: var(--display-case, none); letter-spacing: var(--display-track, -.03em); font-size: 22px; line-height: 1.1; margin: 2px 0 0; color: var(--sea); }
-.sp-strip { display: flex; gap: 2px; height: 14px; border-radius: var(--r-sm); overflow: hidden; }
-.sp-strip i { display: block; }
-.style-prev .sp-top { background: var(--head-bg, transparent); margin: -14px -14px 0; padding: 12px 14px; }
-.style-prev[data-style="bank"] .sp-top { color: #fff; } .style-prev[data-style="bank"] .sp-top b { color: #8aa2ff; }
-.style-prev { position: relative; isolation: isolate; }
-.style-prev::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--pattern, none); }
-.sp-btns span { border-radius: var(--btn-radius, var(--r-sm)); text-transform: var(--btn-case, none); }
-.sp-font { font-size: 12.5px; color: var(--muted); }

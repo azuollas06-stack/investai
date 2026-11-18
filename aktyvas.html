@@ -18,15 +18,13 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script>try{var d=document.documentElement,t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";d.dataset.theme=t;
-var S={terminal:["dark","IBM+Plex+Mono:wght@400;500;600;700"],bank:["light","Manrope:wght@400;500;600;700;800&family=DM+Serif+Display"],amber:["light","Fraunces:opsz,wght@9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700"],neon:["dark","Unbounded:wght@500;700&family=Space+Grotesk:wght@400;500;600;700"],green:["light","Inter+Tight:wght@400;500;600;700;800"],glass:["dark","Sora:wght@400;500;600;700"],paper:["light","Playfair+Display:wght@700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700"],graphite:["dark",""],sea:["dark","Nunito:wght@400;600;700;800;900"]},st=localStorage.getItem("investai.style");
-if(S[st]){d.dataset.style=st;d.dataset.theme=S[st][0];if(S[st][1])document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family='+S[st][1]+'&display=swap">')}}catch(e){}</script>
-<link rel="stylesheet" href="assets/style.css?v=2735e599">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>try{var d=document.documentElement,t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";d.dataset.theme=t;try{localStorage.removeItem("investai.style")}catch(e){}}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css?v=3dc7e006">
 <script src="assets/viz.js?v=2a3cee52" defer></script>
-<script src="assets/app.js?v=4a9d4d7a" defer></script>
+<script src="assets/app.js?v=53439f5f" defer></script>
 <script src="assets/glossary.js?v=be0fc5e9" defer></script>
-<script src="assets/pages.js?v=bf9b6cea" defer></script>
+<script src="assets/pages.js?v=0184c684" defer></script>
 </head>
 <body data-page="asset">
 <main class="wrap wide">
@@ -39,7 +37,7 @@ if(S[st]){d.dataset.style=st;d.dataset.theme=S[st][0];if(S[st][1])document.write
 
   <div id="browse">
     <h1>Aktyvai</h1>
-    <p class="lead">Pasirinkite įmonę, ETF ar kriptovaliutą. Bet kurį kitą aktyvą galite įvesti formatu BIRŽA:SIMBOLIS, pvz., <code>NYSE:KO</code>.</p>
+
   </div>
 
   <div id="asset">
@@ -52,11 +50,12 @@ if(S[st]){d.dataset.style=st;d.dataset.theme=S[st][0];if(S[st][1])document.write
       <div class="asset-grid">
         <div class="card" id="ap-chart"><div class="skel" style="height:260px"></div></div>
         <aside class="ap-side">
-          <div class="card"><h3><button type="button" class="term" data-term="range52">Metų kainų intervalas</button></h3><div id="ap-range"></div><p class="muted small" style="margin:8px 0 0">Žemiausia ir aukščiausia kaina per 52 savaites. Taškas – dabartinė kaina.</p></div>
-          <div class="card" id="ap-an-card"><h3><button type="button" class="term" data-term="analitikai">Analitikų nuomonės</button></h3><div id="ap-an"></div><p class="muted small" style="margin:10px 0 0">Trečiųjų šalių analitikų vertinimų vidurkis (Yahoo Finance). Tai ne InvestAI nuomonė ir ne rekomendacija.</p></div>
+          <div class="card"><h3><button type="button" class="term" data-term="range52">Metų kainų intervalas</button></h3><div id="ap-range"></div></div>
+          <div class="card" id="ap-an-card"><h3><button type="button" class="term" data-term="analitikai">Analitikų nuomonės</button></h3><div id="ap-an"></div><p class="muted small" style="margin:10px 0 0">Trečiųjų šalių vidurkis (Yahoo Finance), ne InvestAI nuomonė.</p></div>
         </aside>
       </div>
-      <div class="stat-cards" id="ap-stats"></div>
+      <h2 class="sec-h">Rodikliai</h2>
+      <ul class="grp kv-list" id="ap-stats"></ul>
     </div>
     <div id="w-info" class="widget" hidden></div>
     <div id="w-explain"></div>
@@ -68,7 +67,6 @@ if(S[st]){d.dataset.style=st;d.dataset.theme=S[st][0];if(S[st][1])document.write
       <section><h2 class="kicker">Finansiniai rodikliai</h2><div id="w-fin" class="widget"></div></section>
     </div>
     <h2 class="kicker">Naujienų srautas</h2>
-    <p class="panel-help">Naujienos iš TradingView partnerių (anglų k.). Svarbiausius įvykius su šaltiniais rasite skiltyje <a href="naujienos.html">Naujienos</a>.</p>
     <div id="w-news" class="widget"></div>
     <p class="muted small">Daugiau duomenų: <a id="tv-link" href="#" target="_blank" rel="noopener">šis aktyvas TradingView svetainėje</a>. Kainos – paskutinės prekybos dienos uždarymo. Tai ne investavimo rekomendacija.</p>
   </div>

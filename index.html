@@ -18,72 +18,69 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script>try{var d=document.documentElement,t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";d.dataset.theme=t;
-var S={terminal:["dark","IBM+Plex+Mono:wght@400;500;600;700"],bank:["light","Manrope:wght@400;500;600;700;800&family=DM+Serif+Display"],amber:["light","Fraunces:opsz,wght@9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700"],neon:["dark","Unbounded:wght@500;700&family=Space+Grotesk:wght@400;500;600;700"],green:["light","Inter+Tight:wght@400;500;600;700;800"],glass:["dark","Sora:wght@400;500;600;700"],paper:["light","Playfair+Display:wght@700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700"],graphite:["dark",""],sea:["dark","Nunito:wght@400;600;700;800;900"]},st=localStorage.getItem("investai.style");
-if(S[st]){d.dataset.style=st;d.dataset.theme=S[st][0];if(S[st][1])document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family='+S[st][1]+'&display=swap">')}}catch(e){}</script>
-<link rel="stylesheet" href="assets/style.css?v=2735e599">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>try{var d=document.documentElement,t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";d.dataset.theme=t;try{localStorage.removeItem("investai.style")}catch(e){}}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css?v=3dc7e006">
 <script src="assets/viz.js?v=2a3cee52" defer></script>
-<script src="assets/app.js?v=4a9d4d7a" defer></script>
+<script src="assets/app.js?v=53439f5f" defer></script>
 <script src="assets/glossary.js?v=be0fc5e9" defer></script>
-<script src="assets/pages.js?v=bf9b6cea" defer></script>
+<script src="assets/pages.js?v=0184c684" defer></script>
 </head>
 <body data-page="home">
-<main class="home">
-  <section class="wrap wide home-top">
-    <div class="greet">
-      <div>
-        <p class="greet-date" id="greet-date"></p>
-        <h1 id="greet">Rinkos šiandien</h1>
-      </div>
-      <p class="data-stamp" id="data-stamp"></p>
-    </div>
-    <div class="pulse-scroll" id="pulse"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
-  </section>
+<main class="app wrap wide">
+  <section class="app-hero" id="hero"><div class="skel" style="height:150px"></div></section>
 
-  <section class="wrap wide home-grid">
-    <div class="home-main">
-      <div id="me-card"><div class="skel" style="height:190px"></div></div>
-      <div class="card">
-        <div class="card-head"><h2>Daugiausiai judėjo</h2>
-          <div class="seg" id="mv-seg" role="group" aria-label="Rodyti"><button type="button" data-mv="up" aria-pressed="true">Kilo</button><button type="button" data-mv="down" aria-pressed="false">Krito</button><button type="button" data-mv="watch" aria-pressed="false">Stebimi</button></div>
+  <nav class="qa" aria-label="Greiti veiksmai">
+    <a href="portfelis.html"><span data-icon="upload"></span>Įkelti</a>
+    <a href="rytas.html"><span data-icon="morning"></span>Rytas</a>
+    <a href="atranka.html"><span data-icon="screener"></span>Atranka</a>
+    <a href="irankiai.html"><span data-icon="tools"></span>Skaičiuoti</a>
+  </nav>
+
+  <div class="app-grid">
+    <div class="app-col">
+      <section class="grp-wrap">
+        <div class="grp-head"><h2>Rinkos</h2><span class="grp-note" id="data-stamp"></span></div>
+        <ul class="grp" id="pulse"><li class="skel" style="height:300px"></li></ul>
+      </section>
+
+      <section class="grp-wrap">
+        <div class="grp-head"><h2>Stebimi</h2><a class="grp-link" href="atranka.html?pf=watch">Visi</a></div>
+        <ul class="grp" id="watch"></ul>
+      </section>
+
+      <section class="grp-wrap">
+        <div class="grp-head"><h2>Daugiausiai judėjo</h2>
+          <div class="seg seg-sm" id="mv-seg" role="group" aria-label="Rodyti"><button type="button" data-mv="up" aria-pressed="true">Kilo</button><button type="button" data-mv="down" aria-pressed="false">Krito</button></div>
         </div>
-        <ul class="mv-list" id="movers"><li><div class="skel" style="height:260px"></div></li></ul>
-      </div>
-      <div class="card">
-        <div class="card-head"><h2>Didžiausios pasaulio įmonės</h2><a class="card-link" href="rinkos.html">Visas žemėlapis</a></div>
-        <div id="home-map"><div class="skel" style="height:300px"></div></div>
-      </div>
+        <ul class="grp" id="movers"></ul>
+      </section>
     </div>
-    <aside class="home-side" id="home-news"><div class="skel" style="height:260px"></div><div class="skel" style="height:300px"></div></aside>
-  </section>
 
-  <section class="wrap wide block">
-    <h2 class="section-title">Ką gali InvestAI</h2>
-    <nav class="action-grid" aria-label="Įrankiai">
-      <a href="rytas.html"><span class="ag-ico" data-icon="morning"></span><b>Mano rytas</b><small>Tavo akcijos, įvykiai ir naujienos vienoje vietoje</small></a>
-      <a href="portfelis.html"><span class="ag-ico" data-icon="portfolio"></span><b>Portfelio analizė</b><small>Įkelk ekrano nuotrauką iš Revolut, Swedbank ar kitos programėlės</small></a>
-      <a href="atranka.html"><span class="ag-ico" data-icon="screener"></span><b>Akcijų atranka</b><small>Filtruok ~330 aktyvų pagal kritimą, dividendus ir analitikus</small></a>
-      <a href="strategija.html"><span class="ag-ico" data-icon="strategy"></span><b>Strategija</b><small>Pasirink planą ir pamatyk, kur skirti naujus pinigus</small></a>
-      <a href="irankiai.html"><span class="ag-ico" data-icon="tools"></span><b>Skaičiuoklės</b><small>Taupymas, dividendai, „o jei būčiau investavęs“</small></a>
-      <a href="zodynas.html"><span class="ag-ico" data-icon="glossary"></span><b>Žodynas</b><small>P/E, ETF, dividendai ir kiti terminai paprastai</small></a>
-    </nav>
-  </section>
+    <div class="app-col">
+      <section class="grp-wrap">
+        <div class="grp-head"><h2>Naujienos</h2><a class="grp-link" href="naujienos.html">Visos</a></div>
+        <ul class="grp" id="news"><li class="skel" style="height:200px"></li></ul>
+      </section>
 
-  <section class="wrap wide block">
-    <div class="sec-head"><h2 class="section-title">Dienos apžvalga</h2><a class="card-link" href="archyvas.html">Archyvas</a></div>
-    <div class="card latest" id="latest" aria-live="polite"><div class="skel" style="height:180px"></div></div>
-  </section>
+      <section class="grp-wrap">
+        <div class="grp-head"><h2>Kalendorius</h2><a class="grp-link" href="naujienos.html#kalendorius">Visas</a></div>
+        <ul class="grp" id="events"></ul>
+      </section>
 
-  <section class="wrap wide block" id="home-help"></section>
+      <section class="grp-wrap">
+        <div class="grp-head"><h2>Didžiausios įmonės</h2><a class="grp-link" href="rinkos.html">Žemėlapis</a></div>
+        <div class="grp grp-pad" id="home-map"></div>
+      </section>
 
-  <section class="wrap wide block">
-    <div class="honest-row">
-      <div><b>Nepataria, ką pirkti ar parduoti.</b><span>Rodome faktus ir šaltinius, sprendžia kiekvienas pats.</span></div>
-      <div><b>Neprognozuoja kainų.</b><span>Niekas patikimai nežino, kur kaina bus rytoj.</span></div>
-      <div><b>Nesaugo tavo duomenų.</b><span>Portfelis lieka tik tavo telefone ar kompiuteryje.</span></div>
+      <section class="grp-wrap">
+        <div class="grp-head"><h2>DI apžvalga</h2><a class="grp-link" href="apzvalga.html">Skaityti</a></div>
+        <a class="grp grp-pad digest-mini" id="latest" href="apzvalga.html"></a>
+      </section>
     </div>
-  </section>
+  </div>
+
+  <p class="app-foot">InvestAI nepataria, ką pirkti ar parduoti. Kainos uždelstos iki ~15 min. <a href="apie.html">Apie</a></p>
 </main>
 </body>
 </html>
