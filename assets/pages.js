@@ -242,6 +242,13 @@ async function pageAsset() {
 
   const P = await loadPrices();
   const p = P.items[sym];
+  if (p && typeof ALERTS !== "undefined") {
+    $("#asset-star").insertAdjacentHTML("afterbegin", bellHTML(sym));
+    $(".bell-btn").addEventListener("click", () => openBell(sym, name, p));
+    ALERTS.sync().then(() => { const b = $(".bell-btn"); if (b) { b.outerHTML = bellHTML(sym); $(".bell-btn").addEventListener("click", () => openBell(sym, name, p)); } });
+  }
+  renderFin(sym, p);
+  renderCompanyAI(sym, name, p, known);
   if (p && p.spark) {
     $("#ap-price").textContent = fmtPrice(p.price, p.cur);
     $("#ap-d1").innerHTML = `<span class="pill ${(p.d1 ?? 0) >= 0 ? "pill-up" : "pill-down"}">${fmtPct(p.d1, 2)} per dieną</span>`;
@@ -297,6 +304,159 @@ async function pageAsset() {
     const st = (n.stories || []).filter((x) => (x.symbols || []).includes(sym));
     if (st.length) $("#ap-news").innerHTML = st.map((x) => `<a class="card news-teaser" href="naujienos.html#${esc(x.id)}"><span class="badge tag">${esc(KIND[x.kind] || "Naujiena")}</span><h3>${esc(x.title)}</h3><p>${esc(x.lead)}</p><span class="go">Faktai ir analitikų nuomonės</span></a>`).join("");
   }).catch(() => {});
+}
+
+/* ---------- Įmonės finansai grafikais (metinės ataskaitos) ---------- */
+function finBars(series, { growth = false } = {}) {
+  const vals = series.map((x) => x[1]);
+  const max = Math.max(...vals.map((v) => Math.max(v, 0)), 0), min = Math.min(...vals.map((v) => Math.min(v, 0)), 0);
+  const span = max - min || 1, zero = (max / span) * 100;
+  return `<div class="fb" style="--zero:${zero.toFixed(1)}%">${series.map(([y, v], i) => {
+    const h = (Math.abs(v) / span) * 100;
+    const prev = i ? series[i - 1][1] : null;
+    const g = growth && prev && prev > 0 ? (v / prev - 1) * 100 : null;
+    return `<div class="fb-col"><span class="fb-val ${v < 0 ? "neg" : ""}">${fmtBig(v).replace(" ", " ")}</span><div class="fb-area"><span class="fb-bar ${v < 0 ? "neg" : ""}" style="height:${h.toFixed(1)}%;${v < 0 ? `top:${zero.toFixed(1)}%` : `bottom:${(100 - zero).toFixed(1)}%`}"></span></div><small>${y}${g !== null ? `<em class="${g >= 0 ? "up" : "down"}">${g >= 0 ? "+" : "−"}${Math.abs(g).toFixed(0)}%</em>` : ""}</small></div>`;
+  }).join("")}</div>`;
+}
+async function renderFin(sym, p) {
+  let F = {};
+  try { F = ((await getJSON("data/fund.json")).items || {})[sym] || {}; } catch {}
+  const el = $("#fin");
+  if (!el || !(F.rev || F.ni)) return;
+  const tabs = [["rev", "Pajamos", F.rev], ["ni", "Grynasis pelnas", F.ni], ["sh", "Akcijų skaičius", F.sh]].filter((t) => t[2] && t[2].length >= 2);
+  if (!tabs.length) return;
+  const ni = (F.ni || []).map((x) => x[1]), losses = ni.filter((v) => v < 0).length;
+  const sh = (F.sh || []).map((x) => x[1]), dil = sh.length >= 2 && sh[0] > 0 ? (sh[sh.length - 1] / sh[0] - 1) * 100 : null;
+  const notes = [];
+  if (ni.length >= 2) notes.push(losses === 0 ? `Pelninga visus ${ni.length} metus.` : losses === ni.length ? `Nuostolinga visus ${ni.length} metus.` : `Nuostolis ${losses} iš ${ni.length} metų.`);
+  if (dil !== null && Math.abs(dil) >= 5) notes.push(dil > 0 ? `Akcijų skaičius išaugo ${dil.toFixed(0)} % (naujos akcijos – akcininkų dalis mažėja).` : `Akcijų skaičius sumažėjo ${Math.abs(dil).toFixed(0)} % (supirkimai – akcininkų dalis didėja).`);
+  el.hidden = false;
+  el.innerHTML = `<div class="sec-head"><h2 class="sec-h">Finansai per ${tabs[0][2].length} m.</h2><div class="seg" role="group" aria-label="Rodiklis" id="fin-t">${tabs.map((t, i) => `<button type="button" data-f="${t[0]}" aria-pressed="${i === 0}">${t[1]}</button>`).join("")}</div></div>
+    <div class="card fin-card"><div id="fin-chart">${finBars(tabs[0][2], { growth: true })}</div>${notes.length ? `<p class="fin-note">${notes.join(" ")}</p>` : ""}<p class="muted small" style="margin:8px 0 0">Metinės ataskaitos (Yahoo Finance), įmonės ataskaitų valiuta.</p></div>`;
+  el.querySelectorAll("#fin-t button").forEach((b) => b.addEventListener("click", () => {
+    el.querySelectorAll("#fin-t button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    const t = tabs.find((x) => x[0] === b.dataset.f);
+    $("#fin-chart").innerHTML = finBars(t[2], { growth: t[0] !== "ni" });
+  }));
+  return F;
+}
+
+/* ---------- AI įmonės santrauka ---------- */
+async function renderCompanyAI(sym, name, p, known) {
+  const el = $("#co-ai");
+  let cfg = {};
+  try { cfg = await getJSON("data/ai.json"); } catch {}
+  if (!el || !cfg.url || (known && known.type === "Kriptovaliuta" && false)) return;
+  const KEY = "investai.co.v1", DAY = new Date().toISOString().slice(0, 10);
+  const store = (() => { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch { return {}; } })();
+  const prem = (() => { try { return localStorage.getItem("investai.premium.ai") || ""; } catch { return ""; } })();
+  const used = Object.values(store).filter((x) => x.day === DAY).length, lim = prem ? 30 : 3;
+  const saved = store[sym] && Date.now() - store[sym].at < 14 * 864e5 ? store[sym] : null;
+  const md = (t) => { const e = esc(t).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>"); let o = "", l = false; for (const r of e.split("\n")) { const x = r.trim(), m = x.match(/^(?:[-•*]|\d+[.)])\s+(.*)/); if (m) { if (!l) { o += "<ul>"; l = true; } o += `<li>${m[1]}</li>`; continue; } if (l) { o += "</ul>"; l = false; } if (x) o += /^<b>[^<]+<\/b>:?$/.test(x) ? `<h3>${x.replace(/<\/?b>|:$/g, "")}</h3>` : `<p>${x}</p>`; } return o + (l ? "</ul>" : ""); };
+  el.hidden = false;
+  const draw = () => {
+    const can = saved || used < lim;
+    el.innerHTML = `<div class="rai-head"><span class="rai-ico">${icon("ai", 22)}</span><div><h2>${esc(name)} per 60 sekundžių</h2><p class="muted small">${saved ? `AI santrauka · ${new Date(saved.at).toLocaleDateString("lt-LT", { month: "long", day: "numeric" })}` : "Ką daro, skaičiai, optimistų ir skeptikų argumentai"}</p></div></div>
+      ${saved ? `<div class="rai-body">${md(saved.text)}</div>` : ""}
+      <div class="rai-foot">${can ? `<button type="button" class="btn ${saved ? "" : "primary"}" id="co-go">${saved ? "Atnaujinti" : "Sukurti santrauką"}</button>` : `<a class="btn" href="premium.html">${icon("gem", 16)} Premium – daugiau santraukų</a>`}<span class="muted small">${prem ? "Premium" : `Šiandien liko ${Math.max(0, lim - used)} iš ${lim}`}</span></div>
+      ${saved ? `<p class="rai-note">Rašo AI pagal mūsų duomenis ir bendras žinias – gali klysti, tai ne rekomendacija.</p>` : ""}`;
+    const go = $("#co-go");
+    if (go) go.addEventListener("click", run);
+  };
+  async function ctx() {
+    const lines = [`Aktyvas: ${name} (${sym})${known ? `, ${[known.type, known.sector, known.country].filter(Boolean).join(", ")}` : ""}.`];
+    if (p) {
+      lines.push(`Kaina ${p.price} ${p.cur} (${priceStamp(p)}); per metus ${fmtPct(p.y1)}, nuo metų pradžios ${fmtPct(p.ytd)}, nuo 52 sav. aukščiausio ${fmtPct(p.fromHigh)}; metinis kintamumas ~${Math.round(p.vol || 0)} %.`);
+      const k = [["P/E", p.pe], ["ateities P/E", p.fpe], ["pelno marža", p.pm !== undefined ? `${(p.pm * 100).toFixed(1)} %` : null], ["pajamų augimas (metinis)", p.rg !== undefined ? `${(p.rg * 100).toFixed(1)} %` : null], ["skola/nuosavybė", p.de !== undefined ? (p.de / 100).toFixed(2) : null], ["kapitalizacija", p.mcap ? fmtBig(p.mcap, p.cur) : null], ["dividendų pajamingumas", p.dy ? `${p.dy} %` : null]].filter((x) => x[1] !== null && x[1] !== undefined);
+      if (k.length) lines.push("Rodikliai: " + k.map(([a, b]) => `${a} ${typeof b === "number" ? b.toFixed(1) : b}`).join("; ") + ".");
+      if (p.an && p.an.n) lines.push(`Analitikai (Yahoo Finance, ${p.an.n}): sutarimas „${p.an.key}“, vidutinė tikslinė kaina ${p.an.tMean} ${p.cur} (intervalas ${p.an.tLow}–${p.an.tHigh}).`);
+      if (p.ed) lines.push(`Kita ataskaita: ${p.ed}.`);
+    }
+    try {
+      const F = ((await getJSON("data/fund.json")).items || {})[sym] || {};
+      if (F.rev) lines.push("Pajamos pagal metus: " + F.rev.map(([y, v]) => `${y}: ${fmtBig(v)}`).join(", "));
+      if (F.ni) lines.push("Grynasis pelnas pagal metus: " + F.ni.map(([y, v]) => `${y}: ${fmtBig(v)}`).join(", "));
+      if (F.sh) lines.push("Akcijų skaičius: " + F.sh.map(([y, v]) => `${y}: ${fmtBig(v)}`).join(", "));
+    } catch {}
+    try { const ex = (await loadExplain())[sym]; if (ex) lines.push(`InvestAI paaiškinimas (${ex.date}): ${ex.headline}. ${(ex.points || []).join(" ")}`); } catch {}
+    return lines.join("\n");
+  }
+  async function run() {
+    const go = $("#co-go"); go.disabled = true; go.textContent = "AI rašo…";
+    let body = el.querySelector(".rai-body");
+    if (!body) { el.querySelector(".rai-head").insertAdjacentHTML("afterend", '<div class="rai-body"></div>'); body = el.querySelector(".rai-body"); }
+    body.innerHTML = `<p class="ai-think">Renku duomenis apie ${esc(name)}…</p>`;
+    let text = "";
+    try {
+      const r = await fetch(cfg.url + "/chat", { method: "POST", headers: { "Content-Type": "application/json", ...(prem ? { "X-Premium": prem } : {}) }, body: JSON.stringify({ mode: "company", context: await ctx(), messages: [{ role: "user", content: `Parašyk ${name} apžvalgą.` }] }) });
+      if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(d.error || "AI šiuo metu neatsako."); }
+      const rd = r.body.getReader(), dec = new TextDecoder();
+      for (;;) { const { value, done } = await rd.read(); if (done) break; text += dec.decode(value, { stream: true }); body.innerHTML = md(text); }
+      if (!text.trim()) throw new Error("Atsakymas tuščias.");
+      store[sym] = { at: Date.now(), day: DAY, text };
+      try { localStorage.setItem(KEY, JSON.stringify(store)); } catch {}
+      renderCompanyAI(sym, name, p, known);
+    } catch (e) { body.innerHTML = `<p class="rai-err">${esc(e.message)}</p>`; go.disabled = false; go.textContent = "Bandyti dar kartą"; }
+  }
+  draw();
+}
+
+/* ---------- Kainos lygio įspėjimas (varpelis aktyvo puslapyje) ---------- */
+function bellHTML(sym) {
+  const c = typeof ALERTS !== "undefined" ? ALERTS.get() : null;
+  const on = !!(c && ((c.levels || {})[sym] || (c.symbols || []).includes(sym)));
+  return `<button type="button" class="icon-btn bell-btn${on ? " on" : ""}" aria-label="Kainos įspėjimas" title="Kainos įspėjimas">${icon("bell", 22)}</button>`;
+}
+function openBell(sym, name, p) {
+  const c = ALERTS.get() || { symbols: [], names: {}, th: 5, levels: {} };
+  const lv = (c.levels || {})[sym] || {};
+  const cs = CUR_SIGN[p.cur] || p.cur || "";
+  const d = document.createElement("dialog");
+  d.className = "ocr-choice bell-sheet";
+  const daily = (c.symbols || []).includes(sym);
+  const max = ALERTS.isPremium() ? 30 : 3, used = Object.keys(c.levels || {}).filter((k) => k !== sym).length;
+  d.innerHTML = `<form method="dialog" class="oc-in">
+    <h2>${esc(name)}: įspėjimai</h2>
+    <p class="muted" style="margin:0 4px 6px">Dabartinė kaina – <b>${fmtPrice(p.price, p.cur)}</b>. Pranešime telefone, kai ji pasieks tavo lygį.</p>
+    ${!ALERTS.canUse() ? `<p class="al-help">${ALERTS.blockedText()}</p><button class="btn" value="x">Uždaryti</button>` : `
+    <label class="bl-row"><span>Kai nukris iki</span><span class="bl-in"><input type="number" step="any" min="0" id="bl-lo" value="${lv.lo ?? ""}" placeholder="${(p.price * 0.9).toFixed(p.price < 10 ? 2 : 0)}"> ${esc(cs)}</span></label>
+    <label class="bl-row"><span>Kai pakils iki</span><span class="bl-in"><input type="number" step="any" min="0" id="bl-hi" value="${lv.hi ?? ""}" placeholder="${(p.price * 1.1).toFixed(p.price < 10 ? 2 : 0)}"> ${esc(cs)}</span></label>
+    <label class="bl-row"><span>Kai per dieną pajuda ±${c.th || 5} % ir daugiau</span><input type="checkbox" id="bl-d" ${daily ? "checked" : ""}></label>
+    <p class="muted small" style="margin:2px 4px">${ALERTS.isPremium() ? "Premium: iki 30 kainos lygių." : `Nemokamai – iki ${max} kainos lygių ir ${3} akcijų dienos pokyčiams.`} Kainos tikrinamos kas 15 min. prekybos metu.</p>
+    <p class="al-msg muted small" role="status"></p>
+    <div class="al-actions"><button type="button" class="btn primary" id="bl-save">Išsaugoti</button><button class="btn" value="x">Atšaukti</button>${lv.lo || lv.hi || daily ? `<button type="button" class="linkish" id="bl-del">Pašalinti</button>` : ""}</div>`}
+  </form>`;
+  document.body.appendChild(d);
+  d.addEventListener("close", () => d.remove());
+  d.showModal();
+  const msg = d.querySelector(".al-msg");
+  const apply = async (remove) => {
+    const lo = parseFloat(String(d.querySelector("#bl-lo").value).replace(",", ".")), hi = parseFloat(String(d.querySelector("#bl-hi").value).replace(",", "."));
+    const next = { ...c, names: { ...(c.names || {}), [sym]: name }, levels: { ...(c.levels || {}) }, symbols: [...(c.symbols || [])] };
+    delete next.levels[sym];
+    next.symbols = next.symbols.filter((x) => x !== sym);
+    if (!remove) {
+      if ((lo > 0 || hi > 0) && used >= max) { msg.innerHTML = `Nemokamai galima turėti iki ${max} kainos lygių. <a href="premium.html">Premium</a> – iki 30.`; return; }
+      if (lo > 0 && lo >= p.price) { msg.textContent = "Kritimo lygis turi būti žemiau dabartinės kainos."; return; }
+      if (hi > 0 && hi <= p.price) { msg.textContent = "Kilimo lygis turi būti aukščiau dabartinės kainos."; return; }
+      const o = {}; if (lo > 0) o.lo = lo; if (hi > 0) o.hi = hi;
+      if (o.lo || o.hi) next.levels[sym] = o;
+      if (d.querySelector("#bl-d").checked) {
+        if (next.symbols.length >= (ALERTS.isPremium() ? 60 : 3)) { msg.innerHTML = `Dienos pokyčiams nemokamai – iki 3 akcijų. <a href="premium.html">Premium</a> – visos.`; return; }
+        next.symbols.push(sym);
+      }
+    }
+    msg.textContent = "Saugoma…";
+    try {
+      if (!next.symbols.length && !Object.keys(next.levels).length) await ALERTS.off();
+      else await ALERTS.save(next);
+      d.close();
+      $(".bell-btn").outerHTML = bellHTML(sym);
+      $(".bell-btn").addEventListener("click", () => openBell(sym, name, p));
+    } catch (e) { msg.textContent = e.message; }
+  };
+  const sv = d.querySelector("#bl-save"); if (sv) sv.addEventListener("click", () => apply(false));
+  const dl = d.querySelector("#bl-del"); if (dl) dl.addEventListener("click", () => apply(true));
 }
 
 /* ---------- Naujienos ir įvykiai ---------- */

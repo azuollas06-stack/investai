@@ -41,6 +41,16 @@ UŽDUOTIS DABAR: parašyk vartotojo portfelio apžvalgą pagal KONTEKSTE pateikt
 **Klausimai sau** – 2–3 klausimai, kuriuos investuotojas galėtų sau užduoti (pvz., apie investavimo laikotarpį ar riziką). Ne patarimai.
 Jokių „pirk“, „parduok“, „padidink“, „sumažink“. Neprognozuok. Iki ~220 žodžių.`;
 
+const COMPANY = `
+
+UŽDUOTIS DABAR: parašyk trumpą įmonės (ar fondo) apžvalgą „per 60 sekundžių“ pagal KONTEKSTĄ ir bendras žinias. Struktūra (kiekviena dalis prasideda paryškinta eilute):
+**Ką daro** – 2 sakiniai paprastai: kuo užsiima, iš ko uždirba.
+**Skaičiai** – 3–4 punktai iš KONTEKSTO (pajamų ir pelno kryptis per kelerius metus, marža, skola, akcijų skaičiaus pokytis, kaina nuo aukščiausio taško). Neišgalvok skaičių, kurių nėra kontekste.
+**Kodėl investuotojai optimistiški** – 2 punktai (bendri argumentai, ne prognozės).
+**Kodėl skeptiški / rizikos** – 2–3 punktai.
+**Ką sako analitikai** – 1 sakinys iš KONTEKSTO su šaltiniu, jei yra.
+Jokių „pirk/parduok“. Iki ~200 žodžių. Jei tavo žinios apie įmonę gali būti pasenusios – taip ir parašyk.`;
+
 const PARSE = `Tu ištrauki investicijų pozicijas iš brokerio ar banko programėlės ekrano nuotraukų. Grąžink TIK JSON pagal schemą.
 - Įtrauk kiekvieną matomą poziciją (akciją, fondą/ETF, obligaciją, kriptovaliutą). Grynuosius pinigus įtrauk tik jei aiškiai parodyti kaip atskira eilutė (name „Grynieji pinigai“, ticker „CASH“).
 - value – dabartinė pozicijos vertė (ne kaina už vienetą, ne pokytis), skaičius be valiutos ženklo.
@@ -183,7 +193,7 @@ export default {
       if (!lim.ok) return json({ error: lim.why === "user" ? `Šiandien jau uždavei ${perUser} ${lt(perUser, "klausimą", "klausimus", "klausimų")} – tai dienos limitas. Grįžk rytoj!` : "Šiandien asistentas jau atsakė į labai daug klausimų ir pasiekė dienos biudžetą. Grįžk rytoj!", left: 0 }, 429, c.headers);
 
       const ctx = String((body && body.context) || "").slice(0, MAX_CONTEXT);
-      const system = SYSTEM(today()) + (body.mode === "review" ? REVIEW : "") + (ctx ? `\n\n<kontekstas>\n${ctx}\n</kontekstas>` : "");
+      const system = SYSTEM(today()) + (body.mode === "review" ? REVIEW : body.mode === "company" ? COMPANY : "") + (ctx ? `\n\n<kontekstas>\n${ctx}\n</kontekstas>` : "");
       let res;
       try {
         res = provider === "openai" ? await callOpenAI(env, system, msgs) : await callAnthropic(env, system, msgs);
@@ -240,11 +250,20 @@ export default {
         if (!valid) return json({ error: "Netinkama prenumerata." }, 400, c.headers);
         const max = premium ? 60 : 3;
         const symbols = (Array.isArray(body.symbols) ? body.symbols : []).filter((x) => typeof x === "string" && /^[A-Z_]+:[A-Z0-9._-]+$/i.test(x)).slice(0, max);
-        if (!symbols.length) return json({ error: "Pasirink bent vieną akciją." }, 400, c.headers);
+        if (!symbols.length && !(body.levels && Object.keys(body.levels).length)) return json({ error: "Pasirink bent vieną akciją." }, 400, c.headers);
         const th = [3, 5, 7, 10].includes(+body.th) ? +body.th : 5;
         const names = {};
         for (const s of symbols) if (body.names && typeof body.names[s] === "string") names[s] = body.names[s].slice(0, 40);
-        const r = await push.subscribe({ sub: { endpoint: sub.endpoint, keys: { p256dh: sub.keys.p256dh, auth: sub.keys.auth } }, symbols, names, th, earnings: premium && !!body.earnings, premium });
+        const levels = {};
+        const lmax = premium ? 30 : 3;
+        for (const [sym, lv] of Object.entries(body.levels && typeof body.levels === "object" ? body.levels : {}).slice(0, lmax)) {
+          if (!/^[A-Z_]+:[A-Z0-9._-]+$/i.test(sym) || !lv) continue;
+          const o = {};
+          if (Number.isFinite(+lv.lo) && +lv.lo > 0) o.lo = +lv.lo;
+          if (Number.isFinite(+lv.hi) && +lv.hi > 0) o.hi = +lv.hi;
+          if (o.lo !== undefined || o.hi !== undefined) { levels[sym] = o; if (body.names && typeof body.names[sym] === "string") names[sym] = body.names[sym].slice(0, 40); }
+        }
+        const r = await push.subscribe({ sub: { endpoint: sub.endpoint, keys: { p256dh: sub.keys.p256dh, auth: sub.keys.auth } }, symbols, names, th, levels, weekly: body.weekly !== false, earnings: premium && !!body.earnings, premium });
         return json({ ...r, max, premium }, 200, c.headers);
       }
       if (url.pathname === "/push/unsubscribe" && req.method === "POST" && valid) return json(await push.unsubscribe(sub.endpoint), 200, c.headers);
@@ -256,6 +275,7 @@ export default {
   },
   async scheduled(event, env, ctx) {
     const push = env.PUSH.get(env.PUSH.idFromName("push"));
-    ctx.waitUntil(push.check().then((r) => console.log("push check", JSON.stringify(r))));
+    if (event.cron === "0 17 * * 0") ctx.waitUntil(push.weekly().then((r) => console.log("weekly", JSON.stringify(r))));
+    else ctx.waitUntil(push.check().then((r) => console.log("push check", JSON.stringify(r))));
   },
 };

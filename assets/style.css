@@ -1846,3 +1846,25 @@ summary .h-ico { width: 28px; height: 28px; }
 .nx-link span { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .nx-link b { font-size: 15.5px; } .nx-link small { font-size: 13px; color: var(--muted); }
 .nx-link > svg:last-child { color: var(--muted); flex: none; }
+
+/* v14: įmonės finansai, AI santrauka, kainos įspėjimai */
+.fin-card { padding: 18px 14px 14px; }
+#fin .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+#fin .sec-head .sec-h { margin: 0; }
+.fb { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 10px; height: 210px; }
+.fb-col { display: flex; flex-direction: column; align-items: stretch; min-width: 0; text-align: center; }
+.fb-val { font-size: 12.5px; font-weight: 750; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--sea); }
+.fb-val.neg { color: var(--down); }
+.fb-area { position: relative; flex: 1; margin: 6px 0; background: linear-gradient(var(--line), var(--line)) 0 var(--zero) / 100% 1px no-repeat; }
+.fb-bar { position: absolute; left: 14%; right: 14%; border-radius: 8px; background: linear-gradient(180deg, #6aa5ff, #3b6dff); min-height: 2px; }
+.fb-bar.neg { background: linear-gradient(0deg, #ff7a85, #ff4d5e); }
+.fb-col small { font-size: 12px; font-weight: 700; color: var(--muted); display: flex; flex-direction: column; gap: 1px; }
+.fb-col small em { font-style: normal; font-size: 11.5px; }
+.fin-note { margin: 12px 2px 0; font-size: 14.5px; font-weight: 600; }
+.co-ai { margin: 0 0 14px; }
+.bell-btn.on { color: #f5b335; }
+.bell-btn.on svg path { fill: color-mix(in srgb, #f5b335 30%, transparent); }
+.bl-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 4px; border-top: 1px solid var(--line); font-size: 15px; font-weight: 600; }
+.bl-in { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.bl-in input { width: 110px; height: 42px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--sea); font: inherit; font-size: 16px; text-align: right; }
+.bl-row input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--amber); }

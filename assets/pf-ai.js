@@ -152,20 +152,6 @@ const PFAI = (() => {
   }
 
   /* ---------- 3. Kainų įspėjimai telefone ---------- */
-  const AL_KEY = "investai.alerts.v1"; // { symbols, th, earnings }
-  const ios = /iP(hone|ad|od)/.test(navigator.userAgent);
-  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
-  const supported = "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
-  const u8 = (b) => { b = b.replace(/-/g, "+").replace(/_/g, "/"); while (b.length % 4) b += "="; return Uint8Array.from(atob(b), (ch) => ch.charCodeAt(0)); };
-  const swReady = () => Promise.race([navigator.serviceWorker.ready, new Promise((_, rej) => setTimeout(() => rej(new Error("Programėlės dalis dar neįsikėlė – perkrauk puslapį ir bandyk dar kartą.")), 4000))]);
-  async function currentSub() { if (!supported) return null; const reg = await swReady(); return reg.pushManager.getSubscription(); }
-  async function api(path, data) {
-    const c = await cfg();
-    const r = await fetch(c.url + path, { method: "POST", headers: { "Content-Type": "application/json", ...premHdr() }, body: JSON.stringify(data) });
-    const d = await r.json().catch(() => ({}));
-    if (!r.ok) throw new Error(d.error || "Nepavyko");
-    return d;
-  }
   async function renderAlerts(a) {
     const el = $("#r-alerts");
     if (!el) return;
@@ -173,19 +159,18 @@ const PFAI = (() => {
     el.hidden = false;
     const P = PRICES_PF.items || {};
     const cands = a.rows.filter((r) => r.s !== CASH && P[r.s]).sort((x, y) => y.value - x.value);
-    let cfgA = null; try { cfgA = JSON.parse(ls.get(AL_KEY) || "null"); } catch {}
+    const cfgA = ALERTS.get();
     const max = isPremium() ? 60 : 3;
-    const sel = new Set((cfgA && cfgA.symbols) || cands.slice(0, max).map((r) => r.s));
-    const on = !!cfgA && supported && Notification.permission === "granted";
-    const head = `<div class="al-head"><span class="al-ico">${icon("bell", 22)}</span><div><h2>Įspėjimai telefone</h2><p class="muted small">${on ? `Įjungta · ${cfgA.symbols.length} ${cfgA.symbols.length === 1 ? "akcija" : "akcijos"} · ±${cfgA.th} % per dieną` : "Pranešime, kai tavo akcija per dieną pajudės smarkiau nei įprastai"}</p></div>${on ? `<span class="al-on">Įjungta</span>` : ""}</div>`;
-    if (!supported || (ios && !standalone)) {
-      el.innerHTML = head + `<p class="al-help">${ios ? "iPhone pranešimus leidžia tik programėlėms: Safari spausk <b>Bendrinti</b> → <b>Į pradžios ekraną</b>, tada atidaryk InvestAI iš pradžios ekrano ir grįžk čia." : "Ši naršyklė pranešimų nepalaiko. Pabandyk Chrome, Edge ar Firefox."}</p>`;
-      return;
-    }
+    const sel = new Set(cfgA ? cfgA.symbols : cands.slice(0, max).map((r) => r.s));
+    const on = ALERTS.isOn();
+    const nLv = cfgA ? Object.keys(cfgA.levels || {}).length : 0;
+    const head = `<div class="al-head"><span class="al-ico">${icon("bell", 22)}</span><div><h2>Įspėjimai telefone</h2><p class="muted small">${on ? `Įjungta · ${cfgA.symbols.length} ${cfgA.symbols.length === 1 ? "akcija" : "akcijos"} · ±${cfgA.th} % per dieną${nLv ? ` · ${nLv} kainos lygiai` : ""}` : "Pranešime, kai tavo akcija per dieną pajudės smarkiau nei įprastai"}</p></div>${on ? `<span class="al-on">Įjungta</span>` : ""}</div>`;
+    if (!ALERTS.canUse()) { el.innerHTML = head + `<p class="al-help">${ALERTS.blockedText()}</p>`; return; }
     el.innerHTML = head + `
       <div class="al-pick" role="group" aria-label="Akcijos įspėjimams">${cands.slice(0, 24).map((r) => `<button type="button" class="al-chip" data-s="${esc(r.s)}" aria-pressed="${sel.has(r.s)}">${logoHTML(r.s, r.n, "#1d3a63", 22)}<span>${esc(r.n)}</span></button>`).join("")}</div>
-      <p class="muted small al-max">${isPremium() ? "Premium: gali pasirinkti visas akcijas." : `Nemokamai – iki ${max} akcijų. <a href="premium.html">Premium</a> – visos ir priminimai apie ataskaitas.`}</p>
+      <p class="muted small al-max">${isPremium() ? "Premium: gali pasirinkti visas akcijas." : `Nemokamai – iki ${max} akcijų. <a href="premium.html">Premium</a> – visos ir priminimai apie ataskaitas.`} Kainos lygį (pvz., „kai nukris žemiau 140 $“) nustatysi akcijos puslapyje varpeliu.</p>
       <div class="al-row"><span>Pranešti, kai per dieną pajuda</span><div class="seg" role="group" aria-label="Riba" id="al-th">${[3, 5, 10].map((t) => `<button type="button" data-th="${t}" aria-pressed="${((cfgA && cfgA.th) || 5) === t}">±${t} %</button>`).join("")}</div></div>
+      <label class="al-row al-ed"><span>Savaitės santrauka sekmadienio vakarą</span><input type="checkbox" id="al-wk" ${!cfgA || cfgA.weekly !== false ? "checked" : ""}></label>
       ${isPremium() ? `<label class="al-row al-ed"><span>Priminti dieną prieš ataskaitas</span><input type="checkbox" id="al-ed" ${!cfgA || cfgA.earnings ? "checked" : ""}></label>` : ""}
       <div class="al-actions"><button type="button" class="btn primary" id="al-save">${on ? "Išsaugoti" : "Įjungti įspėjimus"}</button>${on ? `<button type="button" class="btn" id="al-test">Bandomasis pranešimas</button><button type="button" class="linkish" id="al-off">Išjungti</button>` : ""}</div>
       <p class="al-msg muted small" role="status"></p>`;
@@ -200,32 +185,20 @@ const PFAI = (() => {
     el.querySelectorAll("#al-th button").forEach((b) => b.addEventListener("click", () => el.querySelectorAll("#al-th button").forEach((x) => x.setAttribute("aria-pressed", x === b))));
     $("#al-save").addEventListener("click", async () => {
       const btn = $("#al-save");
-      if (!sel.size) { msg.textContent = "Pasirink bent vieną akciją."; return; }
+      if (!sel.size && !nLv) { msg.textContent = "Pasirink bent vieną akciją."; return; }
       btn.disabled = true; msg.textContent = "Jungiama…";
       try {
-        if (Notification.permission !== "granted" && (await Notification.requestPermission()) !== "granted") throw new Error("Pranešimai neleisti. Leisk juos naršyklės nustatymuose.");
-        const reg = await swReady();
-        let s = await reg.pushManager.getSubscription();
-        if (!s) { const { key } = await (await fetch((await cfg()).url + "/push/key")).json(); s = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: u8(key) }); }
-        const th = +(el.querySelector("#al-th [aria-pressed=true]") || {}).dataset?.th || 5;
-        const earnings = !!(el.querySelector("#al-ed") && el.querySelector("#al-ed").checked);
         const symbols = [...sel];
-        const names = Object.fromEntries(symbols.map((x) => [x, (cands.find((r) => r.s === x) || {}).n || x]));
-        await api("/push/subscribe", { sub: s.toJSON(), symbols, names, th, earnings });
-        ls.set(AL_KEY, JSON.stringify({ symbols, th, earnings }));
-        const first = !on;
-        await renderAlerts(a);
-        if (first) api("/push/test", { sub: s.toJSON() }).catch(() => {});
+        const prev = ALERTS.get() || {};
+        const names = { ...(prev.names || {}), ...Object.fromEntries(symbols.map((x) => [x, (cands.find((r) => r.s === x) || {}).n || x])) };
+        await ALERTS.save({ ...prev, symbols, names, th: +(el.querySelector("#al-th [aria-pressed=true]") || {}).dataset?.th || 5, weekly: $("#al-wk").checked, earnings: !!($("#al-ed") && $("#al-ed").checked) });
+        renderAlerts(a);
       } catch (e) { msg.textContent = e.message || "Nepavyko įjungti."; btn.disabled = false; }
     });
     const t = $("#al-test");
-    if (t) t.addEventListener("click", async () => { try { await api("/push/test", { sub: (await currentSub()).toJSON() }); msg.textContent = "Išsiųsta – pranešimas turėtų ateiti per kelias sekundes."; } catch (e) { msg.textContent = e.message; } });
+    if (t) t.addEventListener("click", async () => { try { await ALERTS.test(); msg.textContent = "Išsiųsta – pranešimas turėtų ateiti per kelias sekundes."; } catch (e) { msg.textContent = e.message; } });
     const off = $("#al-off");
-    if (off) off.addEventListener("click", async () => {
-      try { const s = await currentSub(); if (s) { await api("/push/unsubscribe", { sub: s.toJSON() }).catch(() => {}); await s.unsubscribe(); } } catch {}
-      try { localStorage.removeItem(AL_KEY); } catch {}
-      renderAlerts(a);
-    });
+    if (off) off.addEventListener("click", async () => { await ALERTS.off(); renderAlerts(a); });
   }
 
   return { hasAI, chooseMode, recognize, renderReview, renderAlerts };

@@ -61,11 +61,11 @@ export class Push extends DurableObject {
   async subscribe(data) {
     const id = await hash(data.sub.endpoint);
     const prev = (await this.ctx.storage.get("s:" + id)) || {};
-    await this.ctx.storage.put("s:" + id, { sub: data.sub, symbols: data.symbols, names: data.names || {}, th: data.th, earnings: !!data.earnings, premium: !!data.premium, sent: prev.sent || {}, at: Date.now() });
+    await this.ctx.storage.put("s:" + id, { sub: data.sub, symbols: data.symbols, names: data.names || {}, th: data.th, earnings: !!data.earnings, weekly: data.weekly !== false, levels: data.levels || {}, premium: !!data.premium, sent: prev.sent || {}, at: Date.now() });
     return { ok: true, id };
   }
   async unsubscribe(endpoint) { await this.ctx.storage.delete("s:" + (await hash(endpoint))); return { ok: true }; }
-  async status(endpoint) { const s = await this.ctx.storage.get("s:" + (await hash(endpoint))); return s ? { on: true, symbols: s.symbols, th: s.th, earnings: s.earnings } : { on: false }; }
+  async status(endpoint) { const s = await this.ctx.storage.get("s:" + (await hash(endpoint))); return s ? { on: true, symbols: s.symbols, th: s.th, earnings: s.earnings, weekly: s.weekly !== false, levels: s.levels || {} } : { on: false }; }
   async test(endpoint) {
     const s = await this.ctx.storage.get("s:" + (await hash(endpoint)));
     if (!s) return { ok: false };
@@ -102,8 +102,46 @@ export class Push extends DurableObject {
           s.sent["ed:" + sym] = today; changed = true; sent++;
         }
       }
-      if (changed) await this.ctx.storage.put(k, s);
+      // Kainos lygio įspėjimai (vienkartiniai): { sym: { lo, hi } }
+      for (const [sym, lv] of Object.entries(s.levels || {})) {
+        const p = items[sym]; if (!p || !lv) continue;
+        const lvp = live[sym];
+        const price = lvp && lvp[0] ? lvp[0] : p.price;
+        const name = s.names[sym] || sym.split(":")[1];
+        const hitLo = typeof lv.lo === "number" && price <= lv.lo, hitHi = typeof lv.hi === "number" && price >= lv.hi;
+        if (!hitLo && !hitHi) continue;
+        const fmt = (v) => v.toLocaleString("lt-LT", { maximumFractionDigits: v < 10 ? 2 : 1 });
+        const st = await this.send(s.sub, { title: `${name}: kaina ${hitLo ? "nukrito iki" : "pakilo iki"} ${fmt(price)} ${p.cur || ""}`, body: `Tavo nustatytas lygis – ${fmt(hitLo ? lv.lo : lv.hi)} ${p.cur || ""}. Įspėjimas išjungtas; jei reikia, nustatyk naują.`, url: `aktyvas.html?s=${encodeURIComponent(sym)}` });
+        if (st === 404 || st === 410) { await this.ctx.storage.delete(k); removed++; changed = false; break; }
+        if (hitLo) delete lv.lo; if (hitHi) delete lv.hi;
+        if (lv.lo === undefined && lv.hi === undefined) delete s.levels[sym];
+        changed = true; sent++;
+      }
+      if (changed && (await this.ctx.storage.get(k))) await this.ctx.storage.put(k, s);
     }
     return { ok: true, subs: all.size, sent, removed };
+  }
+
+  // Sekmadienio vakaro santrauka: kaip per savaitę pajudėjo pasirinktos akcijos ir kas laukia
+  async weekly() {
+    const r = await fetch(SITE + "data/prices.json?t=" + Date.now()).catch(() => null);
+    if (!r || !r.ok) return { ok: false };
+    const items = (await r.json()).items || {};
+    const today = new Date().toISOString().slice(0, 10), wk = new Date(Date.now() + 7 * 864e5).toISOString().slice(0, 10);
+    const all = await this.ctx.storage.list({ prefix: "s:" });
+    let sent = 0;
+    for (const [k, s] of all) {
+      if (s.weekly === false || s.sent.week === today) continue;
+      const rows = s.symbols.map((sym) => ({ sym, p: items[sym], n: s.names[sym] || sym.split(":")[1] })).filter((x) => x.p && typeof x.p.w1 === "number");
+      if (!rows.length) continue;
+      const pc = (v) => `${v > 0 ? "+" : "−"}${Math.abs(v).toLocaleString("lt-LT", { maximumFractionDigits: 1 })} %`;
+      const top = rows.sort((x, y) => Math.abs(y.p.w1) - Math.abs(x.p.w1)).slice(0, 3).map((x) => `${x.n} ${pc(x.p.w1)}`).join(", ");
+      const ev = rows.filter((x) => x.p.ed && x.p.ed > today && x.p.ed <= wk).map((x) => x.n);
+      const up = rows.filter((x) => x.p.w1 > 0).length;
+      const st = await this.send(s.sub, { title: `Tavo savaitė: ${up} iš ${rows.length} akcijų pakilo`, body: `${top}.${ev.length ? ` Kitą savaitę ataskaitas skelbia: ${ev.slice(0, 3).join(", ")}.` : ""}`, url: "portfelis.html" });
+      if (st === 404 || st === 410) { await this.ctx.storage.delete(k); continue; }
+      s.sent.week = today; await this.ctx.storage.put(k, s); sent++;
+    }
+    return { ok: true, sent };
   }
 }

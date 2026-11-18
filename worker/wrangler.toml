@@ -35,4 +35,4 @@ new_sqlite_classes = ["Push"]
 
 # Kainų įspėjimų tikrinimas kas 15 min. darbo dienomis (UTC 7–21)
 [triggers]
-crons = ["*/15 7-21 * * 1-5"]
+crons = ["*/15 7-21 * * 1-5", "0 17 * * 0"]
