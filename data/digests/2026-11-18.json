@@ -1,0 +1,224 @@
+{
+  "date": "2026-11-18",
+  "weekday": "trečiadienis",
+  "title": "Nvidia rezultatai pakėlė lustų akcijas, Anthropic šiandien nustato IPO kainą",
+  "lead": "JAV akcijų ateities sandoriai po dviejų kritimo dienų kilo, nes Nvidia pajamos viršijo lūkesčius. Baltijoje dėmesio centre – Akola Group ketvirčio rezultatai: pajamos augo, bet pelnas sumažėjo 40 %.",
+  "generated_at": "2026-11-18T17:30:00+02:00",
+  "prices_available": false,
+  "sections": [
+    {
+      "id": "rinka",
+      "title": "Rinkos nuotaika",
+      "items": [
+        {
+          "headline": "JAV ateities sandoriai kyla po Nvidia ataskaitos",
+          "text": "Prieš prekybos pradžią Nasdaq-100 ateities sandoriai kilo apie 0,8–0,9 %, S&P 500 – apie 0,3–0,5 %, Dow Jones – beveik nepakito. Tai įvyko po dviejų iš eilės kritimo dienų. Kartu su Nvidia kilo AMD, Broadcom, TSMC ir CoreWeave akcijos.",
+          "why": "Nvidia rezultatai laikomi DI investicijų barometru, todėl jie veikia visą technologijų sektorių. Dienos uždarymo duomenų apžvalgos rengimo metu dar nebuvo.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "Yahoo Finance: rinkos tiesiogiai",
+              "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-november-18-dow-sp-500-nasdaq-nvidia-anthropic-ipo-090613569.html",
+              "type": "media",
+              "published": "2026-11-18T07:44:00-05:00"
+            },
+            {
+              "name": "Nexo: Markets Today",
+              "url": "https://nexo.com/blog/markets-today-november-18",
+              "type": "media",
+              "published": "2026-11-18T09:30:00-05:00"
+            }
+          ]
+        },
+        {
+          "headline": "Rinkos beveik neabejoja FED palūkanų kėlimu gruodį",
+          "text": "Pagal CME FedWatch, tikimybė, kad FED gruodžio 9 d. pakels palūkanas ketvirčiu procentinio punkto, – apie 96 %. Šiandien skelbiamas spalio FOMC posėdžio protokolas. JAV 10 metų obligacijų pajamingumas – apie 5,1 %, dolerio indeksas pasiekė aukščiausią lygį per 19 mėn.",
+          "why": "Aukštesnės palūkanos ir pajamingumas dažniausiai spaudžia augimo akcijų bei kriptovaliutų vertinimus; obligacijų investuotojams – didesnės pajamos naujoms emisijoms.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "Nexo: Markets Today",
+              "url": "https://nexo.com/blog/markets-today-november-18",
+              "type": "media",
+              "published": "2026-11-18T09:30:00-05:00"
+            },
+            {
+              "name": "Yahoo Finance: rinkos tiesiogiai",
+              "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-november-18-dow-sp-500-nasdaq-nvidia-anthropic-ipo-090613569.html",
+              "type": "media",
+              "published": "2026-11-18T07:44:00-05:00"
+            }
+          ]
+        },
+        {
+          "headline": "Bitcoin – apie 64 000 $, auksas ir nafta pinga",
+          "text": "Bitcoin kaina – apie 64 000 $ (−1,5 % per parą); spot bitcoin fondai šią savaitę patyrė apie 232 mln. $ grynųjų išmokų. Auksas atpigo 2–3 % iki maždaug 3 750 $ už unciją, Brent nafta – apie 91 $ už barelį (−21 % per lapkritį).",
+          "why": "Kriptovaliutos šiuo metu jautriai reaguoja į palūkanų kėlimo lūkesčius ir stiprėjantį dolerį.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "Nexo: Markets Today",
+              "url": "https://nexo.com/blog/markets-today-november-18",
+              "type": "media",
+              "published": "2026-11-18T09:30:00-05:00"
+            },
+            {
+              "name": "Yahoo Finance: rinkos tiesiogiai",
+              "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-november-18-dow-sp-500-nasdaq-nvidia-anthropic-ipo-090613569.html",
+              "type": "media",
+              "published": "2026-11-18T07:44:00-05:00"
+            }
+          ]
+        },
+        {
+          "headline": "Rygos birža šiandien nedirba",
+          "text": "Lapkričio 18 d. – Latvijos Respublikos paskelbimo diena, todėl Nasdaq Riga prekyba nevyksta. Vilniaus ir Talino biržos dirba įprastai.",
+          "why": "Latvijos akcijų ir obligacijų sandoriai šiandien neįvykdomi.",
+          "status": "primary",
+          "sources": [
+            {
+              "name": "Nasdaq Baltic investuotojų kalendorius",
+              "url": "https://www.nasdaqbaltic.com/statistics/en/calendar?page=1",
+              "type": "primary",
+              "published": "2026-11-18T16:53:00+02:00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "imones",
+      "title": "Įmonių naujienos",
+      "items": [
+        {
+          "headline": "Nvidia: pajamos +103 %, prognozė – 130 mlrd. $",
+          "tags": [
+            "NVDA",
+            "rezultatai"
+          ],
+          "text": "Trečiojo finansinio ketvirčio pajamos – 115,8 mlrd. $ (analitikai tikėjosi ~108,8 mlrd. $), pelnas vienai akcijai – 2,68 $ (lūkesčiai – 2,47 $). Ketvirto ketvirčio pajamų prognozė – 130 mlrd. $ ±3 %, bendrasis pelningumas turėtų sumažėti iki 71–72 %. Po prekybos akcija pakilo daugiau nei 4 %, trečiadienį atsidarė apie 2 % aukščiau. Valdybos pirmininkas pareiškė, kad Jensen Huang į vadovo postą negrąžinamas.",
+          "why": "Akcija prieš rezultatus buvo ~36 % žemiau spalio 6 d. piko, todėl rinka itin atidžiai vertina ir skaičius, ir vadovybės pokyčius.",
+          "status": "primary",
+          "sources": [
+            {
+              "name": "NVIDIA pranešimas",
+              "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2027",
+              "type": "primary",
+              "published": "2026-11-17"
+            },
+            {
+              "name": "Kiplinger: rezultatai tiesiogiai",
+              "url": "https://www.kiplinger.com/news/live/nvidia-earnings-live-updates-and-commentary-november-2026",
+              "type": "media",
+              "published": "2026-11-18T14:34:00Z"
+            }
+          ]
+        },
+        {
+          "headline": "Akola Group: pajamos +6,7 %, grynasis pelnas −40 %",
+          "tags": [
+            "AKO1L",
+            "rezultatai"
+          ],
+          "text": "Per pirmuosius 3 finansinių 2026/27 m. mėnesius grupė pardavė 880,9 tūkst. t produkcijos (+11,3 %), pajamos – 420,4 mln. € (+6,7 %), EBITDA – 29,7 mln. € (−18 %), grynasis pelnas – 11,7 mln. € (−40,1 %). Pelną mažino siauresnės grūdų prekybos maržos (grūdų prekybos bendrasis pelnas −51 %) ir žemesnės pieno kainos; paukštininkystė išliko stabili.",
+          "why": "Bendrovė pabrėžia, kad dėl sezoniškumo vieno ketvirčio rezultatai neatspindi viso metų. Investuotojų webinaras – lapkričio 19 d., strategija „Akola 2030“ bus pristatyta 2027 m. vasarį.",
+          "status": "primary",
+          "sources": [
+            {
+              "name": "Akola Group pranešimas (GlobeNewswire)",
+              "url": "https://www.globenewswire.com/news-release/2026/11/18/3405390/0/en/akola-group-generated-eur-30-million-ebitda-in-3-months-of-fy-2026-2027.html",
+              "type": "primary",
+              "published": "2026-11-18T09:20:00+02:00"
+            }
+          ]
+        },
+        {
+          "headline": "Anthropic šiandien vakare nustato IPO kainą",
+          "tags": [
+            "ANT",
+            "IPO"
+          ],
+          "text": "Kainų intervalas – 70–78 $ už A klasės akciją, siūloma 825 mln. akcijų; prekyba Nasdaq biržoje simboliu ANT planuojama lapkričio 19 d. Žiniasklaida skelbia, kad bendrovė siekia kainos intervalo viršuje ar aukščiau. Iki 20 % akcijų skiriama mažmeniniams investuotojams per šešias platformas.",
+          "why": "Tai vienas didžiausių IPO istorijoje. Atskleidimas: InvestAI turinį rengia Claude – Anthropic modelis; pateikiami tik šaltinių faktai.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "StockTitan: IPO faktai iš S-1/A",
+              "url": "https://www.stocktitan.net/articles/anthropic-ipo-live-ant-first-trading-day-2026",
+              "type": "media",
+              "published": "2026-11-17"
+            },
+            {
+              "name": "Yahoo Finance: rinkos tiesiogiai",
+              "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-november-18-dow-sp-500-nasdaq-nvidia-anthropic-ipo-090613569.html",
+              "type": "media",
+              "published": "2026-11-18T07:44:00-05:00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "obligacijos",
+      "title": "Obligacijos",
+      "items": [
+        {
+          "headline": "Šią savaitę baigiasi Civinity ir Bigbank obligacijų pasirašymas",
+          "tags": [
+            "Civinity",
+            "Bigbank",
+            "obligacijos"
+          ],
+          "text": "Civinity ir Bigbank subordinuotų obligacijų viešas platinimas vyksta iki lapkričio 20 d., PN Project – iki lapkričio 30 d. Lapkričio 18 d. – gruodžio 4 d. vyksta naujas LKOPBOND obligacijų platinimas Baltijos šalyse.",
+          "why": "Obligacijų investuotojams tai paskutinės dienos pateikti pavedimus šiose emisijose.",
+          "status": "primary",
+          "sources": [
+            {
+              "name": "Nasdaq Baltic investuotojų kalendorius",
+              "url": "https://www.nasdaqbaltic.com/statistics/en/calendar?page=1",
+              "type": "primary",
+              "published": "2026-11-18T16:53:00+02:00"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "calendar": [
+    {
+      "date": "2026-11-18",
+      "text": "FOMC spalio posėdžio protokolas (JAV)",
+      "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-november-18-dow-sp-500-nasdaq-nvidia-anthropic-ipo-090613569.html"
+    },
+    {
+      "date": "2026-11-19",
+      "text": "Anthropic (ANT) prekybos pradžia Nasdaq biržoje",
+      "url": "https://www.stocktitan.net/articles/anthropic-ipo-live-ant-first-trading-day-2026"
+    },
+    {
+      "date": "2026-11-19",
+      "text": "Akola Group investuotojų webinaras; KN Energies 9 mėn. rezultatai",
+      "url": "https://www.nasdaqbaltic.com/statistics/en/calendar?page=1"
+    },
+    {
+      "date": "2026-11-20",
+      "text": "Baigiasi Civinity ir Bigbank obligacijų pasirašymas; Pro Kapital 9 mėn. rezultatai",
+      "url": "https://www.nasdaqbaltic.com/statistics/en/calendar?page=1"
+    },
+    {
+      "date": "2026-11-25",
+      "text": "Rheinmetall investuotojų diena (iki lapkričio 27 d.)",
+      "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/rheinmetall-stock-slips-after-strong-nine-month-growth/70493851"
+    },
+    {
+      "date": "2026-12-09",
+      "text": "FED palūkanų sprendimas",
+      "url": "https://nexo.com/blog/markets-today-november-18"
+    },
+    {
+      "date": "2026-12-10",
+      "text": "Ignitis grupės neeilinis akcininkų susirinkimas (dividendai)",
+      "url": "https://www.globenewswire.com/news-release/2026/11/11/3400468/0/en/ignitis-group-s-updated-financial-calendar-2026.html"
+    }
+  ]
+}

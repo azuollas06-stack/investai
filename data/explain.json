@@ -1,84 +1,191 @@
 {
-  "updated": "2026-11-17",
-  "note": "Paaiškinimai, kodėl pasikeitė aktyvų kainos. Raktas – TradingView simbolis. Pildo kasdienė užduotis (žr. TURINIO_GIDAS.md).",
-  "items": {
-    "NASDAQ:NVDA": {
-      "date": "2026-11-17",
-      "direction": "down",
-      "move": "≈ −35 % nuo spalio 6 d. piko",
-      "headline": "Vadovo atsistatydinimas, ieškinys ir nauji eksporto ribojimai",
-      "points": [
-        "Lapkričio 12 d. atsistatydino bendrovės įkūrėjas ir generalinis direktorius Jensen Huang – investuotojams kilo klausimų dėl tolesnės vadovybės.",
-        "Lapkričio 9 d. pateiktas investuotojų grupinis ieškinys; tą ir kitą dieną akcija krito apie 4 % ir 5,5 %.",
-        "Lapkričio 16 d. JAV Prekybos departamentas įvedė licencijas pažangių lustų eksportui į penkias šalis – akcija tą dieną nukrito 4,1 % iki 156 $.",
-        "Šešias savaites iš eilės krentanti akcija – ilgiausia tokia serija nuo 2012 m. – yra ir platesnio DI bei lustų bendrovių išpardavimo dalis."
-      ],
-      "context": "Ketvirčio rezultatai skelbiami lapkričio 17 d. vakare – jie gali stipriai pajudinti kainą į bet kurią pusę.",
-      "status": "media",
-      "sources": [
-        { "name": "CNBC: akcija krenta po vadovo atsistatydinimo", "url": "https://www.cnbc.com/2026/11/16/nvidia-stock-price-jensen-huang.html", "published": "2026-11-16" },
-        { "name": "CNBC: šešta savaitė iš eilės minuse", "url": "https://www.cnbc.com/amp/2026/11/13/nvidia-stock-jensen-affair-ai.html", "published": "2026-11-13" },
-        { "name": "Gotrade: eksporto taisyklės", "url": "https://www.heygotrade.com/en/news/nvidia-nvda-stock-news-november-17-2026/", "published": "2026-11-17" },
-        { "name": "Trefis: ieškinys", "url": "https://www.trefis.com/stock/nvda/articles/624393/what-just-happened-to-nvidia-stock/2026-11-11", "published": "2026-11-11" }
-      ]
+ "updated": "2026-11-18",
+ "note": "Paaiškinimai, kodėl pasikeitė aktyvų kainos. Raktas – TradingView simbolis. Pildo kasdienė užduotis (žr. TURINIO_GIDAS.md).",
+ "items": {
+  "NASDAQ:NVDA": {
+   "date": "2026-11-18",
+   "direction": "mixed",
+   "move": "≈ −36 % nuo spalio 6 d. piko; po rezultatų +2–4 %",
+   "headline": "Rezultatai viršijo lūkesčius, tačiau vadovybės klausimai lieka",
+   "points": [
+    "Lapkričio 17 d. paskelbtos ketvirčio pajamos – 115,8 mlrd. $ (+103 % per metus), lūkesčiai – ~108,8 mlrd. $; kito ketvirčio prognozė – 130 mlrd. $.",
+    "Po rezultatų akcija po prekybos pakilo daugiau nei 4 %, lapkričio 18 d. atsidarė apie 2 % aukščiau.",
+    "Prieš tai akcija keturias dienas iš eilės krito: lapkričio 16 d. užsidarė ties 156,14 $, o spalio 6 d. buvo pasiekusi 243,67 $.",
+    "Kritimą lėmė Jensen Huang atsistatydinimas (lapkričio 12 d.), investuotojų ieškinys ir nauji JAV eksporto licencijavimo reikalavimai; valdyba pareiškė, kad Huang negrąžins."
+   ],
+   "context": "Bendrovė tikisi, kad bendrasis pelningumas kitą ketvirtį sumažės iki 71–72 %. Gruodžio 9 d. – FED sprendimas, kuris veikia visą technologijų sektorių.",
+   "status": "primary",
+   "sources": [
+    {
+     "name": "NVIDIA: Q3 FY2027 rezultatai",
+     "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2027",
+     "published": "2026-11-17"
     },
-    "XETR:RHM": {
-      "date": "2026-11-17",
-      "direction": "down",
-      "move": "≈ −20 % per lapkritį",
-      "headline": "Antrą kartą per metus sumažintos 2026 m. prognozės",
-      "points": [
-        "Lapkričio 5 d. akcija per vieną sesiją krito apie 16 %, kai bendrovė antrą kartą šiais metais sumažino 2026 m. pardavimų ir pelningumo tikslus.",
-        "Viena priežasčių – Vokietijos kariuomenės „Boxer“ šarvuočių sutartis šiais metais jau nebebus pasirašyta; vėluoja ir dalis amunicijos pristatymų.",
-        "Kartu krito ir kitos Europos gynybos bendrovės (Leonardo, Thales, Indra).",
-        "Tuo pat metu 9 mėnesių pardavimai išaugo 38 % iki 8,4 mlrd. € – verslas auga, bet lėčiau, nei tikėtasi."
-      ],
-      "context": "Lapkričio 25–27 d. bendrovė rengia investuotojų dieną – joje gali paaiškėti naujesni tikslai.",
-      "status": "media",
-      "sources": [
-        { "name": "Investing.com / Yahoo: prognozių mažinimas", "url": "https://ca.finance.yahoo.com/news/rheinmetall-cuts-2026-sales-margin-073413277.html", "published": "2026-11-05" },
-        { "name": "Eurasia Business News: priežastys", "url": "https://eurasiabusinessnews.com/2026/11/06/rheinmetall-shares-plunge-after-german-defence-giant-cuts-2026-forecasts/", "published": "2026-11-06" },
-        { "name": "AD HOC NEWS: 9 mėn. rezultatai", "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/rheinmetall-stock-slips-after-strong-nine-month-growth/70493851", "published": "2026-11-11" }
-      ]
+    {
+     "name": "Kiplinger: rezultatai ir reakcija",
+     "url": "https://www.kiplinger.com/news/live/nvidia-earnings-live-updates-and-commentary-november-2026",
+     "published": "2026-11-18"
     },
-    "NYSE:IONQ": {
-      "date": "2026-11-17",
-      "direction": "down",
-      "move": "≈ −28 % nuo spalio akcijų emisijos (40 $)",
-      "headline": "Finansų direktoriaus pasitraukimas ir naujos akcijos rinkoje",
-      "points": [
-        "Lapkričio 13 d. akcija krito 6,4 % iki 28,88 $, kai bendrovė paskelbė, kad finansų direktorius Inder Singh pasitraukia nedelsiant.",
-        "Spalį IonQ pardavė naujų akcijų po 40 $, o lapkritį už akcijas įsigijo saugumo bendrovę Elisity (~1,3 mlrd. $). Buvusiems Elisity savininkams leista parduoti iki 34,6 mln. gautų akcijų – tai gali didinti pardavimo spaudimą.",
-        "Verslas tuo metu sparčiai auga: trečiojo ketvirčio pajamos išaugo 336 %, palyginti su praėjusiais metais."
-      ],
-      "context": "Kvantinių kompiuterių bendrovių akcijos istoriškai labai svyruoja – dideli šuoliai abiem kryptimis joms įprasti.",
-      "status": "primary",
-      "sources": [
-        { "name": "IonQ prospekto priedas (SEC)", "url": "https://www.sec.gov/Archives/edgar/data/0001824920/000119312526461012/ionq-20261113.htm", "published": "2026-11-13" },
-        { "name": "IonQ 10-Q ataskaita (SEC)", "url": "https://www.sec.gov/Archives/edgar/data/0001824920/000119312526449829/ionq-20260930.htm", "published": "2026-11-03" },
-        { "name": "IonQ Q3 pranešimas (SEC)", "url": "https://www.sec.gov/Archives/edgar/data/0001824920/000119312526449779/ionq-ex99_1.htm", "published": "2026-11-03" },
-        { "name": "Gotrade: CFO pasitraukimas", "url": "https://www.heygotrade.com/en/news/ionq-ionq-stock-news-november-16-2026/", "published": "2026-11-16" }
-      ]
-    },
-    "NASDAQ:RKLB": {
-      "date": "2026-11-17",
-      "direction": "mixed",
-      "move": "Didelis svyravimas: nuo −12 % iki +15 % per dieną",
-      "headline": "Rekordinis ketvirtis, bet kosmoso sektorių krečia konkurento nesėkmė",
-      "points": [
-        "Lapkričio 10 d. akcija pakilo apie 6,5 % po rekordinių trečiojo ketvirčio pajamų (268 mln. $) ir 52 % išaugusio užsakymų portfelio (3,57 mlrd. $).",
-        "Lapkričio 16 d. akcija krito apie 7 %, kai konkurento ULA raketa „Vulcan“ nesugebėjo iškelti 40 „Amazon“ palydovų – tai pakenkė visoms kosmoso bendrovėms.",
-        "Lapkričio 14 d. bendrovė atliko 100-ąjį „Electron“ raketos paleidimą.",
-        "Lapkričio pradžioje akciją kartu su kitomis augimo bendrovėmis smukdė po rinkimų kilęs technologijų akcijų išpardavimas."
-      ],
-      "context": "Akcijos kaina labai jautri rinkos nuotaikoms: ji svyruoja daugiau nei tris kartus stipriau nei rinka (beta ≈ 3,2).",
-      "status": "media",
-      "sources": [
-        { "name": "Benzinga: kodėl krinta pirmadienį", "url": "https://www.benzinga.com/news/space/26/11/63280714/why-is-rocket-lab-stock-falling-monday", "published": "2026-11-16" },
-        { "name": "Trefis: trečiojo ketvirčio rezultatai", "url": "https://www.trefis.com/stock/rklb/articles/624320/what-should-rocket-lab-stock-holders-take-from-its-third-quarter/2026-11-11", "published": "2026-11-11" },
-        { "name": "Trefis: lapkričio 5–6 d. svyravimai", "url": "https://www.trefis.com/stock/rklb/articles/623715/what-sent-rocket-lab-stock-higher/2026-11-07", "published": "2026-11-07" },
-        { "name": "StockAnalysis: kaina ir beta", "url": "https://stockanalysis.com/stocks/rklb/", "published": "2026-11-17" }
-      ]
+    {
+     "name": "Yahoo Finance: rinkos tiesiogiai",
+     "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-november-18-dow-sp-500-nasdaq-nvidia-anthropic-ipo-090613569.html",
+     "published": "2026-11-18"
     }
+   ]
+  },
+  "XETR:RHM": {
+   "date": "2026-11-17",
+   "direction": "down",
+   "move": "≈ −20 % per lapkritį",
+   "headline": "Antrą kartą per metus sumažintos 2026 m. prognozės",
+   "points": [
+    "Lapkričio 5 d. akcija per vieną sesiją krito apie 16 %, kai bendrovė antrą kartą šiais metais sumažino 2026 m. pardavimų ir pelningumo tikslus.",
+    "Viena priežasčių – Vokietijos kariuomenės „Boxer“ šarvuočių sutartis šiais metais jau nebebus pasirašyta; vėluoja ir dalis amunicijos pristatymų.",
+    "Kartu krito ir kitos Europos gynybos bendrovės (Leonardo, Thales, Indra).",
+    "Tuo pat metu 9 mėnesių pardavimai išaugo 38 % iki 8,4 mlrd. € – verslas auga, bet lėčiau, nei tikėtasi."
+   ],
+   "context": "Lapkričio 25–27 d. bendrovė rengia investuotojų dieną – joje gali paaiškėti naujesni tikslai.",
+   "status": "media",
+   "sources": [
+    {
+     "name": "Investing.com / Yahoo: prognozių mažinimas",
+     "url": "https://ca.finance.yahoo.com/news/rheinmetall-cuts-2026-sales-margin-073413277.html",
+     "published": "2026-11-05"
+    },
+    {
+     "name": "Eurasia Business News: priežastys",
+     "url": "https://eurasiabusinessnews.com/2026/11/06/rheinmetall-shares-plunge-after-german-defence-giant-cuts-2026-forecasts/",
+     "published": "2026-11-06"
+    },
+    {
+     "name": "AD HOC NEWS: 9 mėn. rezultatai",
+     "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/rheinmetall-stock-slips-after-strong-nine-month-growth/70493851",
+     "published": "2026-11-11"
+    }
+   ]
+  },
+  "NYSE:IONQ": {
+   "date": "2026-11-17",
+   "direction": "down",
+   "move": "≈ −28 % nuo spalio akcijų emisijos (40 $)",
+   "headline": "Finansų direktoriaus pasitraukimas ir naujos akcijos rinkoje",
+   "points": [
+    "Lapkričio 13 d. akcija krito 6,4 % iki 28,88 $, kai bendrovė paskelbė, kad finansų direktorius Inder Singh pasitraukia nedelsiant.",
+    "Spalį IonQ pardavė naujų akcijų po 40 $, o lapkritį už akcijas įsigijo saugumo bendrovę Elisity (~1,3 mlrd. $). Buvusiems Elisity savininkams leista parduoti iki 34,6 mln. gautų akcijų – tai gali didinti pardavimo spaudimą.",
+    "Verslas tuo metu sparčiai auga: trečiojo ketvirčio pajamos išaugo 336 %, palyginti su praėjusiais metais."
+   ],
+   "context": "Kvantinių kompiuterių bendrovių akcijos istoriškai labai svyruoja – dideli šuoliai abiem kryptimis joms įprasti.",
+   "status": "primary",
+   "sources": [
+    {
+     "name": "IonQ prospekto priedas (SEC)",
+     "url": "https://www.sec.gov/Archives/edgar/data/0001824920/000119312526461012/ionq-20261113.htm",
+     "published": "2026-11-13"
+    },
+    {
+     "name": "IonQ 10-Q ataskaita (SEC)",
+     "url": "https://www.sec.gov/Archives/edgar/data/0001824920/000119312526449829/ionq-20260930.htm",
+     "published": "2026-11-03"
+    },
+    {
+     "name": "IonQ Q3 pranešimas (SEC)",
+     "url": "https://www.sec.gov/Archives/edgar/data/0001824920/000119312526449779/ionq-ex99_1.htm",
+     "published": "2026-11-03"
+    },
+    {
+     "name": "Gotrade: CFO pasitraukimas",
+     "url": "https://www.heygotrade.com/en/news/ionq-ionq-stock-news-november-16-2026/",
+     "published": "2026-11-16"
+    }
+   ]
+  },
+  "NASDAQ:RKLB": {
+   "date": "2026-11-17",
+   "direction": "mixed",
+   "move": "Didelis svyravimas: nuo −12 % iki +15 % per dieną",
+   "headline": "Rekordinis ketvirtis, bet kosmoso sektorių krečia konkurento nesėkmė",
+   "points": [
+    "Lapkričio 10 d. akcija pakilo apie 6,5 % po rekordinių trečiojo ketvirčio pajamų (268 mln. $) ir 52 % išaugusio užsakymų portfelio (3,57 mlrd. $).",
+    "Lapkričio 16 d. akcija krito apie 7 %, kai konkurento ULA raketa „Vulcan“ nesugebėjo iškelti 40 „Amazon“ palydovų – tai pakenkė visoms kosmoso bendrovėms.",
+    "Lapkričio 14 d. bendrovė atliko 100-ąjį „Electron“ raketos paleidimą.",
+    "Lapkričio pradžioje akciją kartu su kitomis augimo bendrovėmis smukdė po rinkimų kilęs technologijų akcijų išpardavimas."
+   ],
+   "context": "Akcijos kaina labai jautri rinkos nuotaikoms: ji svyruoja daugiau nei tris kartus stipriau nei rinka (beta ≈ 3,2).",
+   "status": "media",
+   "sources": [
+    {
+     "name": "Benzinga: kodėl krinta pirmadienį",
+     "url": "https://www.benzinga.com/news/space/26/11/63280714/why-is-rocket-lab-stock-falling-monday",
+     "published": "2026-11-16"
+    },
+    {
+     "name": "Trefis: trečiojo ketvirčio rezultatai",
+     "url": "https://www.trefis.com/stock/rklb/articles/624320/what-should-rocket-lab-stock-holders-take-from-its-third-quarter/2026-11-11",
+     "published": "2026-11-11"
+    },
+    {
+     "name": "Trefis: lapkričio 5–6 d. svyravimai",
+     "url": "https://www.trefis.com/stock/rklb/articles/623715/what-sent-rocket-lab-stock-higher/2026-11-07",
+     "published": "2026-11-07"
+    },
+    {
+     "name": "StockAnalysis: kaina ir beta",
+     "url": "https://stockanalysis.com/stocks/rklb/",
+     "published": "2026-11-17"
+    }
+   ]
+  },
+  "BITSTAMP:BTCUSD": {
+   "date": "2026-11-18",
+   "direction": "down",
+   "move": "≈ −49 % nuo 2025 m. spalio 6 d. rekordo (126 198 $)",
+   "headline": "FED kėlimo lūkesčiai, stiprus doleris ir fondų išmokos",
+   "points": [
+    "Lapkričio 18 d. kaina – apie 64 000 $ (−1,5 % per parą); savaitgalį buvo nukritusi iki ~62 000 $.",
+    "Spalio JAV infliacija (+0,4 % per mėn.) viršijo lūkesčius, todėl rinkos beveik neabejoja FED palūkanų kėlimu gruodžio 9 d.; 10 m. obligacijų pajamingumas pakilo virš 5 %.",
+    "Spot bitcoin fondai kelias dienas iš eilės patyrė grynųjų išmokų – vien šią savaitę apie 232 mln. $.",
+    "Lapkričio 13 d. greitas kritimas žemiau 70 000 $ sukėlė skolintų pozicijų likvidavimą, kuris pagreitino nuosmukį."
+   ],
+   "context": "Kriptovaliutos įprastai svyruoja daug labiau nei akcijos; artimiausias svarbus makro įvykis – FED sprendimas gruodžio 9 d.",
+   "status": "media",
+   "sources": [
+    {
+     "name": "Nexo: Markets Today",
+     "url": "https://nexo.com/blog/markets-today-november-18",
+     "published": "2026-11-18"
+    },
+    {
+     "name": "Motley Fool: kodėl bitcoin krenta",
+     "url": "https://www.fool.com/investing/2026/11/13/why-bitcoin-is-falling-today/",
+     "published": "2026-11-13"
+    },
+    {
+     "name": "IfYouSpent: 40 % žemiau rekordo",
+     "url": "https://news.ifyouspent.com/th/news/bitcoin-40-percent-below-record-november-2026-explained",
+     "published": "2026-11-12"
+    }
+   ]
+  },
+  "OMXVSE:AKO1L": {
+   "date": "2026-11-18",
+   "direction": "mixed",
+   "move": "Kainos pokytis šaltiniuose nenurodytas – svarbi naujiena: ketvirčio rezultatai",
+   "headline": "Pajamos augo, bet pelnas krito dėl grūdų maržų ir pieno kainų",
+   "points": [
+    "Lapkričio 18 d. paskelbti 3 mėn. (2026/27 finansinių metų) rezultatai: pajamos – 420,4 mln. € (+6,7 %), parduota 880,9 tūkst. t produkcijos (+11,3 %).",
+    "EBITDA sumažėjo 18 % iki 29,7 mln. €, grynasis pelnas – 40 % iki 11,7 mln. €.",
+    "Grūdų prekybos bendrasis pelnas sumažėjo 51 %, pieno pardavimo kainos – beveik 29 %; paukštininkystės pajamos išaugo iki ~90 mln. €.",
+    "Vadovybės teigimu, pieno kainos nuo rugpjūčio pradėjo atsigauti; dėl sezoniškumo ketvirčio rezultatai neatspindi viso metų."
+   ],
+   "context": "Investuotojų webinaras – lapkričio 19 d.; strategija „Akola 2030“ bus pristatyta 2027 m. vasarį.",
+   "status": "unverified",
+   "sources": [
+    {
+     "name": "Akola Group: 3 mėn. rezultatai",
+     "url": "https://www.globenewswire.com/news-release/2026/11/18/3405390/0/en/akola-group-generated-eur-30-million-ebitda-in-3-months-of-fy-2026-2027.html",
+     "published": "2026-11-18"
+    }
+   ]
   }
+ }
 }

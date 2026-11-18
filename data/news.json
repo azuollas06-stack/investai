@@ -2,79 +2,295 @@
   "updated": "2026-11-18",
   "note": "Naujienų ir įvykių sąrašas. Pildo kasdienė užduotis (žr. TURINIO_GIDAS.md). Nuomonės – tik iš šaltinių, abi pusės.",
   "events": [
-    { "date": "2026-11-18", "kind": "ipo", "title": "Anthropic nustato akcijų kainą (IPO)", "symbols": ["NASDAQ:ANT"], "url": "https://finance.yahoo.com/technology/ai/article/anthropic-ipo-what-we-know-143321078.html" },
-    { "date": "2026-11-19", "kind": "ipo", "title": "Anthropic (ANT) pradeda prekybą Nasdaq biržoje", "symbols": ["NASDAQ:ANT"], "url": "https://finance.yahoo.com/technology/ai/article/anthropic-ipo-what-we-know-143321078.html" },
-    { "date": "2026-11-20", "kind": "bonds", "title": "Baigiasi Bigbank subordinuotų obligacijų pasirašymas", "symbols": [], "url": "https://www.manilatimes.net/2026/11/10/tmt-newswire/globenewswire/notice-on-public-offering-of-subordinated-bonds-of-bigbank-as/2465960" },
-    { "date": "2026-11-25", "kind": "company", "title": "Rheinmetall investuotojų diena (lapkričio 25–27 d.)", "symbols": ["XETR:RHM"], "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/rheinmetall-stock-slips-after-strong-nine-month-growth/70493851" },
-    { "date": "2026-12-09", "kind": "macro", "title": "JAV FED palūkanų sprendimas", "symbols": [], "url": "https://www.lrt.lt/naujienos/verslas/4/3117123/birzos-laikmatis-akciju-rinkose-tesiasi-di-imoniu-ispardavimas" },
-    { "date": "2026-12-10", "kind": "company", "title": "Ignitis grupės neeilinis akcininkų susirinkimas (dividendai)", "symbols": ["OMXVSE:IGN1L"], "url": "https://www.globenewswire.com/news-release/2026/11/11/3400468/0/en/ignitis-group-s-updated-financial-calendar-2026.html" }
+    {
+      "date": "2026-11-18",
+      "kind": "ipo",
+      "title": "Anthropic nustato akcijų kainą (IPO)",
+      "symbols": [
+        "NASDAQ:ANT"
+      ],
+      "url": "https://finance.yahoo.com/technology/ai/article/anthropic-ipo-what-we-know-143321078.html"
+    },
+    {
+      "date": "2026-11-18",
+      "kind": "macro",
+      "title": "FOMC spalio posėdžio protokolas",
+      "symbols": [],
+      "url": "https://nexo.com/blog/markets-today-november-18"
+    },
+    {
+      "date": "2026-11-18",
+      "kind": "earnings",
+      "title": "Akola Group 3 mėn. rezultatai",
+      "symbols": [
+        "OMXVSE:AKO1L"
+      ],
+      "url": "https://www.globenewswire.com/news-release/2026/11/18/3405390/0/en/akola-group-generated-eur-30-million-ebitda-in-3-months-of-fy-2026-2027.html"
+    },
+    {
+      "date": "2026-11-19",
+      "kind": "ipo",
+      "title": "Anthropic (ANT) pradeda prekybą Nasdaq biržoje",
+      "symbols": [
+        "NASDAQ:ANT"
+      ],
+      "url": "https://finance.yahoo.com/technology/ai/article/anthropic-ipo-what-we-know-143321078.html"
+    },
+    {
+      "date": "2026-11-19",
+      "kind": "company",
+      "title": "Akola Group investuotojų webinaras",
+      "symbols": [
+        "OMXVSE:AKO1L"
+      ],
+      "url": "https://www.nasdaqbaltic.com/statistics/en/calendar?page=1"
+    },
+    {
+      "date": "2026-11-19",
+      "kind": "earnings",
+      "title": "KN Energies 9 mėn. rezultatai",
+      "symbols": [],
+      "url": "https://www.nasdaqbaltic.com/statistics/en/calendar?page=1"
+    },
+    {
+      "date": "2026-11-19",
+      "kind": "dividend",
+      "title": "Eleving Group – dividendų ex-data (įrašymo data – lapkričio 20 d.)",
+      "symbols": [],
+      "url": "https://www.nasdaqbaltic.com/statistics/en/calendar?page=1"
+    },
+    {
+      "date": "2026-11-20",
+      "kind": "bonds",
+      "title": "Baigiasi Bigbank subordinuotų obligacijų pasirašymas",
+      "symbols": [],
+      "url": "https://www.manilatimes.net/2026/11/10/tmt-newswire/globenewswire/notice-on-public-offering-of-subordinated-bonds-of-bigbank-as/2465960"
+    },
+    {
+      "date": "2026-11-20",
+      "kind": "bonds",
+      "title": "Baigiasi Civinity obligacijų pasirašymas",
+      "symbols": [],
+      "url": "https://www.nasdaqbaltic.com/statistics/en/calendar?page=1"
+    },
+    {
+      "date": "2026-11-25",
+      "kind": "company",
+      "title": "Rheinmetall investuotojų diena (lapkričio 25–27 d.)",
+      "symbols": [
+        "XETR:RHM"
+      ],
+      "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/rheinmetall-stock-slips-after-strong-nine-month-growth/70493851"
+    },
+    {
+      "date": "2026-12-09",
+      "kind": "macro",
+      "title": "JAV FED palūkanų sprendimas",
+      "symbols": [],
+      "url": "https://www.lrt.lt/naujienos/verslas/4/3117123/birzos-laikmatis-akciju-rinkose-tesiasi-di-imoniu-ispardavimas"
+    },
+    {
+      "date": "2026-12-10",
+      "kind": "company",
+      "title": "Ignitis grupės neeilinis akcininkų susirinkimas (dividendai)",
+      "symbols": [
+        "OMXVSE:IGN1L"
+      ],
+      "url": "https://www.globenewswire.com/news-release/2026/11/11/3400468/0/en/ignitis-group-s-updated-financial-calendar-2026.html"
+    }
   ],
   "stories": [
     {
       "id": "anthropic-ipo",
       "date": "2026-11-18",
       "kind": "ipo",
-      "title": "Anthropic eina į biržą: prekyba prasideda ketvirtadienį",
-      "symbols": ["NASDAQ:ANT"],
-      "lead": "Claude kūrėja Anthropic lapkričio 18 d. nustato galutinę akcijų kainą, o lapkričio 19 d. jos pradedamos prekiauti Nasdaq biržoje simboliu ANT. Tai vienas didžiausių IPO istorijoje.",
+      "title": "Anthropic šiandien nustato IPO kainą, prekyba – ketvirtadienį",
+      "symbols": [
+        "NASDAQ:ANT"
+      ],
+      "lead": "Claude kūrėja Anthropic lapkričio 18 d. vakare (JAV laiku) nustato galutinę akcijų kainą, o lapkričio 19 d. jos turėtų pradėti prekiauti Nasdaq biržoje simboliu ANT. Tai vienas didžiausių IPO istorijoje.",
       "facts": [
-        "Siūlomas kainų intervalas – 70–78 $ už akciją, parduodama 825 mln. akcijų; tai atitinka maždaug 1,26–1,41 trln. $ bendrovės vertę.",
-        "Pagal viešą S-1 dokumentą, 2026 m. pirmąjį pusmetį pajamos siekė 16,3 mlrd. $ (prieš metus – 1,2 mlrd. $), o veiklos nuostolis – apie 0,7 mlrd. $.",
-        "Apskaitinis grynasis nuostolis pirmąjį pusmetį – 80,7 mlrd. $, tačiau didžiąją jo dalį lėmė išvestinių finansinių priemonių vertės pokyčiai, o ne pati veikla.",
-        "Pranešama, kad paklausa tarp institucinių investuotojų kelis kartus viršijo siūlomą akcijų kiekį.",
-        "Viešiems akcininkams tenka labai mažai balsų – bendrovės kryptį ir toliau lemia esami valdytojai."
+        "Kainų intervalas – 70–78 $ už A klasės akciją, siūloma 825 mln. akcijų (iš jų 23,6 mln. parduoda įkūrėjai); žiniasklaida skelbia, kad siekiama kainos intervalo viršuje ar aukščiau.",
+        "Kartu IPO kaina 26 mlrd. $ vertės nebalsuojančių akcijų perka Google, Nvidia, AMD, Broadcom, Micron, Microsoft ir TSMC.",
+        "Pagal S-1/A, liepos–rugsėjo mėn. pajamos – 17,0 mlrd. $, veiklos nuostolis – 0,57 mlrd. $; grynasis nuostolis (23,3 mlrd. $) daugiausia susidarė dėl 21,9 mlrd. $ nepiniginio apskaitinio mokesčio.",
+        "Iki 20 % akcijų skiriama mažmeniniams investuotojams per šešias platformas (Schwab, Fidelity, Robinhood ir kt.), tačiau paskirstymas negarantuojamas.",
+        "Valdymas: septyni įkūrėjai per F klasės akciją turi 50,1 % balsų, o daugumą valdybos renka Ilgalaikės naudos patikos fondas (Long-Term Benefit Trust)."
       ],
       "pro": [
-        { "who": "Investuotojai, jau turintys Anthropic akcijų", "text": "Mato didžiulę galimybę: tai pirmoji gryna dirbtinio intelekto bendrovė biržoje, leidžianti mažmeniniams investuotojams dalyvauti DI augime ne tik per lustų gamintojus.", "source": "CNBC" },
-        { "who": "Rinkos analitikai (MarketPulse)", "text": "Kelis kartus viršyta paklausa rodo, kad didieji investuotojai vis dar nori investuoti į DI temą nepaisant aukštų vertinimų.", "source": "MarketPulse" },
-        { "who": "S-1 dokumento skaitytojai", "text": "Pajamos auga daug sparčiau nei išlaidos skaičiavimams; antrąjį ketvirtį fiksuotas veiklos pelnas.", "source": "DeepLearning.AI" }
+        {
+          "who": "Investuotojai, jau turintys Anthropic akcijų",
+          "text": "Mato didžiulę galimybę: tai pirmoji gryna dirbtinio intelekto bendrovė biržoje, leidžianti mažmeniniams investuotojams dalyvauti DI augime ne tik per lustų gamintojus.",
+          "source": "CNBC"
+        },
+        {
+          "who": "Rinkos analitikai (MarketPulse)",
+          "text": "Kelis kartus viršyta paklausa rodo, kad didieji investuotojai vis dar nori investuoti į DI temą nepaisant aukštų vertinimų.",
+          "source": "MarketPulse"
+        },
+        {
+          "who": "S-1 dokumento skaitytojai",
+          "text": "Pajamos auga daug sparčiau nei išlaidos skaičiavimams; antrąjį ketvirtį fiksuotas veiklos pelnas.",
+          "source": "DeepLearning.AI"
+        }
       ],
       "con": [
-        { "who": "Jay Ritter („Mr. IPO“), IPO tyrėjas", "text": "Įėjus į biržą su daugiau nei 1 trln. $ verte, procentinis augimo potencialas investuotojams lieka gerokai mažesnis.", "source": "TheStreet" },
-        { "who": "Analitikai, kalbinti „Fortune“", "text": "Vertė, viršijanti ~40 kartų metines pajamas, istoriškai pasiekta tik 14 iš 4 110 JAV IPO nuo 1980 m. – istorija nebūtinai palanki tokioms kainoms.", "source": "Fortune" },
-        { "who": "Josh Schafer, Yahoo Finance", "text": "Įspėja mažmeninius investuotojus nepirkti pirmą dieną: didelės technologijų emisijos istoriškai neretai smarkiai krito per pirmuosius metus, be to, konkurencija (pvz., OpenAI) didelė.", "source": "Fox Business" }
+        {
+          "who": "Jay Ritter („Mr. IPO“), IPO tyrėjas",
+          "text": "Įėjus į biržą su daugiau nei 1 trln. $ verte, procentinis augimo potencialas investuotojams lieka gerokai mažesnis.",
+          "source": "TheStreet"
+        },
+        {
+          "who": "Analitikai, kalbinti „Fortune“",
+          "text": "Vertė, viršijanti ~40 kartų metines pajamas, istoriškai pasiekta tik 14 iš 4 110 JAV IPO nuo 1980 m. – istorija nebūtinai palanki tokioms kainoms.",
+          "source": "Fortune"
+        },
+        {
+          "who": "Josh Schafer, Yahoo Finance",
+          "text": "Įspėja mažmeninius investuotojus nepirkti pirmą dieną: didelės technologijų emisijos istoriškai neretai smarkiai krito per pirmuosius metus, be to, konkurencija (pvz., OpenAI) didelė.",
+          "source": "Fox Business"
+        }
       ],
       "disclosure": "InvestAI turinį rengia DI modelis Claude, kurį kuria Anthropic. Todėl čia pateikiami tik šaltinių faktai ir abiejų pusių nuomonės, be jokio savo vertinimo.",
       "status": "media",
       "sources": [
-        { "name": "Yahoo Finance: ką žinome apie IPO", "url": "https://finance.yahoo.com/technology/ai/article/anthropic-ipo-what-we-know-143321078.html", "published": "2026-11-17" },
-        { "name": "Yahoo Finance: kaip pirkti IPO akcijas", "url": "https://finance.yahoo.com/personal-finance/investing/article/anthropic-ipo-how-to-buy-a-companys-stock-when-it-ipos-201237173.html", "published": "2026-11-17" },
-        { "name": "DeepLearning.AI: S-1 apžvalga", "url": "https://www.deeplearning.ai/the-batch/anthropic-opens-its-books/" },
-        { "name": "Guru3D: apskaitinis nuostolis", "url": "https://www.guru3d.com/story/anthropic-ipo-filing-shows-billion-first-half-accounting-loss/" },
-        { "name": "CNBC: investuotojų nuomonės išsiskiria", "url": "https://www.cnbc.com/2026/10/27/-anthropic-ipo-investors-growth-losses-s-1.html", "published": "2026-10-27" },
-        { "name": "TheStreet: Jay Ritter apie vertinimą", "url": "https://www.thestreet.com/investing/anthropic-ipo-valuation-risk-1-trillion-ceiling-jay-ritter", "published": "2026-11-15" },
-        { "name": "Fortune: IPO matematika", "url": "https://fortune.com/2026/11/03/anthropics-third-quarter-results-mean-ipo-math-and-history-are-not-on-its-side-analysts-say/", "published": "2026-11-03" },
-        { "name": "Fox Business: vertinimas ir įspėjimai", "url": "https://www.foxbusiness.com/markets/anthropic-targets-valuation-around-1t-blockbuster-ai-ipo-below-initial-expectation", "published": "2026-11-11" },
-        { "name": "MarketPulse: IPO kaip DI rinkos testas", "url": "https://www.marketpulse.com/markets/anthropics-ipo-a-make-or-break-test-for-the-trillion-dollar-ai-trade/", "published": "2026-11-17" }
+        {
+          "name": "StockTitan: IPO faktai iš S-1/A",
+          "url": "https://www.stocktitan.net/articles/anthropic-ipo-live-ant-first-trading-day-2026",
+          "published": "2026-11-17"
+        },
+        {
+          "name": "Yahoo Finance: rinkos tiesiogiai",
+          "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-november-18-dow-sp-500-nasdaq-nvidia-anthropic-ipo-090613569.html",
+          "published": "2026-11-18"
+        },
+        {
+          "name": "Nexo: Markets Today",
+          "url": "https://nexo.com/blog/markets-today-november-18",
+          "published": "2026-11-18"
+        },
+        {
+          "name": "Yahoo Finance: ką žinome apie IPO",
+          "url": "https://finance.yahoo.com/technology/ai/article/anthropic-ipo-what-we-know-143321078.html",
+          "published": "2026-11-17"
+        },
+        {
+          "name": "Yahoo Finance: kaip pirkti IPO akcijas",
+          "url": "https://finance.yahoo.com/personal-finance/investing/article/anthropic-ipo-how-to-buy-a-companys-stock-when-it-ipos-201237173.html",
+          "published": "2026-11-17"
+        },
+        {
+          "name": "DeepLearning.AI: S-1 apžvalga",
+          "url": "https://www.deeplearning.ai/the-batch/anthropic-opens-its-books/"
+        },
+        {
+          "name": "Guru3D: apskaitinis nuostolis",
+          "url": "https://www.guru3d.com/story/anthropic-ipo-filing-shows-billion-first-half-accounting-loss/"
+        },
+        {
+          "name": "CNBC: investuotojų nuomonės išsiskiria",
+          "url": "https://www.cnbc.com/2026/10/27/-anthropic-ipo-investors-growth-losses-s-1.html",
+          "published": "2026-10-27"
+        },
+        {
+          "name": "TheStreet: Jay Ritter apie vertinimą",
+          "url": "https://www.thestreet.com/investing/anthropic-ipo-valuation-risk-1-trillion-ceiling-jay-ritter",
+          "published": "2026-11-15"
+        },
+        {
+          "name": "Fortune: IPO matematika",
+          "url": "https://fortune.com/2026/11/03/anthropics-third-quarter-results-mean-ipo-math-and-history-are-not-on-its-side-analysts-say/",
+          "published": "2026-11-03"
+        },
+        {
+          "name": "Fox Business: vertinimas ir įspėjimai",
+          "url": "https://www.foxbusiness.com/markets/anthropic-targets-valuation-around-1t-blockbuster-ai-ipo-below-initial-expectation",
+          "published": "2026-11-11"
+        },
+        {
+          "name": "MarketPulse: IPO kaip DI rinkos testas",
+          "url": "https://www.marketpulse.com/markets/anthropics-ipo-a-make-or-break-test-for-the-trillion-dollar-ai-trade/",
+          "published": "2026-11-17"
+        }
       ]
     },
     {
       "id": "nvidia-q3-fy27",
       "date": "2026-11-18",
       "kind": "earnings",
-      "title": "Nvidia rezultatai viršijo lūkesčius – pirmieji be Jensen Huang",
-      "symbols": ["NASDAQ:NVDA"],
-      "lead": "Lapkričio 17 d. vakare Nvidia paskelbė trečiojo ketvirčio rezultatus. Pajamos išaugo dvigubai ir viršijo analitikų lūkesčius; akcija po prekybos pakilo keliais procentais.",
+      "title": "Nvidia rezultatai viršijo lūkesčius, akcija kyla po keturių kritimo dienų",
+      "symbols": [
+        "NASDAQ:NVDA"
+      ],
+      "lead": "Lapkričio 17 d. vakare Nvidia paskelbė trečiojo ketvirčio rezultatus – pirmuosius po Jensen Huang pasitraukimo. Pajamos išaugo dvigubai ir viršijo lūkesčius; akcija po prekybos pakilo daugiau nei 4 %, trečiadienį atsidarė apie 2 % aukščiau.",
       "facts": [
         "Ketvirčio pajamos – 115,8 mlrd. $ (+103 % per metus), analitikai tikėjosi apie 109 mlrd. $.",
         "Duomenų centrų pajamos – 107,6 mlrd. $ (+110 %).",
         "Kito ketvirčio prognozė – apie 130 mlrd. $ pajamų, neįskaičiuojant duomenų centrų pardavimų Kinijai.",
         "Bendrovė tikisi, kad bendrasis pelningumas kitą ketvirtį sumažės nuo ~75 % iki 71–72 %.",
-        "Tai pirmoji ataskaita po Jensen Huang atsistatydinimo; laikinai bendrovei vadovauja finansų direktorė Colette Kress."
+        "Bendrovė padidino metinio pajamų augimo prognozę nuo 70 % iki 75 %.",
+        "Laikinai bendrovei vadovauja finansų direktorė Colette Kress; valdybos pirmininkas pareiškė, kad Huang negrąžinamas."
       ],
       "pro": [
-        { "who": "Rezultatų apžvalgininkai", "text": "Pajamos viršijo net pačios bendrovės prognozę, o kito ketvirčio prognozė rodo, kad DI infrastruktūros paklausa išlieka stipri.", "source": "StockTitan" }
+        {
+          "who": "Michael Casper, HB Wealth",
+          "text": "Rezultatus ir prognozę rinka sutiko su palengvėjimu – DI paklausa išlieka stipri, o Nvidia tebėra lyderio pozicijoje.",
+          "source": "Kiplinger"
+        },
+        {
+          "who": "Rezultatų apžvalgininkai",
+          "text": "Pajamos viršijo net pačios bendrovės prognozę, o kito ketvirčio prognozė rodo stiprią DI infrastruktūros paklausą.",
+          "source": "StockTitan"
+        }
       ],
       "con": [
-        { "who": "Rinkos dalyviai", "text": "Prognozuojamas pelningumo sumažėjimas ir vadovybės pasikeitimas palieka neaiškumų, nors skaičiai stiprūs.", "source": "TradingKey" }
+        {
+          "who": "Michael Casper, HB Wealth",
+          "text": "Rizikos lieka: maža pardavimų Kinijai dalis (6 %), galimi griežtesni eksporto ribojimai ir „žiedinis“ finansavimas su DI debesijos bendrovėmis (pvz., CoreWeave).",
+          "source": "Kiplinger"
+        },
+        {
+          "who": "Reuters cituotas strategas",
+          "text": "Rezultatai neatsakė į klausimus apie DI investicijų grąžą ir vadovybės ateitį.",
+          "source": "Reuters / Yahoo Finance"
+        }
       ],
       "status": "primary",
       "sources": [
-        { "name": "NVIDIA pranešimas", "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2027", "published": "2026-11-17" },
-        { "name": "Investing.com / Yahoo: lūkesčiai", "url": "https://uk.finance.yahoo.com/news/nvidia-beats-third-quarter-estimates-214100513.html", "published": "2026-11-17" },
-        { "name": "Quantisnow: 8-K santrauka", "url": "https://www.quantisnow.com/insight/nvidia-corporation-filed-sec-form-8-k-results-of-operations-and-6796844", "published": "2026-11-17" },
-        { "name": "TradingKey: pelningumo prognozė", "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262309793-nvidia-earnings-report-q3-rubin-ramp-data-center-growth-revenue-guidance-gross-margin-tradingkey", "published": "2026-11-17" },
-        { "name": "StockTitan: rezultatai vs prognozė", "url": "https://www.stocktitan.net/articles/nvidia-q3-fiscal-2027-earnings-revenue-outlook", "published": "2026-11-17" }
+        {
+          "name": "Kiplinger: rezultatai ir reakcija",
+          "url": "https://www.kiplinger.com/news/live/nvidia-earnings-live-updates-and-commentary-november-2026",
+          "published": "2026-11-18"
+        },
+        {
+          "name": "Yahoo Finance: rinkos tiesiogiai",
+          "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-november-18-dow-sp-500-nasdaq-nvidia-anthropic-ipo-090613569.html",
+          "published": "2026-11-18"
+        },
+        {
+          "name": "NVIDIA pranešimas",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2027",
+          "published": "2026-11-17"
+        },
+        {
+          "name": "Investing.com / Yahoo: lūkesčiai",
+          "url": "https://uk.finance.yahoo.com/news/nvidia-beats-third-quarter-estimates-214100513.html",
+          "published": "2026-11-17"
+        },
+        {
+          "name": "Quantisnow: 8-K santrauka",
+          "url": "https://www.quantisnow.com/insight/nvidia-corporation-filed-sec-form-8-k-results-of-operations-and-6796844",
+          "published": "2026-11-17"
+        },
+        {
+          "name": "TradingKey: pelningumo prognozė",
+          "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262309793-nvidia-earnings-report-q3-rubin-ramp-data-center-growth-revenue-guidance-gross-margin-tradingkey",
+          "published": "2026-11-17"
+        },
+        {
+          "name": "StockTitan: rezultatai vs prognozė",
+          "url": "https://www.stocktitan.net/articles/nvidia-q3-fiscal-2027-earnings-revenue-outlook",
+          "published": "2026-11-17"
+        }
       ]
     }
   ]
