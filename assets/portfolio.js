@@ -922,7 +922,7 @@ function renderNext(a) {
   const watch = list.filter((x) => sev(x) > 0).sort((x, y) => sev(y) * (0.5 + y.w) - sev(x) * (0.5 + x.w));
   const strong = list.filter((x) => sev(x) === 0 && x.c.some((c) => c.lvl === "green")).sort((x, y) => y.w - x.w);
   const unknown = list.filter((x) => !x.c.length);
-  const P = a.pnl, single = rows.slice().sort((x, y) => y.value - x.value)[0];
+  const P = a.pnl, single = rows.filter((r) => /Akcija|Kriptovaliuta|Kita/.test(r.type || "Kita")).sort((x, y) => y.value - x.value)[0];
   const bondShare = a.typeShare("Obligacijos") + a.typeShare("Obligacijų fondas");
   const sec = a.sectors.filter((x) => !/Grynieji|Obligacijos|Auksas|Nežinomas/.test(x.k))[0];
   const port = [];
@@ -945,7 +945,7 @@ function renderNext(a) {
       <a class="nx-link" href="atranka.html">${icon("screener", 20)}<span><b>Atranka</b><small>Pelningos įmonės, plačios rinkos fondai, sektoriai, kurių dar neturi</small></span>${icon("chevron", 18)}</a>
       <a class="nx-link" href="${"#"}" data-ai-ask="Kurios mano portfelio įmonės dirba nuostolingai ir ką tai reiškia investuotojui?">${icon("ai", 20)}<span><b>Paklausk AI</b><small>„Kurios mano įmonės nuostolingos ir ką tai reiškia?“</small></span>${icon("chevron", 18)}</a>
     </section>
-    ${unknown.length ? `<p class="muted small">Neturime duomenų apie: ${unknown.slice(0, 8).map((x) => esc(x.r.n)).join(", ")}. Fondams įmonių rodikliai netaikomi.</p>` : ""}
+    ${unknown.length ? `<p class="muted small">Be pastabų: ${unknown.slice(0, 8).map((x) => esc(x.r.n)).join(", ")}. Fondams ir kriptovaliutoms įmonių rodikliai netaikomi.</p>` : ""}
     <p class="disclaimer">Duomenys – Yahoo Finance (metinės ataskaitos atnaujinamos kas savaitę). Nuostolinga įmonė nebūtinai bloga investicija, o pelninga – nebūtinai gera: tai tik faktai, į kuriuos verta atsižvelgti.</p>`;
   el.querySelectorAll("[data-ai-ask]").forEach((b) => b.addEventListener("click", (e) => { e.preventDefault(); if (window.openAI) window.openAI(b.dataset.aiAsk); else location.href = "strategija.html"; }));
 }
