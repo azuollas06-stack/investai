@@ -207,7 +207,7 @@ function renderChrome(page) {
         <span class="badge media">Žiniasklaida</span><span>naujienų agentūra ar analitikas</span>
         <span class="badge unverified">Reikia patikrinti</span><span>šaltiniai neaiškūs ar nesutaria</span>
       </div>
-      <p>InvestAI teikia informaciją, o ne investavimo rekomendacijas. Apžvalgas rengia dirbtinis intelektas pagal nurodytus šaltinius, todėl galimos klaidos. Kainų duomenys – Yahoo Finance (uždelsti), grafikai – <a href="https://www.tradingview.com/" target="_blank" rel="noopener">TradingView</a>.</p>
+      <p>InvestAI teikia informaciją, o ne investavimo rekomendacijas. Apžvalgas rengia AI (dirbtinis intelektas) pagal nurodytus šaltinius, todėl galimos klaidos. Kainų duomenys – Yahoo Finance (uždelsti), grafikai – <a href="https://www.tradingview.com/" target="_blank" rel="noopener">TradingView</a>.</p>
     </div>`;
   document.body.append(footer);
 
@@ -329,7 +329,7 @@ function explainHTML(e, opts = {}) {
     <ul>${(e.points || []).map((p) => `<li>${esc(p)}</li>`).join("")}</ul>
     ${e.context ? `<p class="explain-ctx">${esc(e.context)}</p>` : ""}
     <p class="explain-meta"><span class="badge ${st.cls}">${st.label}</span> Atnaujinta ${fmtShort(e.date)}${age > 7 ? " (senesnis nei savaitė)" : ""} · ${(e.sources || []).map((s) => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>`).join(" · ")}</p>
-    ${opts.footer === false ? "" : `<p class="explain-foot">Paaiškinimą parengė DI pagal nurodytus šaltinius. Tai ne rekomendacija pirkti ar parduoti.</p>`}
+    ${opts.footer === false ? "" : `<p class="explain-foot">Paaiškinimą parengė AI pagal nurodytus šaltinius. Tai ne rekomendacija pirkti ar parduoti.</p>`}
   </div>`;
 }
 

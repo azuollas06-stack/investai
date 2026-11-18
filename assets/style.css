@@ -1947,3 +1947,24 @@ summary .h-ico { width: 28px; height: 28px; }
 .hl-list b { font-size: 15.5px; line-height: 1.35; font-weight: 700; }
 .hl-list small { font-size: 12.5px; color: var(--muted); font-weight: 600; }
 .hl-note { margin: 8px 0 0; }
+
+/* v16: šlifavimas */
+.pill-flat { font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; color: var(--muted); background: var(--surface-2); }
+@media (max-width: 680px) {
+  .ah .search-toggle { display: none !important; }
+  .ah-id { min-width: 0; flex: 1; }
+  .ah-id > div { min-width: 0; }
+  #asset-title { font-size: clamp(24px, 7vw, 32px); overflow-wrap: anywhere; }
+  #asset-title.long { font-size: 22px; line-height: 1.15; }
+  #asset-star { flex: none; gap: 0; }
+  #asset-star .icon-btn, .ah .star-text { width: 40px; height: 40px; padding: 8px; }
+}
+.why-list a > span:nth-child(2) { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+em.why-move { font-style: normal; text-align: left; max-width: none; margin-top: 3px; font-size: 12.5px; font-weight: 750; }
+em.why-move.ex-down { color: var(--down); } em.why-move.ex-up { color: var(--up); }
+.plan-list li { display: grid !important; grid-template-columns: auto 1fr auto; grid-template-areas: "dot name val" ". btn btn"; align-items: center; column-gap: 10px; row-gap: 8px; }
+.plan-list li > .dot { grid-area: dot; }
+.plan-list li > span { grid-area: name; min-width: 0; }
+.plan-list li > b { grid-area: val; font-size: 19px; white-space: nowrap; }
+.plan-list li > .btn { grid-area: btn; justify-self: start; }
+@media (min-width: 681px) { .plan-list li { grid-template-columns: auto 1fr auto auto; grid-template-areas: "dot name val btn"; } .plan-list li > .btn { justify-self: end; } }

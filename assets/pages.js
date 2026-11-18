@@ -129,7 +129,7 @@ async function pageHome() {
   drawMv();
   // Žemėlapis
   const big = all.filter((a) => a.type === "Akcija" && !DUP_SKIP.has(a.s) && P.items[a.s] && P.items[a.s].mcap).map((a) => ({ a, p: P.items[a.s], v: P.items[a.s].mcap * (TO_EUR[P.items[a.s].cur] || 1) })).sort((x, y) => y.v - x.v).slice(0, 30);
-  $("#home-map").innerHTML = treemapHTML(big.map(({ a, p, v }) => ({ label: a.s.split(":")[1].replace(/\..*/, ""), sub: fmtPct(p.d1), v, c: p.d1, href: assetUrl(a.s), title: `${a.n}: ${fmtPct(p.d1)} per dieną` })), { scale: 3, ratio: 0.75 });
+  $("#home-map").innerHTML = treemapHTML(big.map(({ a, p, v }) => ({ label: /^\d+$/.test(a.s.split(":")[1]) ? a.n.split(" ")[0] : a.s.split(":")[1].replace(/\..*/, ""), sub: fmtPct(p.d1), v, c: p.d1, href: assetUrl(a.s), title: `${a.n}: ${fmtPct(p.d1)} per dieną` })), { scale: 3, ratio: 0.75 });
   fitTreemaps($("#home-map"));
   // Naujienos ir kalendorius
   getJSON("data/news.json").then((n) => {
@@ -229,6 +229,7 @@ async function pageAsset() {
   document.title = `${name} – InvestAI`;
   $("#browse").hidden = true;
   $("#asset-title").textContent = name;
+  $("#asset-title").classList.toggle("long", name.length > 18);
   $("#asset-symbol").textContent = sym;
   $("#asset-meta").textContent = known ? [known.type, `${keyIcon(known.sector)} ${known.sector || ""}`.trim(), `${keyIcon(known.country)} ${known.country || ""}`.trim()].filter((x) => x && x.trim()).join(" · ") : "";
   $("#asset-logo").innerHTML = logoHTML(sym, name, "#1d3a63", 52);
@@ -252,7 +253,7 @@ async function pageAsset() {
   renderCompanyAI(sym, name, p, known);
   if (p && p.spark) {
     $("#ap-price").textContent = fmtPrice(p.price, p.cur);
-    $("#ap-d1").innerHTML = `<span class="pill ${(p.d1 ?? 0) >= 0 ? "pill-up" : "pill-down"}">${fmtPct(p.d1, 2)} per dieną</span>`;
+    $("#ap-d1").innerHTML = `<span class="pill ${Math.abs(p.d1 ?? 0) < 0.005 ? "pill-flat" : p.d1 > 0 ? "pill-up" : "pill-down"}">${fmtPct(p.d1, 2)} per dieną</span>`;
     $("#ap-date").textContent = priceStamp(p);
     mountPriceChart($("#ap-chart"), sym, p, { cur: CUR_SIGN[p.cur] || p.cur });
     $("#ap-range").innerHTML = rangeBarHTML(p.lo52, p.hi52, p.price, CUR_SIGN[p.cur] || p.cur);
@@ -624,22 +625,22 @@ async function pageMorning() {
   $("#m-watch").innerHTML = `<div class="card-head"><h2>Stebimi</h2><a class="card-link" href="atranka.html?pf=watch">Atranka</a></div>` +
     (wl.length ? `<ul class="mv-list">${wl.map((a) => moverRow(a, P.items[a.s])).join("")}</ul>` : `<p class="muted">Pažymėk žvaigždute ${starHTML("NASDAQ:NVDA", "Nvidia")} įmones, kurias nori stebėti kasdien.</p>`);
 
-  // DI santrauka iš dienos apžvalgos
+  // AI santrauka iš dienos apžvalgos
   try {
     const idx = await getJSON("data/index.json");
     const d = await getJSON(`data/digests/${idx.latest}.json`);
     const items = (d.sections || []).flatMap((s) => s.items || []);
     const rel = items.filter((it) => (it.tags || []).some((tg) => [...mine].some((s) => s.endsWith(":" + tg))));
     const pick = [...rel, ...items.filter((it) => !rel.includes(it))].slice(0, 4);
-    $("#m-ai").innerHTML = `<div class="card-head"><h2><span class="ai-label">${aiMark()} DI santrauka</span></h2><a class="card-link" href="apzvalga.html">Visa apžvalga</a></div>
+    $("#m-ai").innerHTML = `<div class="card-head"><h2><span class="ai-label">${aiMark()} AI santrauka</span></h2><a class="card-link" href="apzvalga.html">Visa apžvalga</a></div>
       <h3 class="m-ai-title">${esc(d.title)}</h3><p>${esc(d.lead)}</p>
       <ul class="latest-list">${pick.map((it) => `<li><span class="badge ${(STATUS[it.status] || STATUS.media).cls}">${(STATUS[it.status] || STATUS.media).label}</span> ${esc(it.headline)}</li>`).join("")}</ul>
-      <p class="explain-foot">Santrauką ${fmtShort(d.date)} parengė DI pagal nurodytus šaltinius. Tai ne rekomendacija.</p>`;
+      <p class="explain-foot">Santrauką ${fmtShort(d.date)} parengė AI pagal nurodytus šaltinius. Tai ne rekomendacija.</p>`;
   } catch { $("#m-ai").hidden = true; }
 
   // Kodėl judėjo
   const exList = Object.entries(ex).sort(([a], [b]) => (mine.has(b) - mine.has(a))).slice(0, 4);
-  $("#m-why").innerHTML = exList.length ? `<div class="card-head"><h2>Kodėl judėjo?</h2></div><ul class="why-list">${exList.map(([s, e]) => `<li class="ex-${esc(e.direction)}"><a href="${assetUrl(s)}">${logoHTML(s, nameOf(s), "#1d3a63", 32)}<span><b>${esc(nameOf(s))}${mine.has(s) ? ' <em class="mine-tag">tavo</em>' : ""}</b><small>${esc(e.headline)}</small></span><span class="why-move">${esc(e.move || "")}</span></a></li>`).join("")}</ul>` : "";
+  $("#m-why").innerHTML = exList.length ? `<div class="card-head"><h2>Kodėl judėjo?</h2></div><ul class="why-list">${exList.map(([s, e]) => `<li class="ex-${esc(e.direction)}"><a href="${assetUrl(s)}">${logoHTML(s, nameOf(s), "#1d3a63", 32)}<span><b>${esc(nameOf(s))}${mine.has(s) ? ' <em class="mine-tag">tavo</em>' : ""}</b><small>${esc(e.headline)}</small>${e.move ? `<em class="why-move ex-${esc(e.direction)}">${esc(e.move)}</em>` : ""}</span></a></li>`).join("")}</ul>` : "";
   $("#m-why").hidden = !exList.length;
 
   // Kalendorius – 10 dienų, pirmiausia tavo

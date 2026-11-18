@@ -126,7 +126,7 @@ function anHTML(an) {
   if (!an || !an.n) return `<span class="muted small">Analitikų vertinimų nėra</span>`;
   const c = an.c || null;
   const bar = c ? (() => { const t = c.reduce((a, b) => a + b, 0) || 1; const col = ["#16825d", "#45c08f", "#8c9aab", "#f07a70", "#c8463d"]; return `<span class="an-bar">${c.map((v, i) => (v ? `<span style="flex:${v};background:${col[i]}"></span>` : "")).join("")}</span><small>${c[0] + c[1]} pirkti · ${c[2]} laikyti · ${c[3] + c[4]} parduoti</small>`; })() : `<small>${an.n} analitikų</small>`;
-  return `<span class="an an-${an.key || "none"}"><b>${AN_LABEL[an.key] || "–"}</b>${bar}</span>`;
+  return AN_LABEL[an.key] ? `<span class="an an-${an.key}"><b>${AN_LABEL[an.key]}</b>${bar}</span>` : "";
 }
 
 function update() {
