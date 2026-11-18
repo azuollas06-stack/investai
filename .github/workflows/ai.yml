@@ -81,3 +81,20 @@ jobs:
           echo "---"
           curl -sS -m 60 -X POST "$URL/chat" -H "Origin: https://azuollas06-stack.github.io" -H "Content-Type: application/json" \
             -d '{"messages":[{"role":"user","content":"Ar man dabar pirkti Nvidia akcijų už 1000 eurų?"}]}' ; echo
+
+      - name: Patikrinti pranešimus ir nuotraukų atpažinimą
+        run: |
+          URL=$(python3 -c "import json;print(json.load(open('data/ai.json'))['url'])")
+          curl -sS "$URL/push/key" -H "Origin: https://azuollas06-stack.github.io"; echo
+          pip install -q pillow
+          python3 - <<'PY'
+          from PIL import Image, ImageDraw, ImageFont
+          import base64, io, json
+          im = Image.new("RGB", (720, 420), "white"); d = ImageDraw.Draw(im)
+          f = ImageFont.load_default(size=28)
+          rows = [("Portfolio", "4 772,40 €"), ("IonQ  IONQ", "512,40 €   -8,6 %"), ("NVIDIA  NVDA", "1 830,00 €   +34,5 %"), ("Vanguard FTSE All-World", "2 430,00 €   +9,6 %")]
+          for i, (a, b) in enumerate(rows): d.text((30, 30 + i * 90), a, fill="black", font=f); d.text((400, 30 + i * 90), b, fill="black", font=f)
+          buf = io.BytesIO(); im.save(buf, "JPEG", quality=85)
+          json.dump({"images": ["data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()]}, open("/tmp/parse.json", "w"))
+          PY
+          curl -sS -m 90 -X POST "$URL/parse" -H "Origin: https://azuollas06-stack.github.io" -H "Content-Type: application/json" --data @/tmp/parse.json; echo
