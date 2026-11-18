@@ -42,8 +42,11 @@ DOMAINS = {
     "OMXTSE:TKM1T": "kaubamaja.ee", "OMXTSE:HAE1T": "harjuelekter.com", "OMXTSE:TVE1T": "tallinnavesi.ee",
     "OMXTSE:CPA1T": "cooppank.ee", "OMXTSE:INF1T": "infortar.ee", "OMXTSE:EFT1T": "eften.ee",
     "OMXRSE:GRD1R": "grindeks.lv", "OMXRSE:SAF1R": "saftehnika.com", "OMXRSE:DGR1R": "delfingroup.lv",
-    "NASDAQ:ANT": "anthropic.com",
+    "NASDAQ:ANT": "anthropic.com", "NYSE:OKLO": "oklo.com", "NASDAQ:MRVL": "marvell.com", "OMXSTO:VOLV_B": "volvogroup.com",
+    "AMEX:ARKK": "ark-funds.com",
 }
+# Šiuos perrašyti net jei logotipas jau yra (buvo neteisingas)
+REFRESH = {"NYSE:OKLO"}
 
 
 def name_of(tv: str) -> str:
@@ -92,7 +95,9 @@ def save(data: bytes, dest: Path, min_side: int = 40) -> bool:
 
 
 def favicon(domain: str, min_side: int = 48) -> bytes | None:
-    for url in (f"https://www.google.com/s2/favicons?domain={domain}&sz=128", f"https://icons.duckduckgo.com/ip3/{domain}.ico"):
+    # Pirmiausia didelės „apple-touch-icon“ ikonos (180×180), tada paieškos sistemų ikonos
+    for url in (f"https://{domain}/apple-touch-icon.png", f"https://www.{domain}/apple-touch-icon.png", f"https://{domain}/apple-touch-icon-precomposed.png", f"https://icon.horse/icon/{domain}",
+                f"https://www.google.com/s2/favicons?domain={domain}&sz=128", f"https://icons.duckduckgo.com/ip3/{domain}.ico"):
         data = get(url)
         if data:
             try:
@@ -121,7 +126,7 @@ def main() -> int:
                 continue
             dest = OUT / f"{name_of(tv)}.png"
             rel = f"assets/logos/{dest.name}"
-            if dest.exists() and not force:
+            if dest.exists() and not force and tv not in REFRESH:
                 found[tv] = rel
                 continue
             y = yahoo_symbol(tv)
@@ -143,12 +148,12 @@ def main() -> int:
                     if data and save(data, dest):
                         ok = True
                         break
-                if not ok and key:
-                    data = favicon(dict(ISSUERS)[key], 32)
+                if not ok and (tv in DOMAINS or key):
+                    data = favicon(DOMAINS.get(tv) or dict(ISSUERS)[key], 32)
                     ok = bool(data and save(data, dest, 32))
             else:
                 if tv in DOMAINS:
-                    data = favicon(DOMAINS[tv], 32)
+                    data = favicon(DOMAINS[tv], 48) or favicon(DOMAINS[tv], 32)
                     ok = bool(data and save(data, dest, 32))
                 if not ok and y:
                     for url in (f"https://financialmodelingprep.com/image-stock/{y}.png", f"https://assets.parqet.com/logos/symbol/{y.split('.')[0]}?format=png"):
