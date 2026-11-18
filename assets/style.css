@@ -1737,3 +1737,66 @@ details.pos .logo-ava { border-radius: 50%; }
 .pmx-perk-ai { background: linear-gradient(135deg, color-mix(in srgb, #4d8dff 14%, var(--surface)), var(--surface)); box-shadow: inset 0 0 0 1px color-mix(in srgb, #6aa5ff 40%, transparent); }
 .ai-up { white-space: nowrap; }
 .ai-hello h2 { background: none; color: var(--sea); -webkit-text-fill-color: currentColor; }
+
+/* v12: AI apžvalga, įspėjimai, atpažinimo pasirinkimas */
+.rai { position: relative; overflow: hidden; isolation: isolate; background: linear-gradient(160deg, color-mix(in srgb, #4d8dff 13%, var(--surface)) 0%, var(--surface) 55%); box-shadow: inset 0 0 0 1px color-mix(in srgb, #6aa5ff 30%, transparent); }
+.rai::before { content: ""; position: absolute; inset: -60% -30% auto auto; width: 70%; height: 140%; z-index: -1; background: radial-gradient(closest-side, rgba(122,77,255,.22), transparent); filter: blur(10px); }
+.rai-head, .al-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.rai-head h2, .al-head h2 { margin: 0; font-size: 19px; }
+.rai-head p, .al-head p { margin: 2px 0 0; }
+.rai-head > div, .al-head > div { flex: 1; min-width: 0; }
+.rai-ico, .al-ico { width: 44px; height: 44px; flex: none; display: grid; place-items: center; border-radius: 30%; color: #fff; background: linear-gradient(140deg, #6aa5ff, #3b6dff 45%, #7a4dff); box-shadow: 0 8px 22px -10px rgba(77,141,255,.9); }
+.al-ico { background: linear-gradient(140deg, #ffd56b, #f5b335 50%, #ff8a3d); color: #1a1405; box-shadow: 0 8px 22px -10px rgba(245,179,53,.9); }
+.rai-body { font-size: 15.5px; line-height: 1.55; }
+.rai-body h3 { margin: 16px 0 6px; font-size: 13px; font-weight: 800; color: #8bb4ff; text-transform: none; letter-spacing: 0; }
+:root[data-theme="light"] .rai-body h3 { color: #2f6bff; }
+.rai-body h3:first-child { margin-top: 4px; }
+.rai-body p { margin: 0 0 8px; }
+.rai-body ul { margin: 0 0 8px; padding-left: 20px; }
+.rai-body li { margin: 4px 0; }
+.rai-body li::marker { color: #6aa5ff; }
+.rai-err { color: var(--down); }
+.rai-foot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+.rai-foot .btn { display: inline-flex; align-items: center; gap: 6px; }
+.rai-note { margin: 12px 0 0; font-size: 12px; color: var(--muted); }
+.al-on { padding: 4px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 800; color: var(--up); background: color-mix(in srgb, var(--up) 15%, transparent); }
+.al-help { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+.al-help b { color: var(--sea); }
+.al-pick { display: flex; flex-wrap: wrap; gap: 8px; }
+.al-chip { display: inline-flex; align-items: center; gap: 7px; padding: 5px 12px 5px 5px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface-2); color: var(--sea); font: inherit; font-size: 14px; font-weight: 650; cursor: pointer; max-width: 100%; }
+.al-chip span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.al-chip .logo-ava { width: 22px !important; height: 22px !important; font-size: 9px; flex: none; }
+.al-chip[aria-pressed="true"] { border-color: var(--amber); background: color-mix(in srgb, var(--amber) 16%, var(--surface)); }
+.al-max { margin: 10px 2px 4px; }
+.al-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 0; border-top: 1px solid var(--line); font-size: 15px; font-weight: 600; }
+.al-ed input { width: 20px; height: 20px; accent-color: var(--amber); }
+.al-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.al-msg { margin: 10px 0 0; min-height: 1em; }
+
+.ocr-choice { width: min(460px, calc(100vw - 24px)); padding: 0; border: 0; border-radius: 26px; background: var(--mist); color: var(--sea); box-shadow: 0 0 0 1px var(--line), 0 40px 100px -30px rgba(0,0,0,.7); }
+.ocr-choice::backdrop { background: rgba(3,7,15,.6); backdrop-filter: blur(4px); }
+.ocr-choice[open] { animation: aiIn .28s cubic-bezier(.2,.9,.25,1); }
+.oc-in { padding: 22px 18px 18px; display: grid; gap: 10px; }
+.oc-in h2 { margin: 0 4px 6px; font-size: 21px; }
+.oc-opt { display: flex; gap: 14px; align-items: flex-start; text-align: left; padding: 14px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface); color: var(--sea); font: inherit; cursor: pointer; }
+.oc-opt:hover { border-color: var(--amber); }
+.oc-opt b { display: block; font-size: 16px; margin-bottom: 4px; }
+.oc-opt em { font-style: normal; font-size: 12px; font-weight: 800; margin-left: 6px; padding: 2px 8px; border-radius: 999px; color: #fff; background: linear-gradient(140deg, #6aa5ff, #3b6dff 45%, #7a4dff); vertical-align: 2px; }
+.oc-opt small { display: block; font-size: 13.5px; line-height: 1.45; color: var(--muted); }
+.oc-ico { width: 42px; height: 42px; flex: none; display: grid; place-items: center; border-radius: 30%; background: var(--surface-2); color: var(--sea); }
+.oc-ai { box-shadow: inset 0 0 0 1px color-mix(in srgb, #6aa5ff 45%, transparent); background: linear-gradient(160deg, color-mix(in srgb, #4d8dff 12%, var(--surface)), var(--surface)); }
+.oc-ai .oc-ico { color: #fff; background: linear-gradient(140deg, #6aa5ff, #3b6dff 45%, #7a4dff); }
+.oc-rem { display: flex; align-items: center; gap: 8px; margin: 4px 4px 0; font-size: 13.5px; color: var(--muted); font-weight: 600; }
+.oc-rem input { width: 18px; height: 18px; accent-color: var(--amber); }
+.ai-think { font-weight: 700; }
+.wk-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.wk-head h2 { margin: 0; font-size: 19px; }
+.wk-head p { margin: 2px 0 0; }
+.wk-sum { text-align: right; display: flex; flex-direction: column; }
+.wk-sum b { font-size: 20px; font-variant-numeric: tabular-nums; }
+.wk-sum span { font-size: 13px; font-weight: 700; }
+.wk-sum.up b, .wk-sum.up span { color: var(--up); } .wk-sum.down b, .wk-sum.down span { color: var(--down); }
+.wk .grp { background: transparent; box-shadow: none; padding: 0; margin: 0; }
+.wk .row { padding-left: 0; padding-right: 0; }
+.wk-h3 { margin: 16px 0 4px; font-size: 15px; }
+.pmx-tr > span:not(:first-child) { font-size: 13px; }

@@ -1,6 +1,6 @@
 // InvestAI service worker: veikia kaip programėlė ir be interneto rodo paskutinį turinį.
 // Puslapiai ir duomenys – pirmiausia iš tinklo (kad visada būtų naujausi), CSS/JS su ?v= ir OCR failai – iš talpyklos.
-const VERSION = "v11";
+const VERSION = "v12";
 const SHELL = `investai-shell-${VERSION}`;
 const STATIC = `investai-static-${VERSION}`;
 const OCR = "investai-ocr-v1";
@@ -43,4 +43,22 @@ self.addEventListener("fetch", (e) => {
   if (url.pathname.includes("/assets/logos/") || url.pathname.includes("/assets/vendor/")) return e.respondWith(cacheFirst(req, STATIC));
   if (url.pathname.includes("/assets/") && url.search.includes("v=")) return e.respondWith(cacheFirst(req, STATIC));
   if (url.pathname.includes("/data/") || url.pathname.includes("/assets/")) return e.respondWith(networkFirst(req, STATIC));
+});
+
+// Kainų įspėjimai (Web Push)
+self.addEventListener("push", (e) => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch { d = { title: "InvestAI", body: e.data ? e.data.text() : "" }; }
+  e.waitUntil(self.registration.showNotification(d.title || "InvestAI", {
+    body: d.body || "", icon: "assets/icons/icon-192.png", badge: "assets/icons/icon-192.png",
+    data: { url: d.url || "./" }, tag: d.title || "investai", renotify: true,
+  }));
+});
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const url = new URL((e.notification.data && e.notification.data.url) || "./", self.registration.scope).href;
+  e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((list) => {
+    for (const c of list) if (c.url.startsWith(self.registration.scope) && "focus" in c) { c.navigate(url); return c.focus(); }
+    return self.clients.openWindow(url);
+  }));
 });

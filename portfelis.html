@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>try{var d=document.documentElement,t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";d.dataset.theme=t;try{localStorage.removeItem("investai.style")}catch(e){}}catch(e){}</script>
-<link rel="stylesheet" href="assets/style.css?v=51391125">
+<link rel="stylesheet" href="assets/style.css?v=a29f216f">
 <script src="assets/viz.js?v=2a3cee52" defer></script>
 <script src="assets/app.js?v=8c87017e" defer></script>
 <script src="assets/glossary.js?v=be0fc5e9" defer></script>
@@ -63,10 +63,11 @@
     </details>
     <div class="alt-actions">
       <button type="button" class="linkish" id="manual">Suvesti pozicijas ranka</button>
+      <button type="button" class="linkish" id="ocr-reset" hidden>Keisti atpažinimo būdą</button>
       <a href="portfelis.html?pavyzdys=1">Žiūrėti pavyzdį</a>
     </div>
     <ul class="trust">
-      <li>Nuotrauka ir CSV failas apdorojami tavo naršyklėje ir niekur nesiunčiami</li>
+      <li>CSV failas apdorojamas tik tavo naršyklėje; nuotrauką gali atpažinti naršyklėje arba tiksliau su AI – renkiesi tu</li>
       <li>Tinka Revolut, Swedbank, SEB, Lightyear, Trading 212 ir kt.</li>
       <li>Prieš analizę galėsi viską pataisyti</li>
     </ul>
@@ -119,6 +120,8 @@
     </div>
 
     <div class="ptab" data-panel="overview">
+    <section class="card rai" id="r-ai" hidden aria-live="polite"></section>
+    <section class="card wk" id="r-week" hidden></section>
     <div class="card">
       <div class="seg" role="group" aria-label="Rodyti pagal">
         <button type="button" data-dim="sectors" aria-pressed="true">Sektoriai</button>
@@ -131,6 +134,8 @@
     </div>
 
     <section class="card health" id="r-health" aria-labelledby="health-h"></section>
+
+    <section class="card alerts" id="r-alerts" hidden></section>
 
     <div class="card" id="r-tm-card">
       <div class="sec-head"><h2>Portfelio žemėlapis</h2><div class="seg" role="group" aria-label="Spalva pagal" id="tm-mode"><button type="button" data-tm="pnl" aria-pressed="true">Nuo pirkimo</button><button type="button" data-tm="d1" aria-pressed="false">Diena</button><button type="button" data-tm="w1" aria-pressed="false">Savaitė</button><button type="button" data-tm="m1" aria-pressed="false">Mėnuo</button></div></div>
@@ -257,7 +262,8 @@
 </main>
 <script src="assets/pf-parse.js?v=f0a19f83" defer></script>
 <script src="assets/pf-csv.js?v=b37d750c" defer></script>
+<script src="assets/pf-ai.js?v=7ebcb48b" defer></script>
 <script src="assets/pf-insights.js?v=71f40392" defer></script>
-<script src="assets/portfolio.js?v=f3e0c079" defer></script>
+<script src="assets/portfolio.js?v=f10b19f1" defer></script>
 </body>
 </html>

@@ -138,6 +138,8 @@ function renderResult() {
   renderScenarios(a);
   renderCards(a);
   renderDivs(a);
+  renderWeek(a);
+  if (typeof PFAI !== "undefined") { PFAI.renderReview(a); PFAI.renderAlerts(a); }
   renderTable(a);
   renderRules(a);
   renderToday(a);
@@ -672,18 +674,19 @@ async function recognizeFiles(files, progressEl) {
 function mergeIntoDraft(results) {
   let usd = 0, all = 0;
   for (const r of results) {
+    const ai = !!r.ai;
     for (const row of r.rows) {
       all++; if (row.cur === "USD") usd++;
       const ex = draft.find((d) => d.s === row.s);
       // Ta pati pozicija keliose nuotraukose su ta pačia suma – tikėtina, kad nuotraukos persidengia
       if (ex) { if (Math.abs(ex.value - row.value) > Math.max(1, ex.value * 0.01)) ex.value += row.value; }
-      else draft.push({ s: row.s, n: row.n, value: Math.round(row.value * 100) / 100, src: row.src, unknown: false, fixed: row.fixed, pnl: row.pnl, pnlPct: row.pnlPct, qty: row.qty });
+      else draft.push({ s: row.s, n: row.n, value: Math.round(row.value * 100) / 100, src: row.src, unknown: false, fixed: row.fixed, pnl: row.pnl, pnlPct: row.pnlPct, qty: row.qty, csv: ai });
     }
     for (const u of r.unknown) {
       all++; if (u.cur === "USD") usd++;
       if (draft.some((d) => d.src === u.text)) continue;
       const name = u.name || u.text;
-      draft.push({ s: name ? customId(name) : null, n: name, value: Math.round(u.value * 100) / 100, src: u.text, unknown: true, custom: true, pnl: u.pnl, pnlPct: u.pnlPct, qty: u.qty });
+      draft.push({ s: name ? customId(name) : null, n: name, value: Math.round(u.value * 100) / 100, src: u.text, unknown: true, custom: true, pnl: u.pnl, pnlPct: u.pnlPct, qty: u.qty, csv: ai });
     }
   }
   return { usd, all };
@@ -699,6 +702,9 @@ function renderReview(info) {
     note.hidden = false;
     note.textContent = info ? "Nuotraukoje neradome pozicijų. Pabandyk aiškesnę nuotrauką arba suvesk pozicijas ranka." : "Suvesk savo pozicijas: aktyvą ir jo vertę.";
     draft.push({ s: null, n: "", value: "", src: "", unknown: false });
+  } else if (info && info.ai) {
+    note.hidden = false;
+    note.innerHTML = `Nuotrauką perskaitė AI – radome ${draft.length} ${ltN(draft.length, "poziciją", "pozicijas", "pozicijų")}. Peržiūrėk, ar viskas sutampa su tavo programėle, ir pataisyk, jei reikia.`;
   } else if (info && info.csv) {
     const c = info.csv;
     note.hidden = false;
@@ -871,6 +877,33 @@ function autoStamp() {
   return h && !isDemo ? ` · vertė pagal kainas: ${priceStamp(PRICES_PF.items[h.s]).toLowerCase()}` : "";
 }
 
+/* ---------- Tavo savaitė: judėjimai ir artimiausi įvykiai ---------- */
+function renderWeek(a) {
+  const el = $("#r-week");
+  if (!el) return;
+  const P = PRICES_PF.items || {};
+  const rows = a.rows.filter((r) => r.s !== CASH && P[r.s]);
+  if (!rows.length) { el.hidden = true; return; }
+  el.hidden = false;
+  const today = new Date().toISOString().slice(0, 10), lim = new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10);
+  // Savaitės poveikis eurais: pozicijos vertė × savaitės pokytis
+  const mv = rows.filter((r) => typeof P[r.s].w1 === "number").map((r) => { const w = P[r.s].w1; return { r, w, eur: r.value - r.value / (1 + w / 100) }; });
+  const weekEur = mv.reduce((t, x) => t + x.eur, 0), weekBase = mv.reduce((t, x) => t + (x.r.value - x.eur), 0);
+  const top = mv.slice().sort((x, y) => Math.abs(y.eur) - Math.abs(x.eur)).slice(0, 4);
+  const ev = [];
+  rows.forEach((r) => {
+    const p = P[r.s];
+    if (p.ed && p.ed >= today && p.ed <= lim) ev.push({ d: p.ed, r, t: "Ataskaita", k: "ed" });
+    if (p.xd && p.xd >= today && p.xd <= lim) ev.push({ d: p.xd, r, t: "Dividendų nukirpimas", k: "xd" });
+  });
+  ev.sort((x, y) => (x.d < y.d ? -1 : 1));
+  const pc = (v) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toLocaleString("lt-LT", { maximumFractionDigits: 1 })}\u00a0%`;
+  el.innerHTML = `<div class="wk-head"><div><h2>Tavo savaitė</h2><p class="muted small">Kaip per 5 prekybos dienas pasikeitė tavo pozicijos</p></div>
+      ${weekBase > 0 ? `<div class="wk-sum ${weekEur >= 0 ? "up" : "down"}"><b>${weekEur >= 0 ? "+" : "−"}${money(Math.abs(weekEur))}</b><span>${pc((weekEur / weekBase) * 100)}</span></div>` : ""}</div>
+    <ul class="grp wk-list">${top.map((x) => rowHTML({ href: isTv(x.r.s) ? assetUrl(x.r.s) : "", ava: logoHTML(x.r.s, x.r.n, "#1d3a63", 40), title: esc(x.r.n), sub: `${pc(x.w)} per savaitę`, val: `<span class="${x.eur >= 0 ? "up" : "down"}">${x.eur >= 0 ? "+" : "−"}${money(Math.abs(x.eur))}</span>` })).join("")}</ul>
+    ${ev.length ? `<h3 class="wk-h3">Artimiausi įvykiai</h3><ul class="grp">${ev.slice(0, 5).map((e) => { const [, m, d] = e.d.split("-").map(Number); return `<li class="row"><div class="row-main"><span class="row-date${daysUntil(e.d) <= 3 ? " soon" : ""}"><b>${d}</b>${MONTHS[m - 1].slice(0, 3)}.</span><span class="row-txt"><b>${esc(e.r.n)}</b><small>${e.t} · ${whenLabel(e.d)}</small></span></div></li>`; }).join("")}</ul>` : ""}`;
+}
+
 /* ---------- Dividendai ---------- */
 const moneyD = (v) => { const d = Math.abs(v) < 100 ? 2 : 0; return new Intl.NumberFormat("lt-LT", { style: "currency", currency: state.currency, minimumFractionDigits: d, maximumFractionDigits: d }).format(v); };
 const MON_SHORT = ["Sau", "Vas", "Kov", "Bal", "Geg", "Bir", "Lie", "Rgp", "Rgs", "Spa", "Lap", "Gru"];
@@ -954,18 +987,29 @@ function renderDivs(a) {
 /* ---------- Failai, vilkimas, įklijavimas ---------- */
 async function handleFiles(files, fromView) {
   if (!files || !files.length) return;
+  files = [...files]; // FileList išvaloma, kai įvesties laukas nustatomas iš naujo
   const csv = [...files].find(isCSV);
   if (csv) return handleCSV(csv);
   const progressEl = fromView === "review" ? $("#progress2") : $("#progress");
   if (fromView === "result") { show("start"); }
   if (fromView !== "review") draft = [];
   try {
-    const info = mergeIntoDraft(await recognizeFiles(files, fromView === "review" ? progressEl : $("#progress")));
+    const pe = fromView === "review" ? progressEl : $("#progress");
+    let results = null, fellBack = "";
+    if (typeof PFAI !== "undefined" && [...files].some((f) => f.type.startsWith("image/")) && (await PFAI.hasAI()) && (await PFAI.chooseMode()) === "ai") {
+      try { results = await PFAI.recognize(files, pe); }
+      catch (e) { console.warn(e); fellBack = e.message || "AI nepavyko"; }
+    }
+    if (!results) results = await recognizeFiles(files, pe);
+    const info = mergeIntoDraft(results);
+    if (fellBack) info.fellBack = fellBack;
+    if (results[0] && results[0].ai) info.ai = true;
     renderReview(info);
+    if (fellBack) { const n = $("#review-note"); n.hidden = false; n.innerHTML = `AI atpažinti nepavyko (${esc(fellBack)}), todėl nuotrauką perskaitėme naršyklėje – atidžiai patikrink sumas. ${n.innerHTML}`; }
   } catch (e) {
     console.error(e);
     progressEl.hidden = false;
-    progressEl.querySelector("p").textContent = `${e.message || "Atpažinti nepavyko"}. Pabandyk dar kartą arba suvesk pozicijas ranka.`;
+    progressEl.querySelector("p").textContent = `${(e.message || "Atpažinti nepavyko").replace(/[.]+$/, "")}. Pabandyk dar kartą arba suvesk pozicijas ranka.`;
   }
 }
 function setupInputs() {
@@ -984,6 +1028,9 @@ function setupInputs() {
     handleFiles(files, view);
   });
   $("#manual").addEventListener("click", () => { draft = []; renderReview(); });
+  const ocrBtn = $("#ocr-reset");
+  try { if (ocrBtn && localStorage.getItem("investai.pf.ocr")) ocrBtn.hidden = false; } catch {}
+  if (ocrBtn) ocrBtn.addEventListener("click", () => { try { localStorage.removeItem("investai.pf.ocr"); } catch {} ocrBtn.hidden = true; ocrBtn.insertAdjacentHTML("afterend", '<span class="muted small"> Kitą kartą paklausime iš naujo.</span>'); });
   $("#review-add").addEventListener("click", () => { draft.push({ s: null, n: "", value: "", src: "", unknown: false }); renderReview(); const ins = $("#review-list").querySelectorAll("li:last-child input"); ins[0] && ins[0].focus(); });
   $("#review-done").addEventListener("click", finishReview);
   $("#review-cancel").addEventListener("click", () => { draft = []; pendingDivs = null; state.holdings.length ? renderResult() : show("start"); });

@@ -24,3 +24,15 @@ class_name = "Limiter"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["Limiter"]
+
+[[durable_objects.bindings]]
+name = "PUSH"
+class_name = "Push"
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["Push"]
+
+# Kainų įspėjimų tikrinimas kas 15 min. darbo dienomis (UTC 7–21)
+[triggers]
+crons = ["*/15 7-21 * * 1-5"]
