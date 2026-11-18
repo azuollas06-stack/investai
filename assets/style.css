@@ -1662,3 +1662,54 @@ details.pos .logo-ava { border-radius: 50%; }
 .ai-up { display: block; margin: 0 auto 8px; width: fit-content; padding: 6px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 750; text-decoration: none; color: #f5b335 !important; background: color-mix(in srgb, #f5b335 12%, transparent); }
 @media print { .ai-fab, .ai-sheet { display: none !important; } }
 :root[data-theme="light"] .ai-up { color: #9a6a00 !important; background: #fff1cc; }
+
+/* v10: Premium puslapis */
+.pmx-hero { position: relative; overflow: hidden; isolation: isolate; margin: 8px 0 18px; padding: 34px 26px 28px; border-radius: 28px; color: #fff;
+  background: linear-gradient(160deg, #1b1407 0%, #0d1729 55%, #0a1220 100%); box-shadow: 0 0 0 1px rgba(245,179,53,.35), 0 30px 80px -40px rgba(245,179,53,.6); }
+.pmx-glow { position: absolute; inset: -40% -20% auto; height: 120%; z-index: -1; background: radial-gradient(40% 40% at 20% 30%, rgba(245,179,53,.45), transparent 70%), radial-gradient(40% 45% at 85% 20%, rgba(77,141,255,.35), transparent 70%); filter: blur(30px); animation: aiDrift 12s ease-in-out infinite alternate; }
+.pmx-badge { display: inline-block; padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 800; color: #1a1405; background: linear-gradient(90deg, #ffe08a, #f5b335); }
+.pmx-hero h1 { margin: 18px 0 10px; font-size: clamp(32px, 8vw, 52px); line-height: 1.02; letter-spacing: -.035em; font-weight: 800; color: #fff; }
+.pmx-lead { margin: 0 0 18px; max-width: 46ch; font-size: 16px; line-height: 1.5; color: rgba(255,255,255,.75); }
+.pmx-price { margin: 0 0 18px; font-size: 16px; color: rgba(255,255,255,.8); }
+.pmx-price b { font-size: 34px; color: #f5b335; letter-spacing: -.02em; }
+.pmx-price span { display: block; font-size: 13px; color: rgba(255,255,255,.55); margin-top: 2px; }
+.pmx-form { display: flex; gap: 8px; flex-wrap: wrap; max-width: 520px; }
+.pmx-form input { flex: 1 1 220px; min-width: 0; height: 50px; padding: 0 18px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.08); color: #fff; font: inherit; font-size: 16px; }
+.pmx-form input::placeholder { color: rgba(255,255,255,.5); }
+.pmx-form input:focus { outline: none; border-color: #f5b335; }
+.pmx-btn { flex: 0 0 auto; height: 50px; padding: 0 24px; border: 0; border-radius: 999px; font: inherit; font-size: 16px; font-weight: 800; color: #1a1405; cursor: pointer; background: radial-gradient(circle at 30% 20%, #ffe29a, #f5b335 50%, #ff8a3d); box-shadow: 0 10px 26px -10px rgba(245,179,53,.9); }
+@media (max-width: 480px) { .pmx-btn { width: 100%; } .pmx-hero { padding: 28px 20px 22px; } }
+.pmx-hero .note { color: #ff9e95; }
+.pmx-perks { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-bottom: 28px; }
+.pmx-perk { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: var(--r-lg); background: var(--surface); }
+.pmx-perk b { font-size: 16px; }
+.pmx-perk p { margin: 4px 0 0; font-size: 14px; color: var(--muted); line-height: 1.45; }
+.pmx-ico { width: 42px; height: 42px; flex: none; display: grid; place-items: center; border-radius: 13px; color: var(--amber); background: color-mix(in srgb, var(--amber) 14%, transparent); font-size: 20px; font-weight: 800; }
+.pmx-perk-ai { background: linear-gradient(135deg, color-mix(in srgb, #f5b335 16%, var(--surface)), var(--surface)); box-shadow: inset 0 0 0 1px color-mix(in srgb, #f5b335 40%, transparent); }
+.pmx-perk-ai .pmx-ico { color: #1a1405; background: radial-gradient(circle at 30% 25%, #ffe29a, #f5b335 45%, #ff8a3d); }
+.pmx-h2 { font-size: 22px; margin: 0 0 12px; }
+.pmx-table { border-radius: var(--r-lg); background: var(--surface); overflow: hidden; }
+.pmx-tr { display: grid; grid-template-columns: 1fr 86px 86px; align-items: center; gap: 8px; padding: 13px 16px; border-top: 1px solid var(--line); font-size: 14.5px; }
+.pmx-tr > span:not(:first-child) { text-align: center; font-weight: 700; }
+.pmx-th { border-top: 0; font-size: 13px; font-weight: 800; color: var(--muted); }
+.pmx-gold { color: #f5b335; }
+:root[data-theme="light"] .pmx-gold { color: #a87400; }
+.pmx-yes { color: var(--up); font-size: 17px; }
+.pmx-no { color: var(--muted); }
+.pmx-soon { margin: 12px 4px 0; }
+@media (max-width: 420px) { .pmx-tr { grid-template-columns: 1fr 64px 64px; font-size: 14px; padding: 12px 12px; } }
+.rule > span:last-child { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; flex: none; color: var(--muted); font-weight: 600; }
+.rule > span:first-child { min-width: 0; }
+.rule input { background: var(--surface-2); border-color: transparent; border-radius: 12px; font-weight: 700; }
+.rule input:focus { outline: none; border-color: var(--amber); }
+/* Atranka: analitikų sutarimas kaip ženkliukas */
+@media (max-width: 760px) {
+  .res-an { justify-content: flex-start !important; text-align: left; padding-top: 2px; }
+  .res-an .an b { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 750; background: var(--surface-2); color: var(--sea-2); }
+  .res-an .an-buy b, .res-an .an-strong_buy b { background: color-mix(in srgb, var(--up) 16%, transparent); color: var(--up); }
+  .res-an .an-sell b, .res-an .an-underperform b { background: color-mix(in srgb, var(--down) 16%, transparent); color: var(--down); }
+  .res-an > .muted.small { font-size: 12.5px; }
+}
+@media (max-width: 760px) { .res-an { flex-direction: row !important; align-items: center !important; } }
+.pmx-th { font-size: 12px; }
+@media (max-width: 420px) { .pmx-tr { grid-template-columns: 1fr 74px 62px; } }

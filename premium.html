@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>try{var d=document.documentElement,t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";d.dataset.theme=t;try{localStorage.removeItem("investai.style")}catch(e){}}catch(e){}</script>
-<link rel="stylesheet" href="assets/style.css?v=a94404f5">
+<link rel="stylesheet" href="assets/style.css?v=73613d1b">
 <script src="assets/viz.js?v=2a3cee52" defer></script>
 <script src="assets/app.js?v=30aa8cb6" defer></script>
 <script src="assets/glossary.js?v=be0fc5e9" defer></script>
@@ -30,39 +30,40 @@
 <body data-page="premium">
 <main class="wrap wide pm">
   <section id="pm-locked">
-    <h1>InvestAI Premium</h1>
-    <p class="lead">Daugiau įrankių tiems, kurie nori nuolat sekti savo investicijas. Šiuo metu – <b>bandomoji versija</b>, atrakinama slaptažodžiu.</p>
-    <div class="pm-plans">
-      <div class="card pm-plan">
-        <h2>Nemokamai</h2>
-        <p class="pm-price">0 €</p>
-        <ul>
-          <li>Portfelio analizė iš nuotraukos</li>
-          <li>Palyginimas su rinka ir nuosmukio scenarijai</li>
-          <li>Strategija ir akcijų atranka</li>
-          <li>Populiariausių akcijų „Kodėl kilo / krito?“</li>
-          <li>Mano rytas, dienos apžvalga ir kalendorius</li><li>Diversifikacijos balas, skaičiuoklės ir žodynas</li>
-        </ul>
-      </div>
-      <div class="card pm-plan pm-pro">
-        <h2>Premium</h2>
-        <p class="pm-price">~5 € <small>/ mėn. (planuojama)</small></p>
-        <ul>
-          <li><b>Įspėjimai:</b> kurios tavo pozicijos šiandien ar per savaitę pajudėjo daugiausia</li>
-          <li><b>Analitikai apie tavo akcijas:</b> vertinimai ir tikslinės kainos vienoje vietoje</li>
-          <li><b>Portfelio istorija:</b> kaip keitėsi vertė ir rezultatas</li>
-          <li><b>PDF ataskaita</b> apie portfelį vienu paspaudimu</li>
-          <li><b>Pažangi atranka:</b> P/E, dividendai, įmonės dydis ir išsaugoti filtrai</li>
-          <li class="muted">Netrukus: paaiškinimai visoms tavo akcijoms, įspėjimai el. paštu, sinchronizavimas tarp įrenginių</li>
-        </ul>
-        <form id="pm-form" class="pm-form" autocomplete="off">
-          <label for="pm-pass" class="sr-only">Slaptažodis</label>
-          <input id="pm-pass" type="password" placeholder="Bandomosios versijos slaptažodis">
-          <button class="btn primary" type="submit">Atrakinti</button>
-        </form>
-        <p class="note" id="pm-err" hidden>Neteisingas slaptažodis.</p>
-      </div>
+    <div class="pmx-hero">
+      <div class="pmx-glow" aria-hidden="true"></div>
+      <span class="pmx-badge">★ InvestAI Premium</span>
+      <h1>Daugiau atsakymų.<br>Mažiau spėliojimo.</h1>
+      <p class="pmx-lead">Įrankiai tiems, kurie savo investicijas seka kasdien. Šiuo metu – bandomoji versija, atrakinama slaptažodžiu.</p>
+      <p class="pmx-price"><b>~5 €</b> / mėn. <span>planuojama kaina</span></p>
+      <form id="pm-form" class="pmx-form" autocomplete="off">
+        <label for="pm-pass" class="sr-only">Slaptažodis</label>
+        <input id="pm-pass" type="password" placeholder="Bandomosios versijos slaptažodis">
+        <button class="pmx-btn" type="submit">Atrakinti Premium</button>
+      </form>
+      <p class="note" id="pm-err" hidden>Neteisingas slaptažodis.</p>
     </div>
+
+    <div class="pmx-perks">
+      <div class="pmx-perk pmx-perk-ai"><span class="pmx-ico">✦</span><div><b>2× daugiau AI klausimų</b><p>50 klausimų per dieną vietoj 25 – asistentas mato tavo portfelį ir puslapį, kurį žiūri.</p></div></div>
+      <div class="pmx-perk"><span class="pmx-ico" data-icon="calendar"></span><div><b>Įspėjimai</b><p>Kurios tavo pozicijos šiandien ar per savaitę pajudėjo daugiausia.</p></div></div>
+      <div class="pmx-perk"><span class="pmx-ico" data-icon="screener"></span><div><b>Analitikai apie tavo akcijas</b><p>Vertinimai ir tikslinės kainos vienoje vietoje, su šaltiniais.</p></div></div>
+      <div class="pmx-perk"><span class="pmx-ico" data-icon="portfolio"></span><div><b>Portfelio istorija ir PDF</b><p>Kaip keitėsi vertė, ir ataskaita vienu paspaudimu.</p></div></div>
+    </div>
+
+    <h2 class="pmx-h2">Ką gauni</h2>
+    <div class="pmx-table" role="table" aria-label="Nemokamos ir Premium versijos palyginimas">
+      <div class="pmx-tr pmx-th" role="row"><span role="columnheader"></span><span role="columnheader">Nemokamai</span><span role="columnheader" class="pmx-gold">Premium</span></div>
+      <div class="pmx-tr" role="row"><span role="cell">AI asistento klausimai per dieną</span><span role="cell">25</span><span role="cell" class="pmx-gold"><b>50</b></span></div>
+      <div class="pmx-tr" role="row"><span role="cell">Portfelio analizė, CSV importas, dividendai</span><span role="cell" class="pmx-yes">✓</span><span role="cell" class="pmx-yes">✓</span></div>
+      <div class="pmx-tr" role="row"><span role="cell">Strategija, atranka, skaičiuoklės</span><span role="cell" class="pmx-yes">✓</span><span role="cell" class="pmx-yes">✓</span></div>
+      <div class="pmx-tr" role="row"><span role="cell">Mano rytas, apžvalga, kalendorius</span><span role="cell" class="pmx-yes">✓</span><span role="cell" class="pmx-yes">✓</span></div>
+      <div class="pmx-tr" role="row"><span role="cell">Įspėjimai apie tavo pozicijas</span><span role="cell" class="pmx-no">–</span><span role="cell" class="pmx-yes">✓</span></div>
+      <div class="pmx-tr" role="row"><span role="cell">Analitikai apie tavo akcijas</span><span role="cell" class="pmx-no">–</span><span role="cell" class="pmx-yes">✓</span></div>
+      <div class="pmx-tr" role="row"><span role="cell">Portfelio istorija ir PDF ataskaita</span><span role="cell" class="pmx-no">–</span><span role="cell" class="pmx-yes">✓</span></div>
+      <div class="pmx-tr" role="row"><span role="cell">Pažangi atranka (P/E, dividendai, filtrai)</span><span role="cell" class="pmx-no">–</span><span role="cell" class="pmx-yes">✓</span></div>
+    </div>
+    <p class="muted small pmx-soon">Netrukus: paaiškinimai visoms tavo akcijoms, pranešimai telefone, sinchronizavimas tarp įrenginių.</p>
   </section>
 
   <section id="pm-unlocked" hidden>
