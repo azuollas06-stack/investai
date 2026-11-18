@@ -37,7 +37,7 @@ let animateNext = false;
 function load() {
   try {
     const d = JSON.parse(localStorage.getItem(PF_KEY) || "null");
-    if (d && Array.isArray(d.holdings)) state = { holdings: d.holdings, rules: d.rules || {}, currency: d.currency || "EUR", divs: Array.isArray(d.divs) ? d.divs : [] };
+    if (d && Array.isArray(d.holdings)) state = { holdings: d.holdings, rules: d.rules || {}, currency: d.currency || "EUR", divs: Array.isArray(d.divs) ? d.divs : [], tx: Array.isArray(d.tx) ? d.tx : [], txBroker: d.txBroker || "" };
   } catch (e) { console.warn("Naršyklės saugykla nepasiekiama", e); }
 }
 function save() {
@@ -140,6 +140,7 @@ function renderResult() {
   renderDivs(a);
   renderWeek(a);
   renderReal(a);
+  renderTax();
   renderNext(a);
   if (typeof PFAI !== "undefined") { PFAI.renderReview(a); PFAI.renderAlerts(a); }
   decorateHeads();
@@ -777,6 +778,7 @@ function finishReview() {
   state.holdings = [...merged.values()];
   state.currency = $("#v-review").dataset.cur || "EUR";
   if (pendingDivs) { state.divs = pendingDivs; pendingDivs = null; }
+  if (pendingTx) { state.tx = pendingTx; state.txBroker = pendingBroker; pendingTx = null; }
   draft = [];
   $("#rule-inputs").dataset.ready = "";
   quotesKey = mentionsKey = "";
@@ -787,7 +789,7 @@ function finishReview() {
 /* ---------- Brokerio CSV ---------- */
 // Lietuviškos daugiskaitos formos: 1 (21, 31…), 2–9 (22–29…), 10–20 ir kt.
 const ltN = (n, one, few, many) => { const t = n % 10, h = n % 100; return t === 1 && h !== 11 ? one : t >= 2 && t <= 9 && (h < 12 || h > 19) ? few : many; };
-let pendingDivs = null;
+let pendingDivs = null, pendingTx = null, pendingBroker = "";
 const isCSV = (f) => f && (/\.(csv|txt)$/i.test(f.name || "") || /csv|comma-separated/.test(f.type || ""));
 const fxEur = (c) => (c ? TO_EUR[c === "GBX" ? "GBp" : c] : TO_EUR.EUR) || null;
 const r2 = (v) => Math.round(v * 100) / 100;
@@ -852,6 +854,8 @@ async function handleCSV(file) {
       const s = csvSymbol(d);
       return { d: d.date, s: s || undefined, n: s ? (findAsset(s) || {}).n : d.name || d.ticker || "", eur: r2(d.amt * (fxEur(d.cur) || 1)) };
     }).sort((x, y) => (x.d < y.d ? -1 : 1));
+    pendingTx = Array.isArray(r.txs) && r.txs.length ? r.txs : null;
+    pendingBroker = r.broker || "";
     isDemo = false;
     draft = rows;
     renderReview({ usd: 0, all: rows.length, csv: { broker: r.broker, n: rows.length, divs: pendingDivs.length, live: rows.some((x) => x.auto), unknown: rows.filter((x) => x.custom).length } });
@@ -965,6 +969,114 @@ function decorateHeads() {
     const hit = HEAD_ICONS.find(([re]) => re.test(h.textContent.trim()));
     if (hit) h.insertAdjacentHTML("afterbegin", `<span class="h-ico">${icon(hit[1], 18)}</span>`);
   });
+}
+
+/* ---------- Mokesčių ataskaita VMI (iš brokerio CSV sandorių, FIFO) ---------- */
+const TAX_VDU12 = 27745.8;
+function txEur(amount, cur, fx) {
+  if (!amount) return { v: 0, approx: false };
+  if (!cur || cur === "EUR") return { v: amount, approx: false };
+  if (fx && fx > 0.3 && fx < 3 && cur === "USD") return { v: amount / fx, approx: false };
+  return { v: amount * (TO_EUR[cur === "GBX" ? "GBp" : cur] || 1), approx: true };
+}
+function taxReport(txs) {
+  const lots = new Map(), pendSplit = new Map(), years = {};
+  const Y = (d) => (years[d.slice(0, 4)] ||= { sales: [], divs: [], approx: false });
+  for (const t of txs.slice().sort((a, b) => (a.d < b.d ? -1 : a.d > b.d ? 1 : 0))) {
+    const key = (t.i || t.t || t.n).toUpperCase(), name = t.n || t.t || t.i;
+    if (!lots.has(key)) lots.set(key, []);
+    const L = lots.get(key);
+    const held = L.reduce((s, l) => s + l.q, 0);
+    if (t.k === "buy" && t.q > 0) { const e = txEur(t.a, t.c, t.fx); L.push({ q: t.q, cost: e.v, d: t.d, approx: e.approx }); }
+    else if (t.k === "sell" && t.q > 0) {
+      const e = txEur(t.a, t.c, t.fx);
+      let left = t.q, cost = 0, approx = e.approx, oldest = null, missing = 0;
+      while (left > 1e-9 && L.length) {
+        const l = L[0], take = Math.min(l.q, left), part = l.cost * (take / l.q);
+        cost += part; oldest = oldest || l.d; approx = approx || l.approx;
+        l.cost -= part; l.q -= take; left -= take;
+        if (l.q <= 1e-9) L.shift();
+      }
+      if (left > 1e-6) missing = left;
+      const y = Y(t.d);
+      y.sales.push({ d: t.d, n: name, q: t.q, proceeds: e.v, cost, gain: e.v - cost, approx, missing, long: oldest && (new Date(t.d) - new Date(oldest)) / 864e5 >= 5 * 365 });
+      if (approx) y.approx = true;
+    } else if (t.k === "split-") pendSplit.set(key, t.q || held);
+    else if (t.k === "split+" && held > 0) {
+      const old = pendSplit.get(key);
+      const factor = old ? t.q / old : (held + t.q) / held;
+      if (factor > 0 && isFinite(factor)) L.forEach((l) => (l.q *= factor));
+      pendSplit.delete(key);
+    } else if (t.k === "split+" && pendSplit.has(key)) {
+      // T212: „close“ jau išėmė senas akcijas – grąžiname tuos pačius lotus su nauju kiekiu
+      pendSplit.delete(key);
+    } else if (t.k === "div" && t.a > 0) {
+      const net = txEur(t.a, t.c, t.fx), w = t.w ? txEur(t.w, t.wc || t.pc || "USD", t.fx) : { v: 0, approx: false };
+      const y = Y(t.d);
+      y.divs.push({ d: t.d, n: name, net: net.v, wht: w.v, gross: net.v + w.v });
+      if (net.approx || w.approx) y.approx = true;
+    }
+  }
+  return years;
+}
+function renderTax() {
+  const el = $("#r-tax");
+  if (!el) return;
+  const prem = (() => { try { return !!localStorage.getItem("investai.premium.v1"); } catch { return false; } })();
+  const txs = state.tx || [];
+  const head = `<div class="wk-head"><div><h2><span class="h-ico">${icon("report", 18)}</span>Mokesčių ataskaita (VMI)</h2><p class="muted small">Realizuotas pelnas pagal FIFO ir gauti dividendai eurais – deklaracijai GPM311</p></div>${prem ? "" : `<span class="pmx-badge" style="font-size:12px">${icon("gem", 12)}Premium</span>`}</div>`;
+  if (!txs.length) {
+    el.innerHTML = head + `<p class="muted" style="margin:6px 0 12px">Ataskaitai reikia sandorių istorijos. Importuok brokerio CSV su <b>visais</b> sandoriais nuo pirmojo pirkimo (Trading 212, Revolut ar Lightyear).</p><label class="btn" for="csv2">Importuoti CSV</label>`;
+    return;
+  }
+  const years = taxReport(txs);
+  const ys = Object.keys(years).filter((y) => years[y].sales.length || years[y].divs.length).sort().reverse();
+  if (!ys.length) { el.innerHTML = head + `<p class="muted">Importuotame faile nėra pardavimų ar dividendų.</p>`; return; }
+  const cur = new Date().getFullYear();
+  let sel = String(ys.includes(String(cur - 1)) ? cur - 1 : ys[0]);
+  const e2 = (v) => `${v.toLocaleString("lt-LT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
+  const draw = () => {
+    const y = years[sel];
+    const gains = y.sales.reduce((s, x) => s + Math.max(0, x.gain), 0), losses = y.sales.reduce((s, x) => s + Math.min(0, x.gain), 0);
+    const net = gains + losses, taxable = Math.max(0, net - 500), in15 = Math.min(taxable, TAX_VDU12);
+    const tax = in15 * 0.15;
+    const dG = y.divs.reduce((s, x) => s + x.gross, 0), dW = y.divs.reduce((s, x) => s + x.wht, 0);
+    const dTax = Math.max(0, dG * 0.15 - Math.min(dW, dG * 0.15));
+    const missing = y.sales.some((x) => x.missing > 0);
+    const body = `
+      <div class="seg tax-years" role="group" aria-label="Metai">${ys.map((x) => `<button type="button" data-y="${x}" aria-pressed="${x === sel}">${x} m.</button>`).join("")}</div>
+      <div class="tax-grid">
+        <div class="tax-box"><h3>Akcijų ir fondų pardavimas</h3>
+          <dl><div><dt>Pardavimų</dt><dd>${y.sales.length}</dd></div><div><dt>Pelnas</dt><dd class="up">${e2(gains)}</dd></div><div><dt>Nuostoliai</dt><dd class="down">${e2(losses)}</dd></div><div><dt>Grynasis rezultatas</dt><dd><b>${e2(net)}</b></dd></div><div><dt>Neapmokestinama dalis</dt><dd>− 500,00 €</dd></div><div class="tax-sum"><dt>Apmokestinama suma</dt><dd><b>${e2(taxable)}</b></dd></div><div class="tax-sum"><dt>Apytikslis GPM (15 %)</dt><dd><b>${e2(tax)}</b></dd></div></dl>
+          ${taxable > TAX_VDU12 ? `<p class="muted small">Suma viršija 12 VDU (${e2(TAX_VDU12)}) – didesnei daliai taikomi 20/25/32 % tarifai. Apskaičiuok <a href="irankiai.html#mokesciai">mokesčių skaičiuoklėje</a>.</p>` : ""}
+        </div>
+        <div class="tax-box"><h3>Dividendai</h3>
+          <dl><div><dt>Išmokų</dt><dd>${y.divs.length}</dd></div><div><dt>Bruto (prieš mokesčius)</dt><dd>${e2(dG)}</dd></div><div><dt>Išskaičiuota užsienyje</dt><dd>${e2(dW)}</dd></div><div class="tax-sum"><dt>Primokėti Lietuvoje (apytiksliai)</dt><dd><b>${e2(dTax)}</b></dd></div></dl>
+          <p class="muted small">Lietuvoje dividendams – 15 %; užsienyje sumokėtas mokestis įskaitomas (ne daugiau nei 15 %).</p>
+        </div>
+      </div>
+      ${prem ? `<details class="tax-list"><summary>Visi ${y.sales.length} pardavimai ir ${y.divs.length} dividendų išmokos</summary>
+        <table><thead><tr><th>Data</th><th>Aktyvas</th><th>Pajamos</th><th>Savikaina</th><th>Rezultatas</th></tr></thead><tbody>${y.sales.map((x) => `<tr><td>${x.d}</td><td>${esc(x.n)}${x.long ? " <small>(≥5 m.)</small>" : ""}${x.missing ? " <small class=\"down\">(trūksta pirkimų)</small>" : ""}</td><td>${e2(x.proceeds)}</td><td>${e2(x.cost)}</td><td class="${x.gain >= 0 ? "up" : "down"}">${e2(x.gain)}</td></tr>`).join("")}</tbody></table>
+        ${y.divs.length ? `<table><thead><tr><th>Data</th><th>Dividendai</th><th>Bruto</th><th>Užsienio mok.</th><th>Gauta</th></tr></thead><tbody>${y.divs.map((x) => `<tr><td>${x.d}</td><td>${esc(x.n)}</td><td>${e2(x.gross)}</td><td>${e2(x.wht)}</td><td>${e2(x.net)}</td></tr>`).join("")}</tbody></table>` : ""}
+        <button type="button" class="btn" id="tax-csv">Atsisiųsti CSV</button></details>`
+        : `<div class="tax-lock"><p><b>Premium:</b> kiekvieno pardavimo ir dividendo detalės bei CSV failas buhalterei ar deklaracijai.</p><a class="btn" href="premium.html">${icon("gem", 16)} Atrakinti</a></div>`}
+      ${missing ? `<p class="tax-warn">Kai kuriems pardavimams faile trūksta ankstesnių pirkimų – importuok istoriją nuo pat sąskaitos atidarymo, kitaip savikaina bus per maža.</p>` : ""}
+      ${y.approx ? `<p class="tax-warn">Kai kurios sumos ne eurais perskaičiuotos pagal dabartinį kursą, todėl yra apytikslės. VMI reikalauja kurso sandorio dieną.</p>` : ""}
+      <p class="disclaimer">Skaičiuojama pagal ${esc(state.txBroker || "brokerio")} CSV, FIFO metodu, įskaitant brokerio mokesčius, jei jie įtraukti į sumas. Akcijoms, laikytoms ≥ 5 m., gali galioti kitos taisyklės. Tai pagalbinis skaičiavimas, ne mokesčių konsultacija – galutinai pasitikrink VMI svetainėje arba su buhalteriu. Deklaracija – GPM311, iki gegužės 1 d.</p>`;
+    el.innerHTML = head + body;
+    el.querySelectorAll(".tax-years button").forEach((b) => b.addEventListener("click", () => { sel = b.dataset.y; draw(); }));
+    const dl = $("#tax-csv");
+    if (dl) dl.addEventListener("click", () => {
+      const rows = [["Tipas", "Data", "Aktyvas", "Pajamos EUR", "Savikaina EUR", "Rezultatas EUR", "Užsienio mokestis EUR"]]
+        .concat(y.sales.map((x) => ["Pardavimas", x.d, x.n, x.proceeds.toFixed(2), x.cost.toFixed(2), x.gain.toFixed(2), ""]))
+        .concat(y.divs.map((x) => ["Dividendai", x.d, x.n, x.gross.toFixed(2), "", "", x.wht.toFixed(2)]));
+      const csv = "﻿" + rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";")).join("\n");
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+      a.download = `investai-mokesciai-${sel}.csv`; a.click();
+    });
+  };
+  draw();
 }
 
 /* ---------- Tikri rezultatai: kasdienis portfelio įrašas ir palyginimas su VWCE ---------- */

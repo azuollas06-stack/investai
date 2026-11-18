@@ -1876,3 +1876,22 @@ summary .h-ico { width: 28px; height: 28px; }
 .real-empty p { margin: 0; font-size: 14.5px; line-height: 1.45; }
 .real-dot { width: 10px; height: 10px; margin-top: 6px; flex: none; border-radius: 50%; background: var(--up); box-shadow: 0 0 0 4px color-mix(in srgb, var(--up) 25%, transparent); }
 .real-stats b { white-space: nowrap; font-size: 17px; }
+/* Mokesčių ataskaita */
+.tax-years { margin: 6px 0 14px; }
+.tax-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.tax-box { padding: 14px 16px; border-radius: 16px; background: var(--surface-2); }
+.tax-box h3 { margin: 0 0 8px; font-size: 15.5px; }
+.tax-box dl { margin: 0; display: grid; gap: 2px; }
+.tax-box dl div { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; font-size: 14.5px; }
+.tax-box dt { color: var(--muted); }
+.tax-box dd { margin: 0; font-variant-numeric: tabular-nums; text-align: right; }
+.tax-sum { border-top: 1px solid var(--line); padding-top: 8px !important; margin-top: 4px; }
+.tax-list { margin-top: 14px; }
+.tax-list summary { cursor: pointer; font-weight: 700; color: var(--amber); padding: 6px 0; }
+.tax-list table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0 12px; display: block; overflow-x: auto; }
+.tax-list th, .tax-list td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.tax-list th:nth-child(-n+2), .tax-list td:nth-child(-n+2) { text-align: left; }
+.tax-lock { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 14px; padding: 14px; border-radius: 16px; background: linear-gradient(135deg, color-mix(in srgb, #f5b335 14%, var(--surface)), var(--surface)); }
+.tax-lock p { margin: 0; flex: 1 1 220px; font-size: 14px; }
+.tax-lock .btn { display: inline-flex; gap: 6px; align-items: center; }
+.tax-warn { margin: 12px 0 0; padding: 10px 12px; border-radius: 12px; font-size: 13.5px; background: color-mix(in srgb, #f5b335 14%, transparent); }

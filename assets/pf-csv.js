@@ -94,32 +94,33 @@
   // Trading 212: Action, Time, ISIN, Ticker, Name, No. of shares, Price / share, Currency (Price / share), Total, Currency (Total)…
   function t212(rows) {
     const f = finder(rows[0]);
-    const c = { act: f(/^action$/), time: f(/^time$/), isin: f(/^isin$/), tic: f(/^ticker$/), name: f(/^name$/), qty: f(/no of shares/), price: f(/^price share$/), pcur: f(/currency price share/), total: f(/^total( [a-z]{3})?$/), tcur: f(/currency total/) };
+    const c = { act: f(/^action$/), time: f(/^time$/), isin: f(/^isin$/), tic: f(/^ticker$/), name: f(/^name$/), qty: f(/no of shares/), price: f(/^price share$/), pcur: f(/currency price share/), total: f(/^total( [a-z]{3})?$/), tcur: f(/currency total/), fx: f(/^exchange rate$/), wht: f(/^withholding tax$/), whtc: f(/currency withholding tax/) };
     const totHdr = norm(rows[0][c.total] || "");
     const totCur = (totHdr.match(/total ([a-z]{3})$/) || [])[1];
     return rows.slice(1).map((r) => ({
       date: day(r[c.time]), kind: kindOf(r[c.act]), ticker: r[c.tic], isin: r[c.isin], name: r[c.name],
       qty: Math.abs(num(r[c.qty]) || 0), price: num(r[c.price]), pcur: r[c.pcur] || null,
       total: Math.abs(num(r[c.total]) || 0), tcur: (c.tcur >= 0 && r[c.tcur]) || (totCur ? totCur.toUpperCase() : "EUR"),
+      fx: c.fx >= 0 ? num(r[c.fx]) : null, wht: c.wht >= 0 ? Math.abs(num(r[c.wht]) || 0) : 0, whtCur: c.whtc >= 0 ? r[c.whtc] : null,
     }));
   }
   // Revolut: Date, Ticker, Type, Quantity, Price per share, Total Amount, Currency, FX Rate
   function revolut(rows) {
     const f = finder(rows[0]);
-    const c = { date: f(/^date$/), tic: f(/^ticker$/, /^symbol$/), type: f(/^type$/), qty: f(/^quantity$/), price: f(/price per share/), total: f(/total amount/), cur: f(/^currency$/) };
+    const c = { date: f(/^date$/), tic: f(/^ticker$/, /^symbol$/), type: f(/^type$/), qty: f(/^quantity$/), price: f(/price per share/), total: f(/total amount/), cur: f(/^currency$/), fx: f(/^fx rate$/) };
     return rows.slice(1).map((r) => {
       const q = num(r[c.qty]);
       const cur = (c.cur >= 0 && curOf(r[c.cur])) || curOf(r[c.price]) || curOf(r[c.total]) || "USD";
-      return { date: day(r[c.date]), kind: kindOf(r[c.type], q), ticker: r[c.tic], qty: Math.abs(q || 0), price: num(r[c.price]), pcur: cur, total: Math.abs(num(r[c.total]) || 0), tcur: cur };
+      return { date: day(r[c.date]), kind: kindOf(r[c.type], q), ticker: r[c.tic], qty: Math.abs(q || 0), price: num(r[c.price]), pcur: cur, total: Math.abs(num(r[c.total]) || 0), tcur: cur, fx: c.fx >= 0 ? num(r[c.fx]) : null };
     });
   }
   // Lightyear: Date, Reference, Ticker, ISIN, Type, Quantity, CCY, Price/share, Gross Amount, FX Rate, Fee, Net Amt., Tax Amt.
   function lightyear(rows) {
     const f = finder(rows[0]);
-    const c = { date: f(/^date$/), tic: f(/^ticker$/), isin: f(/^isin$/), type: f(/^type$/), qty: f(/^quantity$/), cur: f(/^ccy$/, /^currency$/), price: f(/price share/), gross: f(/gross amount/), net: f(/^net amt/, /^net amount/) };
+    const c = { date: f(/^date$/), tic: f(/^ticker$/), isin: f(/^isin$/), type: f(/^type$/), qty: f(/^quantity$/), cur: f(/^ccy$/, /^currency$/), price: f(/price share/), gross: f(/gross amount/), net: f(/^net amt/, /^net amount/), fx: f(/^fx rate$/), tax: f(/^tax amt/) };
     return rows.slice(1).map((r) => {
       const q = num(r[c.qty]);
-      return { date: day(r[c.date]), kind: kindOf(r[c.type], q), ticker: r[c.tic], isin: r[c.isin], qty: Math.abs(q || 0), price: num(r[c.price]), pcur: r[c.cur] || null, total: Math.abs(num(r[c.net >= 0 ? c.net : c.gross]) || 0), tcur: r[c.cur] || "EUR" };
+      return { date: day(r[c.date]), kind: kindOf(r[c.type], q), ticker: r[c.tic], isin: r[c.isin], qty: Math.abs(q || 0), price: num(r[c.price]), pcur: r[c.cur] || null, total: Math.abs(num(r[c.net >= 0 ? c.net : c.gross]) || 0), tcur: r[c.cur] || "EUR", fx: c.fx >= 0 ? num(r[c.fx]) : null, wht: c.tax >= 0 ? Math.abs(num(r[c.tax]) || 0) : 0, whtCur: r[c.cur] || null };
     });
   }
   // Bendras sandorių failas: tipas + kiekis + (simbolis | ISIN | pavadinimas)
@@ -196,7 +197,8 @@
       if (t.price && t.kind !== "div") { p.lastPrice = t.price; p.lastDate = t.date; }
     }
     const positions = [...pos.values()].filter((p) => p.qty > 1e-6).map((p) => ({ ...p, avg: p.cost > 0 ? p.cost / p.qty : null }));
-    return { positions, divs };
+    const txOut = ok.filter((t) => t.date && t.kind !== "other").map((t) => ({ d: t.date, k: t.kind, t: t.ticker || "", i: t.isin || "", n: t.name || "", q: t.qty || 0, p: t.price || null, pc: t.pcur || null, a: t.total || 0, c: t.tcur || null, fx: t.fx || null, w: t.wht || 0, wc: t.whtCur || null }));
+    return { positions, divs, txs: txOut };
   }
 
   /* ---------- Įėjimas ---------- */
