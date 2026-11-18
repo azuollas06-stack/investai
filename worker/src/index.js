@@ -194,8 +194,94 @@ async function callAnthropic(env, system, msgs) {
 }
 
 /* ---------- Maršrutai ---------- */
+/* ===== Naujienos ===== */
+const NEWS_VER = 4;
+const TOPICS = {
+  markets: { q: "stock market", feeds: ["https://www.cnbc.com/id/100003114/device/rss/rss.html", "https://feeds.content.dowjones.io/public/rss/mw_topstories", "https://feeds.finance.yahoo.com/rss/2.0/headline?s=^GSPC,^IXIC&region=US&lang=en-US"] },
+  tech: { q: "tech stocks", feeds: ["https://www.cnbc.com/id/19854910/device/rss/rss.html", "https://feeds.finance.yahoo.com/rss/2.0/headline?s=NVDA,AAPL,MSFT,GOOGL,AMZN,META&region=US&lang=en-US"] },
+  crypto: { q: "bitcoin crypto market", feeds: ["https://www.coindesk.com/arc/outboundfeeds/rss/", "https://cointelegraph.com/rss"] },
+  baltic: { q: "Nasdaq Baltic OR Lithuania economy OR Baltic stocks", feeds: ["https://www.lrt.lt/naujienos/verslas?rss", "https://www.vz.lt/rss"], lt: true },
+};
+const SRC_NAMES = { "cnbc.com": "CNBC", "marketwatch.com": "MarketWatch", "finance.yahoo.com": "Yahoo Finance", "coindesk.com": "CoinDesk", "cointelegraph.com": "Cointelegraph", "lrt.lt": "LRT", "vz.lt": "Verslo žinios", "reuters.com": "Reuters", "bloomberg.com": "Bloomberg" };
+const BAD_TITLE = /prediction|forecast 20|should you buy|stocks? to buy|buy now|millionaire|could make you|price target 20\d\d|sponsored|\bpromo\b/i;
+const BAD_SRC = /coinpedia|changelly|benzinga pro|motley fool|fool\.com|zacks|investorplace/i;
+const newsKey = (o) => new Request(`https://investai-cache/news?t=${o.t}&q=${encodeURIComponent((o.q || "").toLowerCase())}&s=${o.s || ""}&v=${NEWS_VER}`);
+function xmlPick(blk, tag) {
+  const m = blk.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`));
+  return m ? m[1].replace(/<!\[CDATA\[|\]\]>/g, "").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;|&#039;|&apos;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#8217;/g, "’").replace(/<[^>]+>/g, "").trim() : "";
+}
+async function readFeed(feed, lt) {
+  const rss = await fetch(feed, { headers: { "User-Agent": "Mozilla/5.0 (compatible; InvestAI/1.0; +https://azuollas06-stack.github.io/investai/)", Accept: "application/rss+xml, application/xml, text/xml" }, cf: { cacheTtl: 300 }, signal: AbortSignal.timeout(6000) });
+  const xml = await rss.text();
+  const items = [...xml.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/g)].slice(0, 20).map((m) => {
+    const blk = m[1];
+    let src = xmlPick(blk, "source") || xmlPick(blk, "News:Source");
+    let title = xmlPick(blk, "title");
+    if (src && title.endsWith(" - " + src)) title = title.slice(0, -(src.length + 3));
+    let link = xmlPick(blk, "link") || ((blk.match(/<link[^>]*href="([^"]+)"/) || [])[1] || "");
+    const real = link.match(/[?&]url=([^&]+)/); if (/bing\.com/.test(link) && real) link = decodeURIComponent(real[1]);
+    let host = ""; try { host = new URL(link).hostname.replace(/^www\./, ""); } catch {}
+    if (!src) src = SRC_NAMES[host] || SRC_NAMES[Object.keys(SRC_NAMES).find((k) => host.endsWith(k)) || ""] || host;
+    const d = new Date(xmlPick(blk, "pubDate") || xmlPick(blk, "dc:date") || xmlPick(blk, "updated"));
+    return { title, link, source: src, time: isNaN(d) ? null : d.toISOString(), ...(lt && /\.lt$/.test(host) ? { lt: title } : {}) };
+  }).filter((x) => x.title && /^https?:/.test(x.link) && !BAD_TITLE.test(x.title) && !BAD_SRC.test(x.source || ""));
+  return { status: rss.status, items };
+}
+async function gatherNews(env, o, debug = false) {
+  const T = TOPICS[o.t];
+  const q = o.q || (T && T.q);
+  const feeds = [...((T && T.feeds) || [])];
+  if (o.s) feeds.push(`https://feeds.finance.yahoo.com/rss/2.0/headline?s=${o.s}&region=US&lang=en-US`);
+  if (q) feeds.push(`https://www.bing.com/news/search?q=${encodeURIComponent(q)}&format=rss&setlang=en-US`);
+  const res = await Promise.allSettled(feeds.map((f) => readFeed(f, T && T.lt)));
+  const dbg = res.map((r, i) => `${new URL(feeds[i]).hostname}:${r.status === "fulfilled" ? `${r.value.status}:${r.value.items.length}` : "err"}`);
+  const seen = new Set(), week = Date.now() - 7 * 864e5;
+  let items = [];
+  for (const r of res) if (r.status === "fulfilled") for (const x of r.value.items) {
+    const k = x.title.toLowerCase().replace(/[^a-z0-9ąčęėįšųūž]+/g, " ").trim().slice(0, 60);
+    if (seen.has(k) || (x.time && new Date(x.time) < week)) continue;
+    seen.add(k); items.push(x);
+  }
+  items.sort((x, y) => (y.time || "").localeCompare(x.time || ""));
+  items = items.slice(0, 30);
+  if (debug) return { dbg, n: items.length, sample: items.slice(0, 3) };
+  return items;
+}
+async function translateNews(env, items, old) {
+  const prev = new Map(((old && old.items) || []).filter((x) => x.lt).map((x) => [x.title, x.lt]));
+  items.forEach((x) => { if (!x.lt && prev.has(x.title)) x.lt = prev.get(x.title); });
+  const todo = items.filter((x) => !x.lt);
+  if (!todo.length || !env.OPENAI_API_KEY) return;
+  try {
+    const r = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST", headers: { Authorization: `Bearer ${env.OPENAI_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ model: env.MODEL || "gpt-6-luna", reasoning_effort: "low", max_completion_tokens: 3000, response_format: { type: "json_schema", json_schema: { name: "t", strict: true, schema: { type: "object", additionalProperties: false, required: ["lt"], properties: { lt: { type: "array", items: { type: "string" } } } } } },
+        messages: [{ role: "developer", content: "Išversk finansų naujienų antraštes į taisyklingą, natūralią lietuvių kalbą. Įmonių pavadinimus, tickerius ir skaičius palik. Grąžink tiek pat eilučių ta pačia tvarka." }, { role: "user", content: JSON.stringify(todo.map((x) => x.title)) }] }),
+    });
+    if (r.ok) { const lt = JSON.parse((await r.json()).choices[0].message.content).lt || []; todo.forEach((x, i) => { if (lt[i]) x.lt = lt[i]; }); }
+  } catch (e) { console.log("vertimo klaida", String(e)); }
+}
+async function refreshNews(env, o, old) {
+  const items = await gatherNews(env, o);
+  if (!items.length) return old || { items: [], at: new Date().toISOString() };
+  await translateNews(env, items, old);
+  const out = { t: o.t, q: o.q, items, at: new Date().toISOString() };
+  await caches.default.put(newsKey(o), new Response(JSON.stringify(out), { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=21600" } }));
+  return out;
+}
+async function cachedNews(env, ctx, o) {
+  const hit = await caches.default.match(newsKey(o));
+  if (hit) {
+    const d = await hit.json();
+    // Senesnis nei 10 min.: grąžiname iškart, o fone atnaujiname
+    if (Date.now() - new Date(d.at) > 10 * 60000 && ctx) ctx.waitUntil(refreshNews(env, o, d).catch(() => {}));
+    return d;
+  }
+  return refreshNews(env, o);
+}
+
 export default {
-  async fetch(req, env) {
+  async fetch(req, env, ctx) {
     const url = new URL(req.url);
     const c = cors(req, env);
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: c.headers });
@@ -245,56 +331,15 @@ export default {
       }
       return new Response(res.stream, { status: 200, headers: { ...c.headers, "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store", "X-Left": String(lim.left) } });
     }
-    /* ----- Naujienų antraštės (Google News RSS) su vertimu į lietuvių kalbą, talpykla 30 min. ----- */
+    /* ----- Naujienų antraštės: keli šaltiniai, vertimas, talpykla (iškart grąžinama, atnaujinama fone) ----- */
     if (url.pathname === "/news" && req.method === "GET") {
-      const q = (url.searchParams.get("q") || "").slice(0, 80).trim();
-      if (!q) return json({ error: "Nėra užklausos." }, 400, c.headers);
-      const cacheKey = new Request(`https://investai-cache/news?q=${encodeURIComponent(q.toLowerCase())}&v=3`);
-      const cache = caches.default;
-      const hit = await cache.match(cacheKey);
-      if (hit) { const d = await hit.json(); return json(d, 200, { ...c.headers, "Cache-Control": "public, max-age=600" }); }
-      let items = [];
-      const dbg = [];
-      const pick = (blk, tag) => { const m = blk.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`)); return m ? m[1].replace(/<!\[CDATA\[|\]\]>/g, "").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/<[^>]+>/g, "").trim() : ""; };
-      const feeds = [
-        ["google", `https://news.google.com/rss/search?q=${encodeURIComponent(q + " when:7d")}&hl=en-US&gl=US&ceid=US:en`],
-        ["bing", `https://www.bing.com/news/search?q=${encodeURIComponent(q)}&format=rss&setlang=en-US`],
-      ];
-      for (const [name, feed] of feeds) {
-        try {
-          const rss = await fetch(feed, { headers: { "User-Agent": "Mozilla/5.0 (compatible; InvestAI/1.0; +https://azuollas06-stack.github.io/investai/)", Accept: "application/rss+xml, application/xml, text/xml" }, cf: { cacheTtl: 600 } });
-          const xml = await rss.text();
-          dbg.push(`${name}:${rss.status}:${xml.length}`);
-          const got = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].slice(0, 12).map((m) => {
-            const blk = m[1];
-            let src = pick(blk, "source") || pick(blk, "News:Source");
-            let title = pick(blk, "title");
-            if (src && title.endsWith(" - " + src)) title = title.slice(0, -(src.length + 3));
-            let link = pick(blk, "link");
-            const real = link.match(/[?&]url=([^&]+)/); if (name === "bing" && real) link = decodeURIComponent(real[1]);
-            if (!src) { try { src = new URL(link).hostname.replace(/^www\./, ""); } catch {} }
-            const d = new Date(pick(blk, "pubDate"));
-            return { title, link, source: src, time: isNaN(d) ? null : d.toISOString() };
-          }).filter((x) => x.title && /^https?:/.test(x.link) && !/prediction|forecast 20|should you buy|stocks? to buy|buy now|millionaire|could make you|price target 20\d\d/i.test(x.title) && !/coinpedia|changelly|benzinga pro|motley fool/i.test(x.source || ""));
-          if (got.length) { items = got; break; }
-        } catch (e) { dbg.push(`${name}:err:${String(e).slice(0, 80)}`); }
-      }
-      items.sort((x, y) => (y.time || "").localeCompare(x.time || ""));
-      if (url.searchParams.get("debug")) return json({ dbg, n: items.length }, 200, c.headers);
-      // Antraščių vertimas (vienas pigus užklausimas visoms)
-      if (items.length && env.OPENAI_API_KEY) {
-        try {
-          const r = await fetch("https://api.openai.com/v1/chat/completions", {
-            method: "POST", headers: { Authorization: `Bearer ${env.OPENAI_API_KEY}`, "Content-Type": "application/json" },
-            body: JSON.stringify({ model: env.MODEL || "gpt-6-luna", reasoning_effort: "low", max_completion_tokens: 2500, response_format: { type: "json_schema", json_schema: { name: "t", strict: true, schema: { type: "object", additionalProperties: false, required: ["lt"], properties: { lt: { type: "array", items: { type: "string" } } } } } },
-              messages: [{ role: "developer", content: "Išversk finansų naujienų antraštes į taisyklingą, natūralią lietuvių kalbą. Įmonių pavadinimus, tickerius ir skaičius palik. Grąžink tiek pat eilučių ta pačia tvarka." }, { role: "user", content: JSON.stringify(items.map((x) => x.title)) }] }),
-          });
-          if (r.ok) { const lt = JSON.parse((await r.json()).choices[0].message.content).lt || []; items.forEach((x, i) => { if (lt[i]) x.lt = lt[i]; }); }
-        } catch (e) { console.log("vertimo klaida", String(e)); }
-      }
-      const out = { q, items, at: new Date().toISOString() };
-      if (items.length) await cache.put(cacheKey, new Response(JSON.stringify(out), { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=1800" } }));
-      return json(out, 200, c.headers);
+      const t = (url.searchParams.get("t") || "").toLowerCase();
+      const q = (url.searchParams.get("q") || "").slice(0, 120).trim();
+      const sy = (url.searchParams.get("s") || "").toUpperCase().replace(/[^A-Z0-9.,\-^=]/g, "").slice(0, 60);
+      if (!q && !TOPICS[t]) return json({ error: "Nėra užklausos." }, 400, c.headers);
+      if (url.searchParams.get("debug")) { const d = await gatherNews(env, { t, q, s: sy }, true); return json(d, 200, c.headers); }
+      const out = await cachedNews(env, ctx, { t, q, s: sy });
+      return json(out, 200, { ...c.headers, "Cache-Control": "public, max-age=120" });
     }
 
     /* ----- Nuotraukos atpažinimas su AI ----- */
@@ -381,6 +426,10 @@ export default {
     const push = env.PUSH.get(env.PUSH.idFromName("push"));
     if (event.cron === "0 6 * * 1-5") ctx.waitUntil(push.morning().then((r) => console.log("morning", JSON.stringify(r))));
     else if (event.cron === "0 17 * * 0") ctx.waitUntil(push.weekly().then((r) => console.log("weekly", JSON.stringify(r))));
-    else ctx.waitUntil(push.check().then((r) => console.log("push check", JSON.stringify(r))));
+    else {
+      ctx.waitUntil(push.check().then((r) => console.log("push check", JSON.stringify(r))));
+      // Iš anksto atnaujiname pagrindines naujienų temas, kad lankytojai jas gautų akimirksniu
+      ctx.waitUntil(Promise.all(Object.keys(TOPICS).map((t) => refreshNews(env, { t, q: "", s: "" }).catch((e) => console.log("news", t, String(e))))));
+    }
   },
 };

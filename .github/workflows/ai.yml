@@ -82,8 +82,10 @@ jobs:
           curl -sS -m 60 -X POST "$URL/chat" -H "Origin: https://azuollas06-stack.github.io" -H "Content-Type: application/json" \
             -d '{"messages":[{"role":"user","content":"Kodėl Nvidia akcija šiandien pajudėjo? Atsakyk trumpai su šaltiniais."}]}' ; echo
           echo "--- naujienos"
-          curl -sS -m 60 "$URL/news?q=Nvidia%20stock&debug=1" -H "Origin: https://azuollas06-stack.github.io"; echo
-          curl -sS -m 60 "$URL/news?q=Nvidia%20stock" -H "Origin: https://azuollas06-stack.github.io" | head -c 1500; echo
+          for t in markets tech crypto baltic; do curl -sS -m 60 "$URL/news?t=$t&debug=1" -H "Origin: https://azuollas06-stack.github.io" | head -c 600; echo; done
+          curl -sS -m 60 "$URL/news?q=Nvidia%20stock&s=NVDA&debug=1" -H "Origin: https://azuollas06-stack.github.io" | head -c 600; echo
+          time curl -sS -m 90 "$URL/news?t=markets" -H "Origin: https://azuollas06-stack.github.io" | head -c 1200; echo
+          time curl -sS -m 30 "$URL/news?t=markets" -o /dev/null
 
       - name: Patikrinti pranešimus ir nuotraukų atpažinimą
         run: |

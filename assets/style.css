@@ -1980,3 +1980,4 @@ em.why-move.ex-down { color: var(--down); } em.why-move.ex-up { color: var(--up)
 .foot-legal{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px}
 .foot-legal a{color:var(--muted,#6b7280);text-decoration:underline;text-underline-offset:2px}
 .chip.on{background:var(--sea);color:#fff;box-shadow:none}
+.hl-more{width:100%;margin-top:8px}
