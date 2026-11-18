@@ -170,6 +170,7 @@ const PFAI = (() => {
       <div class="al-pick" role="group" aria-label="Akcijos įspėjimams">${cands.slice(0, 24).map((r) => `<button type="button" class="al-chip" data-s="${esc(r.s)}" aria-pressed="${sel.has(r.s)}">${logoHTML(r.s, r.n, "#1d3a63", 22)}<span>${esc(r.n)}</span></button>`).join("")}</div>
       <p class="muted small al-max">${isPremium() ? "Premium: gali pasirinkti visas akcijas." : `Nemokamai – iki ${max} akcijų. <a href="premium.html">Premium</a> – visos ir priminimai apie ataskaitas.`} Kainos lygį (pvz., „kai nukris žemiau 140 $“) nustatysi akcijos puslapyje varpeliu.</p>
       <div class="al-row"><span>Pranešti, kai per dieną pajuda</span><div class="seg" role="group" aria-label="Riba" id="al-th">${[3, 5, 10].map((t) => `<button type="button" data-th="${t}" aria-pressed="${((cfgA && cfgA.th) || 5) === t}">±${t} %</button>`).join("")}</div></div>
+      <label class="al-row al-ed"><span>Rytinė santrauka 8:00 darbo dienomis</span><input type="checkbox" id="al-mo" ${cfgA && cfgA.morning ? "checked" : ""}></label>
       <label class="al-row al-ed"><span>Savaitės santrauka sekmadienio vakarą</span><input type="checkbox" id="al-wk" ${!cfgA || cfgA.weekly !== false ? "checked" : ""}></label>
       ${isPremium() ? `<label class="al-row al-ed"><span>Priminti dieną prieš ataskaitas</span><input type="checkbox" id="al-ed" ${!cfgA || cfgA.earnings ? "checked" : ""}></label>` : ""}
       <div class="al-actions"><button type="button" class="btn primary" id="al-save">${on ? "Išsaugoti" : "Įjungti įspėjimus"}</button>${on ? `<button type="button" class="btn" id="al-test">Bandomasis pranešimas</button><button type="button" class="linkish" id="al-off">Išjungti</button>` : ""}</div>
@@ -191,7 +192,7 @@ const PFAI = (() => {
         const symbols = [...sel];
         const prev = ALERTS.get() || {};
         const names = { ...(prev.names || {}), ...Object.fromEntries(symbols.map((x) => [x, (cands.find((r) => r.s === x) || {}).n || x])) };
-        await ALERTS.save({ ...prev, symbols, names, th: +(el.querySelector("#al-th [aria-pressed=true]") || {}).dataset?.th || 5, weekly: $("#al-wk").checked, earnings: !!($("#al-ed") && $("#al-ed").checked) });
+        await ALERTS.save({ ...prev, symbols, names, th: +(el.querySelector("#al-th [aria-pressed=true]") || {}).dataset?.th || 5, weekly: $("#al-wk").checked, morning: $("#al-mo").checked, earnings: !!($("#al-ed") && $("#al-ed").checked) });
         renderAlerts(a);
       } catch (e) { msg.textContent = e.message || "Nepavyko įjungti."; btn.disabled = false; }
     });

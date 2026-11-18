@@ -208,6 +208,7 @@ function renderChrome(page) {
         <span class="badge unverified">Reikia patikrinti</span><span>šaltiniai neaiškūs ar nesutaria</span>
       </div>
       <p>InvestAI teikia informaciją, o ne investavimo rekomendacijas. Apžvalgas rengia AI (dirbtinis intelektas) pagal nurodytus šaltinius, todėl galimos klaidos. Kainų duomenys – Yahoo Finance (uždelsti), grafikai – <a href="https://www.tradingview.com/" target="_blank" rel="noopener">TradingView</a>.</p>
+      <p class="foot-legal"><a href="apie.html#privatumas">Privatumas</a><a href="apie.html#salygos">Naudojimo sąlygos</a><a href="#" data-report="svetainė">Pranešti apie klaidą</a></p>
     </div>`;
   document.body.append(footer);
 
@@ -329,7 +330,7 @@ function explainHTML(e, opts = {}) {
     <ul>${(e.points || []).map((p) => `<li>${esc(p)}</li>`).join("")}</ul>
     ${e.context ? `<p class="explain-ctx">${esc(e.context)}</p>` : ""}
     <p class="explain-meta"><span class="badge ${st.cls}">${st.label}</span> Atnaujinta ${fmtShort(e.date)}${age > 7 ? " (senesnis nei savaitė)" : ""} · ${(e.sources || []).map((s) => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>`).join(" · ")}</p>
-    ${opts.footer === false ? "" : `<p class="explain-foot">Paaiškinimą parengė AI pagal nurodytus šaltinius. Tai ne rekomendacija pirkti ar parduoti.</p>`}
+    ${opts.footer === false ? "" : `<p class="explain-foot">Paaiškinimą parengė AI pagal nurodytus šaltinius. Tai ne rekomendacija pirkti ar parduoti. <a href="#" data-report="paaiškinimas">Pranešti apie klaidą</a></p>`}
   </div>`;
 }
 
@@ -427,7 +428,7 @@ function renderDigest(d) {
     <div class="dateline">${fmtDate(d.date, true)}</div>
     <h1>${esc(d.title)}</h1>
     <p class="lead">${esc(d.lead)}</p>
-    <p class="ai-note">Apžvalgą parengė dirbtinis intelektas pagal nurodytus šaltinius. Tai ne investavimo rekomendacija.</p>
+    <p class="ai-note">Apžvalgą parengė AI (dirbtinis intelektas) pagal nurodytus šaltinius. Tai ne investavimo rekomendacija. <a href="#" data-report="dienos apžvalga">Pranešti apie klaidą</a></p>
     ${sections}${cal}`;
 }
 async function pageDigest() {

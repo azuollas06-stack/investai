@@ -15,6 +15,8 @@ PER_USER_DAY = "25"
 GLOBAL_DAY = "600"
 # Premium nariams – daugiau klausimų. Čia tik rakto maišos kodas (patį raktą žino tik atrakinę Premium).
 PREMIUM_MULT = "2"
+# Atsiliepimų peržiūros rakto maišos kodas (patį raktą žino tik savininkas)
+ADMIN_HASH = "9348909a49b729d8adcbc997a2a6abc6fbdb535af35762b3656e74cb59ef9567"
 PREMIUM_AI_HASH = "b0deb5e24109eab3fbdc18111abd0130483828966d7bacbb225ff01c773c7797"
 
 [[durable_objects.bindings]]
@@ -35,4 +37,4 @@ new_sqlite_classes = ["Push"]
 
 # Kainų įspėjimų tikrinimas kas 15 min. darbo dienomis (UTC 7–21)
 [triggers]
-crons = ["*/15 7-21 * * 1-5", "0 17 * * 0"]
+crons = ["*/15 7-21 * * 1-5", "0 17 * * 0", "0 6 * * 1-5"]

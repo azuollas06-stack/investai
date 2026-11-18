@@ -61,11 +61,11 @@ export class Push extends DurableObject {
   async subscribe(data) {
     const id = await hash(data.sub.endpoint);
     const prev = (await this.ctx.storage.get("s:" + id)) || {};
-    await this.ctx.storage.put("s:" + id, { sub: data.sub, symbols: data.symbols, names: data.names || {}, th: data.th, earnings: !!data.earnings, weekly: data.weekly !== false, levels: data.levels || {}, premium: !!data.premium, sent: prev.sent || {}, at: Date.now() });
+    await this.ctx.storage.put("s:" + id, { sub: data.sub, symbols: data.symbols, names: data.names || {}, th: data.th, earnings: !!data.earnings, weekly: data.weekly !== false, morning: !!data.morning, levels: data.levels || {}, premium: !!data.premium, sent: prev.sent || {}, at: Date.now() });
     return { ok: true, id };
   }
   async unsubscribe(endpoint) { await this.ctx.storage.delete("s:" + (await hash(endpoint))); return { ok: true }; }
-  async status(endpoint) { const s = await this.ctx.storage.get("s:" + (await hash(endpoint))); return s ? { on: true, symbols: s.symbols, th: s.th, earnings: s.earnings, weekly: s.weekly !== false, levels: s.levels || {} } : { on: false }; }
+  async status(endpoint) { const s = await this.ctx.storage.get("s:" + (await hash(endpoint))); return s ? { on: true, symbols: s.symbols, th: s.th, earnings: s.earnings, weekly: s.weekly !== false, morning: !!s.morning, levels: s.levels || {} } : { on: false }; }
   async test(endpoint) {
     const s = await this.ctx.storage.get("s:" + (await hash(endpoint)));
     if (!s) return { ok: false };
@@ -120,6 +120,43 @@ export class Push extends DurableObject {
       if (changed && (await this.ctx.storage.get(k))) await this.ctx.storage.put(k, s);
     }
     return { ok: true, subs: all.size, sent, removed };
+  }
+
+  // Rytinė santrauka darbo dienomis 8:00 (tik tiems, kas įjungė)
+  async morning() {
+    const r = await fetch(SITE + "data/prices.json?t=" + Date.now()).catch(() => null);
+    if (!r || !r.ok) return { ok: false };
+    const items = (await r.json()).items || {};
+    const today = new Date().toISOString().slice(0, 10);
+    const all = await this.ctx.storage.list({ prefix: "s:" });
+    let sent = 0;
+    for (const [k, s] of all) {
+      if (!s.morning || s.sent.morning === today) continue;
+      const rows = s.symbols.map((sym) => ({ p: items[sym], n: s.names[sym] || sym.split(":")[1] })).filter((x) => x.p && typeof x.p.d1 === "number");
+      if (!rows.length) continue;
+      const pc = (v) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toLocaleString("lt-LT", { maximumFractionDigits: 1 })} %`;
+      const top = rows.sort((x, y) => Math.abs(y.p.d1) - Math.abs(x.p.d1)).slice(0, 3).map((x) => `${x.n} ${pc(x.p.d1)}`).join(", ");
+      const ev = rows.filter((x) => x.p.ed === today).map((x) => x.n);
+      const st = await this.send(s.sub, { title: "Labas rytas! Tavo akcijos vakar", body: `${top}.${ev.length ? ` Šiandien ataskaitas skelbia: ${ev.join(", ")}.` : ""}`, url: "rytas.html" });
+      if (st === 404 || st === 410) { await this.ctx.storage.delete(k); continue; }
+      s.sent.morning = today; await this.ctx.storage.put(k, s); sent++;
+    }
+    return { ok: true, sent };
+  }
+
+  // Atsiliepimai ir pranešimai apie klaidas (be asmens duomenų)
+  async addFeedback(f) {
+    const id = `fb:${Date.now()}:${Math.random().toString(36).slice(2, 7)}`;
+    await this.ctx.storage.put(id, f);
+    // Senesni nei 90 dienų pranešimai ištrinami
+    const cut = `fb:${Date.now() - 90 * 864e5}`;
+    const old = await this.ctx.storage.list({ prefix: "fb:", end: cut, limit: 100 });
+    if (old.size) await this.ctx.storage.delete([...old.keys()]);
+    return { ok: true };
+  }
+  async listFeedback() {
+    const all = await this.ctx.storage.list({ prefix: "fb:", reverse: true, limit: 200 });
+    return [...all.values()];
   }
 
   // Sekmadienio vakaro santrauka: kaip per savaitę pajudėjo pasirinktos akcijos ir kas laukia

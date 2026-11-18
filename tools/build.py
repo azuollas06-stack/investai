@@ -21,6 +21,7 @@ PAGES = {
     "apie": "Apie – InvestAI",
     "rytas": "Mano rytas – InvestAI",
     "zodynas": "Žodynas – InvestAI",
+    "atsiliepimai": "Pranešimai – InvestAI",
 }
 def ver(rel):
     return hashlib.sha1((ROOT / rel).read_bytes()).hexdigest()[:8]
@@ -30,6 +31,7 @@ def bust(html):
 
 for name, title in PAGES.items():
     body = (ROOT / f"tools/pages/{name}.body.html").read_text(encoding="utf-8")
-    html = HEAD.replace("{{TITLE}}", title).replace("{{DESC}}", DESC) + body.rstrip() + "\n</body>\n</html>\n"
+    head = HEAD.replace("<head>", '<head>\n<meta name="robots" content="noindex">', 1) if name == "atsiliepimai" else HEAD
+    html = head.replace("{{TITLE}}", title).replace("{{DESC}}", DESC) + body.rstrip() + "\n</body>\n</html>\n"
     (ROOT / f"{name}.html").write_text(bust(html), encoding="utf-8")
     print("built", name)

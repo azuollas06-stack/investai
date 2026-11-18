@@ -1968,3 +1968,15 @@ em.why-move.ex-down { color: var(--down); } em.why-move.ex-up { color: var(--up)
 .plan-list li > b { grid-area: val; font-size: 19px; white-space: nowrap; }
 .plan-list li > .btn { grid-area: btn; justify-self: start; }
 @media (min-width: 681px) { .plan-list li { grid-template-columns: auto 1fr auto auto; grid-template-areas: "dot name val btn"; } .plan-list li > .btn { justify-self: end; } }
+.ai-fb { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+.ai-fb button { border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 999px; padding: 4px 10px; font: inherit; font-size: 13px; cursor: pointer; }
+.ai-fb button:hover { border-color: var(--amber); color: var(--sea); }
+.ai-fb .ai-fb-bug { font-size: 12.5px; font-weight: 600; }
+.fb-sheet textarea { width: 100%; min-height: 100px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); color: var(--sea); font: inherit; font-size: 16px; resize: vertical; }
+.explain-foot a { color: inherit; text-decoration: underline; white-space: nowrap; }
+.ai-note a, .news-side a[data-report] { color: inherit; text-decoration: underline; }
+
+/* v17: teisinės nuorodos poraštėje */
+.foot-legal{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px}
+.foot-legal a{color:var(--muted,#6b7280);text-decoration:underline;text-underline-offset:2px}
+.chip.on{background:var(--sea);color:#fff;box-shadow:none}

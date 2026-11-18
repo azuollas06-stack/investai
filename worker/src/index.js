@@ -325,6 +325,23 @@ export default {
       }
     }
 
+    /* ----- Atsiliepimai / klaidų pranešimai ----- */
+    if (url.pathname === "/feedback" && req.method === "POST") {
+      let b = {}; try { b = await req.json(); } catch {}
+      const f = { at: new Date().toISOString(), kind: ["up", "down", "bug", "idea"].includes(b.kind) ? b.kind : "bug", where: String(b.where || "").slice(0, 120), text: String(b.text || "").slice(0, 1000), excerpt: String(b.excerpt || "").slice(0, 600) };
+      if (!f.text && f.kind === "bug" && !f.excerpt) return json({ error: "Aprašyk klaidą." }, 400, c.headers);
+      const key = await userKey(req);
+      const lim = await env.LIMITER.get(env.LIMITER.idFromName("fb-" + today())).take(key, 30, 2000);
+      if (!lim.ok) return json({ error: "Per daug pranešimų šiandien." }, 429, c.headers);
+      await env.PUSH.get(env.PUSH.idFromName("push")).addFeedback(f);
+      return json({ ok: true }, 200, c.headers);
+    }
+    if (url.pathname === "/feedback/list" && req.method === "GET") {
+      const t = url.searchParams.get("t") || "";
+      if (!env.ADMIN_HASH || (await sha256hex(t)) !== env.ADMIN_HASH) return json({ error: "Nėra teisių." }, 403, c.headers);
+      return json({ items: await env.PUSH.get(env.PUSH.idFromName("push")).listFeedback() }, 200, c.headers);
+    }
+
     /* ----- Pranešimai telefone ----- */
     if (url.pathname.startsWith("/push/")) {
       const push = env.PUSH.get(env.PUSH.idFromName("push"));
@@ -350,7 +367,7 @@ export default {
           if (Number.isFinite(+lv.hi) && +lv.hi > 0) o.hi = +lv.hi;
           if (o.lo !== undefined || o.hi !== undefined) { levels[sym] = o; if (body.names && typeof body.names[sym] === "string") names[sym] = body.names[sym].slice(0, 40); }
         }
-        const r = await push.subscribe({ sub: { endpoint: sub.endpoint, keys: { p256dh: sub.keys.p256dh, auth: sub.keys.auth } }, symbols, names, th, levels, weekly: body.weekly !== false, earnings: premium && !!body.earnings, premium });
+        const r = await push.subscribe({ sub: { endpoint: sub.endpoint, keys: { p256dh: sub.keys.p256dh, auth: sub.keys.auth } }, symbols, names, th, levels, weekly: body.weekly !== false, morning: !!body.morning, earnings: premium && !!body.earnings, premium });
         return json({ ...r, max, premium }, 200, c.headers);
       }
       if (url.pathname === "/push/unsubscribe" && req.method === "POST" && valid) return json(await push.unsubscribe(sub.endpoint), 200, c.headers);
@@ -362,7 +379,8 @@ export default {
   },
   async scheduled(event, env, ctx) {
     const push = env.PUSH.get(env.PUSH.idFromName("push"));
-    if (event.cron === "0 17 * * 0") ctx.waitUntil(push.weekly().then((r) => console.log("weekly", JSON.stringify(r))));
+    if (event.cron === "0 6 * * 1-5") ctx.waitUntil(push.morning().then((r) => console.log("morning", JSON.stringify(r))));
+    else if (event.cron === "0 17 * * 0") ctx.waitUntil(push.weekly().then((r) => console.log("weekly", JSON.stringify(r))));
     else ctx.waitUntil(push.check().then((r) => console.log("push check", JSON.stringify(r))));
   },
 };

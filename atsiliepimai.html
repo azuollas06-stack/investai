@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta name="robots" content="noindex">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pranešimai – InvestAI</title>
+<meta name="description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
+<meta property="og:title" content="Pranešimai – InvestAI">
+<meta property="og:description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0a1930">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="InvestAI">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>try{var d=document.documentElement,t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";d.dataset.theme=t;try{localStorage.removeItem("investai.style")}catch(e){}}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css?v=7c95aa0d">
+<script src="assets/viz.js?v=4ac1511d" defer></script>
+<script src="assets/app.js?v=c387e7a2" defer></script>
+<script src="assets/glossary.js?v=be0fc5e9" defer></script>
+<script src="assets/pages.js?v=6cb5fd41" defer></script>
+<script src="assets/alerts.js?v=f0085f96" defer></script>
+<script src="assets/onboard.js?v=5d7c8b27" defer></script>
+<script src="assets/ai.js?v=a19a3eff" defer></script>
+</head>
+<main class="wrap" id="main">
+<h1>Pranešimai apie klaidas</h1>
+<p class="muted">Vidinis puslapis. Įvesk administratoriaus raktą – jis saugomas tik šioje naršyklėje.</p>
+<form id="fb-login" class="card" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+  <input id="fb-t" type="password" autocomplete="off" placeholder="Administratoriaus raktas" style="flex:1;min-width:200px">
+  <button class="btn primary" type="submit">Rodyti</button>
+</form>
+<div id="fb-filter" class="chips" style="margin:14px 0" hidden></div>
+<div id="fb-list"></div>
+</main>
+<script>
+(() => {
+  const KEY = "investai.admin.t", esc = (s) => String(s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const LBL = { up: "👍 Patiko", down: "👎 Nepatiko", bug: "Klaida", idea: "Idėja" };
+  const t = document.getElementById("fb-t"), list = document.getElementById("fb-list"), filt = document.getElementById("fb-filter");
+  let items = [], only = "";
+  try { t.value = localStorage.getItem(KEY) || ""; } catch {}
+  function draw() {
+    const rows = items.filter((f) => !only || f.kind === only);
+    const n = (k) => items.filter((f) => f.kind === k).length;
+    filt.hidden = false;
+    filt.innerHTML = [["", `Visi (${items.length})`], ...Object.keys(LBL).map((k) => [k, `${LBL[k]} (${n(k)})`])]
+      .map(([k, l]) => `<button type="button" class="chip${k === only ? " on" : ""}" data-k="${k}">${l}</button>`).join("");
+    list.innerHTML = rows.length ? rows.map((f) => `<article class="card" style="margin-bottom:10px">
+      <p class="muted" style="margin:0 0 6px">${esc(LBL[f.kind] || f.kind)} · ${esc(new Date(f.at).toLocaleString("lt-LT"))} · ${esc(f.where)}</p>
+      ${f.text ? `<p style="margin:0 0 6px">${esc(f.text)}</p>` : ""}
+      ${f.excerpt ? `<blockquote style="margin:0;padding-left:10px;border-left:3px solid var(--line,#ddd);color:var(--muted,#666)">${esc(f.excerpt)}</blockquote>` : ""}
+    </article>`).join("") : `<p class="muted">Pranešimų nėra.</p>`;
+  }
+  filt.addEventListener("click", (e) => { const b = e.target.closest("[data-k]"); if (b) { only = b.dataset.k; draw(); } });
+  document.getElementById("fb-login").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    list.innerHTML = `<p class="muted">Kraunama…</p>`;
+    try {
+      const c = await (await fetch("data/ai.json?t=" + Date.now())).json();
+      const r = await fetch(c.url + "/feedback/list?t=" + encodeURIComponent(t.value.trim()));
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.error || "Nepavyko");
+      try { localStorage.setItem(KEY, t.value.trim()); } catch {}
+      items = j.items || []; draw();
+    } catch (err) { list.innerHTML = `<p class="muted">${esc(err.message === "Nėra teisių." ? "Neteisingas raktas." : "Nepavyko įkelti: " + err.message)}</p>`; }
+  });
+  if (t.value) document.getElementById("fb-login").requestSubmit();
+})();
+</script>
+</body>
+</html>

@@ -126,9 +126,10 @@
   function bubbles() {
     if (!chat.length) return `<div class="ai-hello">${ORB("big")}<h2>Labas! Ko nori paklausti?</h2><p>Paaiškinu terminus, rinkos įvykius ir tavo portfelio sudėtį – paprastai ir lietuviškai.</p></div>
       <div class="ai-sugg">${suggestions().map(([i, q]) => `<button type="button" class="ai-card"><span class="ai-card-ico">${ico(i, 20)}</span><span>${escH(q)}</span><span class="ai-card-go">${ico("chevron", 18)}</span></button>`).join("")}</div>`;
-    return chat.map((m) => m.role === "user"
+    return chat.map((m, i) => m.role === "user"
       ? `<div class="ai-msg me"><p>${escH(m.content)}</p></div>`
-      : `<div class="ai-msg bot${m.err ? " err" : ""}">${ORB("sm")}<div class="ai-txt">${md(m.content) || `<span class="ai-think">${m.searching ? "Ieškau naujausių žinių internete…" : "Galvoju…"}</span>`}</div></div>`).join("");
+      : `<div class="ai-msg bot${m.err ? " err" : ""}">${ORB("sm")}<div class="ai-txt">${md(m.content) || `<span class="ai-think">${m.searching ? "Ieškau naujausių žinių internete…" : "Galvoju…"}</span>`}
+        ${!m.err && m.content && !(busy && i === chat.length - 1) ? `<div class="ai-fb" data-i="${i}">${m.rated ? `<span class="muted small">${m.rated === "up" ? "Ačiū!" : "Ačiū – peržiūrėsime."}</span>` : `<button type="button" data-fb="up" aria-label="Naudingas atsakymas">👍</button><button type="button" data-fb="down" aria-label="Nenaudingas atsakymas">👎</button><button type="button" data-fb="bug" class="ai-fb-bug">Pranešti apie klaidą</button>`}</div>` : ""}</div></div>`).join("");
   }
   function render() {
     if (!dlg) return;
@@ -165,7 +166,14 @@
     ta.addEventListener("input", grow);
     ta.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); dlg.querySelector(".ai-form").requestSubmit(); } });
     dlg.querySelector(".ai-form").addEventListener("submit", (e) => { e.preventDefault(); const q = ta.value.trim(); if (q && !busy) { ta.value = ""; grow(); ask(q); } });
-    dlg.querySelector(".ai-log").addEventListener("click", (e) => { const b = e.target.closest(".ai-card"); if (b) ask(b.textContent.trim()); });
+    dlg.querySelector(".ai-log").addEventListener("click", (e) => {
+      const b = e.target.closest(".ai-card"); if (b) return ask(b.textContent.trim());
+      const f = e.target.closest("[data-fb]"); if (!f) return;
+      const i = +f.closest(".ai-fb").dataset.i, m = chat[i], q = chat[i - 1];
+      const send = (kind, text = "") => { sendFeedback({ kind, where: "AI asistentas · " + location.pathname.split("/").pop(), text, excerpt: `K: ${q ? q.content : ""}\nA: ${m.content}`.slice(0, 600) }); m.rated = kind; save(); render(); };
+      if (f.dataset.fb === "up") send("up");
+      else reportIssue({ title: f.dataset.fb === "bug" ? "Kas atsakyme negerai?" : "Kodėl atsakymas nenaudingas?", onSend: (t) => send(f.dataset.fb, t) });
+    });
     dlg.querySelector(".ai-close").addEventListener("click", () => dlg.close());
     dlg.querySelector(".ai-clear").addEventListener("click", () => { chat = []; save(); render(); ta.focus(); });
     dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
@@ -222,6 +230,39 @@
     save();
     render();
   }
+
+  /* ---------- Atsiliepimai ---------- */
+  async function sendFeedback(f) {
+    try { const c = CFG || (await getJSON("data/ai.json")); if (c && c.url) await fetch(c.url + "/feedback", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(f) }); } catch {}
+  }
+  function reportIssue({ title = "Pranešti apie klaidą", where = "", excerpt = "", onSend } = {}) {
+    const d = document.createElement("dialog");
+    d.className = "ocr-choice fb-sheet";
+    d.innerHTML = `<form method="dialog" class="oc-in"><h2>${escH(title)}</h2>
+      <p class="muted" style="margin:0 4px">Pvz., neteisingas skaičius, pasenusi informacija ar keista formuluotė. Asmens duomenų nerašyk.</p>
+      <textarea rows="4" maxlength="1000" placeholder="Kas negerai?"></textarea>
+      <div class="al-actions"><button type="button" class="btn primary fb-send">Siųsti</button><button class="btn" value="x">Atšaukti</button></div>
+      <p class="muted small fb-done" hidden>Ačiū! Pranešimą gavome ir peržiūrėsime.</p></form>`;
+    document.body.appendChild(d);
+    d.addEventListener("close", () => d.remove());
+    d.showModal();
+    d.querySelector("textarea").focus();
+    d.querySelector(".fb-send").addEventListener("click", async () => {
+      const t = d.querySelector("textarea").value.trim();
+      if (onSend) onSend(t); else await sendFeedback({ kind: "bug", where: where || document.title, text: t, excerpt });
+      d.querySelector(".fb-done").hidden = false; d.querySelector(".fb-send").disabled = true;
+      setTimeout(() => d.open && d.close(), 1200);
+    });
+  }
+  window.reportIssue = reportIssue;
+  // „Pranešti apie klaidą“ visuose AI paaiškinimuose ir apžvalgose
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("[data-report]");
+    if (!a) return;
+    e.preventDefault();
+    const box = a.closest(".explain, .story, article, section, .card");
+    reportIssue({ where: `${document.title} · ${a.dataset.report}`, excerpt: box ? box.textContent.replace(/\s+/g, " ").trim().slice(0, 600) : "" });
+  });
 
   /* ---------- Paleidimas ---------- */
   async function init() {
