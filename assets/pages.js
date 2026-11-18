@@ -244,7 +244,12 @@ async function pageAsset() {
     $("#ap-range").innerHTML = rangeBarHTML(p.lo52, p.hi52, p.price, CUR_SIGN[p.cur] || p.cur);
     if (p.an && p.an.n) $("#ap-an").innerHTML = analystGaugeHTML(p.an, p.price, CUR_SIGN[p.cur] || p.cur);
     else $("#ap-an-card").hidden = true;
-    $("#ap-stats").innerHTML = STAT_DEFS.map((d) => statCard(d, p)).join("");
+    const today = new Date().toISOString().slice(0, 10);
+    const dates = [
+      p.ed && p.ed >= today ? `<div class="stat stat-date"><span>${termHTML("rezultatai", "Kiti rezultatai")}</span><b>${fmtShort(p.ed)}</b><small>${whenLabel(p.ed)}</small></div>` : "",
+      p.xd && p.xd >= today ? `<div class="stat stat-date"><span>${termHTML("exdiv", "Dividendų ex data")}</span><b>${fmtShort(p.xd)}</b><small>${whenLabel(p.xd)}${p.dr ? ` · ${p.dr.toLocaleString("lt-LT")} ${CUR_SIGN[p.cur] || p.cur}/akc. per metus` : ""}</small></div>` : "",
+    ].join("");
+    $("#ap-stats").innerHTML = STAT_DEFS.map((d) => statCard(d, p)).join("") + dates;
   } else {
     $("#asset-native").hidden = true;
     $("#w-info").hidden = false;

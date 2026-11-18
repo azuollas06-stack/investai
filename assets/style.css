@@ -1258,3 +1258,4 @@ img, svg, video, canvas { max-width: 100%; }
 .tm-group { text-overflow: clip; }
 .tm-group.tm-g-hide { color: transparent; }
 .pulse-item { animation: rise .45s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i, 0) * 55ms); } @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+.stat-date b { color: var(--amber); } @media (max-width: 680px) { .stat-date small { display: block !important; } }
