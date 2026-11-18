@@ -457,6 +457,13 @@ async function buildSearch(form) {
 /* ---------- Paleidimas ---------- */
 document.addEventListener("DOMContentLoaded", async () => {
   const page = document.body.dataset.page;
+  // Pasirinkto stiliaus diagramų paletė (CSS kintamasis --palette)
+  const pal = getComputedStyle(document.documentElement).getPropertyValue("--palette").trim();
+  if (pal) {
+    PALETTE.splice(0, PALETTE.length, ...pal.split(",").map((x) => x.trim()));
+    LIGHT_COLORS.clear();
+    getComputedStyle(document.documentElement).getPropertyValue("--palette-light").split(",").map((x) => x.trim()).filter(Boolean).forEach((c) => LIGHT_COLORS.add(c));
+  }
   renderChrome(page);
   document.querySelectorAll("[data-icon]").forEach((el) => { el.innerHTML = icon(el.dataset.icon, 24); });
   try {
