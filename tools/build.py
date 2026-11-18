@@ -19,6 +19,8 @@ PAGES = {
     "premium": "Premium – InvestAI",
     "archyvas": "Archyvas – InvestAI",
     "apie": "Apie – InvestAI",
+    "rytas": "Mano rytas – InvestAI",
+    "zodynas": "Žodynas – InvestAI",
 }
 def ver(rel):
     return hashlib.sha1((ROOT / rel).read_bytes()).hexdigest()[:8]

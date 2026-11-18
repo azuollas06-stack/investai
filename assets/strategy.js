@@ -4,7 +4,7 @@
 "use strict";
 
 const BUCKETS = [
-  { id: "stocks", name: "Akcijos ir akcijų fondai", color: "#1d3a63" },
+  { id: "stocks", name: "Akcijos ir akcijų fondai", color: "#4f8cff" },
   { id: "bonds", name: "Obligacijos", color: "#2c8c99" },
   { id: "cash", name: "Grynieji ir pinigų rinka", color: "#8c9aab" },
   { id: "gold", name: "Auksas", color: "#a07a2c" },

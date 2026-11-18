@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mano rytas – InvestAI</title>
+<meta name="description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
+<meta property="og:title" content="Mano rytas – InvestAI">
+<meta property="og:description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0a1930">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="InvestAI">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css?v=72bc5ecf">
+<script src="assets/viz.js?v=89d065b0" defer></script>
+<script src="assets/app.js?v=29ee3f5b" defer></script>
+<script src="assets/glossary.js?v=be0fc5e9" defer></script>
+<script src="assets/pages.js?v=2037bcdf" defer></script>
+</head>
+<body data-page="morning">
+<main class="wrap wide morning">
+  <header class="m-head">
+    <div>
+      <p class="greet-date" id="m-date"></p>
+      <h1 id="m-greet">Mano rytas</h1>
+      <p class="lead" id="m-lead">Tavo akcijos, svarbiausi įvykiai ir naujienos vienoje vietoje.</p>
+    </div>
+    <p class="data-stamp" id="m-stamp"></p>
+  </header>
+
+  <section class="m-block">
+    <h2 class="m-h">Rinkos</h2>
+    <div class="pulse-scroll" id="m-pulse"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+  </section>
+
+  <div class="m-grid">
+    <div class="m-col">
+      <section class="card m-block" id="m-portfolio"><div class="skel" style="height:200px"></div></section>
+      <section class="card m-block" id="m-watch"></section>
+      <section class="card m-block ai-block" id="m-ai"><div class="skel" style="height:200px"></div></section>
+      <section class="card m-block" id="m-why"></section>
+    </div>
+    <div class="m-col">
+      <section class="card m-block" id="m-cal"><div class="skel" style="height:240px"></div></section>
+      <section class="card m-block" id="m-news"><div class="skel" style="height:240px"></div></section>
+      <section class="card m-block" id="m-movers"></section>
+    </div>
+  </div>
+  <p class="muted small">„Mano rytas“ sudaromas tavo naršyklėje pagal tavo portfelį ir stebimus aktyvus – šie duomenys niekur nesiunčiami. Kainos uždelstos iki ~15 min. Tai informacija, ne investavimo rekomendacija.</p>
+</main>
+</body>
+</html>

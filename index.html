@@ -8,7 +8,7 @@
 <meta property="og:title" content="InvestAI – suprask, kas vyksta rinkose">
 <meta property="og:description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#10233f">
+<meta name="theme-color" content="#0a1930">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="InvestAI">
@@ -19,106 +19,67 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script>try{var t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="assets/style.css?v=28c41146">
-<script src="assets/viz.js?v=1cb6438f" defer></script>
-<script src="assets/app.js?v=95096e8e" defer></script>
-<script src="assets/pages.js?v=1d637ce6" defer></script>
+<script>try{var t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css?v=72bc5ecf">
+<script src="assets/viz.js?v=89d065b0" defer></script>
+<script src="assets/app.js?v=29ee3f5b" defer></script>
+<script src="assets/glossary.js?v=be0fc5e9" defer></script>
+<script src="assets/pages.js?v=2037bcdf" defer></script>
 </head>
 <body data-page="home">
-<main>
-  <section class="hero">
-    <div class="wrap wide hero-grid">
+<main class="home">
+  <section class="wrap wide home-top">
+    <div class="greet">
       <div>
-        <h1 class="hero-title">Įkelk portfelio nuotrauką. Pamatyk, kur iš tikrųjų tavo pinigai.</h1>
-        <p class="hero-lead">InvestAI per kelias sekundes išskaido tavo investicijas pagal įmones, sektorius ir šalis ir paprastai parodo, kas svarbiausia. Sprendimus priimi pats.</p>
-        <div class="cta">
-          <a class="btn primary" href="portfelis.html">Analizuoti savo portfelį</a>
-          <a class="btn" href="portfelis.html?pavyzdys=1">Žiūrėti pavyzdį</a>
-        </div>
-        <p class="hero-note">Nemokama. Be registracijos. Nuotrauka apdorojama tavo naršyklėje ir niekur nesiunčiama.</p>
+        <p class="greet-date" id="greet-date"></p>
+        <h1 id="greet">Rinkos šiandien</h1>
       </div>
-      <figure class="card" style="margin:0" aria-label="Pavyzdinio portfelio analizė">
-        <div class="demo-head"><b>10 000 €</b><span>pavyzdinis portfelis pagal sektorius</span></div>
-        <div id="demo-strip"></div>
-        <ul class="facts">
-          <li>Didžiausia pozicija – <b>Nvidia</b>, 25 % portfelio.</li>
-          <li><b>Pusė pinigų</b> investuota į technologijų įmones.</li>
-          <li><b>50 %</b> portfelio – JAV, <b>12 %</b> – Lietuvoje.</li>
-        </ul>
-      </figure>
+      <p class="data-stamp" id="data-stamp"></p>
     </div>
+    <div class="pulse-scroll" id="pulse"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
   </section>
 
-  <section class="wrap wide block" id="today">
-    <div class="sec-head"><h2 class="section-title">Šiandien rinkose</h2><span class="muted small" id="today-date"></span></div>
-    <div class="pulse" id="pulse"><div class="skel" style="height:96px"></div><div class="skel" style="height:96px"></div><div class="skel" style="height:96px"></div></div>
-    <div class="movers-grid">
-      <div class="card"><h3>Labiausiai kilo</h3><ul class="mv-list" id="gainers"><li><div class="skel" style="height:220px"></div></li></ul></div>
-      <div class="card"><h3>Labiausiai krito</h3><ul class="mv-list" id="losers"><li><div class="skel" style="height:220px"></div></li></ul></div>
-      <div id="watch-home"></div>
+  <section class="wrap wide home-grid">
+    <div class="home-main">
+      <div id="me-card"><div class="skel" style="height:190px"></div></div>
+      <div class="card">
+        <div class="card-head"><h2>Daugiausiai judėjo</h2>
+          <div class="seg" id="mv-seg" role="group" aria-label="Rodyti"><button type="button" data-mv="up" aria-pressed="true">Kilo</button><button type="button" data-mv="down" aria-pressed="false">Krito</button><button type="button" data-mv="watch" aria-pressed="false">Stebimi</button></div>
+        </div>
+        <ul class="mv-list" id="movers"><li><div class="skel" style="height:260px"></div></li></ul>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Didžiausios pasaulio įmonės</h2><a class="card-link" href="rinkos.html">Visas žemėlapis</a></div>
+        <div id="home-map"><div class="skel" style="height:300px"></div></div>
+      </div>
     </div>
-    <p class="more-link"><a href="rinkos.html">Visos rinkos žemėlapis</a> · <a href="atranka.html">Akcijų atranka</a></p>
+    <aside class="home-side" id="home-news"><div class="skel" style="height:260px"></div><div class="skel" style="height:300px"></div></aside>
   </section>
 
   <section class="wrap wide block">
-    <div class="sec-head"><h2 class="section-title">Naujienos ir įvykiai</h2><a class="small" href="naujienos.html">Visos naujienos</a></div>
-    <div class="home-news" id="home-news"><div class="skel" style="height:220px"></div><div class="skel" style="height:220px"></div></div>
+    <h2 class="section-title">Ką gali InvestAI</h2>
+    <nav class="action-grid" aria-label="Įrankiai">
+      <a href="rytas.html"><span class="ag-ico" data-icon="morning"></span><b>Mano rytas</b><small>Tavo akcijos, įvykiai ir naujienos vienoje vietoje</small></a>
+      <a href="portfelis.html"><span class="ag-ico" data-icon="portfolio"></span><b>Portfelio analizė</b><small>Įkelk ekrano nuotrauką iš Revolut, Swedbank ar kitos programėlės</small></a>
+      <a href="atranka.html"><span class="ag-ico" data-icon="screener"></span><b>Akcijų atranka</b><small>Filtruok ~330 aktyvų pagal kritimą, dividendus ir analitikus</small></a>
+      <a href="strategija.html"><span class="ag-ico" data-icon="strategy"></span><b>Strategija</b><small>Pasirink planą ir pamatyk, kur skirti naujus pinigus</small></a>
+      <a href="irankiai.html"><span class="ag-ico" data-icon="tools"></span><b>Skaičiuoklės</b><small>Taupymas, dividendai, „o jei būčiau investavęs“</small></a>
+      <a href="zodynas.html"><span class="ag-ico" data-icon="glossary"></span><b>Žodynas</b><small>P/E, ETF, dividendai ir kiti terminai paprastai</small></a>
+    </nav>
   </section>
 
   <section class="wrap wide block">
-    <div class="paths">
-      <a class="card path" href="portfelis.html">
-        <h3>Mano portfelis</h3>
-        <p>Įkelk ekrano nuotrauką iš Revolut, Swedbank, SEB, Lightyear ar kitos programėlės ir pamatyk, kaip paskirstyti tavo pinigai.</p>
-        <span class="go">Analizuoti portfelį</span>
-      </a>
-      <a class="card path" href="irankiai.html">
-        <h3>Skaičiuoklės</h3>
-        <p>Kiek užaugtų kas mėnesį atidedami pinigai, kiek atneštų dividendai ir kiek būtum uždirbęs ar praradęs prieš metus.</p>
-        <span class="go">Skaičiuoti</span>
-      </a>
-      <a class="card path" href="apzvalga.html">
-        <h3>Dienos apžvalga</h3>
-        <p>Kas svarbaus nutiko Baltijos ir pasaulio rinkose – trumpai, lietuviškai ir su nuoroda į kiekvieną šaltinį.</p>
-        <span class="go">Skaityti apžvalgą</span>
-      </a>
-    </div>
-  </section>
-
-  <section class="wrap wide block">
-    <h2 class="section-title">Naujausia apžvalga</h2>
-    <div class="card latest" id="latest" aria-live="polite"><p class="muted">Įkeliama…</p></div>
-  </section>
-
-  <section class="wrap wide block">
-    <h2 class="section-title">Populiarūs aktyvai</h2>
-    <div class="chips">
-      <a class="chip" href="aktyvas.html?s=NASDAQ:NVDA">Nvidia<span>NVDA</span></a>
-      <a class="chip" href="aktyvas.html?s=NASDAQ:AAPL">Apple<span>AAPL</span></a>
-      <a class="chip" href="aktyvas.html?s=NASDAQ:MSFT">Microsoft<span>MSFT</span></a>
-      <a class="chip" href="aktyvas.html?s=NASDAQ:TSLA">Tesla<span>TSLA</span></a>
-      <a class="chip" href="aktyvas.html?s=XETR:VWCE">Vanguard All-World<span>VWCE</span></a>
-      <a class="chip" href="aktyvas.html?s=BITSTAMP:BTCUSD">Bitcoin<span>BTC</span></a>
-      <a class="chip" href="aktyvas.html?s=OMXVSE:IGN1L">Ignitis grupė<span>IGN1L</span></a>
-      <a class="chip" href="aktyvas.html?s=OMXTSE:LHV1T">LHV Group<span>LHV1T</span></a>
-      <a class="chip" href="aktyvas.html?s=OMXVSE:TEL1L">Telia Lietuva<span>TEL1L</span></a>
-    </div>
+    <div class="sec-head"><h2 class="section-title">Dienos apžvalga</h2><a class="card-link" href="archyvas.html">Archyvas</a></div>
+    <div class="card latest" id="latest" aria-live="polite"><div class="skel" style="height:180px"></div></div>
   </section>
 
   <section class="wrap wide block" id="home-help"></section>
 
   <section class="wrap wide block">
-    <div class="card honest">
-      <h2>Ko InvestAI nedaro</h2>
-      <div>
-        <ul>
-          <li><b>Nepataria, ką pirkti ar parduoti.</b> Parodome faktus apie tavo portfelį ir rinkas, o sprendžia kiekvienas pats.</li>
-          <li><b>Neprognozuoja kainų.</b> Niekas patikimai nežino, kur kaina bus rytoj.</li>
-          <li><b>Nesaugo tavo duomenų.</b> Portfelis lieka tik tavo naršyklėje.</li>
-        </ul>
-        <p class="muted small" style="margin:10px 0 0">Apžvalgas rengia dirbtinis intelektas, todėl prie kiekvieno teiginio nurodome šaltinį.</p>
-      </div>
+    <div class="honest-row">
+      <div><b>Nepataria, ką pirkti ar parduoti.</b><span>Rodome faktus ir šaltinius, sprendžia kiekvienas pats.</span></div>
+      <div><b>Neprognozuoja kainų.</b><span>Niekas patikimai nežino, kur kaina bus rytoj.</span></div>
+      <div><b>Nesaugo tavo duomenų.</b><span>Portfelis lieka tik tavo telefone ar kompiuteryje.</span></div>
     </div>
   </section>
 </main>

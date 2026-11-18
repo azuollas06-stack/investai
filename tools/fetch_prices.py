@@ -11,9 +11,10 @@ from __future__ import annotations
 
 import json
 import math
+import re
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -68,6 +69,9 @@ def metrics(closes: list[tuple[str, float]]) -> dict | None:
     closes = [(d, c) for d, c in closes if c is not None and not math.isnan(c) and c > 0]
     if len(closes) < 5:
         return None
+    recent = [[d, round(c, 4)] for d, c in closes[-10:]]
+    cut = (date.fromisoformat(closes[-1][0]) - timedelta(days=366)).isoformat()
+    closes = [(d, c) for d, c in closes if d >= cut]
     dates = [d for d, _ in closes]
     px = [c for _, c in closes]
     last = px[-1]
@@ -92,7 +96,56 @@ def metrics(closes: list[tuple[str, float]]) -> dict | None:
         "d1": pct(last, back(1)), "w1": pct(last, back(5)), "m1": pct(last, back(21)), "m3": pct(last, back(63)),
         "ytd": pct(last, ytd_base), "y1": pct(last, px[0]) if len(px) > 200 else None,
         "hi52": round(hi, 4), "lo52": round(lo, 4), "fromHigh": pct(last, hi), "vol": vol, "spark": spark,
+        "recent": recent,
     }
+
+
+def hist_name(tv: str) -> str:
+    return re.sub(r"[^A-Za-z0-9_-]", "_", tv.replace(":", "_"))
+
+
+def sig(v: float) -> float:
+    """Apvalinimas iki ~5 reikšminių skaitmenų (mažesni failai)."""
+    if v == 0:
+        return 0
+    d = max(0, 4 - int(math.floor(math.log10(abs(v)))))
+    return round(v, d)
+
+
+def write_hist(tv: str, cur, daily: list[tuple[str, float]], weekly: list[tuple[str, float]]) -> None:
+    """data/hist/<simbolis>.json – 2 metų dienos ir 5 metų savaitės uždarymo kainos.
+    Datos saugomos kaip dienų skaičius nuo d0 (kompaktiškiau)."""
+    def pack(rows):
+        rows = [(d, c) for d, c in rows if c and not math.isnan(c) and c > 0]
+        if not rows:
+            return None
+        d0 = date.fromisoformat(rows[0][0])
+        return {"d0": rows[0][0], "t": [(date.fromisoformat(d) - d0).days for d, _ in rows], "c": [sig(c) for _, c in rows]}
+    obj = {"s": tv, "cur": cur, "d": pack(daily), "w": pack(weekly)}
+    (ROOT / "data/hist").mkdir(exist_ok=True)
+    (ROOT / f"data/hist/{hist_name(tv)}.json").write_text(json.dumps(obj, separators=(",", ":")), encoding="utf-8")
+
+
+def live(yf, mapping: dict) -> int:
+    """Greitas atnaujinimas biržų darbo metu: tik kaina ir dienos pokytis → data/live.json (mažas failas)."""
+    ysyms = sorted({y for y in mapping.values() if y})
+    data = yf.download(ysyms, period="5d", interval="1d", auto_adjust=True, group_by="ticker", progress=False, threads=True)
+    out = {}
+    for tv, y in mapping.items():
+        if not y:
+            continue
+        try:
+            series = data[y]["Close"].dropna()
+            if len(series) < 2:
+                continue
+            last, prev = float(series.iloc[-1]), float(series.iloc[-2])
+            out[tv] = [sig(last), pct(last, prev), series.index[-1].strftime("%Y-%m-%d")]
+        except Exception:  # noqa: BLE001
+            continue
+    result = {"updated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"), "delay": "~15 min", "items": out}
+    (ROOT / "data/live.json").write_text(json.dumps(result, separators=(",", ":")), encoding="utf-8")
+    print(f"live.json: {len(out)} aktyvų")
+    return 0 if out else 1
 
 
 def main() -> int:
@@ -101,10 +154,15 @@ def main() -> int:
     assets = json.loads((ROOT / "data/assets.json").read_text(encoding="utf-8"))
     items = [a for g in assets["groups"] for a in g["items"]]
     mapping = {a["s"]: yahoo_symbol(a["s"]) for a in items}
+    if "--live" in sys.argv:
+        return live(yf, mapping)
     ysyms = sorted({y for y in mapping.values() if y})
     print(f"Aktyvų: {len(items)}, Yahoo simbolių: {len(ysyms)}")
+    # Istorija grafikams rašoma vakare penktadieniais (arba jei failo dar nėra), kad repozitorija neaugtų per greitai
+    want_hist = "--hist" in sys.argv or datetime.now(timezone.utc).weekday() == 4
 
-    data = yf.download(ysyms, period="1y", interval="1d", auto_adjust=True, group_by="ticker", progress=False, threads=True)
+    data = yf.download(ysyms, period="2y", interval="1d", auto_adjust=True, group_by="ticker", progress=False, threads=True)
+    wdata = None
     currency = {}
     out, missing = {}, []
     for tv, y in mapping.items():
@@ -128,6 +186,16 @@ def main() -> int:
         m["cur"] = currency[y]
         m["y"] = y
         out[tv] = m
+        hp = ROOT / f"data/hist/{hist_name(tv)}.json"
+        if want_hist or not hp.exists():
+            try:
+                if wdata is None:
+                    wdata = yf.download(ysyms, period="5y", interval="1wk", auto_adjust=True, group_by="ticker", progress=False, threads=True)
+                wser = wdata[y]["Close"].dropna()
+                weekly = [(idx.strftime("%Y-%m-%d"), float(v)) for idx, v in wser.items()]
+            except Exception:  # noqa: BLE001
+                weekly = []
+            write_hist(tv, currency[y], closes, weekly)
 
     # Analitikų vertinimai ir pagrindiniai rodikliai – tik akcijoms (ne ETF ir ne kriptovaliutoms)
     stock_types = {a["s"]: a.get("type") for a in items}
@@ -168,10 +236,16 @@ def main() -> int:
             if an.get("tMean") and m.get("price"):
                 an["up"] = pct(an["tMean"], m["price"])
             m["an"] = an
-        for src, dst in (("marketCap", "mcap"), ("trailingPE", "pe"), ("forwardPE", "fpe"), ("dividendYield", "dy")):
+        for src, dst in (("marketCap", "mcap"), ("trailingPE", "pe"), ("forwardPE", "fpe"), ("dividendYield", "dy"), ("dividendRate", "dr")):
             v = info.get(src)
             if isinstance(v, (int, float)) and math.isfinite(v):
                 m[dst] = round(float(v), 4)
+        # Kalendorius: artimiausia rezultatų data ir dividendų nukirpimo (ex) data
+        for src, dst in (("earningsTimestampStart", "ed"), ("earningsTimestamp", "ed"), ("exDividendDate", "xd")):
+            v = info.get(src)
+            if dst in m or not isinstance(v, (int, float)) or v <= 0:
+                continue
+            m[dst] = datetime.fromtimestamp(v, timezone.utc).strftime("%Y-%m-%d")
         time.sleep(0.25)
     print(f"Rodiklių nepavyko gauti: {fund_fail}")
 

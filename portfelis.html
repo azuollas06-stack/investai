@@ -8,7 +8,7 @@
 <meta property="og:title" content="Mano portfelis – InvestAI">
 <meta property="og:description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#10233f">
+<meta name="theme-color" content="#0a1930">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="InvestAI">
@@ -19,11 +19,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script>try{var t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="assets/style.css?v=28c41146">
-<script src="assets/viz.js?v=1cb6438f" defer></script>
-<script src="assets/app.js?v=95096e8e" defer></script>
-<script src="assets/pages.js?v=1d637ce6" defer></script>
+<script>try{var t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css?v=72bc5ecf">
+<script src="assets/viz.js?v=89d065b0" defer></script>
+<script src="assets/app.js?v=29ee3f5b" defer></script>
+<script src="assets/glossary.js?v=be0fc5e9" defer></script>
+<script src="assets/pages.js?v=2037bcdf" defer></script>
 </head>
 <body data-page="portfolio">
 <main class="wrap wide pf">
@@ -101,8 +102,10 @@
       <p class="muted small" id="r-strip-note" style="margin:12px 0 0">ETF fondai išskaidyti į sektorius ir regionus pagal jų indeksų struktūrą (apytiksliai).</p>
     </div>
 
+    <section class="card health" id="r-health" aria-labelledby="health-h"></section>
+
     <div class="card" id="r-tm-card">
-      <div class="sec-head"><h2>Portfelio žemėlapis</h2><div class="seg" role="group" aria-label="Spalva pagal" id="tm-mode"><button type="button" data-tm="pnl" aria-pressed="true">Nuo pirkimo</button><button type="button" data-tm="d1" aria-pressed="false">Paskutinė diena</button></div></div>
+      <div class="sec-head"><h2>Portfelio žemėlapis</h2><div class="seg" role="group" aria-label="Spalva pagal" id="tm-mode"><button type="button" data-tm="pnl" aria-pressed="true">Nuo pirkimo</button><button type="button" data-tm="d1" aria-pressed="false">Diena</button><button type="button" data-tm="w1" aria-pressed="false">Savaitė</button><button type="button" data-tm="m1" aria-pressed="false">Mėnuo</button></div></div>
       <p class="muted small" style="margin:0 0 12px">Stačiakampio dydis – pozicijos vertė, spalva – pokytis (žalia – pelnas, raudona – nuostolis).</p>
       <div id="r-tm"></div>
     </div>
@@ -211,6 +214,6 @@
 </main>
 <script src="assets/pf-parse.js?v=f0a19f83" defer></script>
 <script src="assets/pf-insights.js?v=71f40392" defer></script>
-<script src="assets/portfolio.js?v=3d5501aa" defer></script>
+<script src="assets/portfolio.js?v=245c7098" defer></script>
 </body>
 </html>

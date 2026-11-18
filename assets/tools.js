@@ -94,8 +94,8 @@
     const params = new URLSearchParams(location.search); params.set("c", uniq.map((a) => a.s).join(",")); params.delete("a");
     history.replaceState(null, "", `?${params}#palyginti`);
     if (uniq.length < 2) { $("#o-cmp").innerHTML = `<div class="card"><p class="muted" style="margin:0">Pasirink bent du aktyvus.</p></div>`; return; }
-    const cols = ["#1d3a63", "#e39b1b", "#2c8c99"];
-    const series = uniq.map((a, i) => { const sp = P.items[a.s].spark; return { name: a.n, values: sp.map((v) => (v / sp[0]) * 100), color: i === 0 && currentTheme() === "dark" ? "#b9c7da" : cols[i] }; });
+    const cols = ["#4f8cff", "#f5b335", "#2ec4b6"];
+    const series = uniq.map((a, i) => { const sp = P.items[a.s].spark; return { name: a.n, values: sp.map((v) => (v / sp[0]) * 100), color: cols[i] }; });
     const cell = (row, a) => { const p = P.items[a.s]; const v = row[2] ? (row[2] === "an" ? (p.an || {}).up : p[row[2]]) : null; return `<td class="${v === null || v === undefined ? "" : v >= 0 ? "up" : "down"}">${row[1](p)}</td>`; };
     $("#o-cmp").innerHTML = `
       <div class="card"><h3>Kaip keitėsi 100 € per metus</h3>${multiLineSVG(series, { h: 240, fmt: (v) => `${Math.round(v)} €`, labels: ["Prieš metus", "Prieš pusmetį", "Dabar"] })}</div>

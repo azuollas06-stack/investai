@@ -140,7 +140,7 @@ function update() {
     const p = P.items[a.s] || {}, an = p.an || {};
     const mine = pi.owned.has(a.s);
     return `<div class="res-row">
-      <a class="res-main" href="aktyvas.html?s=${encodeURIComponent(a.s)}">${logoHTML(a.s, a.n, "#1d3a63", 40)}<span class="res-name"><b>${esc(a.n)}</b><small>${esc([a.s.split(":")[1], a.sector, a.country].join(" · "))}${mine ? ' · <span class="mine">Turi portfelyje</span>' : ""}</small></span></a>
+      <a class="res-main" href="aktyvas.html?s=${encodeURIComponent(a.s)}">${logoHTML(a.s, a.n, "#1d3a63", 40)}<span class="res-name"><b>${esc(a.n)}</b><small>${esc([a.s.split(":")[1], shortSector(a.sector), a.country].join(" · "))}${mine ? ' · <span class="mine">Turi portfelyje</span>' : ""}</small></span></a>
       <span class="res-spark">${p.spark ? sparkSVG(p.spark, 90, 30) : ""}</span>
       <span class="res-num"><small>Per mėn.</small><b class="${(p.m1 ?? 0) >= 0 ? "up" : "down"}">${fmtPct(p.m1)}</b></span>
       <span class="res-num"><small>Nuo aukščiausios</small><b class="${(p.fromHigh ?? 0) < -0.5 ? "down" : ""}">${fmtPct(p.fromHigh)}</b></span>
@@ -184,5 +184,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   $("#reset").addEventListener("click", () => { F = {}; SORT = "dd"; $("#scr-q").value = ""; update(); });
   $("#help-slot").innerHTML = helpHTML();
   document.addEventListener("watchchange", () => { if (F.pf === "watch") update(); });
+  // Telefone filtrai suskleidžiami po mygtuku
+  const grid = document.querySelector(".scr-grid");
+  const fbtn = document.createElement("button");
+  fbtn.type = "button"; fbtn.className = "btn filter-toggle"; fbtn.setAttribute("aria-expanded", "false");
+  const label = () => { const n = document.querySelectorAll("#filters .fchip.on:not([data-v=''])").length; fbtn.innerHTML = `${icon("screener", 18)} Filtrai${n ? ` <span class="fcount">${n}</span>` : ""}`; };
+  label();
+  fbtn.addEventListener("click", () => { const o = grid.classList.toggle("f-open"); fbtn.setAttribute("aria-expanded", String(o)); });
+  document.querySelector(".scr-search").prepend(fbtn);
+  const done = document.createElement("button");
+  done.type = "button"; done.className = "btn primary filter-done"; done.textContent = "Rodyti rezultatus";
+  done.addEventListener("click", () => { grid.classList.remove("f-open"); fbtn.setAttribute("aria-expanded", "false"); fbtn.scrollIntoView({ block: "start" }); });
+  $("#filters").append(done);
+  $("#filters").addEventListener("click", () => setTimeout(label, 0));
   update();
 });

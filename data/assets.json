@@ -1851,6 +1851,13 @@
      "country": "JAV"
     },
     {
+     "s": "AMEX:DIA",
+     "n": "SPDR Dow Jones (DIA)",
+     "type": "ETF",
+     "sector": "Platus JAV indeksas",
+     "country": "JAV"
+    },
+    {
      "s": "AMEX:VTI",
      "n": "Vanguard Total Stock Market",
      "type": "ETF",

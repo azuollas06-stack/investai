@@ -21,21 +21,67 @@ function moverRow(a, p, { key = "d1", star = true } = {}) {
     <span class="mv-num"><b>${fmtPrice(p.price, p.cur)}</b><span class="pill ${(p[key] ?? 0) >= 0 ? "pill-up" : "pill-down"}">${fmtPct(p[key])}</span></span></a>${star ? starHTML(a.s, a.n) : ""}</li>`;
 }
 
+/* ---------- Asmeniniai duomenys (tik šioje naršyklėje) ---------- */
+function myHoldings() {
+  try { const d = JSON.parse(localStorage.getItem("investai.portfolio.v1") || "null"); return (d && d.holdings) || []; } catch { return []; }
+}
+// Kiek portfelis pasikeitė per paskutinę prekybos dieną (pagal kiekvienos pozicijos dienos pokytį)
+function portfolioToday(P) {
+  const hs = myHoldings().filter((h) => h.value > 0);
+  if (!hs.length) return null;
+  let total = 0, known = 0, chg = 0;
+  const rows = [];
+  hs.forEach((h) => {
+    total += h.value;
+    const p = P.items[h.s];
+    if (p && p.d1 !== null && p.d1 !== undefined) {
+      known += h.value;
+      const c = h.value - h.value / (1 + p.d1 / 100);
+      chg += c;
+      rows.push({ s: h.s, n: h.n, value: h.value, d1: p.d1, c, p });
+    }
+  });
+  rows.sort((a, b) => Math.abs(b.c) - Math.abs(a.c));
+  return { total, known, chg, pct: known ? (chg / (known - chg)) * 100 : null, rows };
+}
+const eur0 = (v) => `${v < 0 ? "−" : v > 0 ? "+" : ""}${Math.abs(Math.round(v)).toLocaleString("lt-LT")} €`;
+function greeting() {
+  const h = new Date().getHours();
+  return h < 5 ? "Labanakt" : h < 11 ? "Labas rytas" : h < 18 ? "Laba diena" : "Labas vakaras";
+}
+function todayLong() {
+  const d = new Date();
+  const wd = ["sekmadienis", "pirmadienis", "antradienis", "trečiadienis", "ketvirtadienis", "penktadienis", "šeštadienis"][d.getDay()];
+  return `${MONTHS[d.getMonth()]} ${d.getDate()} d., ${wd}`;
+}
+
 /* ---------- Pradžia ---------- */
+const PULSE = [["AMEX:SPY", "S&P 500", "SPY"], ["NASDAQ:QQQ", "Nasdaq 100", "QQQ"], ["AMEX:DIA", "Dow Jones", "DIA"], ["XETR:VWCE", "Pasaulio akcijos", "VWCE"], ["BITSTAMP:BTCUSD", "Bitcoin", "BTC"], ["AMEX:GLD", "Auksas", "GLD"]];
+function pulseHTML(P) {
+  return PULSE.filter(([s]) => P.items[s]).map(([s, n, t]) => {
+    const p = P.items[s], up = (p.d1 ?? 0) >= 0;
+    return `<a class="pulse-item ${up ? "is-up" : "is-down"}" href="${assetUrl(s)}"><span class="pulse-name">${esc(n)} <small>${t}</small></span><b>${fmtPrice(p.price, p.cur)}</b><span class="pulse-chg">${fmtPct(p.d1, 2)}</span>${sparkSVG(sparkTail(p.spark, 0.09), 120, 30)}</a>`;
+  }).join("");
+}
 async function pageHome() {
   $("#home-help").innerHTML = helpHTML();
-  $("#demo-strip").innerHTML = stripHTML([
-    { k: "Technologijos", p: 0.5 }, { k: "Pasaulio indeksas", p: 0.2 }, { k: "Komunalinės", p: 0.12 },
-    { k: "Kriptovaliutos", p: 0.07 }, { k: "Finansai", p: 0.06 }, { k: "Grynieji", p: 0.05 },
-  ]);
-  homeToday().catch((e) => console.error(e));
-  homeNews().catch((e) => console.error(e));
+  $("#greet").textContent = greeting();
+  $("#greet-date").textContent = todayLong();
+  const [P, all] = await Promise.all([loadPrices(), allAssets()]);
+  $("#data-stamp").textContent = dataStamp(P);
+  $("#pulse").innerHTML = pulseHTML(P);
+  homeMe(P, all);
+  homeMovers(P, all);
+  const big = all.filter((a) => a.type === "Akcija" && P.items[a.s] && P.items[a.s].mcap).map((a) => ({ a, p: P.items[a.s], v: P.items[a.s].mcap * (TO_EUR[P.items[a.s].cur] || 1) })).sort((x, y) => y.v - x.v).slice(0, 36);
+  $("#home-map").innerHTML = treemapHTML(big.map(({ a, p, v }) => ({ label: a.s.split(":")[1].replace(/\..*/, ""), sub: fmtPct(p.d1), v, c: p.d1, href: assetUrl(a.s), title: `${a.n}: ${fmtPct(p.d1)} per dieną` })), { scale: 3, ratio: window.innerWidth < 680 ? 0.95 : 0.5 }) + tmLegend(3, " %");
+  fitTreemaps($("#home-map"));
+  homeNews(P, all).catch((e) => console.error(e));
   try {
     const idx = await getJSON("data/index.json");
     const d = await getJSON(`data/digests/${idx.latest}.json`);
     const items = (d.sections || []).flatMap((s) => s.items || []).slice(0, 3);
     $("#latest").innerHTML = `
-      <div class="dateline">${fmtDate(d.date, true)}</div>
+      <div class="ai-label">${aiMark()} DI apžvalga · ${fmtDate(d.date, true)}</div>
       <h3 class="latest-title"><a href="apzvalga.html">${esc(d.title)}</a></h3>
       <p>${esc(d.lead)}</p>
       <ul class="latest-list">${items.map((it) => `<li><span class="badge ${(STATUS[it.status] || STATUS.media).cls}">${(STATUS[it.status] || STATUS.media).label}</span> ${esc(it.headline)}</li>`).join("")}</ul>
@@ -45,36 +91,51 @@ async function pageHome() {
     $("#latest").innerHTML = `<p class="muted">Apžvalgos įkelti nepavyko.</p>`;
   }
 }
-const PULSE = [["AMEX:SPY", "S&P 500", "SPY"], ["NASDAQ:QQQ", "Nasdaq 100", "QQQ"], ["XETR:VWCE", "Pasaulio akcijos", "VWCE"], ["AMEX:GLD", "Auksas", "GLD"], ["BITSTAMP:BTCUSD", "Bitcoin", "BTC"]];
-async function homeToday() {
-  const [P, all] = await Promise.all([loadPrices(), allAssets()]);
+function aiMark() { return `<svg class="ai-mark" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z" fill="currentColor"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z" fill="currentColor" opacity=".7"/></svg>`; }
+function homeMe(P, all) {
+  const t = portfolioToday(P);
+  if (!t || !t.rows.length) {
+    $("#me-card").innerHTML = `<div class="card me-cta">
+      <div><h2>Įkelk portfelio nuotrauką ir pamatyk, kur iš tikrųjų tavo pinigai</h2>
+      <p>Ekrano nuotrauka iš Revolut, Swedbank, SEB ar Lightyear – ir per kelias sekundes matai įmones, sektorius, šalis ir pelną. Nuotrauka apdorojama tik tavo telefone.</p>
+      <div class="cta"><a class="btn primary" href="portfelis.html">Analizuoti portfelį</a><a class="btn" href="portfelis.html?pavyzdys=1">Žiūrėti pavyzdį</a></div></div>
+      <div class="me-demo" aria-hidden="true">${stripHTML([{ k: "Technologijos", p: 0.5 }, { k: "Pasaulio indeksas", p: 0.2 }, { k: "Komunalinės", p: 0.12 }, { k: "Kripto", p: 0.08 }, { k: "Finansai", p: 0.1 }])}</div></div>`;
+    return;
+  }
+  const up = t.chg >= 0;
+  $("#me-card").innerHTML = `<a class="card me-card" href="rytas.html">
+    <div class="me-head"><span class="muted">Tavo portfelis per paskutinę prekybos dieną</span><span class="card-link">Mano rytas</span></div>
+    <div class="me-num"><b class="${up ? "up" : "down"}">${eur0(t.chg)}</b><span class="pill ${up ? "pill-up" : "pill-down"}">${fmtPct(t.pct, 2)}</span></div>
+    <ul class="me-rows">${t.rows.slice(0, 3).map((r) => `<li>${logoHTML(r.s, r.n || r.s, "#1d3a63", 28)}<span>${esc((all.find((a) => a.s === r.s) || {}).n || r.n || r.s)}</span><b class="${r.d1 >= 0 ? "up" : "down"}">${fmtPct(r.d1)}</b></li>`).join("")}</ul>
+  </a>`;
+}
+function homeMovers(P, all) {
   const items = P.items;
-  $("#today-date").textContent = lastDateLabel(P);
-  $("#pulse").innerHTML = PULSE.filter(([s]) => items[s]).map(([s, n, t]) => {
-    const p = items[s];
-    return `<a class="pulse-item" href="${assetUrl(s)}"><span class="pulse-name">${esc(n)} <small>${t}</small></span><b>${fmtPrice(p.price, p.cur)}</b><span class="${(p.d1 ?? 0) >= 0 ? "up" : "down"}">${fmtPct(p.d1, 2)}</span>${sparkSVG(sparkTail(p.spark, 0.09), 120, 28)}</a>`;
-  }).join("");
   const stocks = all.filter((a) => a.type === "Akcija" && items[a.s] && items[a.s].d1 !== null && items[a.s].d1 !== undefined);
   const sorted = [...stocks].sort((x, y) => items[y.s].d1 - items[x.s].d1);
-  $("#gainers").innerHTML = sorted.slice(0, 5).map((a) => moverRow(a, items[a.s])).join("");
-  $("#losers").innerHTML = sorted.slice(-5).reverse().map((a) => moverRow(a, items[a.s])).join("");
-  const renderWatch = () => {
-    const wl = watchList().map((s) => all.find((a) => a.s === s) || { s, n: s.split(":")[1] }).filter((a) => items[a.s]);
-    $("#watch-home").innerHTML = wl.length
-      ? `<div class="card"><h3>Mano stebimi</h3><ul class="mv-list">${wl.map((a) => moverRow(a, items[a.s])).join("")}</ul></div>`
-      : `<div class="card watch-empty"><h3>Mano stebimi</h3><p class="muted">Pažymėk žvaigždute ${starHTML("NASDAQ:NVDA", "Nvidia")} bet kurią įmonę – čia matysi jos kainą kasdien.</p></div>`;
+  let mode = "up";
+  const draw = () => {
+    let list;
+    if (mode === "watch") {
+      list = watchList().map((s) => all.find((a) => a.s === s) || { s, n: s.split(":")[1] }).filter((a) => items[a.s]);
+      if (!list.length) { $("#movers").innerHTML = `<li class="empty-note">Pažymėk žvaigždute ${starHTML("NASDAQ:NVDA", "Nvidia")} bet kurią įmonę – čia matysi jos kainą kasdien.</li>`; return; }
+    } else list = mode === "up" ? sorted.slice(0, 6) : sorted.slice(-6).reverse();
+    $("#movers").innerHTML = list.map((a) => moverRow(a, items[a.s])).join("");
+    document.querySelectorAll("#mv-seg [data-mv]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mv === mode)));
   };
-  renderWatch();
-  document.addEventListener("watchchange", renderWatch);
+  $("#mv-seg").addEventListener("click", (e) => { const b = e.target.closest("[data-mv]"); if (b) { mode = b.dataset.mv; draw(); } });
+  if (watchList().length) mode = "watch";
+  draw();
+  document.addEventListener("watchchange", () => { if (mode === "watch") draw(); });
 }
-async function homeNews() {
+async function homeNews(P, all) {
   const n = await getJSON("data/news.json");
   const today = new Date().toISOString().slice(0, 10);
-  const next = (n.events || []).filter((e) => e.date >= today).slice(0, 4);
+  const next = calendarEvents(n, P, all).filter((e) => e.date >= today).slice(0, 5);
   const st = (n.stories || [])[0];
   $("#home-news").innerHTML = `
-    ${st ? `<a class="card news-teaser" href="naujienos.html#${esc(st.id)}"><span class="badge tag">${esc(KIND[st.kind] || "Naujiena")}</span><h3>${esc(st.title)}</h3><p>${esc(st.lead)}</p><span class="go">Ką apie tai sako analitikai</span></a>` : ""}
-    <div class="card"><h3>Artimiausi įvykiai</h3><ol class="ev-list">${next.map(eventHTML).join("")}</ol><a class="btn small" href="naujienos.html">Visi įvykiai</a></div>`;
+    ${st ? `<a class="card news-teaser" href="naujienos.html#${esc(st.id)}"><div class="story-top"><span class="badge tag">${esc(KIND[st.kind] || "Naujiena")}</span><time>${fmtShort(st.date)}</time></div><h3>${esc(st.title)}</h3><p>${esc(st.lead)}</p><span class="card-link">Faktai ir nuomonės</span></a>` : ""}
+    <div class="card"><div class="card-head"><h2>Kalendorius</h2><a class="card-link" href="naujienos.html#kalendorius">Visas</a></div><ol class="ev-list">${next.map(eventHTML).join("")}</ol></div>`;
 }
 
 /* ---------- Rinkos ---------- */
@@ -91,9 +152,10 @@ async function nativeMap(el) {
     const [key, , scale] = MAP_PERIODS[per];
     const items = all.filter((a) => a.type === "Akcija" && P.items[a.s] && P.items[a.s].mcap && (reg === "Visi" || regionOf(a) === reg)).map((a) => {
       const p = P.items[a.s];
-      return { label: a.s.split(":")[1].replace(/\..*/, ""), sub: fmtPct(p[key]), v: p.mcap * (TO_EUR[p.cur] || 1), c: p[key], href: assetUrl(a.s), title: `${a.n}: ${fmtPct(p[key])}`, group: a.sector || "Kita" };
+      return { label: a.s.split(":")[1].replace(/\..*/, ""), sub: fmtPct(p[key]), v: p.mcap * (TO_EUR[p.cur] || 1), c: p[key], href: assetUrl(a.s), title: `${a.n}: ${fmtPct(p[key])}`, group: window.innerWidth < 680 ? shortSector(a.sector || "Kita") : a.sector || "Kita" };
     });
-    box.innerHTML = items.length ? treemapHTML(items, { groups: true, scale, ratio: window.innerWidth < 680 ? 1.25 : 0.56 }) : `<p class="muted">Duomenų nėra.</p>`;
+    box.innerHTML = items.length ? treemapHTML(items, { groups: true, scale, ratio: window.innerWidth < 680 ? 1.5 : 0.56 }) : `<p class="muted">Duomenų nėra.</p>`;
+    fitTreemaps(box);
     $(".map-leg", el).innerHTML = tmLegend(scale, " %");
     el.querySelectorAll("[data-per]").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.per === per)));
     el.querySelectorAll("[data-reg]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.reg === reg)));
@@ -131,11 +193,12 @@ const STAT_DEFS = [
   ["dy", "Dividendai", "dy", "Metiniai dividendai procentais nuo kainos."],
   ["mcap", "Įmonės vertė", "big", "Visų įmonės akcijų vertė biržoje."],
 ];
+const STAT_TERM = { fromHigh: "drawdown", vol: "vol", pe: "pe", fpe: "fpe", dy: "dy", mcap: "mcap" };
 function statCard([k, label, kind, help], p) {
   const v = p[k];
   if (v === undefined || v === null || (kind !== "pct" && !v)) return "";
   const val = kind === "pct" ? `<b class="${v >= 0 ? "up" : "down"}">${fmtPct(v)}</b>` : kind === "vol" ? `<b>${v.toLocaleString("lt-LT", { maximumFractionDigits: 0 })} %</b>` : kind === "dy" ? `<b>${v.toLocaleString("lt-LT", { maximumFractionDigits: 2 })} %</b>` : kind === "big" ? `<b>${fmtBig(v, CUR_SIGN[p.cur] || p.cur)}</b>` : `<b>${v.toLocaleString("lt-LT", { maximumFractionDigits: 1 })}</b>`;
-  return `<div class="stat"><span>${esc(label)}</span>${val}${help ? `<small>${esc(help)}</small>` : ""}</div>`;
+  return `<div class="stat"><span>${STAT_TERM[k] ? termHTML(STAT_TERM[k], label) : esc(label)}</span>${val}${help ? `<small>${esc(help)}</small>` : ""}</div>`;
 }
 async function pageAsset() {
   const params = new URLSearchParams(location.search);
@@ -172,8 +235,8 @@ async function pageAsset() {
   if (p && p.spark) {
     $("#ap-price").textContent = fmtPrice(p.price, p.cur);
     $("#ap-d1").innerHTML = `<span class="pill ${(p.d1 ?? 0) >= 0 ? "pill-up" : "pill-down"}">${fmtPct(p.d1, 2)} per dieną</span>`;
-    $("#ap-date").textContent = p.date ? `Uždarymo kaina, ${fmtShort(p.date)}` : "";
-    mountPriceChart($("#ap-chart"), p.spark, { endDate: p.date, cur: CUR_SIGN[p.cur] || p.cur });
+    $("#ap-date").textContent = priceStamp(p);
+    mountPriceChart($("#ap-chart"), sym, p, { cur: CUR_SIGN[p.cur] || p.cur });
     $("#ap-range").innerHTML = rangeBarHTML(p.lo52, p.hi52, p.price, CUR_SIGN[p.cur] || p.cur);
     if (p.an && p.an.n) $("#ap-an").innerHTML = analystGaugeHTML(p.an, p.price, CUR_SIGN[p.cur] || p.cur);
     else $("#ap-an-card").hidden = true;
@@ -206,6 +269,7 @@ async function pageAsset() {
 
 /* ---------- Naujienos ir įvykiai ---------- */
 const KIND = { ipo: "IPO", earnings: "Rezultatai", macro: "Ekonomika", company: "Įmonė", bonds: "Obligacijos", dividend: "Dividendai" };
+const CAL_FILTERS = [["all", "Visi"], ["mine", "Mano"], ["earnings", "Rezultatai"], ["dividend", "Dividendai"], ["macro", "Ekonomika"], ["ipo", "IPO"]];
 function daysUntil(iso) {
   const t = new Date(); t.setHours(0, 0, 0, 0);
   return Math.round((new Date(iso + "T00:00:00") - t) / 864e5);
@@ -216,9 +280,32 @@ function whenLabel(iso) {
 }
 function eventHTML(e) {
   const [, m, d] = e.date.split("-").map(Number);
-  const soon = daysUntil(e.date) <= 1 && daysUntil(e.date) >= 0;
-  return `<li class="ev${soon ? " ev-soon" : ""}${daysUntil(e.date) < 0 ? " ev-past" : ""}"><time datetime="${esc(e.date)}"><b>${d}</b><span>${MONTHS[m - 1].slice(0, 3)}.</span></time>
-    <div><span class="ev-when">${whenLabel(e.date)} · ${esc(KIND[e.kind] || "Įvykis")}</span><a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.title)}</a></div></li>`;
+  const dd = daysUntil(e.date);
+  const ext = /^https?:/.test(e.url || "");
+  const link = e.url ? `<a href="${esc(e.url)}"${ext ? ' target="_blank" rel="noopener"' : ""}>${esc(e.title)}</a>` : `<span class="ev-t">${esc(e.title)}</span>`;
+  return `<li class="ev ev-${esc(e.kind || "x")}${dd <= 1 && dd >= 0 ? " ev-soon" : ""}${dd < 0 ? " ev-past" : ""}${e.mine ? " ev-mine" : ""}"><time datetime="${esc(e.date)}"><b>${d}</b><span>${MONTHS[m - 1].slice(0, 3)}.</span></time>
+    <div><span class="ev-when">${whenLabel(e.date)} · ${esc(KIND[e.kind] || "Įvykis")}${e.mine ? ' · <em>tavo</em>' : ""}</span>${link}</div></li>`;
+}
+// Įvykiai iš naujienų sąrašo + rezultatų ir dividendų datos iš kainų duomenų (tavo aktyvams ir didžiausioms įmonėms)
+function calendarEvents(n, P, all) {
+  const mine = new Set([...myHoldings().map((h) => h.s), ...watchList()]);
+  const out = (n.events || []).map((e) => ({ ...e, mine: (e.symbols || []).some((s) => mine.has(s)) }));
+  const seen = new Set(out.map((e) => `${e.date}|${(e.symbols || [])[0] || e.title}|${e.kind}`));
+  const bigCaps = new Set(all.filter((a) => P.items[a.s] && P.items[a.s].mcap).sort((x, y) => P.items[y.s].mcap * (TO_EUR[P.items[y.s].cur] || 1) - P.items[x.s].mcap * (TO_EUR[P.items[x.s].cur] || 1)).slice(0, 40).map((a) => a.s));
+  const today = new Date().toISOString().slice(0, 10), horizon = addDays(today, 60);
+  all.forEach((a) => {
+    const p = P.items[a.s];
+    if (!p) return;
+    const isMine = mine.has(a.s);
+    if (p.ed && p.ed >= addDays(today, -3) && p.ed <= horizon && (isMine || bigCaps.has(a.s) || a.g === "baltic")) {
+      const k = `${p.ed}|${a.s}|earnings`;
+      if (!seen.has(k)) { seen.add(k); out.push({ date: p.ed, kind: "earnings", title: `${a.n} skelbia rezultatus`, symbols: [a.s], url: assetUrl(a.s), mine: isMine }); }
+    }
+    if (p.xd && p.xd >= addDays(today, -3) && p.xd <= horizon && (isMine || a.g === "baltic" || bigCaps.has(a.s))) {
+      out.push({ date: p.xd, kind: "dividend", title: `${a.n}: paskutinė diena dividendams (ex data)${p.dr ? ` · ${p.dr.toLocaleString("lt-LT")} ${CUR_SIGN[p.cur] || p.cur}/akc. per metus` : ""}`, symbols: [a.s], url: assetUrl(a.s), mine: isMine });
+    }
+  });
+  return out.sort((x, y) => x.date.localeCompare(y.date) || (y.mine - x.mine));
 }
 function opinionHTML(list, cls, title) {
   if (!list || !list.length) return "";
@@ -248,11 +335,80 @@ async function pageNews() {
   const [n, assets, P] = await Promise.all([getJSON("data/news.json"), allAssets(), loadPrices()]);
   $("#news-updated").textContent = n.updated ? `Atnaujinta ${fmtDate(n.updated)}` : "";
   const today = new Date().toISOString().slice(0, 10);
-  const ev = (n.events || []).slice().sort((a, b) => a.date.localeCompare(b.date));
-  const upcoming = ev.filter((e) => e.date >= today), past = ev.filter((e) => e.date < today).slice(-3).reverse();
-  $("#events").innerHTML = upcoming.map(eventHTML).join("") || `<li class="muted">Artimiausių įvykių sąraše nėra.</li>`;
+  const ev = calendarEvents(n, P, assets);
+  let f = "all";
+  const drawCal = () => {
+    const list = ev.filter((e) => e.date >= today && (f === "all" || (f === "mine" ? e.mine : e.kind === f || (f === "macro" && e.kind === "bonds"))));
+    $("#events").innerHTML = list.slice(0, 40).map(eventHTML).join("") || `<li class="empty-note">${f === "mine" ? "Tavo aktyvų įvykių artimiausiu metu nėra. Įkelk portfelį arba pažymėk akcijas žvaigždute." : "Įvykių nerasta."}</li>`;
+    document.querySelectorAll("#cal-f [data-f]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.f === f)));
+  };
+  $("#cal-f").innerHTML = CAL_FILTERS.map(([k, l]) => `<button type="button" data-f="${k}" aria-pressed="${k === f}">${l}</button>`).join("");
+  $("#cal-f").addEventListener("click", (e) => { const b = e.target.closest("[data-f]"); if (b) { f = b.dataset.f; drawCal(); } });
+  drawCal();
+  const past = ev.filter((e) => e.date < today && e.date >= addDays(today, -7)).slice(-4).reverse();
   $("#events-past").innerHTML = past.map(eventHTML).join("");
   $("#events-past-wrap").hidden = !past.length;
   $("#stories").innerHTML = (n.stories || []).map((st) => storyHTML(st, assets, P)).join("") || `<p class="muted">Naujienų dar nėra.</p>`;
-  if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) setTimeout(() => t.scrollIntoView(), 50); }
+  if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) setTimeout(() => t.scrollIntoView(), 80); }
+}
+
+/* ---------- Mano rytas (asmeninė dienos apžvalga) ---------- */
+async function pageMorning() {
+  const [P, all, n, ex] = await Promise.all([loadPrices(), allAssets(), getJSON("data/news.json").catch(() => ({})), loadExplain()]);
+  const nameOf = (s) => (all.find((a) => a.s === s) || {}).n || s.split(":")[1] || s;
+  $("#m-greet").textContent = greeting();
+  $("#m-date").textContent = todayLong();
+  $("#m-stamp").textContent = dataStamp(P);
+  $("#m-pulse").innerHTML = pulseHTML(P);
+  const mine = new Set([...myHoldings().map((h) => h.s), ...watchList()]);
+
+  // Portfelis
+  const t = portfolioToday(P);
+  if (t && t.rows.length) {
+    const up = t.chg >= 0;
+    $("#m-lead").textContent = `Per paskutinę prekybos dieną tavo portfelis ${up ? "paaugo" : "sumažėjo"} ${eur0(Math.abs(t.chg)).replace(/^[+−]/, "")} (${fmtPct(t.pct, 2)}).`;
+    $("#m-portfolio").innerHTML = `<div class="card-head"><h2>Tavo portfelis</h2><a class="card-link" href="portfelis.html">Atidaryti</a></div>
+      <div class="me-num"><b class="${up ? "up" : "down"}">${eur0(t.chg)}</b><span class="pill ${up ? "pill-up" : "pill-down"}">${fmtPct(t.pct, 2)}</span><span class="muted small">iš ~${Math.round(t.total).toLocaleString("lt-LT")} €</span></div>
+      <ul class="m-rows">${t.rows.map((r) => `<li><a href="${assetUrl(r.s)}">${logoHTML(r.s, nameOf(r.s), "#1d3a63", 32)}<span class="mv-name"><b>${esc(nameOf(r.s))}</b><small>${ex[r.s] ? `<span class="why-dot">Kodėl ${ex[r.s].direction === "up" ? "kilo" : "krito"}?</span>` : esc(r.s.split(":")[1])}</small></span><span class="m-c ${r.c >= 0 ? "up" : "down"}">${eur0(r.c)}</span><span class="pill ${r.d1 >= 0 ? "pill-up" : "pill-down"}">${fmtPct(r.d1)}</span></a></li>`).join("")}</ul>
+      ${t.known < t.total ? `<p class="muted small">Dalies pozicijų (pvz., grynųjų ar nežinomų aktyvų) dienos pokytis nežinomas – jos neįskaičiuotos.</p>` : ""}`;
+  } else {
+    $("#m-portfolio").innerHTML = `<div class="card-head"><h2>Tavo portfelis</h2></div><p class="muted">Įkelk portfelio ekrano nuotrauką – kasdien čia matysi, kiek jis pasikeitė ir kurios pozicijos judėjo labiausiai.</p><a class="btn primary" href="portfelis.html">Įkelti portfelį</a>`;
+  }
+
+  // Stebimi
+  const wl = watchList().map((s) => all.find((a) => a.s === s) || { s, n: s.split(":")[1] }).filter((a) => P.items[a.s]);
+  $("#m-watch").innerHTML = `<div class="card-head"><h2>Stebimi</h2><a class="card-link" href="atranka.html?pf=watch">Atranka</a></div>` +
+    (wl.length ? `<ul class="mv-list">${wl.map((a) => moverRow(a, P.items[a.s])).join("")}</ul>` : `<p class="muted">Pažymėk žvaigždute ${starHTML("NASDAQ:NVDA", "Nvidia")} įmones, kurias nori stebėti kasdien.</p>`);
+
+  // DI santrauka iš dienos apžvalgos
+  try {
+    const idx = await getJSON("data/index.json");
+    const d = await getJSON(`data/digests/${idx.latest}.json`);
+    const items = (d.sections || []).flatMap((s) => s.items || []);
+    const rel = items.filter((it) => (it.tags || []).some((tg) => [...mine].some((s) => s.endsWith(":" + tg))));
+    const pick = [...rel, ...items.filter((it) => !rel.includes(it))].slice(0, 4);
+    $("#m-ai").innerHTML = `<div class="card-head"><h2><span class="ai-label">${aiMark()} DI santrauka</span></h2><a class="card-link" href="apzvalga.html">Visa apžvalga</a></div>
+      <h3 class="m-ai-title">${esc(d.title)}</h3><p>${esc(d.lead)}</p>
+      <ul class="latest-list">${pick.map((it) => `<li><span class="badge ${(STATUS[it.status] || STATUS.media).cls}">${(STATUS[it.status] || STATUS.media).label}</span> ${esc(it.headline)}</li>`).join("")}</ul>
+      <p class="explain-foot">Santrauką ${fmtShort(d.date)} parengė DI pagal nurodytus šaltinius. Tai ne rekomendacija.</p>`;
+  } catch { $("#m-ai").hidden = true; }
+
+  // Kodėl judėjo
+  const exList = Object.entries(ex).sort(([a], [b]) => (mine.has(b) - mine.has(a))).slice(0, 4);
+  $("#m-why").innerHTML = exList.length ? `<div class="card-head"><h2>Kodėl judėjo?</h2></div><ul class="why-list">${exList.map(([s, e]) => `<li class="ex-${esc(e.direction)}"><a href="${assetUrl(s)}">${logoHTML(s, nameOf(s), "#1d3a63", 32)}<span><b>${esc(nameOf(s))}${mine.has(s) ? ' <em class="mine-tag">tavo</em>' : ""}</b><small>${esc(e.headline)}</small></span><span class="why-move">${esc(e.move || "")}</span></a></li>`).join("")}</ul>` : "";
+  $("#m-why").hidden = !exList.length;
+
+  // Kalendorius – 10 dienų, pirmiausia tavo
+  const today = new Date().toISOString().slice(0, 10), until = addDays(today, 10);
+  const ev = calendarEvents(n, P, all).filter((e) => e.date >= today && e.date <= until);
+  const evs = [...ev.filter((e) => e.mine), ...ev.filter((e) => !e.mine)].slice(0, 8).sort((a, b) => a.date.localeCompare(b.date));
+  $("#m-cal").innerHTML = `<div class="card-head"><h2>Artimiausios 10 dienų</h2><a class="card-link" href="naujienos.html#kalendorius">Kalendorius</a></div>` + (evs.length ? `<ol class="ev-list">${evs.map(eventHTML).join("")}</ol>` : `<p class="muted">Svarbių įvykių sąraše nėra.</p>`);
+
+  // Naujienos – pirmiausia apie tavo aktyvus
+  const stories = (n.stories || []).slice().sort((a, b) => ((b.symbols || []).some((s) => mine.has(s)) - (a.symbols || []).some((s) => mine.has(s))));
+  $("#m-news").innerHTML = `<div class="card-head"><h2>Naujienos</h2><a class="card-link" href="naujienos.html">Visos</a></div>` + (stories.length ? `<ul class="m-news">${stories.slice(0, 4).map((st) => `<li><a href="naujienos.html#${esc(st.id)}"><span class="badge tag">${esc(KIND[st.kind] || "Naujiena")}</span>${(st.symbols || []).some((s) => mine.has(s)) ? ' <em class="mine-tag">tavo</em>' : ""}<b>${esc(st.title)}</b><small>${esc(st.lead)}</small></a></li>`).join("")}</ul>` : `<p class="muted">Naujienų nėra.</p>`);
+
+  // Daugiausiai judėjo rinkoje
+  const stocks = all.filter((a) => a.type === "Akcija" && P.items[a.s] && P.items[a.s].d1 !== null && P.items[a.s].d1 !== undefined && P.items[a.s].mcap).sort((x, y) => P.items[y.s].d1 - P.items[x.s].d1);
+  $("#m-movers").innerHTML = `<div class="card-head"><h2>Rinkoje daugiausiai judėjo</h2><a class="card-link" href="rinkos.html">Žemėlapis</a></div><ul class="mv-list">${[...stocks.slice(0, 3), ...stocks.slice(-3).reverse()].map((a) => moverRow(a, P.items[a.s])).join("")}</ul><p class="muted small">Faktai apie kainų pokyčius, ne pasiūlymai pirkti ar parduoti.</p>`;
 }

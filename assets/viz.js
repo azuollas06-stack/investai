@@ -8,6 +8,8 @@ function toggleTheme() {
   document.documentElement.dataset.theme = t;
   try { localStorage.setItem("investai.theme", t); } catch {}
   document.querySelectorAll(".theme-btn").forEach((b) => b.setAttribute("aria-label", t === "dark" ? "Įjungti šviesią temą" : "Įjungti tamsią temą"));
+  const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = t === "dark" ? "#0a1930" : "#f1f4f9";
+  document.dispatchEvent(new CustomEvent("themechange"));
 }
 const THEME_ICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path class="i-moon" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/><g class="i-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></svg>';
 
@@ -44,11 +46,14 @@ document.addEventListener("click", (e) => {
 
 /* ---------- Spalva pagal pokytį ---------- */
 // Sodrumas pagal |pokytį| / mastelį. Naudoja CSS kintamuosius, todėl tinka abiem temoms.
+const TILE_UP = ["#2b5a45", "#1f7f4f", "#17a35c", "#1fc46d"];
+const TILE_DOWN = ["#6a2f3b", "#9c2f3a", "#cf3540", "#f2454f"];
 function changeColor(v, scale = 3) {
-  if (v === null || v === undefined || !isFinite(v)) return "var(--tile-0)";
-  const k = Math.min(1, Math.abs(v) / scale);
-  const pct = Math.round(18 + k * 82);
-  return `color-mix(in srgb, var(${v >= 0 ? "--tile-up" : "--tile-down"}) ${pct}%, var(--tile-0))`;
+  if (v === null || v === undefined || !isFinite(v)) return "#3f4b5e";
+  const k = Math.abs(v) / scale;
+  if (k < 0.08) return "#3f4b5e";
+  const i = k < 0.33 ? 0 : k < 0.66 ? 1 : k < 1 ? 2 : 3;
+  return (v >= 0 ? TILE_UP : TILE_DOWN)[i];
 }
 
 /* ---------- Medžio žemėlapis (squarified) ---------- */
@@ -99,63 +104,171 @@ function treemapHTML(items, { ratio = 0.55, scale = 3, groups = false, minLabel 
   const P = (v, d) => `${((v / d) * 100).toFixed(3)}%`;
   const html = tiles.map((t, i) => {
     const area = (t.w * t.h) / (W * H) * 100;
-    const big = area > 3 ? " tm-big" : area > 0.9 ? "" : area > minLabel ? " tm-sm" : " tm-tiny";
     const tag = t.href ? "a" : "div";
-    return `<${tag} class="tm-tile${big}" ${t.href ? `href="${esc(t.href)}"` : ""} style="left:${P(t.x, W)};top:${P(t.y, H)};width:${P(t.w, W)};height:${P(t.h, H)};background:${changeColor(t.c, scale)};--d:${Math.min(i, 40) * 12}ms" title="${esc(t.title || `${t.label} ${fmtPct(t.c)}`)}"><b>${esc(t.label)}</b>${t.sub ? `<span>${esc(t.sub)}</span>` : ""}</${tag}>`;
+    return `<${tag} class="tm-tile" data-info="${esc(t.title || `${t.label}: ${fmtPct(t.c)}`)}" ${t.href ? `href="${esc(t.href)}"` : 'tabindex="0"'} style="left:${P(t.x, W)};top:${P(t.y, H)};width:${P(t.w, W)};height:${P(t.h, H)};background:${changeColor(t.c, scale)};--d:${Math.min(i, 40) * 12}ms" title="${esc(t.title || `${t.label} ${fmtPct(t.c)}`)}"><b>${esc(t.label)}</b>${t.sub ? `<span>${esc(t.sub)}</span>` : ""}</${tag}>`;
   }).join("");
   const hs = heads.map((g) => `<div class="tm-group" style="left:${P(g.x, W)};top:${P(g.y, H)};width:${P(g.w, W)}">${esc(g.k)}</div>`).join("");
-  return `<div class="treemap" style="aspect-ratio:${W}/${H}">${hs}${html}</div>`;
+  return `<div class="treemap" style="aspect-ratio:${W}/${H}">${hs}${html}</div><div class="tm-info" hidden></div>`;
 }
+// Teksto dydis pagal tikrą langelio dydį: niekas nenukerpama, mažiems – tik simbolis arba nieko.
+function fitTreemaps(root = document) {
+  root.querySelectorAll(".treemap").forEach((tm) => {
+    const run = () => tm.querySelectorAll(".tm-tile").forEach((t) => {
+      const w = t.clientWidth, h = t.clientHeight, b = t.querySelector("b"), sp = t.querySelector("span");
+      const len = Math.max(3, b.textContent.length);
+      let fs = Math.min((w - 10) / (len * 0.7), h * 0.36, 24);
+      if (fs < 9.5) { t.classList.add("tm-none"); return; }
+      t.classList.remove("tm-none");
+      b.style.fontSize = `${fs.toFixed(1)}px`;
+      if (sp) {
+        const sfs = Math.max(10, Math.min(fs * 0.62, 15));
+        const fits = h > fs * 1.25 + sfs * 1.35 + 6 && w > sp.textContent.length * sfs * 0.6 + 10;
+        sp.style.display = fits ? "" : "none";
+        sp.style.fontSize = `${sfs.toFixed(1)}px`;
+      }
+    });
+    run();
+    if (!tm._ro && window.ResizeObserver) { tm._ro = new ResizeObserver(() => run()); tm._ro.observe(tm); }
+  });
+}
+// Paspaudus langelį – informacija po žemėlapiu; telefone pirmas paspaudimas rodo info, antras atidaro.
+document.addEventListener("click", (e) => {
+  const t = e.target.closest(".tm-tile");
+  if (!t) return;
+  const tm = t.closest(".treemap"), info = tm.nextElementSibling;
+  const coarse = matchMedia("(hover: none)").matches;
+  if (t.tagName === "A" && (!coarse || t.classList.contains("tm-sel"))) return;
+  e.preventDefault();
+  tm.querySelectorAll(".tm-sel").forEach((x) => x.classList.remove("tm-sel"));
+  t.classList.add("tm-sel");
+  if (info && info.classList.contains("tm-info")) {
+    info.hidden = false;
+    info.innerHTML = `<span>${esc(t.dataset.info)}</span>${t.tagName === "A" ? `<a class="btn small" href="${esc(t.getAttribute("href"))}">Atidaryti</a>` : ""}`;
+  }
+});
 function tmLegend(scale = 3, unit = "%") {
-  const steps = [-scale, -scale / 2, 0, scale / 2, scale];
-  return `<div class="tm-legend" aria-hidden="true">${steps.map((s) => `<span style="background:${changeColor(s === 0 ? null : s, scale)}">${s > 0 ? "+" : s < 0 ? "−" : ""}${Math.abs(s).toLocaleString("lt-LT")}${unit}</span>`).join("")}</div>`;
+  const steps = [-scale, -scale * 2 / 3, -scale / 3, 0, scale / 3, scale * 2 / 3, scale];
+  return `<div class="tm-legend" aria-hidden="true">${steps.map((s) => `<span style="background:${changeColor(s, scale)}">${s > 0 ? "+" : s < 0 ? "−" : ""}${Math.abs(s).toLocaleString("lt-LT", { maximumFractionDigits: 1 })}${unit}</span>`).join("")}</div>`;
 }
 
-/* ---------- Kainos grafikas su laikotarpiais ---------- */
-// values – ~1 metų uždarymo kainos (lygiais tarpais), endDate – paskutinės kainos data.
-function mountPriceChart(el, values, { endDate = null, cur = "", ranges = [["1 mėn.", 1 / 12, "mėnesį"], ["3 mėn.", 0.25, "3 mėnesius"], ["6 mėn.", 0.5, "pusmetį"], ["1 metai", 1, "metus"]] } = {}) {
-  if (!el || !values || values.length < 3) return;
-  const end = endDate ? new Date(endDate + "T12:00:00") : new Date();
-  const N = values.length;
-  const dateAt = (i) => new Date(end.getTime() - ((N - 1 - i) / (N - 1)) * 365 * 864e5);
-  let sel = ranges.length - 1;
+/* ---------- Kainos grafikas (TradingView Lightweight Charts, Apache-2.0) ---------- */
+let _lwc;
+function loadLWC() {
+  return (_lwc ||= new Promise((res, rej) => {
+    if (window.LightweightCharts) return res(window.LightweightCharts);
+    const sc = document.createElement("script");
+    sc.src = "assets/vendor/lightweight-charts.js";
+    sc.onload = () => res(window.LightweightCharts);
+    sc.onerror = rej;
+    document.head.append(sc);
+  }));
+}
+const histName = (s) => s.replace(":", "_").replace(/[^A-Za-z0-9_-]/g, "_");
+const addDays = (iso, n) => { const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+const _hist = {};
+// Istorija: 2 m. dienos + 5 m. savaitės; prie jos prijungiamos naujausios kainos iš prices.json / live.json
+async function loadHist(sym, p) {
+  if (!_hist[sym]) _hist[sym] = getJSON(`data/hist/${histName(sym)}.json`).catch(() => null);
+  const h = await _hist[sym];
+  const unpack = (o) => (o ? o.t.map((t, i) => ({ time: addDays(o.d0, t), value: o.c[i] })) : []);
+  let d = h ? unpack(h.d) : [], w = h ? unpack(h.w) : [];
+  const recent = (p && p.recent) || [];
+  const last = d.length ? d[d.length - 1].time : "";
+  recent.forEach(([t, v]) => { if (t > last) d.push({ time: t, value: v }); else if (t === last) d[d.length - 1].value = v; });
+  if (!d.length && p && p.spark) {
+    // Atsarginis variantas, kol istorija dar nesugeneruota: ~1 m. mini grafikas su apytikslėmis datomis
+    const end = p.date || new Date().toISOString().slice(0, 10), n = p.spark.length;
+    d = p.spark.map((v, i) => ({ time: addDays(end, -Math.round(((n - 1 - i) / (n - 1)) * 365)), value: v }));
+    d = d.filter((x, i) => i === 0 || x.time > d[i - 1].time);
+  }
+  if (w.length && d.length) w = [...w.filter((x) => x.time < d[0].time), ...d];
+  return { d, w: w.length ? w : d, approx: !h };
+}
+function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+function chartTheme() {
+  return {
+    layout: { background: { type: "solid", color: "transparent" }, textColor: cssVar("--muted"), fontFamily: "Onest, system-ui, sans-serif", fontSize: 12, attributionLogo: true },
+    grid: { vertLines: { visible: false }, horzLines: { color: cssVar("--line") } },
+    rightPriceScale: { borderVisible: false, scaleMargins: { top: 0.12, bottom: 0.08 } },
+    timeScale: { borderVisible: false, fixLeftEdge: true, fixRightEdge: true, lockVisibleTimeRangeOnResize: true },
+    crosshair: { mode: 0, vertLine: { color: cssVar("--muted"), labelBackgroundColor: cssVar("--sea-2") }, horzLine: { color: cssVar("--muted"), labelBackgroundColor: cssVar("--sea-2") } },
+    localization: { locale: "lt-LT" },
+    handleScroll: { vertTouchDrag: false },
+  };
+}
+const RANGES = [["1 mėn.", 30, "per mėnesį"], ["3 mėn.", 91, "per 3 mėnesius"], ["6 mėn.", 182, "per pusmetį"], ["Nuo m. pr.", "ytd", "nuo metų pradžios"], ["1 m.", 365, "per metus"], ["2 m.", 730, "per 2 metus"], ["5 m.", 1826, "per 5 metus"]];
+function sliceRange(h, r) {
+  const src = r[1] === 1826 ? h.w : h.d;
+  if (!src.length) return [];
+  const end = src[src.length - 1].time;
+  const from = r[1] === "ytd" ? `${end.slice(0, 4)}-01-01` : addDays(end, -r[1]);
+  const out = src.filter((x) => x.time >= from);
+  // ankstesnis taškas – kad pokytis būtų skaičiuojamas nuo laikotarpio pradžios
+  const prev = src.filter((x) => x.time < from).pop();
+  return prev && r[1] !== "ytd" ? [prev, ...out] : prev ? [prev, ...out] : out;
+}
+async function mountPriceChart(el, sym, p, { cur = "" } = {}) {
+  if (!el) return;
   el.classList.add("pchart");
-  el.innerHTML = `<div class="pchart-top"><div class="pchart-chg" aria-live="polite"></div><div class="seg pchart-seg" role="group" aria-label="Laikotarpis">${ranges.map(([l], i) => `<button type="button" data-r="${i}" aria-pressed="${i === sel}">${l}</button>`).join("")}</div></div><div class="pchart-box"><svg preserveAspectRatio="none" viewBox="0 0 600 220"></svg><div class="pchart-tip" hidden></div></div>`;
-  const svg = el.querySelector("svg"), tip = el.querySelector(".pchart-tip"), chg = el.querySelector(".pchart-chg");
-  const fmtP = (v) => `${v.toLocaleString("lt-LT", { maximumFractionDigits: v < 10 ? 3 : 2 })}${cur ? " " + cur : ""}`;
-  let pts = [];
+  el.innerHTML = `<div class="pchart-top"><div class="pchart-legend" aria-live="polite"></div></div><div class="pchart-box"></div><div class="seg pchart-seg" role="group" aria-label="Laikotarpis"></div><p class="pchart-note muted small" hidden>Grafikas apytikslis – detali istorija atsiras po artimiausio duomenų atnaujinimo.</p>`;
+  const [LW, h] = await Promise.all([loadLWC(), loadHist(sym, p)]);
+  if (!h.d.length) { el.innerHTML = `<p class="muted">Grafiko duomenų nėra.</p>`; return; }
+  $(".pchart-note", el).hidden = !h.approx;
+  const avail = RANGES.filter((r) => (r[1] === 1826 ? h.w.length > h.d.length : r[1] === "ytd" || (h.d.length && addDays(h.d[h.d.length - 1].time, -r[1]) >= h.d[0].time) || r[1] <= 365));
+  let sel = avail.findIndex((r) => r[1] === 365); if (sel < 0) sel = avail.length - 1;
+  const seg = $(".pchart-seg", el), legend = $(".pchart-legend", el), box = $(".pchart-box", el);
+  seg.innerHTML = avail.map((r, i) => `<button type="button" data-r="${i}" aria-pressed="${i === sel}">${r[0]}</button>`).join("");
+  const chart = LW.createChart(box, { ...chartTheme(), autoSize: true });
+  const fmt = (v) => `${v.toLocaleString("lt-LT", { minimumFractionDigits: v < 1000 ? 2 : 0, maximumFractionDigits: v < 1 ? 4 : 2 })}${cur ? " " + cur : ""}`;
+  const series = chart.addSeries(LW.AreaSeries, { lineWidth: 2, priceLineVisible: false, lastValueVisible: true, crosshairMarkerRadius: 5, priceFormat: { type: "custom", formatter: (v) => v.toLocaleString("lt-LT", { maximumFractionDigits: v < 10 ? 3 : 2 }) } });
+  let data = [];
+  const paint = () => {
+    const up = data.length < 2 || data[data.length - 1].value >= data[0].value;
+    const col = cssVar(up ? "--up" : "--down");
+    series.applyOptions({ lineColor: col, topColor: col + "55", bottomColor: col + "00", crosshairMarkerBackgroundColor: col });
+    return up;
+  };
+  const showLegend = (pt) => {
+    const first = data[0], last = pt || data[data.length - 1];
+    if (!first || !last) return;
+    const ch = (last.value / first.value - 1) * 100;
+    legend.innerHTML = pt
+      ? `<b>${fmt(pt.value)}</b> <span class="${ch >= 0 ? "up" : "down"}">${fmtPct(ch)}</span> <span class="muted">${fmtShort(pt.time)} ${pt.time.slice(0, 4)}</span>`
+      : `<b class="${ch >= 0 ? "up" : "down"}">${fmtPct(ch)}</b> <span class="muted">${avail[sel][2]}</span>`;
+  };
   const draw = () => {
-    const n = Math.max(3, Math.round(N * ranges[sel][1]));
-    const vals = values.slice(-n), off = N - vals.length;
-    const mn = Math.min(...vals), mx = Math.max(...vals), r = mx - mn || 1;
-    pts = vals.map((v, i) => ({ x: (i / (vals.length - 1)) * 600, y: 12 + (1 - (v - mn) / r) * 190, v, d: dateAt(off + i) }));
-    const up = vals[vals.length - 1] >= vals[0];
-    const line = pts.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
-    el.classList.toggle("p-up", up); el.classList.toggle("p-down", !up);
-    svg.innerHTML = `<defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="currentColor" stop-opacity=".22"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs>
-      <line class="pchart-base" x1="0" x2="600" y1="${pts[0].y}" y2="${pts[0].y}"/>
-      <polygon points="0,220 ${line} 600,220" fill="url(#pg)"/>
-      <polyline class="pchart-line" points="${line}" fill="none" stroke="currentColor" stroke-width="2.2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
-      <line class="pchart-x" x1="0" x2="0" y1="0" y2="220" visibility="hidden" vector-effect="non-scaling-stroke"/>`;
-    const c = (vals[vals.length - 1] / vals[0] - 1) * 100;
-    chg.innerHTML = `<b class="${up ? "up" : "down"}">${fmtPct(c)}</b> <span class="muted">per ${ranges[sel][2]}</span>`;
-    el.querySelectorAll("[data-r]").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.r === sel)));
+    data = sliceRange(h, avail[sel]);
+    series.setData(data);
+    paint();
+    chart.timeScale().fitContent();
+    showLegend(null);
+    seg.querySelectorAll("[data-r]").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.r === sel)));
   };
   draw();
-  el.querySelector(".pchart-seg").addEventListener("click", (e) => { const b = e.target.closest("[data-r]"); if (b) { sel = +b.dataset.r; draw(); } });
-  const box = el.querySelector(".pchart-box");
-  const move = (clientX) => {
-    const rc = box.getBoundingClientRect();
-    const x = ((clientX - rc.left) / rc.width) * 600;
-    let best = pts[0];
-    pts.forEach((p) => { if (Math.abs(p.x - x) < Math.abs(best.x - x)) best = p; });
-    const xl = svg.querySelector(".pchart-x"); xl.setAttribute("x1", best.x); xl.setAttribute("x2", best.x); xl.setAttribute("visibility", "visible");
-    tip.hidden = false;
-    tip.innerHTML = `<b>${fmtP(best.v)}</b><span>~${best.d.getFullYear()}-${String(best.d.getMonth() + 1).padStart(2, "0")}-${String(best.d.getDate()).padStart(2, "0")}</span>`;
-    tip.style.left = `${Math.min(Math.max((best.x / 600) * 100, 8), 88)}%`;
-  };
-  box.addEventListener("pointermove", (e) => move(e.clientX));
-  box.addEventListener("pointerleave", () => { tip.hidden = true; svg.querySelector(".pchart-x").setAttribute("visibility", "hidden"); });
+  seg.addEventListener("click", (e) => { const b = e.target.closest("[data-r]"); if (b) { sel = +b.dataset.r; draw(); } });
+  chart.subscribeCrosshairMove((param) => {
+    if (!param.time || !param.seriesData.size) return showLegend(null);
+    const v = param.seriesData.get(series);
+    showLegend(v ? { time: typeof param.time === "string" ? param.time : `${param.time.year}-${String(param.time.month).padStart(2, "0")}-${String(param.time.day).padStart(2, "0")}`, value: v.value } : null);
+  });
+  document.addEventListener("themechange", () => { chart.applyOptions(chartTheme()); paint(); });
+}
+// Keli aktyvai viename grafike (100 = laikotarpio pradžia)
+async function mountCompareChart(el, list, days = 365) {
+  const LW = await loadLWC();
+  const hs = await Promise.all(list.map((x) => loadHist(x.s, x.p)));
+  el.innerHTML = `<div class="pchart-box cmp-box"></div>`;
+  const chart = LW.createChart($(".pchart-box", el), { ...chartTheme(), autoSize: true });
+  hs.forEach((h, i) => {
+    const d = days === 1826 ? h.w : h.d;
+    if (!d.length) return;
+    const from = addDays(d[d.length - 1].time, -days);
+    const arr = d.filter((x) => x.time >= from), base = arr[0] ? arr[0].value : 1;
+    const s = chart.addSeries(LW.LineSeries, { color: list[i].color, lineWidth: 2, priceLineVisible: false, lastValueVisible: true, title: list[i].label });
+    s.setData(arr.map((x) => ({ time: x.time, value: +(100 * x.value / base).toFixed(2) })));
+  });
+  chart.timeScale().fitContent();
+  document.addEventListener("themechange", () => chart.applyOptions(chartTheme()));
 }
 
 /* ---------- Kelių linijų grafikas (palyginimui, skaičiuoklėms) ---------- */

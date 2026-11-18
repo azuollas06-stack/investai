@@ -128,6 +128,7 @@ function renderResult() {
   $("#demo-note").hidden = !isDemo;
   renderHero(a);
   renderDim(a);
+  renderHealth(a);
   renderTreemap(a);
   $("#r-facts").innerHTML = facts(a).map((f) => `<li>${f}</li>`).join("");
   renderMovers(a);
@@ -176,10 +177,78 @@ function renderHero(a) {
 function renderDim(a) {
   a = a || analyze(state.holdings);
   document.querySelectorAll(".seg button[data-dim]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.dim === dim)));
-  $("#r-strip").innerHTML = stripHTML(a[dim]);
+  $("#r-strip").innerHTML = stripHTML(a[dim]) + `<div class="drill" id="r-drill" hidden></div>`;
   $("#r-strip-note").hidden = !(dim === "sectors" || dim === "regions");
 }
+// Paspaudus sektorių / regioną – kurios pozicijos jį sudaro (fondai išskaidomi apytiksliai)
+function drillDown(k) {
+  const a = analyze(state.holdings), box = $("#r-drill");
+  const contrib = a.rows.map((r) => {
+    let v = 0;
+    if (dim === "sectors" || dim === "regions") { const e = PFI.exposures([r]); v = ((e[dim] || []).find((x) => x.k === k) || { v: 0 }).v; }
+    else if (dim === "byType") v = r.type === k ? r.value : 0;
+    else v = r.n === k ? r.value : 0;
+    return { r, v };
+  }).filter((x) => x.v > 0.005).sort((x, y) => y.v - x.v);
+  const tot = contrib.reduce((t, x) => t + x.v, 0);
+  document.querySelectorAll("#r-strip [data-k]").forEach((el) => el.classList.toggle("sel", el.dataset.k === k));
+  box.hidden = false;
+  box.innerHTML = `<div class="drill-head"><b>${esc(k)}</b><span class="muted">${money(tot)} · ${pct(tot / a.total)} portfelio</span><button type="button" class="icon-btn drill-x" aria-label="Uždaryti">✕</button></div>
+    <ul>${contrib.map(({ r, v }) => `<li>${logoHTML(r.s, r.n, "#1d3a63", 28)}<span>${isTv(r.s) ? `<a href="${assetUrl(r.s)}">${esc(r.n)}</a>` : esc(r.n)}${(dim === "sectors" || dim === "regions") && v < r.value - 0.01 ? ` <small class="muted">(${pct(v / r.value)} fondo)</small>` : ""}</span><b>${money(v)}</b><span class="muted">${pct(v / tot)}</span></li>`).join("")}</ul>`;
+}
+/* ---------- Diversifikacijos balas (0–100) ----------
+   Matuoja tik tai, kiek portfelis priklauso nuo kelių pozicijų ir kiek svyruoja – ne tai, ar investicijos geros. */
+const lin = (v, good, bad) => Math.max(0, Math.min(100, ((bad - v) / (bad - good)) * 100));
+function healthScore(a) {
+  const total = a.total || 1;
+  const single = a.rows.filter((r) => r.type === "Akcija" || r.type === "Kita").sort((x, y) => y.value - x.value)[0];
+  const maxSingle = single ? single.value / total : 0;
+  const sec = a.sectors.filter((x) => !/Grynieji|Obligacijos|Auksas|Nežinomas/.test(x.k))[0] || { k: "–", p: 0 };
+  const reg = a.regions.filter((x) => !/Be šalies|Nežinoma/.test(x.k))[0] || { k: "–", p: 0 };
+  const crypto = a.typeShare("Kriptovaliuta");
+  let vw = 0, vk = 0;
+  a.rows.forEach((r) => {
+    const p = (typeof PRICES_PF !== "undefined" && PRICES_PF.items[r.s]) || {};
+    const v = p.vol || (r.type === "Grynieji" ? 0 : r.type === "Obligacijos" ? 6 : r.type === "ETF" ? 16 : null);
+    if (v !== null && v !== undefined) { vw += v * r.value; vk += r.value; }
+  });
+  const vol = vk ? vw / vk : null;
+  const parts = [
+    { id: "single", label: "Didžiausia vienos įmonės dalis", val: maxSingle, show: single ? `${single.n} – ${pct(maxSingle)}` : "Atskirų akcijų nėra", score: lin(maxSingle, 0.1, 0.6), w: 3, term: "koncentracija",
+      why: "Kuo didesnė vienos įmonės dalis, tuo labiau visas portfelis priklauso nuo jos likimo." },
+    { id: "sector", label: "Didžiausias sektorius", val: sec.p, show: `${sec.k} – ${pct(sec.p)}`, score: lin(sec.p, 0.3, 0.85), w: 2, term: "sektorius",
+      why: "To paties sektoriaus įmonės dažnai krenta kartu. Fondai išskaidyti apytiksliai." },
+    { id: "region", label: "Didžiausias regionas", val: reg.p, show: `${reg.k} – ${pct(reg.p)}`, score: lin(reg.p, 0.65, 1), w: 1, term: "diversifikacija",
+      why: "Pasaulio akcijų indekse JAV sudaro apie 60–65 %, todėl tik didesnė dalis mažina balą." },
+    { id: "vol", label: "Vidutiniai svyravimai", val: vol, show: vol ? `~${Math.round(vol)} % per metus` : "Nežinoma", score: vol === null ? 50 : lin(vol, 16, 60), w: 2, term: "vol",
+      why: "Pozicijų metinių svyravimų vidurkis pagal jų dalį. Plataus indekso – apie 15–20 %." },
+    { id: "crypto", label: "Kriptovaliutų dalis", val: crypto, show: pct(crypto), score: lin(crypto, 0.05, 0.4), w: 1, term: "kripto",
+      why: "Kriptovaliutos per kelis mėnesius yra kritusios 50–80 %." },
+  ];
+  const score = Math.round(parts.reduce((t, x) => t + x.score * x.w, 0) / parts.reduce((t, x) => t + x.w, 0));
+  const level = score >= 75 ? ["Plačiai paskirstytas", "ok"] : score >= 50 ? ["Vidutiniškai paskirstytas", "mid"] : score >= 30 ? ["Koncentruotas", "warn"] : ["Labai koncentruotas", "bad"];
+  return { score, level, parts };
+}
+function renderHealth(a) {
+  const h = healthScore(a);
+  const R = 52, C = 2 * Math.PI * R, off = C * (1 - h.score / 100);
+  const weakest = h.parts.slice().sort((x, y) => x.score * x.w - y.score * y.w)[0];
+  $("#r-health").innerHTML = `
+    <div class="health-top">
+      <div class="ring ring-${h.level[1]}" role="img" aria-label="Diversifikacijos balas ${h.score} iš 100">
+        <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="${R}" class="ring-bg"/><circle cx="60" cy="60" r="${R}" class="ring-fg" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/></svg>
+        <b>${h.score}</b><span>iš 100</span>
+      </div>
+      <div>
+        <h2 id="health-h">${termHTML("rizikos-balas", "Diversifikacijos balas")}</h2>
+        <p class="health-level lvl-${h.level[1]}">${h.level[0]}</p>
+        <p class="muted small" style="margin:4px 0 0">Daugiausia balą mažina: <b>${esc(weakest.label.toLowerCase())}</b> (${esc(weakest.show)}). Balas rodo, kiek portfelis priklauso nuo kelių pozicijų, o ne ar investicijos geros.</p>
+      </div>
+    </div>
+    <ul class="health-parts">${h.parts.map((x) => `<li><div class="hp-top"><span>${termHTML(x.term, x.label)}</span><b>${esc(x.show)}</b></div><div class="hp-bar"><i class="lvl-${x.score >= 75 ? "ok" : x.score >= 50 ? "mid" : x.score >= 30 ? "warn" : "bad"}" style="width:${Math.max(4, x.score)}%"></i></div><small>${esc(x.why)}</small></li>`).join("")}</ul>`;
+}
 let tmMode = "pnl";
+const TM_SCALE = { pnl: 30, d1: 4, w1: 8, m1: 15 };
 function renderTreemap(a) {
   a = a || analyze(state.holdings);
   const P = a.pnl;
@@ -188,10 +257,11 @@ function renderTreemap(a) {
   const items = a.rows.filter((r) => r.s !== CASH).map((r) => {
     const pr = PRICES_PF.items[r.s] || {};
     const pp = typeof r.pnlPct === "number" ? r.pnlPct : typeof r.pnl === "number" && r.value - r.pnl > 0 ? (r.pnl / (r.value - r.pnl)) * 100 : known.get(r.s);
-    const c = tmMode === "pnl" ? pp : pr.d1;
-    return { label: isTv(r.s) ? r.s.split(":")[1] : r.n, sub: `${pct(r.value / a.total)} · ${c === undefined || c === null ? "–" : fmtPct(c)}`, v: r.value, c, href: isTv(r.s) ? assetUrl(r.s) : null, title: `${r.n}: ${money(r.value)}, ${c === undefined || c === null ? "pokytis nežinomas" : fmtPct(c)}` };
+    const c = tmMode === "pnl" ? pp : pr[tmMode];
+    return { label: isTv(r.s) ? r.s.split(":")[1].replace(/USDT?$/, "") : r.n, sub: `${pct(r.value / a.total)} · ${c === undefined || c === null ? "–" : fmtPct(c)}`, v: r.value, c, href: isTv(r.s) ? assetUrl(r.s) : null, title: `${r.n}: ${money(r.value)}, ${c === undefined || c === null ? "pokytis nežinomas" : fmtPct(c)}` };
   });
-  $("#r-tm").innerHTML = items.length ? treemapHTML(items, { scale: tmMode === "pnl" ? 30 : 4, ratio: window.innerWidth < 680 ? 0.9 : 0.42 }) + tmLegend(tmMode === "pnl" ? 30 : 4, " %") : "";
+  $("#r-tm").innerHTML = items.length ? treemapHTML(items, { scale: TM_SCALE[tmMode], ratio: window.innerWidth < 680 ? 1 : 0.42 }) + tmLegend(TM_SCALE[tmMode], " %") : "";
+  fitTreemaps($("#r-tm"));
   document.querySelectorAll("#tm-mode [data-tm]").forEach((b) => { b.setAttribute("aria-pressed", String(b.dataset.tm === tmMode)); if (b.dataset.tm === "pnl") b.disabled = !P.known; });
 }
 
@@ -219,9 +289,9 @@ async function shareCard() {
   if (rest > 0.005) list.push({ k: "Kiti", p: rest });
   let x = 80; const y = 480, bw = W - 160;
   g.fillStyle = "#fff"; g.font = F(600, 32); g.fillText("Pagal sektorius", 80, y - 24);
-  list.forEach((s, i) => { const w = bw * s.p; g.fillStyle = PALETTE[i % PALETTE.length] === "#1d3a63" ? "#4c7dbf" : PALETTE[i % PALETTE.length]; g.beginPath(); g.roundRect(x, y, Math.max(2, w - 4), 70, 10); g.fill(); x += w; });
+  list.forEach((s, i) => { const w = bw * s.p; g.fillStyle = PALETTE[i % PALETTE.length]; g.beginPath(); g.roundRect(x, y, Math.max(2, w - 4), 70, 10); g.fill(); x += w; });
   g.font = F(500, 28);
-  list.forEach((s, i) => { const col = i % 2, row = Math.floor(i / 2), lx = 80 + col * 470, ly = y + 130 + row * 50; g.fillStyle = PALETTE[i % PALETTE.length] === "#1d3a63" ? "#4c7dbf" : PALETTE[i % PALETTE.length]; g.beginPath(); g.roundRect(lx, ly - 22, 24, 24, 6); g.fill(); g.fillStyle = "#e8eef6"; g.fillText(`${s.k} ${Math.round(s.p * 100)} %`, lx + 38, ly); });
+  list.forEach((s, i) => { const col = i % 2, row = Math.floor(i / 2), lx = 80 + col * 470, ly = y + 130 + row * 50; g.fillStyle = PALETTE[i % PALETTE.length]; g.beginPath(); g.roundRect(lx, ly - 22, 24, 24, 6); g.fill(); g.fillStyle = "#e8eef6"; g.fillText(`${s.k} ${Math.round(s.p * 100)} %`, lx + 38, ly); });
   // didžiausios pozicijos
   const top = a.byAsset.filter((r) => r.s !== CASH).slice(0, 5);
   let ty = y + 140 + Math.ceil(list.length / 2) * 50 + 40;
@@ -666,6 +736,11 @@ function setupInputs() {
   $("#review-cancel").addEventListener("click", () => { draft = []; state.holdings.length ? renderResult() : show("start"); });
   document.querySelectorAll(".seg button[data-dim]").forEach((b) => b.addEventListener("click", () => { dim = b.dataset.dim; renderDim(); }));
   document.querySelectorAll("#tm-mode [data-tm]").forEach((b) => b.addEventListener("click", () => { tmMode = b.dataset.tm; renderTreemap(); }));
+  $("#r-strip").addEventListener("click", (e) => {
+    if (e.target.closest(".drill-x")) { $("#r-drill").hidden = true; document.querySelectorAll("#r-strip .sel").forEach((x) => x.classList.remove("sel")); return; }
+    const el = e.target.closest("[data-k]"); if (el && !e.target.closest(".drill")) drillDown(el.dataset.k);
+  });
+
   $("#share-btn").addEventListener("click", () => shareCard().catch((e) => { console.error(e); alert("Nepavyko sukurti paveikslėlio."); }));
   document.querySelectorAll(".seg button[data-cmp]").forEach((b) => b.addEventListener("click", () => { cmpDim = b.dataset.cmp; renderCompare(analyze(state.holdings)); }));
 
