@@ -1927,3 +1927,23 @@ summary .h-ico { width: 28px; height: 28px; }
 :root[data-theme="light"] .ob-i { color: #2f6bff; }
 .ob-t { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .ob-t b { font-size: 15px; } .ob-t small { font-size: 12.5px; color: var(--muted); }
+.ai-msg a { color: #8bb4ff; text-decoration: underline; text-underline-offset: 2px; }
+:root[data-theme="light"] .ai-msg a { color: #2f6bff; }
+.ai-src { margin-top: 12px !important; font-size: 12.5px; font-weight: 800; color: var(--muted); }
+.ai-src + ul { font-size: 13.5px; }
+.ai-up { display: flex !important; width: fit-content; margin: 0 auto 8px !important; }
+/* Naujausios antraštės */
+.hl-card { margin-bottom: 18px; }
+.hl-card .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.hl-card .seg { margin-bottom: 8px; }
+.hl-live { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--muted); }
+.hl-live i { width: 8px; height: 8px; border-radius: 50%; background: var(--up); box-shadow: 0 0 0 3px color-mix(in srgb, var(--up) 25%, transparent); animation: hlPulse 2s infinite; }
+@keyframes hlPulse { 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--up) 0%, transparent); } }
+@media (prefers-reduced-motion: reduce) { .hl-live i { animation: none; } }
+.hl-list { list-style: none; margin: 0; padding: 0; }
+.hl-list li + li { border-top: 1px solid var(--line); }
+.hl-list a { display: flex; flex-direction: column; gap: 4px; padding: 12px 2px; color: var(--sea); text-decoration: none; }
+.hl-list a:hover b { color: var(--amber); }
+.hl-list b { font-size: 15.5px; line-height: 1.35; font-weight: 700; }
+.hl-list small { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.hl-note { margin: 8px 0 0; }

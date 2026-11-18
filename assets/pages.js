@@ -281,7 +281,15 @@ async function pageAsset() {
   const loaded = new Set();
   const loadTab = (id) => {
     if (loaded.has(id)) return; loaded.add(id);
-    if (id === "news") tv($("#w-news"), "timeline", { feedMode: "symbol", symbol: sym, width: "100%", height: 560, displayMode: "regular" });
+    if (id === "news") {
+      const box = $("#w-news");
+      box.innerHTML = `<div class="skel" style="height:320px"></div>`;
+      const q = `${name.replace(/\s*\(.*\)$/, "")} ${isCrypto ? "crypto" : known && known.type === "ETF" ? "ETF" : "stock"}`;
+      loadHeadlines(q).then((items) => {
+        if (items.length) box.innerHTML = `<h2 class="sec-h" style="margin-top:4px">Naujausios naujienos</h2>${headlinesHTML(items, 10)}`;
+        else { box.innerHTML = ""; tv(box, "timeline", { feedMode: "symbol", symbol: sym, width: "100%", height: 560, displayMode: "regular" }); }
+      });
+    }
     if (id === "about") {
       if (isCrypto) $("#fundamentals").hidden = true;
       else { tv($("#w-profile"), "symbol-profile", { symbol: sym, width: "100%", height: 420 }); tv($("#w-fin"), "financials", { symbol: sym, width: "100%", height: 520, displayMode: "regular" }); }
@@ -305,6 +313,33 @@ async function pageAsset() {
     const st = (n.stories || []).filter((x) => (x.symbols || []).includes(sym));
     if (st.length) $("#ap-news").innerHTML = st.map((x) => `<a class="card news-teaser" href="naujienos.html#${esc(x.id)}"><span class="badge tag">${esc(KIND[x.kind] || "Naujiena")}</span><h3>${esc(x.title)}</h3><p>${esc(x.lead)}</p><span class="go">Faktai ir analitikų nuomonės</span></a>`).join("");
   }).catch(() => {});
+}
+
+/* ---------- Naujausios antraštės (per mūsų serverį iš Google News, išverstos į lietuvių k.) ---------- */
+let _aiCfg = null;
+async function aiUrl() { if (!_aiCfg) { try { _aiCfg = await getJSON("data/ai.json"); } catch { _aiCfg = {}; } } return _aiCfg.url || ""; }
+const _hlCache = new Map();
+async function loadHeadlines(q) {
+  if (_hlCache.has(q)) return _hlCache.get(q);
+  const u = await aiUrl();
+  if (!u) return [];
+  const pr = fetch(`${u}/news?q=${encodeURIComponent(q)}`).then((r) => (r.ok ? r.json() : { items: [] })).then((d) => d.items || []).catch(() => []);
+  _hlCache.set(q, pr);
+  return pr;
+}
+function agoLT(iso) {
+  const m = Math.round((Date.now() - new Date(iso)) / 60000);
+  if (!(m >= 0)) return "";
+  if (m < 60) return `prieš ${Math.max(1, m)} min.`;
+  const h = Math.round(m / 60);
+  if (h < 24) return `prieš ${h} val.`;
+  const d = Math.round(h / 24);
+  return d === 1 ? "vakar" : `prieš ${d} d.`;
+}
+function headlinesHTML(items, n = 8) {
+  if (!items.length) return `<p class="muted">Šiuo metu naujų antraščių nerasta.</p>`;
+  return `<ul class="hl-list">${items.slice(0, n).map((x) => `<li><a href="${esc(x.link)}" target="_blank" rel="noopener"><b>${esc(x.lt || x.title)}</b><small>${esc(x.source || "")}${x.time ? ` · ${agoLT(x.time)}` : ""}</small></a></li>`).join("")}</ul>
+    <p class="muted small hl-note">Antraštės – Google News; išverstos AI, todėl galimi netikslumai. Paspaudęs atsidarysi originalų straipsnį.</p>`;
 }
 
 /* ---------- Įmonės finansai grafikais (metinės ataskaitos) ---------- */
@@ -525,6 +560,22 @@ function storyHTML(st, assets, P) {
   </article>`;
 }
 async function pageNews() {
+  (async () => {
+    if (!(await aiUrl())) { $("#hl").hidden = true; return; }
+    let hs = []; try { hs = (JSON.parse(localStorage.getItem("investai.portfolio.v1") || "{}").holdings || []).filter((h) => h.s && !h.s.startsWith("X:") && h.s !== "CASH").sort((a, b) => b.value - a.value).slice(0, 4); } catch {}
+    const all = await allAssets().catch(() => []);
+    const nm = (s) => ((all.find((a) => a.s === s) || {}).n || s.split(":")[1]).replace(/\s*\(.*\)$/, "");
+    const topics = [["Rinkos", "stock market"], ...(hs.length ? [["Mano akcijos", hs.map((h) => `"${nm(h.s)}"`).join(" OR ") + " stock"]] : []), ["Technologijos", "tech stocks"], ["Kriptovaliutos", "bitcoin crypto market"], ["Baltija", "Nasdaq Baltic OR Lithuania economy OR Baltic stocks"]];
+    const seg = $("#hl-t"), list = $("#hl-list");
+    seg.innerHTML = topics.map(([l], i) => `<button type="button" data-i="${i}" aria-pressed="${i === 0}">${esc(l)}</button>`).join("");
+    const show = async (i) => {
+      seg.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.i === i)));
+      list.innerHTML = `<div class="skel" style="height:260px"></div>`;
+      list.innerHTML = headlinesHTML(await loadHeadlines(topics[i][1]), 8);
+    };
+    seg.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) show(+b.dataset.i); });
+    show(0);
+  })();
   const [n, assets, P] = await Promise.all([getJSON("data/news.json"), allAssets(), loadPrices()]);
   $("#news-updated").textContent = n.updated ? `Atnaujinta ${fmtDate(n.updated)}` : "";
   const today = new Date().toISOString().slice(0, 10);

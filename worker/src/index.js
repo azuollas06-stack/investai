@@ -23,7 +23,9 @@ GRIEŽTOS TAISYKLĖS (Lietuvos bankas: InvestAI neturi licencijos teikti investa
 - Jei klausiama „ar man pirkti X?“, „ką pirkti?“ ar panašiai – maloniai pasakyk, kad asmeninių rekomendacijų teikti negali, ir vietoj to paaiškink, į ką paprastai atsižvelgiama (rizika, išskaidymas, investavimo laikotarpis, mokesčiai, kaštai), ir kad dėl asmeninio patarimo verta kreiptis į licencijuotą finansų patarėją.
 - Neprognozuok kainų ir nežadėk grąžos. Gali paaiškinti, kas istoriškai lėmė svyravimus ir kokie veiksniai svarbūs.
 - Kitų nuomones (analitikų, bankų, žiniasklaidos) visada priskirk šaltiniui: „pasak …“.
-- Jei nežinai arba duomenų neturi – taip ir sakyk. Neišgalvok skaičių, datų, naujienų ar citatų. Tavo žinios gali būti pasenusios; naujausius faktus imk tik iš pateikto KONTEKSTO.
+- Jei nežinai arba duomenų neturi – taip ir sakyk. Neišgalvok skaičių, datų, naujienų ar citatų.
+- Kainas ir pokyčius imk iš KONTEKSTO (InvestAI duomenys). Jei klausiama, KODĖL kaina pajudėjo, kas naujo įmonėje ar rinkose, arba konteksto neužtenka – naudok paiešką internete ir remkis patikimais finansų šaltiniais (Reuters, Bloomberg, CNBC, MarketWatch, Yahoo Finance, įmonių pranešimai, LRT, Verslo žinios). Nurodyk, kas ir kada tai parašė. Jei konkrečios priežasties neranda – sakyk, kad aiškios priežasties nerasta, ir paminėk bendrus rinkos veiksnius.
+- Niekada nesakyk „negavau duomenų“, jei kontekste yra kaina ar pokytis – naudok juos.
 - Apie tavo vartotojo portfelį kalbėk faktais: kokia sudėtis, koncentracija, sektoriai, šalys, valiutos, kokios rizikos būdingos tokiai sudėčiai. Vertinimų „gerai/blogai tau“ nedaryk.
 - Jei klausimas apie Anthropic ar Claude: būk neutralus ir paminėk, kad InvestAI svetainė kurta naudojant Claude, todėl tai gali būti interesų konfliktas.
 - Mokesčių klausimais (Lietuva) duok bendrą informaciją ir priminki, kad galutinai verta pasitikrinti VMI svetainėje.
@@ -152,6 +154,36 @@ async function callOpenAI(env, system, msgs) {
   });
   return { r, stream: r.ok ? sseText(r.body, (j) => j.choices && j.choices[0] && j.choices[0].delta && j.choices[0].delta.content) : null };
 }
+// Su paieška internete (Responses API + web_search): AI pati nusprendžia, ar reikia naujausių žinių
+async function callOpenAIWeb(env, system, msgs) {
+  const r = await fetch("https://api.openai.com/v1/responses", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.OPENAI_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ model: env.MODEL || "gpt-6-luna", stream: true, reasoning: { effort: "low" }, max_output_tokens: 1600, instructions: system, input: msgs.map((m) => ({ role: m.role, content: m.content })), tools: [{ type: "web_search" }], tool_choice: "auto" }),
+  });
+  if (!r.ok) return { r, stream: null };
+  const dec = new TextDecoder(), enc = new TextEncoder();
+  let buf = "", searching = false;
+  const cites = new Map();
+  const stream = r.body.pipeThrough(new TransformStream({
+    transform(chunk, ctl) {
+      buf += dec.decode(chunk, { stream: true });
+      const lines = buf.split("\n");
+      buf = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith("data:")) continue;
+        let j; try { j = JSON.parse(line.slice(5).trim()); } catch { continue; }
+        if (j.type === "response.output_text.delta" && j.delta) ctl.enqueue(enc.encode(j.delta));
+        else if (j.type === "response.output_text.annotation.added" && j.annotation && j.annotation.url) cites.set(j.annotation.url, j.annotation.title || new URL(j.annotation.url).hostname);
+        else if (/web_search_call\.(in_progress|searching)/.test(j.type || "") && !searching) { searching = true; ctl.enqueue(enc.encode("\u2063")); } // ženklas klientui: ieškoma internete
+      }
+    },
+    flush(ctl) {
+      if (cites.size) ctl.enqueue(enc.encode("\n\nŠaltiniai:\n" + [...cites].slice(0, 5).map(([u, t]) => `- [${String(t).replace(/[\[\]]/g, "").slice(0, 80)}](${u})`).join("\n")));
+    },
+  }));
+  return { r, stream };
+}
 async function callAnthropic(env, system, msgs) {
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -196,7 +228,10 @@ export default {
       const system = SYSTEM(today()) + (body.mode === "review" ? REVIEW : body.mode === "company" ? COMPANY : "") + (ctx ? `\n\n<kontekstas>\n${ctx}\n</kontekstas>` : "");
       let res;
       try {
-        res = provider === "openai" ? await callOpenAI(env, system, msgs) : await callAnthropic(env, system, msgs);
+        if (provider === "openai" && env.WEB_SEARCH !== "off" && body.mode !== "review") {
+          res = await callOpenAIWeb(env, system, msgs);
+          if (!res.stream) { console.log("web paieška nepavyko", res.r.status, (await res.r.text().catch(() => "")).slice(0, 300)); res = await callOpenAI(env, system, msgs); }
+        } else res = provider === "openai" ? await callOpenAI(env, system, msgs) : await callAnthropic(env, system, msgs);
       } catch (e) {
         await limiter().refund(key);
         return json({ error: "Nepavyko susisiekti su AI. Pabandyk po minutės." }, 502, c.headers);
@@ -210,6 +245,42 @@ export default {
       }
       return new Response(res.stream, { status: 200, headers: { ...c.headers, "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store", "X-Left": String(lim.left) } });
     }
+    /* ----- Naujienų antraštės (Google News RSS) su vertimu į lietuvių kalbą, talpykla 30 min. ----- */
+    if (url.pathname === "/news" && req.method === "GET") {
+      const q = (url.searchParams.get("q") || "").slice(0, 80).trim();
+      if (!q) return json({ error: "Nėra užklausos." }, 400, c.headers);
+      const cacheKey = new Request(`https://investai-cache/news?q=${encodeURIComponent(q.toLowerCase())}&v=2`);
+      const cache = caches.default;
+      const hit = await cache.match(cacheKey);
+      if (hit) { const d = await hit.json(); return json(d, 200, { ...c.headers, "Cache-Control": "public, max-age=600" }); }
+      let items = [];
+      try {
+        const rss = await fetch(`https://news.google.com/rss/search?q=${encodeURIComponent(q)}+when:7d&hl=en-US&gl=US&ceid=US:en`, { headers: { "User-Agent": "Mozilla/5.0 InvestAI" }, cf: { cacheTtl: 600 } });
+        const xml = await rss.text();
+        const pick = (blk, tag) => { const m = blk.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`)); return m ? m[1].replace(/<!\[CDATA\[|\]\]>/g, "").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").trim() : ""; };
+        items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].slice(0, 12).map((m) => {
+          const b = m[1], src = pick(b, "source");
+          let title = pick(b, "title");
+          if (src && title.endsWith(" - " + src)) title = title.slice(0, -(src.length + 3));
+          return { title, link: pick(b, "link"), source: src, time: new Date(pick(b, "pubDate")).toISOString() };
+        }).filter((x) => x.title && x.link);
+      } catch (e) { console.log("rss klaida", String(e)); }
+      // Antraščių vertimas (vienas pigus užklausimas visoms)
+      if (items.length && env.OPENAI_API_KEY) {
+        try {
+          const r = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST", headers: { Authorization: `Bearer ${env.OPENAI_API_KEY}`, "Content-Type": "application/json" },
+            body: JSON.stringify({ model: env.MODEL || "gpt-6-luna", reasoning_effort: "low", max_completion_tokens: 2500, response_format: { type: "json_schema", json_schema: { name: "t", strict: true, schema: { type: "object", additionalProperties: false, required: ["lt"], properties: { lt: { type: "array", items: { type: "string" } } } } } },
+              messages: [{ role: "developer", content: "Išversk finansų naujienų antraštes į taisyklingą, natūralią lietuvių kalbą. Įmonių pavadinimus, tickerius ir skaičius palik. Grąžink tiek pat eilučių ta pačia tvarka." }, { role: "user", content: JSON.stringify(items.map((x) => x.title)) }] }),
+          });
+          if (r.ok) { const lt = JSON.parse((await r.json()).choices[0].message.content).lt || []; items.forEach((x, i) => { if (lt[i]) x.lt = lt[i]; }); }
+        } catch (e) { console.log("vertimo klaida", String(e)); }
+      }
+      const out = { q, items, at: new Date().toISOString() };
+      if (items.length) await cache.put(cacheKey, new Response(JSON.stringify(out), { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=1800" } }));
+      return json(out, 200, c.headers);
+    }
+
     /* ----- Nuotraukos atpažinimas su AI ----- */
     if (url.pathname === "/parse" && req.method === "POST") {
       let body;

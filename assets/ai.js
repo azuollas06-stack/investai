@@ -18,13 +18,16 @@
 
   /* ---------- Paprastas tekstas → HTML (paryškinimai, sąrašai, pastraipos) ---------- */
   function md(text) {
-    const lines = escH(text).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").split(/\n/);
+    const lines = escH(String(text).replace(/\u2063/g, "")).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (m, t, u) => `<a href="${u.replace(/&amp;/g, "&")}" target="_blank" rel="noopener">${t}</a>`)
+      .split(/\n/);
     let out = "", list = false;
     for (const raw of lines) {
       const l = raw.trim();
       const m = l.match(/^(?:[-•*]|\d+[.)])\s+(.*)/);
       if (m) { if (!list) { out += "<ul>"; list = true; } out += `<li>${m[1]}</li>`; continue; }
       if (list) { out += "</ul>"; list = false; }
+      if (/^Šaltiniai:?$/.test(l)) { out += `<p class="ai-src">Šaltiniai</p>`; continue; }
       if (l) out += `<p>${l.replace(/^#+\s*/, "")}</p>`;
     }
     return out + (list ? "</ul>" : "");
@@ -37,7 +40,7 @@
     try { ASSET_LIST = (await getJSON("data/assets.json")).groups.flatMap((g) => g.items); } catch { ASSET_LIST = []; }
     return ASSET_LIST;
   }
-  async function context(withPf) {
+  async function context(withPf, question = "") {
     const out = [];
     const P = await loadPrices().catch(() => ({ items: {} }));
     const A = await assets();
@@ -74,6 +77,19 @@
       const rel = [...(N.stories || []), ...(N.events || [])].filter((x) => !sym || (x.symbols || []).includes(sym) || (nm.length > 2 && String(x.title).toLowerCase().includes(nm))).slice(0, 5);
       if (rel.length) out.push(`InvestAI naujienos:\n${rel.map((x) => `- ${x.date}: ${x.title}${x.lead ? ` – ${x.lead}` : ""}`).join("\n")}`);
     } catch {}
+    // Aktyvai, paminėti klausime (pagal pavadinimą ar tickerį) – jų naujausi duomenys
+    const qn = (" " + String(question).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") + " ");
+    const named = A.filter((a) => {
+      if (a.s === sym || !P.items[a.s]) return false;
+      const t = a.s.split(":")[1].toLowerCase().replace(/usdt?$/, "");
+      const n = a.n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").split(/[\s(,]/)[0];
+      return (t.length >= 2 && new RegExp(`[^a-z0-9]${t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[^a-z0-9]`).test(qn)) || (n.length >= 4 && qn.includes(" " + n.slice(0, Math.max(4, n.length - 2))));
+    }).slice(0, 4);
+    for (const a of named) {
+      const p = P.items[a.s];
+      out.push(`Paminėtas aktyvas: ${a.n} (${a.s}). Kaina ${num(p.price)} ${p.cur || ""} (${priceStamp(p)}); diena ${pct(p.d1)}, savaitė ${pct(p.w1)}, mėnuo ${pct(p.m1)}, metai ${pct(p.y1)}.`);
+      try { const ex = (await loadExplain())[a.s]; if (ex) out.push(`InvestAI paaiškinimas apie ${a.n} (${ex.date}): ${ex.headline}. ${(ex.points || []).join(" ")}`); } catch {}
+    }
     // Portfelis (tik dalys procentais, be sumų)
     const hs = holdings().filter((h) => h.value > 0);
     if (withPf && hs.length) {
@@ -82,7 +98,9 @@
         const a = info(h.s), name = h.n || a.n || h.s;
         const meta = [a.type, a.sector, a.country].filter(Boolean).join(", ");
         const pnl = typeof h.pnlPct === "number" ? `, rezultatas nuo pirkimo ${pct(h.pnlPct)}` : "";
-        return `- ${name}${h.s && !h.s.startsWith("X:") && h.s !== "CASH" ? ` (${h.s})` : ""}: ${num((h.value / total) * 100, 1)} % portfelio${meta ? `; ${meta}` : ""}${pnl}`;
+        const p = P.items[h.s];
+        const live = p ? `; kaina ${num(p.price)} ${p.cur || ""}, šiandien ${pct(p.d1)}, per savaitę ${pct(p.w1)}` : "";
+        return `- ${name}${h.s && !h.s.startsWith("X:") && h.s !== "CASH" ? ` (${h.s})` : ""}: ${num((h.value / total) * 100, 1)} % portfelio${meta ? `; ${meta}` : ""}${pnl}${live}`;
       });
       out.push(`Vartotojo portfelis (${hs.length} ${ltN(hs.length, "pozicija", "pozicijos", "pozicijų")}; sumos nesiunčiamos, tik dalys):\n${rows.join("\n")}`);
     }
@@ -110,7 +128,7 @@
       <div class="ai-sugg">${suggestions().map(([i, q]) => `<button type="button" class="ai-card"><span class="ai-card-ico">${ico(i, 20)}</span><span>${escH(q)}</span><span class="ai-card-go">${ico("chevron", 18)}</span></button>`).join("")}</div>`;
     return chat.map((m) => m.role === "user"
       ? `<div class="ai-msg me"><p>${escH(m.content)}</p></div>`
-      : `<div class="ai-msg bot${m.err ? " err" : ""}">${ORB("sm")}<div class="ai-txt">${md(m.content) || '<span class="ai-think">Galvoju…</span>'}</div></div>`).join("");
+      : `<div class="ai-msg bot${m.err ? " err" : ""}">${ORB("sm")}<div class="ai-txt">${md(m.content) || `<span class="ai-think">${m.searching ? "Ieškau naujausių žinių internete…" : "Galvoju…"}</span>`}</div></div>`).join("");
   }
   function render() {
     if (!dlg) return;
@@ -139,7 +157,7 @@
       <form class="ai-form">
         ${hasPf ? `<label class="ai-pf"><input type="checkbox" ${pfAllowed() ? "checked" : ""}><span class="ai-switch" aria-hidden="true"></span>Asistentas mato mano portfelio sudėtį (tik %)</label>` : ""}
         <div class="ai-row"><textarea rows="1" maxlength="2000" placeholder="Klausk bet ko apie investavimą…" aria-label="Klausimas"></textarea><button class="ai-send" type="submit" aria-label="Siųsti"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
-        <p class="ai-note">${upsell}AI gali klysti, o tai nėra investavimo rekomendacija. Klausimai per mūsų serverį perduodami OpenAI ir nesaugomi. <a href="apie.html#ai">Daugiau</a></p>
+        <p class="ai-note">${upsell}AI gali klysti, o tai nėra investavimo rekomendacija. Klausimai per mūsų serverį perduodami OpenAI (gali ieškoti internete) ir nesaugomi. <a href="apie.html#ai">Daugiau</a></p>
       </form></div>`;
     document.body.appendChild(dlg);
     const ta = dlg.querySelector("textarea");
@@ -174,7 +192,7 @@
     render();
     try {
       const pfBox = dlg.querySelector(".ai-pf input");
-      const ctx = await context(pfBox ? pfBox.checked : false);
+      const ctx = await context(pfBox ? pfBox.checked : false, q);
       const msgs = chat.filter((m) => m !== bot && !m.err).slice(-12).map((m) => ({ role: m.role, content: m.content }));
       const r = await fetch(CFG.url + "/chat", { method: "POST", headers: { "Content-Type": "application/json", ...(premiumToken() ? { "X-Premium": premiumToken() } : {}) }, body: JSON.stringify({ messages: msgs, context: ctx }) });
       if (!r.ok) {
@@ -190,8 +208,11 @@
         const { value, done } = await reader.read();
         if (done) break;
         bot.content += dec.decode(value, { stream: true });
+        bot.searching = bot.content.includes("\u2063") && !bot.content.replace(/\u2063/g, "").trim();
         if (Date.now() - last > 60) { last = Date.now(); render(); }
       }
+      bot.content = bot.content.replace(/\u2063/g, "");
+      delete bot.searching;
       if (!bot.content.trim()) throw new Error("Atsakymas tuščias. Pabandyk perklausti.");
     } catch (e) {
       bot.content = e.message && !/fetch|network/i.test(e.message) ? e.message : "Nepavyko susisiekti su asistentu. Patikrink internetą ir pabandyk dar kartą.";
