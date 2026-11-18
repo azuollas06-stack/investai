@@ -204,9 +204,10 @@ function sliceRange(h, r) {
   const end = src[src.length - 1].time;
   const from = r[1] === "ytd" ? `${end.slice(0, 4)}-01-01` : addDays(end, -r[1]);
   const out = src.filter((x) => x.time >= from);
-  // ankstesnis taškas – kad pokytis būtų skaičiuojamas nuo laikotarpio pradžios
   const prev = src.filter((x) => x.time < from).pop();
-  return prev && r[1] !== "ytd" ? [prev, ...out] : prev ? [prev, ...out] : out;
+  if (r[1] === "ytd" && prev) return [prev, ...out]; // kaip „nuo metų pradžios“ rodiklis: nuo praėjusių metų paskutinės kainos
+  if (out.length >= 2) return out;
+  return prev ? [prev, ...out] : out;
 }
 async function mountPriceChart(el, sym, p, { cur = "" } = {}) {
   if (!el) return;
