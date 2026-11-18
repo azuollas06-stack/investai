@@ -71,3 +71,13 @@ jobs:
           if git diff --cached --quiet; then echo "Adresas nepasikeitė"; exit 0; fi
           git commit -m "AI serverio adresas"
           for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
+
+      - name: Patikrinti, ar asistentas atsako
+        run: |
+          URL=$(python3 -c "import json;print(json.load(open('data/ai.json'))['url'])")
+          sleep 5
+          curl -sS -m 60 -X POST "$URL/chat" -H "Origin: https://azuollas06-stack.github.io" -H "Content-Type: application/json" \
+            -d '{"messages":[{"role":"user","content":"Kas yra ETF? Atsakyk dviem sakiniais."}]}' -D - ; echo
+          echo "---"
+          curl -sS -m 60 -X POST "$URL/chat" -H "Origin: https://azuollas06-stack.github.io" -H "Content-Type: application/json" \
+            -d '{"messages":[{"role":"user","content":"Ar man dabar pirkti Nvidia akcijų už 1000 eurų?"}]}' ; echo
