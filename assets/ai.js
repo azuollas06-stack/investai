@@ -43,6 +43,7 @@
     const A = await assets();
     const info = (s) => A.find((a) => a.s === s) || {};
     out.push(`Puslapis: ${document.title.replace(/\s*[–|-]\s*InvestAI.*$/, "")}`);
+    if (typeof ONBOARD !== "undefined" && ONBOARD.describe(ONBOARD.get())) out.push(ONBOARD.describe(ONBOARD.get()) + " Pritaikyk paaiškinimų lygį, bet rekomendacijų neteik.");
     // Rinka trumpai
     const idx = [["AMEX:SPY", "S&P 500 (SPY)"], ["NASDAQ:QQQ", "Nasdaq 100 (QQQ)"], ["XETR:VWCE", "Pasaulio akcijos (VWCE)"], ["BITSTAMP:BTCUSD", "Bitcoin"], ["AMEX:GLD", "Auksas (GLD)"]]
       .filter(([s]) => P.items[s]).map(([s, n]) => `${n}: dienos pokytis ${pct(P.items[s].d1)}, metų pradžios ${pct(P.items[s].ytd)}`);

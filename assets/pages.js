@@ -90,6 +90,7 @@ function marketRows(P) {
   return PULSE.filter(([s]) => P.items[s]).map(([s, n, t]) => { const p = P.items[s], [txt, bg] = IDX_BADGE[s] || ["•", "#3a4558"]; return rowHTML({ href: assetUrl(s), ava: LOGOS[s] ? logoHTML(s, n, "#1d3a63", 40) : `<span class="row-badge" style="background:${bg}">${txt}</span>`, title: esc(n), sub: t, val: fmtPrice(p.price, p.cur), chg: p.d1, spark: daySpark(p) }); }).join("");
 }
 async function pageHome() {
+  if (typeof ONBOARD !== "undefined") ONBOARD.mountHome();
   $(".home-search").addEventListener("click", openSearch);
   const [P, all] = await Promise.all([loadPrices(), allAssets()]);
   $("#data-stamp").textContent = dataStamp(P).replace("Kainos atnaujintos ", "").replace(" · uždelstos iki ~15 min", "");
