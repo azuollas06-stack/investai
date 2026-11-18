@@ -1253,3 +1253,8 @@ img, svg, video, canvas { max-width: 100%; }
   .drop-icon { width: 54px; height: 54px; }
   .drop h2 { font-size: 22px; }
 }
+.news-side > *, .ah-id > div { min-width: 0; }
+.ah h1 { overflow-wrap: anywhere; }
+.tm-group { text-overflow: clip; }
+.tm-group.tm-g-hide { color: transparent; }
+.pulse-item { animation: rise .45s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i, 0) * 55ms); } @keyframes rise { from { opacity: 0; transform: translateY(8px); } }

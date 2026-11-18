@@ -60,9 +60,9 @@ function todayLong() {
 /* ---------- Pradžia ---------- */
 const PULSE = [["AMEX:SPY", "S&P 500", "SPY"], ["NASDAQ:QQQ", "Nasdaq 100", "QQQ"], ["AMEX:DIA", "Dow Jones", "DIA"], ["XETR:VWCE", "Pasaulio akcijos", "VWCE"], ["BITSTAMP:BTCUSD", "Bitcoin", "BTC"], ["AMEX:GLD", "Auksas", "GLD"]];
 function pulseHTML(P) {
-  return PULSE.filter(([s]) => P.items[s]).map(([s, n, t]) => {
+  return PULSE.filter(([s]) => P.items[s]).map(([s, n, t], i) => {
     const p = P.items[s], up = (p.d1 ?? 0) >= 0;
-    return `<a class="pulse-item ${up ? "is-up" : "is-down"}" href="${assetUrl(s)}"><span class="pulse-name">${esc(n)} <small>${t}</small></span><b>${fmtPrice(p.price, p.cur)}</b><span class="pulse-chg">${fmtPct(p.d1, 2)}</span>${sparkSVG(sparkTail(p.spark, 0.09), 120, 30)}</a>`;
+    return `<a class="pulse-item ${up ? "is-up" : "is-down"}" style="--i:${i}" href="${assetUrl(s)}"><span class="pulse-name">${esc(n)} <small>${t}</small></span><b>${fmtPrice(p.price, p.cur)}</b><span class="pulse-chg">${fmtPct(p.d1, 2)}</span>${sparkSVG(sparkTail(p.spark, 0.09), 120, 30)}</a>`;
   }).join("");
 }
 async function pageHome() {

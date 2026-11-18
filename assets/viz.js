@@ -107,7 +107,7 @@ function treemapHTML(items, { ratio = 0.55, scale = 3, groups = false, minLabel 
     const tag = t.href ? "a" : "div";
     return `<${tag} class="tm-tile" data-info="${esc(t.title || `${t.label}: ${fmtPct(t.c)}`)}" ${t.href ? `href="${esc(t.href)}"` : 'tabindex="0"'} style="left:${P(t.x, W)};top:${P(t.y, H)};width:${P(t.w, W)};height:${P(t.h, H)};background:${changeColor(t.c, scale)};--d:${Math.min(i, 40) * 12}ms" title="${esc(t.title || `${t.label} ${fmtPct(t.c)}`)}"><b>${esc(t.label)}</b>${t.sub ? `<span>${esc(t.sub)}</span>` : ""}</${tag}>`;
   }).join("");
-  const hs = heads.map((g) => `<div class="tm-group" style="left:${P(g.x, W)};top:${P(g.y, H)};width:${P(g.w, W)}">${esc(g.k)}</div>`).join("");
+  const hs = heads.map((g) => `<div class="tm-group" title="${esc(g.k)}" style="left:${P(g.x, W)};top:${P(g.y, H)};width:${P(g.w, W)}">${esc(g.k)}</div>`).join("");
   return `<div class="treemap" style="aspect-ratio:${W}/${H}">${hs}${html}</div><div class="tm-info" hidden></div>`;
 }
 // Teksto dydis pagal tikrą langelio dydį: niekas nenukerpama, mažiems – tik simbolis arba nieko.
@@ -128,6 +128,7 @@ function fitTreemaps(root = document) {
       }
     });
     run();
+    tm.querySelectorAll(".tm-group").forEach((g) => { g.classList.remove("tm-g-hide"); if (g.scrollWidth > g.clientWidth + 1) g.classList.add("tm-g-hide"); });
     if (!tm._ro && window.ResizeObserver) { tm._ro = new ResizeObserver(() => run()); tm._ro.observe(tm); }
   });
 }
@@ -192,7 +193,7 @@ function chartTheme() {
     rightPriceScale: { borderVisible: false, scaleMargins: { top: 0.12, bottom: 0.08 } },
     timeScale: { borderVisible: false, fixLeftEdge: true, fixRightEdge: true, lockVisibleTimeRangeOnResize: true },
     crosshair: { mode: 0, vertLine: { color: cssVar("--muted"), labelBackgroundColor: cssVar("--sea-2") }, horzLine: { color: cssVar("--muted"), labelBackgroundColor: cssVar("--sea-2") } },
-    localization: { locale: "lt-LT" },
+    localization: { locale: "lt-LT", priceFormatter: (v) => v.toLocaleString("lt-LT", { maximumFractionDigits: Math.abs(v) < 10 ? 3 : 2 }) },
     handleScroll: { vertTouchDrag: false },
   };
 }
@@ -214,7 +215,7 @@ async function mountPriceChart(el, sym, p, { cur = "" } = {}) {
   const [LW, h] = await Promise.all([loadLWC(), loadHist(sym, p)]);
   if (!h.d.length) { el.innerHTML = `<p class="muted">Grafiko duomenų nėra.</p>`; return; }
   $(".pchart-note", el).hidden = !h.approx;
-  const avail = RANGES.filter((r) => (r[1] === 1826 ? h.w.length > h.d.length : r[1] === "ytd" || (h.d.length && addDays(h.d[h.d.length - 1].time, -r[1]) >= h.d[0].time) || r[1] <= 365));
+  const avail = RANGES.filter((r) => (r[1] === 1826 ? h.w.length > h.d.length : r[1] === "ytd" || r[1] <= 365 || (h.d.length && addDays(h.d[h.d.length - 1].time, -r[1] + 25) >= h.d[0].time)));
   let sel = avail.findIndex((r) => r[1] === 365); if (sel < 0) sel = avail.length - 1;
   const seg = $(".pchart-seg", el), legend = $(".pchart-legend", el), box = $(".pchart-box", el);
   seg.innerHTML = avail.map((r, i) => `<button type="button" data-r="${i}" aria-pressed="${i === sel}">${r[0]}</button>`).join("");

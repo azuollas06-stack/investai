@@ -4,21 +4,75 @@
   "short_name": "InvestAI",
   "description": "Įkelk portfelio nuotrauką ir pamatyk, kur tavo pinigai, kiek uždirbai ir kodėl keitėsi kainos.",
   "lang": "lt",
-  "start_url": "./portfelis.html?source=pwa",
+  "start_url": "./rytas.html?source=pwa",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#eef2f1",
-  "theme_color": "#10233f",
-  "categories": ["finance"],
+  "background_color": "#0a1930",
+  "theme_color": "#0a1930",
+  "categories": [
+    "finance"
+  ],
   "icons": [
-    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "assets/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "shortcuts": [
-    { "name": "Mano portfelis", "url": "./portfelis.html?source=pwa", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Rinkos", "url": "./rinkos.html?source=pwa", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Dienos apžvalga", "url": "./apzvalga.html?source=pwa", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] }
+    {
+      "name": "Mano rytas",
+      "url": "./rytas.html?source=pwa",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Mano portfelis",
+      "url": "./portfelis.html?source=pwa",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Rinkos",
+      "url": "./rinkos.html?source=pwa",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Dienos apžvalga",
+      "url": "./apzvalga.html?source=pwa",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
   ]
 }
