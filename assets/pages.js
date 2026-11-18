@@ -421,3 +421,49 @@ async function pageMorning() {
   const stocks = all.filter((a) => a.type === "Akcija" && P.items[a.s] && P.items[a.s].d1 !== null && P.items[a.s].d1 !== undefined && P.items[a.s].mcap).sort((x, y) => P.items[y.s].d1 - P.items[x.s].d1);
   $("#m-movers").innerHTML = `<div class="card-head"><h2>Rinkoje daugiausiai judėjo</h2><a class="card-link" href="rinkos.html">Žemėlapis</a></div><ul class="mv-list">${[...stocks.slice(0, 3), ...stocks.slice(-3).reverse()].map((a) => moverRow(a, P.items[a.s])).join("")}</ul><p class="muted small">Faktai apie kainų pokyčius, ne pasiūlymai pirkti ar parduoti.</p>`;
 }
+
+
+/* ---------- Stiliai ---------- */
+const STYLES = [
+  ["navy", "Tamsiai mėlyna (dabartinis)", "Gilus tamsiai mėlynas fonas, auksas DI funkcijoms, ryški žalia ir raudona."],
+  ["terminal", "Terminalas", "Profesionalių prekiautojų terminalo stilius: juodas fonas, oranžiniai akcentai, skaičiai lygiuoti kaip lentelėje."],
+  ["bank", "Privati bankininkystė", "Šviesus, tvarkingas ir patikimas – kaip šiuolaikinio banko programėlė. Mėlynas akcentas, minkšti šešėliai."],
+  ["amber", "Gintaras", "Šiltas baltiškas gintaro tonas, elegantiškos antraštės su serifais. Išskirtinis ir lietuviškas."],
+  ["neon", "Kripto neonas", "Tamsiai violetinis su neoniniais žydros ir rožinės akcentais. Jaunatviškas ir drąsus."],
+  ["green", "Žalias minimalizmas", "Baltas, labai švarus, dideli skaičiai ir ryški žalia. Kaip populiariausios investavimo programėlės."],
+  ["glass", "Stiklas", "Spalvingas gradientinis fonas ir permatomos „stiklo“ kortelės. Modernus ir įspūdingas."],
+  ["paper", "Finansų laikraštis", "Lašišinės spalvos popierius, serifinės antraštės, aštrūs kampai – kaip finansų dienraštis."],
+  ["graphite", "Grafitas", "Grynai juodas fonas ir pilkos kortelės, sisteminis šriftas. Kaip telefono akcijų programėlė."],
+  ["sea", "Baltijos jūra", "Tamsiai žalsvai mėlyna jūros spalva su akvamarino akcentais. Ramus ir gaivus."],
+];
+function stylePreviewHTML(id) {
+  const pts = [22, 26, 24, 31, 29, 35, 33, 40, 37, 44, 42, 50, 47, 55, 53, 60];
+  const line = pts.map((v, i) => `${(i / (pts.length - 1)) * 300},${64 - v}`).join(" ");
+  return `<div class="style-prev" data-style="${id}" aria-hidden="true">
+    <div class="sp-top"><div>Invest<b>AI</b></div><span><i></i><i></i><i></i></span></div>
+    <div class="sp-hero"><div class="sp-label">Nvidia · NASDAQ</div><div class="sp-row"><span class="sp-price">155,46 $</span><span class="sp-pill">+2,4 %</span></div>
+      <svg viewBox="0 0 300 64" preserveAspectRatio="none"><defs><linearGradient id="g-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--up)" stop-opacity=".35"/><stop offset="1" stop-color="var(--up)" stop-opacity="0"/></linearGradient></defs><polygon points="0,64 ${line} 300,64" fill="url(#g-${id})"/><polyline points="${line}" fill="none" stroke="var(--up)" stroke-width="2.5" vector-effect="non-scaling-stroke"/></svg></div>
+    <div class="sp-stats"><div>Per metus<b class="u">+32 %</b></div><div>Tesla<b class="d">−1,8 %</b></div><div>P/E<b>39,2</b></div></div>
+    <div class="sp-ai">✦ DI santrauka: rinkos šiandien kilo</div>
+    <div class="sp-btns"><span>Analizuoti portfelį</span><span>Rinkos</span></div>
+  </div>`;
+}
+function currentStyle() { return document.documentElement.dataset.style || "navy"; }
+function pageStyles() {
+  const draw = () => {
+    const cur = currentStyle();
+    $("#style-grid").innerHTML = STYLES.map(([id, name, desc], i) => `<article class="sp-card${id === cur ? " current" : ""}">
+      ${stylePreviewHTML(id)}
+      <div class="sp-info"><h2>${i + 1}. ${esc(name)}</h2><p>${esc(desc)}</p>
+      ${id === cur ? `<span class="btn small" aria-disabled="true">Naudojamas dabar</span>` : `<button type="button" class="btn small primary" data-use="${id}">Išbandyti visoje svetainėje</button>`}</div></article>`).join("");
+    const nm = (STYLES.find((x) => x[0] === cur) || STYLES[0])[1];
+    $("#style-bar").innerHTML = `<span>Dabar naudojamas: <b>${esc(nm)}</b></span>${cur !== "navy" ? `<button type="button" class="btn small" data-use="navy">Grąžinti numatytąjį</button>` : `<a class="btn small" href="./">Pažiūrėti pradžios puslapį</a>`}`;
+  };
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-use]");
+    if (!b) return;
+    try { if (b.dataset.use === "navy") localStorage.removeItem("investai.style"); else localStorage.setItem("investai.style", b.dataset.use); } catch {}
+    location.reload();
+  });
+  draw();
+}

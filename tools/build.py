@@ -20,6 +20,7 @@ PAGES = {
     "archyvas": "Archyvas – InvestAI",
     "apie": "Apie – InvestAI",
     "rytas": "Mano rytas – InvestAI",
+    "stiliai": "Išsirink stilių – InvestAI",
     "zodynas": "Žodynas – InvestAI",
 }
 def ver(rel):

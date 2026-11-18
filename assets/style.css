@@ -870,7 +870,10 @@ a.tm-tile:hover { outline: 2px solid var(--amber); outline-offset: -2px; z-index
    v4 – „Navy terminal“: tamsiai mėlyna, auksas DI, ryški žalia/raudona
    ===================================================================== */
 body { background: var(--mist); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
-:root[data-theme="dark"] body { background: radial-gradient(1200px 500px at 85% -120px, rgba(108,178,255,.10), transparent 60%), var(--mist); background-attachment: fixed; }
+:root[data-theme="dark"] { --page-bg: radial-gradient(1200px 500px at 85% -120px, rgba(108,178,255,.10), transparent 60%), var(--mist); }
+body { background: var(--page-bg, var(--mist)); background-attachment: fixed; }
+h1, h2, h3, .section-title, .logo span { font-family: var(--font-display, var(--font)); }
+.ap-price, .calc-big, .me-num b, .pf-hero-total, .pulse-item b, .stat b, .ring b, .mv-num b, .pchart-legend b, .sav-card b, .cmp-table td, .tm-tile, .pill, .pill-up, .pill-down { font-family: var(--font-num, inherit); }
 ::selection { background: color-mix(in srgb, var(--amber) 40%, transparent); }
 
 /* Antraštė */
@@ -927,7 +930,8 @@ h1 { font-size: clamp(28px, 4vw, 42px); margin: 28px 0 10px; letter-spacing: -.0
 
 /* Kortelės ir mygtukai */
 .card { border-radius: var(--r-lg); box-shadow: var(--shadow); }
-:root[data-theme="dark"] .card, :root[data-theme="dark"] .stat, :root[data-theme="dark"] .pulse-item, :root[data-theme="dark"] details.more, :root[data-theme="dark"] details.pos { background: linear-gradient(180deg, color-mix(in srgb, var(--surface-2) 70%, var(--surface)) 0%, var(--surface) 60%); }
+.card, .stat, .pulse-item, details.more, details.pos { background: var(--card-bg, var(--surface)); }
+:root[data-theme="dark"] { --card-bg: linear-gradient(180deg, color-mix(in srgb, var(--surface-2) 70%, var(--surface)) 0%, var(--surface) 60%); }
 .btn { border-radius: 12px; min-height: 44px; font-weight: 650; transition: transform .08s, background .15s, border-color .15s; }
 .btn:active { transform: scale(.98); }
 .btn.primary { box-shadow: 0 8px 20px -10px color-mix(in srgb, var(--amber) 80%, transparent); }
@@ -1207,8 +1211,8 @@ img, svg, video, canvas { max-width: 100%; }
   .save-row .premium-lock { padding: 8px 10px; }
   .scr .lead { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 }
-.pf-hero { background: radial-gradient(640px 280px at 100% 0, rgba(245,179,53,.20), transparent 62%), linear-gradient(160deg, #183a69 0%, #0e2242 75%); color: #eef3fb; box-shadow: 0 0 0 1px #2b4c7c, 0 24px 50px -30px rgba(0,0,0,.6); }
-:root[data-theme="dark"] .pf-hero { background: radial-gradient(640px 280px at 100% 0, rgba(245,179,53,.20), transparent 62%), linear-gradient(160deg, #183a69 0%, #0e2242 75%); color: #eef3fb; }
+.pf-hero { background: var(--hero-bg, radial-gradient(640px 280px at 100% 0, rgba(245,179,53,.20), transparent 62%), linear-gradient(160deg, #183a69 0%, #0e2242 75%)); color: var(--hero-ink, #eef3fb); box-shadow: 0 0 0 1px #2b4c7c, 0 24px 50px -30px rgba(0,0,0,.6); }
+:root[data-theme="dark"] .pf-hero { background: var(--hero-bg, radial-gradient(640px 280px at 100% 0, rgba(245,179,53,.20), transparent 62%), linear-gradient(160deg, #183a69 0%, #0e2242 75%)); color: var(--hero-ink, #eef3fb); }
 .pf-hero-stats div { background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
 @media (max-width: 680px) {
   .pf-hero { padding: 20px 18px; margin-top: 14px; gap: 16px; }
@@ -1259,3 +1263,146 @@ img, svg, video, canvas { max-width: 100%; }
 .tm-group.tm-g-hide { color: transparent; }
 .pulse-item { animation: rise .45s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i, 0) * 55ms); } @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
 .stat-date b { color: var(--amber); } @media (max-width: 680px) { .stat-date small { display: block !important; } }
+
+/* =====================================================================
+   10 stilių variantai (pasirenkami puslapyje stiliai.html)
+   :root[data-style] – visai svetainei, .style-prev[data-style] – peržiūrai
+   ===================================================================== */
+/* 2. Terminalas */
+:root[data-style="terminal"], .style-prev[data-style="terminal"] {
+  --page-bg: #000; --mist: #000; --surface: #0b0b0b; --surface-2: #151515; --line: #2b2b2b; --card-bg: #0b0b0b;
+  --sea: #f2f2f2; --sea-2: #c9c9c9; --muted: #8c8c8c; --amber: #ff9f1a; --amber-ink: #000; --amber-soft: #2a1a00;
+  --up: #00e676; --down: #ff3d3d; --info: #4fc3f7; --warn: #ff9f1a; --warn-soft: #241600;
+  --r-lg: 2px; --r-md: 2px; --r-sm: 2px; --shadow: 0 0 0 1px #2b2b2b; --lift: 0 0 0 1px #ff9f1a;
+  --font: "IBM Plex Sans", system-ui, sans-serif; --font-display: "IBM Plex Sans", system-ui, sans-serif; --font-num: "IBM Plex Mono", ui-monospace, monospace;
+  --hero-bg: #0b0b0b; --hero-ink: #f2f2f2; color-scheme: dark;
+}
+[data-style="terminal"] .card-head h2, [data-style="terminal"] .sp-label { text-transform: uppercase; letter-spacing: .08em; font-size: 13px; color: var(--amber); }
+[data-style="terminal"] .pf-hero { box-shadow: 0 0 0 1px #ff9f1a; }
+[data-style="terminal"] .btn.primary { box-shadow: none; }
+
+/* 3. Privati bankininkystė */
+:root[data-style="bank"], .style-prev[data-style="bank"] {
+  --page-bg: #f4f6fb; --mist: #f4f6fb; --surface: #fff; --surface-2: #eef2f9; --line: #e1e7f0; --card-bg: #fff;
+  --sea: #0b1f44; --sea-2: #3a4d70; --muted: #66758f; --amber: #1f5eff; --amber-ink: #fff; --amber-soft: #e6edff;
+  --up: #0a8f5b; --down: #d6303b; --info: #1f5eff; --warn: #9a5b00; --warn-soft: #fdf1dc;
+  --r-lg: 20px; --r-md: 14px; --r-sm: 10px; --shadow: 0 1px 2px rgba(11,31,68,.06), 0 10px 28px -16px rgba(11,31,68,.22); --lift: 0 2px 4px rgba(11,31,68,.08), 0 18px 40px -18px rgba(11,31,68,.32);
+  --font: "Manrope", system-ui, sans-serif; --font-display: "Manrope", system-ui, sans-serif; --font-num: "Manrope", system-ui, sans-serif;
+  --hero-bg: linear-gradient(135deg, #0b1f44, #1f3f86); --hero-ink: #fff; color-scheme: light;
+}
+
+/* 4. Gintaras */
+:root[data-style="amber"], .style-prev[data-style="amber"] {
+  --page-bg: #f6efe3; --mist: #f6efe3; --surface: #fffaf2; --surface-2: #f1e5d1; --line: #e3d2b5; --card-bg: #fffaf2;
+  --sea: #2a1a0c; --sea-2: #5a4330; --muted: #8a7358; --amber: #c26a00; --amber-ink: #fff; --amber-soft: #f7e3c4;
+  --up: #2f7d32; --down: #b3261e; --info: #8a4b08; --warn: #8a4b08; --warn-soft: #f7e3c4;
+  --r-lg: 14px; --r-md: 10px; --r-sm: 8px; --shadow: 0 0 0 1px #e3d2b5; --lift: 0 0 0 1px #c26a00, 0 12px 26px -16px rgba(90,50,10,.35);
+  --font: "Onest", system-ui, sans-serif; --font-display: "Fraunces", Georgia, serif; --font-num: "Onest", system-ui, sans-serif;
+  --hero-bg: radial-gradient(500px 240px at 100% 0, rgba(255,190,90,.35), transparent 65%), linear-gradient(150deg, #5a3210, #2a1a0c); --hero-ink: #fff4e3; color-scheme: light;
+}
+[data-style="amber"] h1, [data-style="amber"] .section-title { font-weight: 700; letter-spacing: -.02em; }
+
+/* 5. Kripto neonas */
+:root[data-style="neon"], .style-prev[data-style="neon"] {
+  --page-bg: radial-gradient(900px 500px at 90% -10%, rgba(179,136,255,.22), transparent 60%), radial-gradient(700px 400px at -10% 30%, rgba(0,240,255,.12), transparent 60%), #0b0618;
+  --mist: #0b0618; --surface: #150d2c; --surface-2: #1e1339; --line: #35265f; --card-bg: linear-gradient(180deg, #1c1238, #140c2a);
+  --sea: #f3efff; --sea-2: #cfc6f2; --muted: #9a8fc4; --amber: #00f0ff; --amber-ink: #001418; --amber-soft: #0a2a33;
+  --up: #00ffa3; --down: #ff3d81; --info: #b388ff; --warn: #ffd166; --warn-soft: #2a2140;
+  --r-lg: 18px; --r-md: 12px; --r-sm: 8px; --shadow: 0 0 0 1px #35265f; --lift: 0 0 0 1px #00f0ff, 0 0 32px -8px rgba(0,240,255,.55);
+  --font: "Space Grotesk", system-ui, sans-serif; --font-display: "Space Grotesk", system-ui, sans-serif; --font-num: "Space Grotesk", system-ui, sans-serif;
+  --hero-bg: linear-gradient(135deg, #3b1d7a, #0e3a5a); --hero-ink: #fff; color-scheme: dark;
+}
+[data-style="neon"] .btn.primary { box-shadow: 0 0 24px -6px rgba(0,240,255,.8); }
+
+/* 6. Žalias minimalizmas */
+:root[data-style="green"], .style-prev[data-style="green"] {
+  --page-bg: #fff; --mist: #fff; --surface: #fff; --surface-2: #f2f5f3; --line: #e6ebe8; --card-bg: #fff;
+  --sea: #0d0f0e; --sea-2: #3c4340; --muted: #6e7672; --amber: #00c805; --amber-ink: #fff; --amber-soft: #e3f9e4;
+  --up: #00a805; --down: #ff5000; --info: #00a805; --warn: #a85f00; --warn-soft: #fff3e0;
+  --r-lg: 24px; --r-md: 16px; --r-sm: 12px; --shadow: 0 0 0 1px #e6ebe8; --lift: 0 0 0 1.5px #0d0f0e;
+  --font: "DM Sans", system-ui, sans-serif; --font-display: "DM Sans", system-ui, sans-serif; --font-num: "DM Sans", system-ui, sans-serif;
+  --hero-bg: #0d0f0e; --hero-ink: #fff; color-scheme: light;
+}
+[data-style="green"] h1 { font-weight: 800; letter-spacing: -.045em; }
+[data-style="green"] .btn { border-radius: 999px; }
+
+/* 7. Stiklas */
+:root[data-style="glass"], .style-prev[data-style="glass"] {
+  --page-bg: radial-gradient(800px 500px at 100% 0, rgba(255,207,92,.16), transparent 60%), linear-gradient(140deg, #0f1c3d 0%, #2a1650 55%, #0b2a3a 100%);
+  --mist: #121f42; --surface: #1a2550; --surface-2: rgba(255,255,255,.08); --line: rgba(255,255,255,.13); --card-bg: rgba(255,255,255,.06);
+  --sea: #f5f7ff; --sea-2: #d0d7f0; --muted: #a1abcf; --amber: #ffcf5c; --amber-ink: #1d1400; --amber-soft: rgba(255,207,92,.15);
+  --up: #4ade80; --down: #fb7185; --info: #93c5fd; --warn: #ffcf5c; --warn-soft: rgba(255,207,92,.12);
+  --r-lg: 22px; --r-md: 14px; --r-sm: 10px; --shadow: 0 0 0 1px rgba(255,255,255,.12), 0 20px 40px -24px rgba(0,0,0,.6); --lift: 0 0 0 1px rgba(255,255,255,.3), 0 24px 50px -24px rgba(0,0,0,.7);
+  --font: "Onest", system-ui, sans-serif; --hero-bg: rgba(255,255,255,.08); --hero-ink: #fff; color-scheme: dark;
+}
+[data-style="glass"] .card, [data-style="glass"] .stat, [data-style="glass"] .pulse-item, [data-style="glass"] .pf-hero, [data-style="glass"] .sp-card { backdrop-filter: blur(18px) saturate(1.3); -webkit-backdrop-filter: blur(18px) saturate(1.3); }
+
+/* 8. Finansų laikraštis */
+:root[data-style="paper"], .style-prev[data-style="paper"] {
+  --page-bg: #fff1e5; --mist: #fff1e5; --surface: #fff7ef; --surface-2: #f2dfce; --line: #e0c9b4; --card-bg: #fff7ef;
+  --sea: #33302e; --sea-2: #4d4845; --muted: #7d756f; --amber: #0f5499; --amber-ink: #fff; --amber-soft: #e3ecf5;
+  --up: #0a7d55; --down: #cc0000; --info: #0f5499; --warn: #8a4b08; --warn-soft: #f7e3c4;
+  --r-lg: 0; --r-md: 0; --r-sm: 0; --shadow: inset 0 3px 0 #33302e; --lift: inset 0 3px 0 #0f5499;
+  --font: "Onest", system-ui, sans-serif; --font-display: "Source Serif 4", Georgia, serif; --font-num: "Onest", system-ui, sans-serif;
+  --hero-bg: #33302e; --hero-ink: #fff1e5; color-scheme: light;
+}
+[data-style="paper"] h1, [data-style="paper"] .section-title, [data-style="paper"] .card-head h2 { font-weight: 700; letter-spacing: -.01em; }
+
+/* 9. Grafitas */
+:root[data-style="graphite"], .style-prev[data-style="graphite"] {
+  --page-bg: #000; --mist: #000; --surface: #1c1c1e; --surface-2: #2c2c2e; --line: #38383a; --card-bg: #1c1c1e;
+  --sea: #fff; --sea-2: #d1d1d6; --muted: #8e8e93; --amber: #ffd60a; --amber-ink: #000; --amber-soft: #2b2500;
+  --up: #30d158; --down: #ff453a; --info: #0a84ff; --warn: #ffd60a; --warn-soft: #2b2500;
+  --r-lg: 16px; --r-md: 12px; --r-sm: 8px; --shadow: none; --lift: 0 0 0 1px #48484a;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; --font-num: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  --hero-bg: #1c1c1e; --hero-ink: #fff; color-scheme: dark;
+}
+
+/* 10. Baltijos jūra */
+:root[data-style="sea"], .style-prev[data-style="sea"] {
+  --page-bg: radial-gradient(900px 500px at 100% -10%, rgba(94,234,212,.14), transparent 60%), #04232a;
+  --mist: #04232a; --surface: #0a3540; --surface-2: #0f4350; --line: #185666; --card-bg: linear-gradient(180deg, #0d3d49, #0a3540);
+  --sea: #e8fbff; --sea-2: #b9e4ec; --muted: #7fb3bf; --amber: #5eead4; --amber-ink: #00241f; --amber-soft: #0d4a45;
+  --up: #4ade80; --down: #ff6b6b; --info: #67e8f9; --warn: #fcd34d; --warn-soft: #1f3b2e;
+  --r-lg: 22px; --r-md: 14px; --r-sm: 10px; --shadow: 0 0 0 1px #185666; --lift: 0 0 0 1px #5eead4;
+  --font: "Onest", system-ui, sans-serif; --hero-bg: linear-gradient(150deg, #0f5160, #062a33); --hero-ink: #e8fbff; color-scheme: dark;
+}
+
+/* Stiliaus pasirinkimo puslapis */
+.style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px; margin: 20px 0 30px; }
+.sp-card { border-radius: 20px; overflow: hidden; box-shadow: 0 0 0 1px var(--line); background: var(--surface); display: flex; flex-direction: column; }
+.sp-card.current { box-shadow: 0 0 0 3px var(--amber); }
+.style-prev { background: var(--page-bg, var(--mist)); color: var(--sea); font-family: var(--font); padding: 14px; display: grid; gap: 10px; }
+.sp-top { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display, var(--font)); font-weight: 800; font-size: 17px; }
+.sp-top b { color: var(--amber); }
+.sp-top span { display: flex; gap: 6px; }
+.sp-top i { width: 22px; height: 6px; border-radius: 3px; background: var(--line); }
+.sp-hero { border-radius: var(--r-lg); padding: 14px; background: var(--card-bg, var(--surface)); box-shadow: var(--shadow); }
+.sp-label { font-size: 12px; color: var(--muted); font-weight: 600; }
+.sp-row { display: flex; align-items: baseline; gap: 10px; margin: 2px 0 6px; flex-wrap: wrap; }
+.sp-price { font-family: var(--font-num, var(--font)); font-size: 28px; font-weight: 800; letter-spacing: -.03em; }
+.sp-pill { font-family: var(--font-num, var(--font)); font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; color: var(--up); background: color-mix(in srgb, var(--up) 16%, transparent); }
+.sp-pill.dn { color: var(--down); background: color-mix(in srgb, var(--down) 16%, transparent); }
+.sp-hero svg { display: block; width: 100%; height: 54px; }
+.sp-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.sp-stats div { border-radius: var(--r-md); padding: 8px; background: var(--card-bg, var(--surface)); box-shadow: var(--shadow); display: flex; flex-direction: column; font-size: 11px; color: var(--muted); }
+.sp-stats b { font-family: var(--font-num, var(--font)); font-size: 15px; color: var(--sea); }
+.sp-stats b.u { color: var(--up); } .sp-stats b.d { color: var(--down); }
+.sp-btns { display: flex; gap: 6px; }
+.sp-btns span { flex: 1; text-align: center; font-size: 12.5px; font-weight: 700; padding: 8px 6px; border-radius: var(--r-sm); box-shadow: inset 0 0 0 1px var(--line); }
+.sp-btns span:first-child { background: var(--amber); color: var(--amber-ink); box-shadow: none; }
+.sp-ai { font-size: 12px; color: var(--amber); font-weight: 700; display: flex; gap: 6px; align-items: center; }
+.sp-info { padding: 14px 16px 16px; display: grid; gap: 6px; background: var(--surface); color: var(--sea); font-family: Onest, system-ui, sans-serif; }
+.sp-info h2 { margin: 0; font-size: 18px; font-family: Onest, system-ui, sans-serif; }
+.sp-info p { margin: 0; font-size: 14px; color: var(--muted); }
+.sp-info .btn { margin-top: 6px; }
+.style-bar { position: sticky; top: 62px; z-index: 6; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 14px; border-radius: 14px; background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line); font-size: 14.5px; }
+:root[data-style] .theme-btn { display: none; }
+:root[data-style="glass"] dialog.sheet, :root[data-style="glass"] .term-pop { background: #1d2a5a; }
+.style-prev[data-style="navy"] {
+  --page-bg: radial-gradient(600px 300px at 85% -60px, rgba(108,178,255,.14), transparent 60%), #0a1930; --mist: #0a1930; --surface: #10223e; --surface-2: #162c4d; --line: #213a5f;
+  --card-bg: linear-gradient(180deg, #142949 0%, #10223e 60%); --sea: #eef3fb; --sea-2: #c1cee2; --muted: #8fa3c0; --amber: #f5b335; --amber-ink: #1c1200;
+  --up: #2fd389; --down: #ff5a64; --info: #6cb2ff; --r-lg: 16px; --r-md: 12px; --r-sm: 8px; --shadow: 0 0 0 1px #213a5f; --font: "Onest", system-ui, sans-serif; --font-display: "Onest", system-ui, sans-serif; --font-num: "Onest", system-ui, sans-serif;
+}
+@media (max-width: 680px) { .me-cta .cta .btn { white-space: nowrap; padding: 10px 8px; font-size: 14.5px; } }
+@media (max-width: 480px) { .style-grid { grid-template-columns: 1fr 1fr; gap: 10px; } .style-prev { padding: 10px; } .sp-price { font-size: 20px; } .sp-stats b { font-size: 12.5px; } .sp-stats div { padding: 6px; } .sp-btns span { font-size: 11px; padding: 6px 4px; } .sp-ai { font-size: 10.5px; } .sp-info { padding: 10px 12px 12px; } .sp-info h2 { font-size: 15px; } .sp-info p { font-size: 12.5px; } }

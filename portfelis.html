@@ -19,12 +19,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script>try{var t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="assets/style.css?v=530e385b">
+<script>try{var d=document.documentElement,t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";d.dataset.theme=t;
+var S={terminal:["dark","IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600"],bank:["light","Manrope:wght@400;500;600;700;800"],amber:["light","Fraunces:opsz,wght@9..144,600;9..144,700"],neon:["dark","Space+Grotesk:wght@400;500;600;700"],green:["light","DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800"],glass:["dark",""],paper:["light","Source+Serif+4:opsz,wght@8..60,600;8..60,700"],graphite:["dark",""],sea:["dark",""]},st=localStorage.getItem("investai.style");
+if(S[st]){d.dataset.style=st;d.dataset.theme=S[st][0];if(S[st][1])document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family='+S[st][1]+'&display=swap">')}}catch(e){}</script>
+<link rel="stylesheet" href="assets/style.css?v=d8586ba6">
 <script src="assets/viz.js?v=2a3cee52" defer></script>
-<script src="assets/app.js?v=8c8b8907" defer></script>
+<script src="assets/app.js?v=25befa0e" defer></script>
 <script src="assets/glossary.js?v=be0fc5e9" defer></script>
-<script src="assets/pages.js?v=85a0d5b1" defer></script>
+<script src="assets/pages.js?v=13ffec94" defer></script>
 </head>
 <body data-page="portfolio">
 <main class="wrap wide pf">
