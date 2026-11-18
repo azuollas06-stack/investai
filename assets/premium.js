@@ -16,11 +16,13 @@ async function unlockPremium(password) {
   const h = await sha256(password.trim());
   if (h !== PREMIUM_HASH) return false;
   try { localStorage.setItem(PREMIUM_KEY, h); } catch {}
+  // AI asistento raktas (serveris tikrina jo maišos kodą; iš viešo PREMIUM_HASH jo atkurti negalima)
+  try { localStorage.setItem("investai.premium.ai", await sha256("ai|" + password.trim())); } catch {}
   applyPremium();
   return true;
 }
 function lockPremium() {
-  try { localStorage.removeItem(PREMIUM_KEY); } catch {}
+  try { localStorage.removeItem(PREMIUM_KEY); localStorage.removeItem("investai.premium.ai"); } catch {}
   applyPremium();
 }
 // Premium elementai: atrakinus – rodomi; kitaip – rodomas kvietimas

@@ -13,6 +13,9 @@ ALLOWED_ORIGINS = "https://azuollas06-stack.github.io,http://localhost:8765"
 # Kiek klausimų per dieną vienam lankytojui ir visiems kartu (biudžeto apsauga)
 PER_USER_DAY = "25"
 GLOBAL_DAY = "600"
+# Premium nariams – daugiau klausimų. Čia tik rakto maišos kodas (patį raktą žino tik atrakinę Premium).
+PREMIUM_MULT = "2"
+PREMIUM_AI_HASH = "b0deb5e24109eab3fbdc18111abd0130483828966d7bacbb225ff01c773c7797"
 
 [[durable_objects.bindings]]
 name = "LIMITER"

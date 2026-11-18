@@ -92,45 +92,53 @@
   function suggestions() {
     const page = document.body.dataset.page, sym = pageSym();
     const name = sym ? (document.title.replace(/\s*[–|-]\s*InvestAI.*$/, "").trim() || sym.split(":")[1]) : "";
-    if (sym) return [`Kodėl ${name} kaina pastaruoju metu keitėsi?`, `Ką reiškia ${name} P/E rodiklis?`, `Kokios rizikos būdingos ${name}?`];
-    if (page === "portfolio" && holdings().length) return ["Kaip išskaidytas mano portfelis?", "Kurie sektoriai mano portfelyje dominuoja?", "Kokios rizikos būdingos tokiai sudėčiai?"];
-    if (page === "tools") return ["Kaip veikia sudėtinės palūkanos?", "Kaip apmokestinamas investicijų pelnas Lietuvoje?", "Kas yra investicinė sąskaita?"];
-    return ["Kas yra ETF ir kuo jis skiriasi nuo akcijos?", "Kas šiandien vyksta rinkose?", "Ką reiškia dividendai?"];
+    if (sym) return [["markets", `Kodėl ${name} kaina pastaruoju metu keitėsi?`], ["glossary", `Ką reiškia ${name} P/E rodiklis?`], ["strategy", `Kokios rizikos būdingos ${name}?`]];
+    if (page === "portfolio" && holdings().length) return [["portfolio", "Kaip išskaidytas mano portfelis?"], ["markets", "Kurie sektoriai mano portfelyje dominuoja?"], ["strategy", "Kokios rizikos būdingos tokiai sudėčiai?"]];
+    if (page === "tools") return [["tools", "Kaip veikia sudėtinės palūkanos?"], ["glossary", "Kaip apmokestinamas investicijų pelnas Lietuvoje?"], ["portfolio", "Kas yra investicinė sąskaita?"]];
+    return [["glossary", "Kas yra ETF ir kuo jis skiriasi nuo akcijos?"], ["markets", "Kas šiandien vyksta rinkose?"], ["news", "Ką reiškia dividendai?"]];
   }
+  const ico = (id, n = 20) => (typeof icon === "function" ? icon(id, n) : "");
+  const premiumToken = () => { try { return localStorage.getItem("investai.premium.ai") || ""; } catch { return ""; } };
+  const isPrem = () => { try { return !!localStorage.getItem("investai.premium.v1"); } catch { return false; } };
 
   /* ---------- Langas ---------- */
   const SPARK = `<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2.5l1.9 5.1 5.1 1.9-5.1 1.9L12 16.5l-1.9-5.1L5 9.5l5.1-1.9zM18.5 14l.95 2.55L22 17.5l-2.55.95L18.5 21l-.95-2.55L15 17.5l2.55-.95z"/></svg>`;
+  const ORB = (cls = "") => `<span class="ai-orb ${cls}" aria-hidden="true">${SPARK}</span>`;
   function bubbles() {
-    if (!chat.length) return `<div class="ai-empty"><div class="ai-empty-ico">${SPARK}</div><p><b>Klausk apie investavimą</b></p><p class="muted">Paaiškinu terminus, rinkos įvykius ir tavo portfelio sudėtį. Rekomendacijų, ką pirkti ar parduoti, neteikiu.</p></div>`;
-    return chat.map((m) => `<div class="ai-msg ${m.role === "user" ? "me" : "bot"}${m.err ? " err" : ""}">${m.role === "user" ? `<p>${escH(m.content)}</p>` : md(m.content) || '<span class="ai-dots"><i></i><i></i><i></i></span>'}</div>`).join("");
+    if (!chat.length) return `<div class="ai-hello">${ORB("big")}<h2>Labas! Ko nori paklausti?</h2><p>Paaiškinu terminus, rinkos įvykius ir tavo portfelio sudėtį – paprastai ir lietuviškai.</p></div>
+      <div class="ai-sugg">${suggestions().map(([i, q]) => `<button type="button" class="ai-card"><span class="ai-card-ico">${ico(i, 20)}</span><span>${escH(q)}</span><span class="ai-card-go">${ico("chevron", 18)}</span></button>`).join("")}</div>`;
+    return chat.map((m) => m.role === "user"
+      ? `<div class="ai-msg me"><p>${escH(m.content)}</p></div>`
+      : `<div class="ai-msg bot${m.err ? " err" : ""}">${ORB("sm")}<div class="ai-txt">${md(m.content) || '<span class="ai-think">Galvoju…</span>'}</div></div>`).join("");
   }
   function render() {
     if (!dlg) return;
     const log = dlg.querySelector(".ai-log");
     log.innerHTML = bubbles();
     log.scrollTop = log.scrollHeight;
-    const chips = dlg.querySelector(".ai-chips");
-    chips.hidden = chat.length > 0;
-    chips.innerHTML = suggestions().map((q) => `<button type="button" class="ai-chip">${escH(q)}</button>`).join("");
-    dlg.querySelector(".ai-left").textContent = left === null ? "" : `Šiandien liko ${left} ${ltN(left, "klausimas", "klausimai", "klausimų")}`;
+    const sub = dlg.querySelector(".ai-left");
+    sub.innerHTML = `${left === null ? "Pasiruošęs" : `Liko ${left} ${ltN(left, "klausimas", "klausimai", "klausimų")} šiandien`}${prem ? ' <span class="ai-prem">★ Premium</span>' : ""}`;
     dlg.querySelector(".ai-send").disabled = busy;
     dlg.querySelector(".ai-clear").hidden = !chat.length || busy;
+    dlg.classList.toggle("is-busy", busy);
   }
+  let prem = false;
   function build() {
     dlg = document.createElement("dialog");
     dlg.className = "ai-sheet";
     dlg.setAttribute("aria-label", "InvestAI asistentas");
     const hasPf = holdings().length > 0;
-    dlg.innerHTML = `<div class="ai-inner">
-      <header class="ai-head"><span class="ai-badge">${SPARK}</span><div><b>InvestAI asistentas</b><small class="ai-left"></small></div>
-        <button type="button" class="linkish ai-clear" hidden aria-label="Pradėti naują pokalbį">Naujas</button>
-        <button type="button" class="icon-btn ai-close" aria-label="Uždaryti">${typeof icon === "function" ? icon("close", 22) : "✕"}</button></header>
+    prem = !!premiumToken();
+    const upsell = !prem ? (isPrem() ? `<a class="ai-up" href="premium.html">★ Premium: dar kartą įvesk slaptažodį ir gausi 2× daugiau klausimų</a>` : `<a class="ai-up" href="premium.html">★ Premium nariams – 2× daugiau klausimų per dieną</a>`) : "";
+    dlg.innerHTML = `<div class="ai-inner"><div class="ai-aurora" aria-hidden="true"></div>
+      <header class="ai-head">${ORB()}<div><b>InvestAI asistentas</b><small class="ai-left"></small></div>
+        <button type="button" class="icon-btn ai-clear" hidden aria-label="Naujas pokalbis" title="Naujas pokalbis"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
+        <button type="button" class="icon-btn ai-close" aria-label="Uždaryti">${ico("close", 22) || "✕"}</button></header>
       <div class="ai-log" aria-live="polite"></div>
-      <div class="ai-chips"></div>
       <form class="ai-form">
-        ${hasPf ? `<label class="ai-pf"><input type="checkbox" ${pfAllowed() ? "checked" : ""}> Leisti matyti mano portfelio sudėtį (tik procentus)</label>` : ""}
-        <div class="ai-row"><textarea rows="1" maxlength="2000" placeholder="Užduok klausimą…" aria-label="Klausimas"></textarea><button class="ai-send" type="submit" aria-label="Siųsti"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M3.4 20.4l17.45-7.48a1 1 0 000-1.84L3.4 3.6a.99.99 0 00-1.39.91L2 9.12c0 .5.37.93.87.99L17 12 2.87 13.88c-.5.07-.87.5-.87 1l.01 4.61c0 .71.73 1.2 1.39.91z"/></svg></button></div>
-        <p class="ai-note">AI gali klysti, o tai nėra investavimo rekomendacija. Klausimai per mūsų serverį perduodami OpenAI ir nesaugomi. <a href="apie.html#ai">Daugiau</a></p>
+        ${hasPf ? `<label class="ai-pf"><input type="checkbox" ${pfAllowed() ? "checked" : ""}><span class="ai-switch" aria-hidden="true"></span>Asistentas mato mano portfelio sudėtį (tik %)</label>` : ""}
+        <div class="ai-row"><textarea rows="1" maxlength="2000" placeholder="Klausk bet ko apie investavimą…" aria-label="Klausimas"></textarea><button class="ai-send" type="submit" aria-label="Siųsti"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
+        <p class="ai-note">${upsell}AI gali klysti, o tai nėra investavimo rekomendacija. Klausimai per mūsų serverį perduodami OpenAI ir nesaugomi. <a href="apie.html#ai">Daugiau</a></p>
       </form></div>`;
     document.body.appendChild(dlg);
     const ta = dlg.querySelector("textarea");
@@ -138,7 +146,7 @@
     ta.addEventListener("input", grow);
     ta.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); dlg.querySelector(".ai-form").requestSubmit(); } });
     dlg.querySelector(".ai-form").addEventListener("submit", (e) => { e.preventDefault(); const q = ta.value.trim(); if (q && !busy) { ta.value = ""; grow(); ask(q); } });
-    dlg.querySelector(".ai-chips").addEventListener("click", (e) => { const b = e.target.closest(".ai-chip"); if (b) ask(b.textContent); });
+    dlg.querySelector(".ai-log").addEventListener("click", (e) => { const b = e.target.closest(".ai-card"); if (b) ask(b.textContent.trim()); });
     dlg.querySelector(".ai-close").addEventListener("click", () => dlg.close());
     dlg.querySelector(".ai-clear").addEventListener("click", () => { chat = []; save(); render(); ta.focus(); });
     dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
@@ -152,7 +160,7 @@
     if (!dlg.open) dlg.showModal();
     if (q) ask(q); else if (matchMedia("(pointer: fine)").matches) dlg.querySelector("textarea").focus();
     if (left === null) {
-      fetch(CFG.url + "/limits").then((r) => r.json()).then((d) => { if (typeof d.left === "number") { left = d.left; render(); } }).catch(() => {});
+      fetch(CFG.url + "/limits", { headers: premiumToken() ? { "X-Premium": premiumToken() } : {} }).then((r) => r.json()).then((d) => { if (typeof d.left === "number") { left = d.left; prem = !!d.premium; render(); } }).catch(() => {});
     }
   }
 
@@ -167,7 +175,7 @@
       const pfBox = dlg.querySelector(".ai-pf input");
       const ctx = await context(pfBox ? pfBox.checked : false);
       const msgs = chat.filter((m) => m !== bot && !m.err).slice(-12).map((m) => ({ role: m.role, content: m.content }));
-      const r = await fetch(CFG.url + "/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages: msgs, context: ctx }) });
+      const r = await fetch(CFG.url + "/chat", { method: "POST", headers: { "Content-Type": "application/json", ...(premiumToken() ? { "X-Premium": premiumToken() } : {}) }, body: JSON.stringify({ messages: msgs, context: ctx }) });
       if (!r.ok) {
         const d = await r.json().catch(() => ({}));
         if (typeof d.left === "number") left = d.left;
@@ -201,7 +209,7 @@
     fab.type = "button";
     fab.className = "ai-fab";
     fab.setAttribute("aria-label", "Klausti InvestAI asistento");
-    fab.innerHTML = `${SPARK}<span>Klausti AI</span>`;
+    fab.innerHTML = `<span class="ai-fab-ico">${SPARK}</span><span>Klausti AI</span>`;
     fab.addEventListener("click", () => open());
     document.body.appendChild(fab);
     document.body.classList.add("has-ai");

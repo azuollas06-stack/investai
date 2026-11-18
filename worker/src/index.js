@@ -56,6 +56,14 @@ export class Limiter extends DurableObject {
 
 /* ---------- Pagalbinės ---------- */
 const today = () => new Date().toISOString().slice(0, 10);
+async function sha256hex(t) {
+  const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
+  return [...new Uint8Array(h)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+async function isPremium(req, env) {
+  const t = (req.headers.get("X-Premium") || "").trim();
+  return !!(t && env.PREMIUM_AI_HASH && /^[0-9a-f]{64}$/.test(t) && (await sha256hex(t)) === env.PREMIUM_AI_HASH);
+}
 async function userKey(req) {
   const ip = req.headers.get("CF-Connecting-IP") || "0";
   const data = new TextEncoder().encode(`${ip}|${today()}|investai`);
@@ -70,7 +78,7 @@ function cors(req, env) {
     headers: {
       "Access-Control-Allow-Origin": ok ? origin : "null",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Headers": "Content-Type, X-Premium",
       "Access-Control-Expose-Headers": "X-Left",
       "Access-Control-Max-Age": "86400",
       Vary: "Origin",
@@ -129,7 +137,9 @@ export default {
     const url = new URL(req.url);
     const c = cors(req, env);
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: c.headers });
-    const perUser = +env.PER_USER_DAY || 25, global = +env.GLOBAL_DAY || 600;
+    const base = +env.PER_USER_DAY || 25, global = +env.GLOBAL_DAY || 600;
+    const premium = await isPremium(req, env);
+    const perUser = premium ? base * (+env.PREMIUM_MULT || 2) : base;
     const limiter = () => env.LIMITER.get(env.LIMITER.idFromName(today()));
 
     if (url.pathname === "/" && req.method === "GET") return json({ ok: true, provider: env.PROVIDER, model: env.MODEL }, 200, c.headers);
@@ -137,7 +147,7 @@ export default {
 
     if (url.pathname === "/limits" && req.method === "GET") {
       const r = await limiter().peek(await userKey(req), perUser);
-      return json({ left: r.left, perUser }, 200, c.headers);
+      return json({ left: r.left, perUser, premium, base }, 200, c.headers);
     }
 
     if (url.pathname === "/chat" && req.method === "POST") {
