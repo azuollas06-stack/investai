@@ -56,7 +56,7 @@ function renderModels() {
       <span class="model-bar">${bar}</span>
       <span class="model-parts">${esc(parts)}</span>
       <span class="model-desc">${esc(m.desc)}</span>
-      ${m.dd08 ? `<span class="model-dd"><span>2008 m. <b>~${m.dd08} %</b></span><span>2022 m. <b>~${m.dd22} %</b></span></span>` : ""}
+      ${m.dd08 ? `<span class="model-dd"><span>2008 m. <b>≈ ${fmtPct(m.dd08, 0)}</b></span><span>2022 m. <b>≈ ${fmtPct(m.dd22, 0)}</b></span></span>` : ""}
     </button>`;
   }).join("");
   $("#models").querySelectorAll(".model").forEach((b) => b.addEventListener("click", () => {

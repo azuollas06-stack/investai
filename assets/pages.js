@@ -1,6 +1,8 @@
 // InvestAI – puslapiai su savais vizualais: pradžia, rinkos, aktyvas, naujienos.
 "use strict";
 
+// Tos pačios įmonės kitos akcijų klasės / ADR – žemėlapiuose ir sąrašuose nerodomos, kad nesidubliuotų
+const DUP_SKIP = new Set(["NASDAQ:GOOG", "NYSE:BRK.A", "NASDAQ:ASML"]);
 let _assetsAll = null;
 async function allAssets() {
   if (_assetsAll) return _assetsAll;
@@ -72,7 +74,7 @@ async function pageHome() {
   $("#pulse").innerHTML = pulseHTML(P);
   homeMe(P, all);
   homeMovers(P, all);
-  const big = all.filter((a) => a.type === "Akcija" && P.items[a.s] && P.items[a.s].mcap).map((a) => ({ a, p: P.items[a.s], v: P.items[a.s].mcap * (TO_EUR[P.items[a.s].cur] || 1) })).sort((x, y) => y.v - x.v).slice(0, 36);
+  const big = all.filter((a) => a.type === "Akcija" && !DUP_SKIP.has(a.s) && P.items[a.s] && P.items[a.s].mcap).map((a) => ({ a, p: P.items[a.s], v: P.items[a.s].mcap * (TO_EUR[P.items[a.s].cur] || 1) })).sort((x, y) => y.v - x.v).slice(0, 36);
   $("#home-map").innerHTML = treemapHTML(big.map(({ a, p, v }) => ({ label: a.s.split(":")[1].replace(/\..*/, ""), sub: fmtPct(p.d1), v, c: p.d1, href: assetUrl(a.s), title: `${a.n}: ${fmtPct(p.d1)} per dieną` })), { scale: 3, ratio: window.innerWidth < 680 ? 0.95 : 0.5 }) + tmLegend(3, " %");
   fitTreemaps($("#home-map"));
   homeNews(P, all).catch((e) => console.error(e));
@@ -111,7 +113,7 @@ function homeMe(P, all) {
 }
 function homeMovers(P, all) {
   const items = P.items;
-  const stocks = all.filter((a) => a.type === "Akcija" && items[a.s] && items[a.s].d1 !== null && items[a.s].d1 !== undefined);
+  const stocks = all.filter((a) => a.type === "Akcija" && !DUP_SKIP.has(a.s) && items[a.s] && items[a.s].d1 !== null && items[a.s].d1 !== undefined);
   const sorted = [...stocks].sort((x, y) => items[y.s].d1 - items[x.s].d1);
   let mode = "up";
   const draw = () => {
@@ -150,7 +152,7 @@ async function nativeMap(el) {
   const box = $(".map-box", el);
   const draw = () => {
     const [key, , scale] = MAP_PERIODS[per];
-    const items = all.filter((a) => a.type === "Akcija" && P.items[a.s] && P.items[a.s].mcap && (reg === "Visi" || regionOf(a) === reg)).map((a) => {
+    const items = all.filter((a) => a.type === "Akcija" && !DUP_SKIP.has(a.s) && P.items[a.s] && P.items[a.s].mcap && (reg === "Visi" || regionOf(a) === reg)).map((a) => {
       const p = P.items[a.s];
       return { label: a.s.split(":")[1].replace(/\..*/, ""), sub: fmtPct(p[key]), v: p.mcap * (TO_EUR[p.cur] || 1), c: p[key], href: assetUrl(a.s), title: `${a.n}: ${fmtPct(p[key])}`, group: window.innerWidth < 680 ? shortSector(a.sector || "Kita") : a.sector || "Kita" };
     });
@@ -223,7 +225,9 @@ async function pageAsset() {
   $("#asset-symbol").textContent = sym;
   $("#asset-meta").textContent = known ? [known.type, known.sector, known.country].filter(Boolean).join(" · ") : "";
   $("#asset-logo").innerHTML = logoHTML(sym, name, "#1d3a63", 52);
-  $("#asset-star").innerHTML = starHTML(sym, name, true);
+  $("#asset-star").innerHTML = `<button type="button" class="icon-btn search-toggle" aria-label="Ieškoti kito aktyvo">${icon("asset", 22)}</button>` + starHTML(sym, name, true);
+  document.body.classList.add("has-asset");
+  $(".search-toggle").addEventListener("click", () => { document.body.classList.toggle("show-search"); if (document.body.classList.contains("show-search")) $("#q").focus(); });
   $("#tv-link").href = `https://www.tradingview.com/symbols/${sym.replace(":", "-")}/`;
   $("#ap-actions").innerHTML = `
     <a class="btn" href="irankiai.html?a=${encodeURIComponent(sym)}#jei">O jei būčiau investavęs?</a>

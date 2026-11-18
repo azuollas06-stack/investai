@@ -43,17 +43,19 @@
   function renderSav() {
     const f = $("#f-sav"), init = num(f.init.value), mon = num(f.mon.value), yrs = Math.round(num(f.yrs.value, 20));
     $("#yrs-l").textContent = `${yrs} ${yrs % 10 === 1 && yrs !== 11 ? "metai" : yrs % 10 === 0 || (yrs > 10 && yrs < 20) ? "metų" : "metai"}`;
+    const infl = f.infl.checked, defl = (y) => (infl ? Math.pow(1.025, y) : 1);
     const series = SAV.map(([n, r, c]) => {
       const vals = [init]; let v = init;
-      for (let m = 1; m <= yrs * 12; m++) { v = v * (1 + r / 100 / 12) + mon; if (m % 12 === 0) vals.push(v); }
-      return { name: `${n} (${r} % per metus)`, values: vals, color: c, end: v, r, n };
+      for (let m = 1; m <= yrs * 12; m++) { v = v * (1 + r / 100 / 12) + mon; if (m % 12 === 0) vals.push(v / defl(m / 12)); }
+      return { name: `${n} (${r} % per metus)`, values: vals, color: c, end: v / defl(yrs), r, n };
     });
     const paid = init + mon * 12 * yrs;
     const contrib = Array.from({ length: yrs + 1 }, (_, i) => init + mon * 12 * i);
     $("#o-sav").innerHTML = `
       <p class="calc-q">Per ${yrs} m. pats įneštum <b>${eur(paid)}</b>. Priklausomai nuo grąžos, sukauptum:</p>
-      <div class="sav-cards">${series.map((s) => `<div class="sav-card" style="--c:${s.color}"><span>${s.n}, ${s.r} %</span><b>${eur(s.end)}</b><small>iš jų uždirbta ${eur(s.end - paid)}</small></div>`).join("")}</div>
+      <div class="sav-cards">${series.map((s) => `<div class="sav-card" style="--c:${s.color}"><span>${s.n}, ${s.r} %</span><b>${eur(s.end)}</b>${infl ? "<small>šiandienos pinigais</small>" : `<small>iš jų uždirbta ${eur(s.end - paid)}</small>`}</div>`).join("")}</div>
       ${multiLineSVG([...series, { name: "Įnešta suma", values: contrib, color: "var(--muted)", dash: true, width: 1.4 }], { h: 240, fmt: (v) => eur(v), zero: true, labels: ["Šiandien", `po ${Math.round(yrs / 2)} m.`, `po ${yrs} m.`] })}
+      ${infl ? `<p class="note">Sumos perskaičiuotos šiandienos pinigais: po ${yrs} m. 1 € perkamąja galia atitiks ~${(1 / defl(yrs)).toLocaleString("lt-LT", { maximumFractionDigits: 2 })} € šiandien.</p>` : ""}
       <p class="muted small">Tai pavyzdinės metinės grąžos, ne prognozė. Akcijų rinkos gali ir kristi – kai kuriais metais net 20–40 %. Grąža skaičiuojama kas mėnesį (sudėtinės palūkanos).</p>`;
   }
 
@@ -87,6 +89,9 @@
     ["Analitikų vidurkis", (p) => (p.an && p.an.n ? `${{ strong_buy: "Stipriai pirkti", buy: "Pirkti", hold: "Laikyti", underperform: "Prasčiau už rinką", sell: "Parduoti" }[p.an.key] || "–"} (${p.an.n})` : "–")],
     ["Tikslinė kaina", (p) => (p.an && p.an.up !== undefined ? fmtPct(p.an.up, 0) : "–"), "an"],
   ];
+  const CMP_R = [["3 mėn.", 91], ["1 m.", 365], ["2 m.", 730], ["5 m.", 1826]];
+  let cmpDays = 365, cmpList = [];
+  const drawCmpChart = () => mountCompareChart($("#cmp-chart"), cmpList, cmpDays).catch(() => {});
   function renderCmp() {
     const f = $("#f-cmp");
     const picks = ["a0", "a1", "a2"].map((k) => find(f[k].value)).filter((a) => a && P.items[a.s]);
@@ -98,14 +103,70 @@
     const series = uniq.map((a, i) => { const sp = P.items[a.s].spark; return { name: a.n, values: sp.map((v) => (v / sp[0]) * 100), color: cols[i] }; });
     const cell = (row, a) => { const p = P.items[a.s]; const v = row[2] ? (row[2] === "an" ? (p.an || {}).up : p[row[2]]) : null; return `<td class="${v === null || v === undefined ? "" : v >= 0 ? "up" : "down"}">${row[1](p)}</td>`; };
     $("#o-cmp").innerHTML = `
-      <div class="card"><h3>Kaip keitėsi 100 € per metus</h3>${multiLineSVG(series, { h: 240, fmt: (v) => `${Math.round(v)} €`, labels: ["Prieš metus", "Prieš pusmetį", "Dabar"] })}</div>
+      <div class="card"><div class="card-head"><h3>Kaip keitėsi 100 €</h3><div class="seg seg-sm" id="cmp-r">${CMP_R.map(([l, d]) => `<button type="button" data-d="${d}" aria-pressed="${d === cmpDays}">${l}</button>`).join("")}</div></div><div id="cmp-chart"><div class="skel" style="height:300px"></div></div><ul class="ml-legend">${series.map((x) => `<li><i style="background:${x.color}"></i>${esc(x.name)}</li>`).join("")}</ul></div>
       <div class="card cmp-table-wrap"><table class="cmp-table"><thead><tr><th></th>${uniq.map((a) => `<th><a href="${assetUrl(a.s)}">${logoHTML(a.s, a.n, "#1d3a63", 32)}<span>${esc(a.n)}</span></a>${starHTML(a.s, a.n)}</th>`).join("")}</tr></thead>
       <tbody>${CMP_ROWS.map((r) => `<tr><th scope="row">${r[0]}</th>${uniq.map((a) => cell(r, a)).join("")}</tr>`).join("")}</tbody></table>
-      <p class="muted small">Kainos skirtingomis valiutomis. Analitikų duomenys – Yahoo Finance, tai trečiųjų šalių nuomonės, ne InvestAI rekomendacija.</p></div>`;
+      <p class="muted small">Kainos skirtingomis valiutomis; grafike – kiek būtų verta 100 € (vietine valiuta), investuota laikotarpio pradžioje. Analitikų duomenys – Yahoo Finance, tai trečiųjų šalių nuomonės, ne InvestAI rekomendacija.</p></div>`;
+    cmpList = uniq.map((a, i) => ({ s: a.s, p: P.items[a.s], color: cols[i], label: a.s.split(":")[1] }));
+    $("#cmp-r").addEventListener("click", (e) => { const b = e.target.closest("[data-d]"); if (!b) return; cmpDays = +b.dataset.d; $("#cmp-r").querySelectorAll("[data-d]").forEach((x) => x.setAttribute("aria-pressed", String(+x.dataset.d === cmpDays))); drawCmpChart(); });
+    drawCmpChart();
+  }
+
+  /* ---------- Lietuvos mokesčiai (2026 m. taisyklės, VMI) ---------- */
+  const VDU12 = 27745.8, VDU36 = 83237.4, VDU60 = 138729;
+  let txMode = "sale", hold = "lt5";
+  const eur2 = (v) => `${v.toLocaleString("lt-LT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
+  // Progresinė dalis: „krūva“ nuo base iki base+amt pagal 20/25/32 % ribas
+  function progressive(base, amt) {
+    let tax = 0, from = base, left = amt;
+    for (const [lim, r] of [[VDU36, 0.2], [VDU60, 0.25], [Infinity, 0.32]]) {
+      if (left <= 0) break;
+      const room = Math.max(0, lim - from), take = Math.min(room, left);
+      tax += take * r; left -= take; from += take;
+    }
+    return tax;
+  }
+  function renderTax() {
+    const f = $("#f-tax"), out = $("#o-tax");
+    f.querySelectorAll("[data-tx]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tx === txMode)));
+    f.querySelectorAll("[data-hold]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.hold === hold)));
+    f.querySelectorAll("[data-for]").forEach((d) => (d.hidden = d.dataset.for !== txMode));
+    let html = "";
+    if (txMode === "sale") {
+      const gain = num(f.sale.value) - num(f.cost.value) - num(f.fees.value);
+      const taxable = Math.max(0, gain - 500);
+      let tax = 0, lines = [];
+      if (gain <= 0) lines.push(["Pelno nėra – mokėti nereikia", ""]);
+      else if (hold === "ge5") { tax = taxable * 0.15; lines.push(["Apmokestinama suma (pelnas − 500 €)", eur2(taxable)], ["Tarifas", "15 % (laikyta ≥ 5 m.)"]); }
+      else {
+        const room = Math.max(0, VDU12 - num(f.other.value));
+        const in15 = Math.min(taxable, room), rest = taxable - in15;
+        const base = num(f.salary.value) + Math.min(VDU12, num(f.other.value) + in15);
+        const prog = progressive(base, rest);
+        tax = in15 * 0.15 + prog;
+        lines.push(["Apmokestinama suma (pelnas − 500 €)", eur2(taxable)], ["Iš jos 15 % tarifu", eur2(in15)]);
+        if (rest > 0) lines.push(["Viršija 12 VDU ribą – 20/25/32 % tarifais", eur2(rest)]);
+      }
+      html = `<p class="calc-q">Pelnas: <b>${eur2(Math.max(0, gain))}</b>. Apytikslis gyventojų pajamų mokestis:</p><p class="calc-big">${eur2(tax)}</p>
+        <ul class="tax-lines">${lines.map(([a, b]) => `<li><span>${a}</span><b>${b}</b></li>`).join("")}</ul>
+        <p class="muted small">500 € neapmokestinama suma taikoma visam metų finansinių priemonių pardavimo pelnui (ne kiekvienam pardavimui atskirai). ${hold === "lt5" ? "Trumpiau nei 5 m. laikytų akcijų pelnui 15 % tarifas taikomas, kol visos ne darbo pajamos neviršija 12 VDU (27 745,80 € 2026 m.)." : ""}</p>`;
+    } else if (txMode === "is") {
+      const over = Math.max(0, num(f.out.value) - num(f.in.value));
+      html = `<p class="calc-q">Iš investicinės sąskaitos išsiimant daugiau, nei įnešei, apmokestinamas tik skirtumas:</p><p class="calc-big">${eur2(over * 0.15)}</p>
+        <ul class="tax-lines"><li><span>Apmokestinama suma</span><b>${eur2(over)}</b></li><li><span>Tarifas</span><b>15 % (nepriklausomai nuo sumos)</b></li></ul>
+        <p class="muted small">Kol pinigus laikai ir perinvestuoji sąskaitoje, mokestis atidedamas. 500 € lengvata investicinei sąskaitai netaikoma.</p>`;
+    } else {
+      const dv = num(f.dv.value), wh = Math.min(num(f.wh.value), 15);
+      const lt = dv * Math.max(0, 0.15 - wh / 100);
+      html = `<p class="calc-q">Dividendams Lietuvoje taikomas 15 % tarifas. Užsienyje nuskaičiuotas mokestis paprastai įskaitomas pagal dvigubo apmokestinimo sutartį, todėl Lietuvoje dar reikėtų sumokėti:</p><p class="calc-big">${eur2(lt)}</p>
+        <ul class="tax-lines"><li><span>Nuskaičiuota užsienyje</span><b>${eur2(dv * num(f.wh.value) / 100)}</b></li><li><span>Lietuvos mokestis (15 %)</span><b>${eur2(dv * 0.15)}</b></li><li><span>Liko sumokėti Lietuvoje</span><b>${eur2(lt)}</b></li></ul>
+        <p class="muted small">Įskaitymas negali viršyti Lietuvos mokesčio. Jei užsienyje nuskaičiuota daugiau nei 15 %, skirtumą susigrąžinti galima tik toje šalyje.</p>`;
+    }
+    out.innerHTML = html + `<p class="tax-src">Šaltiniai: <a href="https://www.vmi.lt/evmi/kaip-apmokestinamos-finansini%C5%B3-priemoni%C5%B3-pardavimo-pajamos-" target="_blank" rel="noopener">VMI: finansinių priemonių pardavimo pajamos</a> · <a href="https://www.vmi.lt/evmi/5725" target="_blank" rel="noopener">VMI: GPM tarifai</a>. Apytikslis skaičiavimas pagal 2026 m. taisykles – ne mokesčių konsultacija; prieš deklaruodamas pasitikrink VMI arba pas konsultantą.</p>`;
   }
 
   /* ---------- Paleidimas ---------- */
-  const PANELS = { jei: renderJei, taupymas: renderSav, dividendai: () => renderDiv(), palyginti: renderCmp };
+  const PANELS = { jei: renderJei, taupymas: renderSav, dividendai: () => renderDiv(), palyginti: renderCmp, mokesciai: renderTax };
   function show(id) {
     if (!PANELS[id]) id = "jei";
     document.querySelectorAll("[data-tab]").forEach((t) => t.setAttribute("aria-selected", String(t.dataset.tab === id)));
@@ -135,7 +196,9 @@
     $("#f-div").addEventListener("input", (e) => renderDiv(e.target.name === "a"));
     $("#f-div").addEventListener("click", (e) => { const b = e.target.closest("[data-pick]"); if (b) { $("#f-div").a.value = label(byS(b.dataset.pick)); renderDiv(true); } });
     $("#f-cmp").addEventListener("input", renderCmp);
-    document.querySelectorAll("form.calc-form, #f-cmp").forEach((f) => f.addEventListener("submit", (e) => e.preventDefault()));
+    $("#f-tax").addEventListener("input", renderTax);
+    $("#f-tax").addEventListener("click", (e) => { const b = e.target.closest("[data-tx],[data-hold]"); if (!b) return; if (b.dataset.tx) txMode = b.dataset.tx; else hold = b.dataset.hold; renderTax(); });
+    document.querySelectorAll("form.calc-form, #f-cmp, #f-tax").forEach((f) => f.addEventListener("submit", (e) => e.preventDefault()));
     document.querySelectorAll("[data-tab]").forEach((t) => t.addEventListener("click", () => show(t.dataset.tab)));
     show(location.hash.slice(1) || "jei");
   });

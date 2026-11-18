@@ -1223,3 +1223,33 @@ img, svg, video, canvas { max-width: 100%; }
 .logo-ava.has-img b { visibility: hidden; }
 #main-nav a.nav-cta { color: var(--amber-ink); background: var(--amber); }
 #main-nav a.nav-cta[aria-current="page"] { background: var(--amber); color: var(--amber-ink); box-shadow: 0 0 0 2px var(--mist), 0 0 0 4px var(--amber); }
+.tax-lines { list-style: none; padding: 0; margin: 14px 0; }
+.tax-lines li { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+.tax-lines li span { color: var(--sea-2); }
+.tax-src { font-size: 13px; color: var(--muted); margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--line); }
+.calc-form label small { font-weight: 400; font-size: 12.5px; }
+.calc-form label.check { display: flex; gap: 10px; align-items: center; font-weight: 500; font-size: 14.5px; } .calc-form label.check input { width: 20px; height: 20px; accent-color: var(--amber); }
+#asset-star { display: flex; align-items: center; gap: 4px; }
+.search-toggle { display: none; }
+@media (max-width: 680px) {
+  body.has-asset .search { display: none; }
+  body.has-asset.show-search .search { display: flex; }
+  .search-toggle { display: inline-grid; }
+  .ah { flex-wrap: nowrap; }
+  .ah .star-text { padding: 8px; background: none; box-shadow: none; }
+  .ah .star-text .star-t { display: none; }
+  .ah .star-text svg { width: 24px; height: 24px; }
+  .stat small { display: none; }
+  .stat-cards { gap: 8px; }
+  .pchart-seg button { padding: 6px 9px; font-size: 13px; }
+}
+.calc-form [data-for] { display: grid; gap: 14px; }
+.dateline { color: var(--amber); } @media (max-width: 680px) { .dateline { margin-top: 18px; } .dateline + h1 { font-size: 28px; } .item h3 { font-size: 19px; } }
+@media (max-width: 680px) {
+  .models { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; margin: 0 -14px; padding: 4px 14px 8px; scroll-padding-inline: 14px; scrollbar-width: none; }
+  .models::-webkit-scrollbar { display: none; }
+  .model { flex: 0 0 72%; scroll-snap-align: start; }
+  .drop { padding: 28px 16px; }
+  .drop-icon { width: 54px; height: 54px; }
+  .drop h2 { font-size: 22px; }
+}

@@ -20,11 +20,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>try{var t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="dark";document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="assets/style.css?v=72bc5ecf">
+<link rel="stylesheet" href="assets/style.css?v=54000d41">
 <script src="assets/viz.js?v=89d065b0" defer></script>
-<script src="assets/app.js?v=29ee3f5b" defer></script>
+<script src="assets/app.js?v=8c8b8907" defer></script>
 <script src="assets/glossary.js?v=be0fc5e9" defer></script>
-<script src="assets/pages.js?v=2037bcdf" defer></script>
+<script src="assets/pages.js?v=284a0c6e" defer></script>
 </head>
 <body data-page="tools">
 <main class="wrap wide">
@@ -35,6 +35,7 @@
     <button role="tab" data-tab="taupymas">Taupymas</button>
     <button role="tab" data-tab="dividendai">Dividendai</button>
     <button role="tab" data-tab="palyginti">Palyginti</button>
+    <button role="tab" data-tab="mokesciai">Mokesčiai (LT)</button>
   </div>
   <datalist id="asset-list"></datalist>
 
@@ -52,6 +53,7 @@
       <label>Pradinė suma, €<input name="init" type="number" min="0" step="10" value="1000" inputmode="decimal"></label>
       <label>Kas mėnesį, €<input name="mon" type="number" min="0" step="10" value="100" inputmode="decimal"></label>
       <label>Laikotarpis: <b id="yrs-l">20 metų</b><input name="yrs" type="range" min="1" max="40" value="20"></label>
+      <label class="check"><input type="checkbox" name="infl"> Rodyti šiandienos pinigais (infliacija 2,5 % per metus)</label>
     </form>
     <div class="card calc-out" id="o-sav" aria-live="polite"></div>
   </section>
@@ -76,8 +78,31 @@
     <div id="o-cmp" aria-live="polite"></div>
   </section>
 
+  <section data-panel="mokesciai" role="tabpanel" class="calc" hidden>
+    <form class="card calc-form" id="f-tax">
+      <div class="seg" role="group" aria-label="Kas apmokestinama"><button type="button" data-tx="sale" aria-pressed="true">Pardavimo pelnas</button><button type="button" data-tx="is" aria-pressed="false">Investicinė sąskaita</button><button type="button" data-tx="div" aria-pressed="false">Dividendai</button></div>
+      <div data-for="sale">
+        <label>Pardavimo suma, €<input name="sale" type="number" min="0" step="10" value="6000" inputmode="decimal"></label>
+        <label>Įsigijimo kaina, €<input name="cost" type="number" min="0" step="10" value="4000" inputmode="decimal"></label>
+        <label>Brokerio mokesčiai, €<input name="fees" type="number" min="0" step="1" value="10" inputmode="decimal"></label>
+        <div class="seg" role="group" aria-label="Kiek laikyta"><button type="button" data-hold="lt5" aria-pressed="true">Laikyta &lt; 5 metų</button><button type="button" data-hold="ge5" aria-pressed="false">5 metai ir ilgiau</button></div>
+        <label>Kitos ne darbo pajamos šiais metais, €<input name="other" type="number" min="0" step="100" value="0" inputmode="decimal"><small class="muted">Pvz., palūkanos, kitų akcijų pardavimo pelnas</small></label>
+        <label>Metinis atlyginimas (prieš mokesčius), €<input name="salary" type="number" min="0" step="1000" value="24000" inputmode="decimal"><small class="muted">Reikia tik tada, jei pelnas didelis</small></label>
+      </div>
+      <div data-for="is" hidden>
+        <label>Išsiimama suma, €<input name="out" type="number" min="0" step="100" value="12000" inputmode="decimal"></label>
+        <label>Iki šiol įnešta (dar neišimta) suma, €<input name="in" type="number" min="0" step="100" value="10000" inputmode="decimal"></label>
+      </div>
+      <div data-for="div" hidden>
+        <label>Gauti dividendai, €<input name="dv" type="number" min="0" step="10" value="400" inputmode="decimal"></label>
+        <label>Užsienyje nuskaičiuota, %<input name="wh" type="number" min="0" max="50" step="1" value="15" inputmode="decimal"><small class="muted">JAV – dažniausiai 15 % (su W-8BEN), Lietuvos įmonės – 15 %</small></label>
+      </div>
+    </form>
+    <div class="card calc-out" id="o-tax" aria-live="polite"></div>
+  </section>
+
   <p class="muted small">Skaičiavimai iliustraciniai: neįtraukti mokesčiai, brokerio mokesčiai ir valiutų kursų pokyčiai. Praeities rezultatai negarantuoja ateities. Tai ne investavimo rekomendacija.</p>
 </main>
-<script src="assets/tools.js?v=54b9ab8a" defer></script>
+<script src="assets/tools.js?v=d7161696" defer></script>
 </body>
 </html>
