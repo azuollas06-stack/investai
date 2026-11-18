@@ -139,6 +139,7 @@ function renderResult() {
   renderCards(a);
   renderDivs(a);
   renderWeek(a);
+  renderReal(a);
   renderNext(a);
   if (typeof PFAI !== "undefined") { PFAI.renderReview(a); PFAI.renderAlerts(a); }
   decorateHeads();
@@ -964,6 +965,56 @@ function decorateHeads() {
     const hit = HEAD_ICONS.find(([re]) => re.test(h.textContent.trim()));
     if (hit) h.insertAdjacentHTML("afterbegin", `<span class="h-ico">${icon(hit[1], 18)}</span>`);
   });
+}
+
+/* ---------- Tikri rezultatai: kasdienis portfelio įrašas ir palyginimas su VWCE ---------- */
+const SNAP_KEY = "investai.pf.snap.v1", BENCH = "XETR:VWCE";
+function loadSnaps() { try { return JSON.parse(localStorage.getItem(SNAP_KEY) || "[]"); } catch { return []; } }
+function recordSnap(a) {
+  if (isDemo || !a.total) return loadSnaps();
+  const P = PRICES_PF.items || {};
+  const day = Object.values(P).map((x) => x.date).filter(Boolean).sort().pop() || new Date().toISOString().slice(0, 10);
+  const px = {}, w = {};
+  a.rows.forEach((r) => { w[r.s] = Math.round((r.value / a.total) * 1e5) / 1e5; if (P[r.s] && P[r.s].price) px[r.s] = P[r.s].price; });
+  const b = P[BENCH] ? P[BENCH].price : null;
+  let snaps = loadSnaps();
+  if (snaps.length && snaps[snaps.length - 1].d === day) snaps.pop(); // tos pačios dienos įrašą perskaičiuojame
+  const prev = snaps[snaps.length - 1];
+  let idx = 100;
+  if (prev) {
+    let ret = 0;
+    for (const [sym, wt] of Object.entries(prev.w || {})) if (prev.px[sym] && px[sym]) ret += wt * (px[sym] / prev.px[sym] - 1);
+    idx = prev.idx * (1 + ret);
+  }
+  snaps.push({ d: day, v: Math.round(a.total * 100) / 100, idx: Math.round(idx * 1e4) / 1e4, b, px, w });
+  snaps = snaps.slice(-400);
+  try { localStorage.setItem(SNAP_KEY, JSON.stringify(snaps)); } catch {}
+  return snaps;
+}
+function renderReal(a) {
+  const el = $("#r-real");
+  if (!el) return;
+  if (isDemo) { el.hidden = true; return; }
+  const snaps = recordSnap(a);
+  el.hidden = false;
+  const first = snaps[0];
+  const head = `<div class="wk-head"><div><h2>Tikri rezultatai</h2><p class="muted small">Tavo portfelio pokytis dėl kainų (be įnašų ir išėmimų), palyginti su pasaulio akcijomis (VWCE)</p></div></div>`;
+  if (snaps.length < 2) {
+    el.innerHTML = head + `<div class="real-empty"><span class="real-dot"></span><p>Pradėjome sekti <b>${fmtShort(first.d)}</b>. Kiekvieną dieną, kai atidarysi šį puslapį, išsaugosime tavo portfelio vertę – grafikas atsiras jau po kitos prekybos dienos.</p></div>`;
+    return;
+  }
+  const base = snaps[0], last = snaps[snaps.length - 1];
+  const me = snaps.map((x) => (x.idx / base.idx - 1) * 100);
+  const bs = base.b ? snaps.map((x) => (x.b && base.b ? (x.b / base.b - 1) * 100 : null)) : null;
+  const okB = bs && bs.every((v) => v !== null);
+  const meT = me[me.length - 1], bT = okB ? bs[bs.length - 1] : null;
+  const days = Math.round((new Date(last.d) - new Date(base.d)) / 864e5);
+  const series = [{ values: me, color: cssVar("--amber") || "#4d8dff", name: "Tavo portfelis", width: 2.6 }];
+  if (okB) series.push({ values: bs, color: "#a77bff", name: "Pasaulio akcijos (VWCE)", dash: true });
+  const lab = [fmtShort(base.d), fmtShort(snaps[Math.floor(snaps.length / 2)].d), fmtShort(last.d)];
+  el.innerHTML = head + `<div class="real-stats"><div><small>Tavo portfelis</small><b class="${meT >= 0 ? "up" : "down"}">${fmtPct(meT)}</b></div>${okB ? `<div><small>VWCE</small><b class="${bT >= 0 ? "up" : "down"}">${fmtPct(bT)}</b></div><div><small>Skirtumas</small><b class="${meT - bT >= 0 ? "up" : "down"}">${meT - bT >= 0 ? "+" : "−"}${Math.abs(meT - bT).toLocaleString("lt-LT", { maximumFractionDigits: 1 })} p. p.</b></div>` : ""}</div>
+    ${multiLineSVG(series, { h: 200, labels: lab, fmt: (v) => `${v.toFixed(1)} %` })}
+    <p class="muted small" style="margin:8px 0 0">Sekama nuo ${fmtShort(base.d)} (${days} d., ${snaps.length} įrašai). Vertė įrašoma, kai atidarai portfelio puslapį – kuo dažniau užsuksi, tuo tikslesnis grafikas. Duomenys saugomi tik šioje naršyklėje.</p>`;
 }
 
 /* ---------- Tavo savaitė: judėjimai ir artimiausi įvykiai ---------- */
