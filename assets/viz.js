@@ -87,7 +87,7 @@ function squarify(items, x, y, w, h) {
   return out;
 }
 // items: [{label, sub, v, c (pokytis %), href, title, group}] → HTML (procentinės koordinatės, prisitaiko prie pločio)
-function treemapHTML(items, { ratio = 0.55, scale = 3, groups = false, minLabel = 0.22 } = {}) {
+function treemapHTML(items, { ratio = 0.55, scale = 3, groups = false, minLabel = 0.22, rich = false } = {}) {
   const W = 1000, H = Math.round(1000 * ratio);
   items = items.filter((i) => i.v > 0).sort((a, b) => b.v - a.v);
   let tiles = [], heads = [];
@@ -105,26 +105,29 @@ function treemapHTML(items, { ratio = 0.55, scale = 3, groups = false, minLabel 
   const html = tiles.map((t, i) => {
     const area = (t.w * t.h) / (W * H) * 100;
     const tag = t.href ? "a" : "div";
-    return `<${tag} class="tm-tile" data-info="${esc(t.title || `${t.label}: ${fmtPct(t.c)}`)}" ${t.href ? `href="${esc(t.href)}"` : 'tabindex="0"'} style="left:${P(t.x, W)};top:${P(t.y, H)};width:${P(t.w, W)};height:${P(t.h, H)};background:${changeColor(t.c, scale)};--d:${Math.min(i, 40) * 12}ms" title="${esc(t.title || `${t.label} ${fmtPct(t.c)}`)}"><b>${esc(t.label)}</b>${t.sub ? `<span>${esc(t.sub)}</span>` : ""}</${tag}>`;
+    return `<${tag} class="tm-tile" data-info="${esc(t.title || `${t.label}: ${fmtPct(t.c)}`)}" ${t.href ? `href="${esc(t.href)}"` : 'tabindex="0"'} style="left:${P(t.x, W)};top:${P(t.y, H)};width:${P(t.w, W)};height:${P(t.h, H)};background:${changeColor(t.c, scale)};--d:${Math.min(i, 40) * 12}ms" title="${esc(t.title || `${t.label} ${fmtPct(t.c)}`)}">${t.ico ? `<i class="tm-ico">${t.ico}</i>` : ""}<b>${esc(t.label)}</b>${t.sub ? `<span>${esc(t.sub)}</span>` : ""}</${tag}>`;
   }).join("");
   const hs = heads.map((g) => `<div class="tm-group" title="${esc(g.k)}" style="left:${P(g.x, W)};top:${P(g.y, H)};width:${P(g.w, W)}">${esc(g.k)}</div>`).join("");
-  return `<div class="treemap" style="aspect-ratio:${W}/${H}">${hs}${html}</div><div class="tm-info" hidden></div>`;
+  return `<div class="treemap${rich ? " tm-rich" : ""}" style="aspect-ratio:${W}/${H}">${hs}${html}</div><div class="tm-info" hidden></div>`;
 }
 // Teksto dydis pagal tikrą langelio dydį: niekas nenukerpama, mažiems – tik simbolis arba nieko.
 function fitTreemaps(root = document) {
   root.querySelectorAll(".treemap").forEach((tm) => {
     const run = () => tm.querySelectorAll(".tm-tile").forEach((t) => {
-      const w = t.clientWidth, h = t.clientHeight, b = t.querySelector("b"), sp = t.querySelector("span");
+      const w = t.clientWidth, h = t.clientHeight, b = t.querySelector(":scope > b"), sp = t.querySelector(":scope > span");
       const len = Math.max(3, b.textContent.length);
       let fs = Math.min((w - 10) / (len * 0.7), h * 0.36, 24);
       if (fs < 9.5) { t.classList.add("tm-none"); return; }
       t.classList.remove("tm-none");
+      const ic = t.querySelector(".tm-ico");
+      if (ic) { const isz = Math.min(44, Math.max(22, Math.min(w, h) * 0.26)); const show = h > isz + fs * 2.6 && w > isz + 12; ic.style.display = show ? "" : "none"; ic.style.setProperty("--isz", `${isz.toFixed(0)}px`); if (show) fs = Math.min(fs, (h - isz) * 0.3); b.style.fontSize = `${fs.toFixed(1)}px`; }
       b.style.fontSize = `${fs.toFixed(1)}px`;
       if (sp) {
         const sfs = Math.max(10, Math.min(fs * 0.62, 15));
         const fits = h > fs * 1.25 + sfs * 1.35 + 6 && w > sp.textContent.length * sfs * 0.6 + 10;
         sp.style.display = fits ? "" : "none";
         sp.style.fontSize = `${sfs.toFixed(1)}px`;
+        if (fits && (sp.scrollWidth > sp.clientWidth + 1 || sp.offsetWidth > t.clientWidth - 8)) sp.style.display = "none";
       }
     });
     run();

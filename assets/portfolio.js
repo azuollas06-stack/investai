@@ -140,6 +140,7 @@ function renderResult() {
   renderDivs(a);
   renderWeek(a);
   if (typeof PFAI !== "undefined") { PFAI.renderReview(a); PFAI.renderAlerts(a); }
+  decorateHeads();
   renderTable(a);
   renderRules(a);
   renderToday(a);
@@ -281,9 +282,9 @@ function renderTreemap(a) {
     const pr = PRICES_PF.items[r.s] || {};
     const pp = typeof r.pnlPct === "number" ? r.pnlPct : typeof r.pnl === "number" && r.value - r.pnl > 0 ? (r.pnl / (r.value - r.pnl)) * 100 : known.get(r.s);
     const c = tmMode === "pnl" ? pp : pr[tmMode];
-    return { label: isTv(r.s) ? r.s.split(":")[1].replace(/USDT?$/, "") : r.n, sub: `${pct(r.value / a.total)} · ${c === undefined || c === null ? "–" : fmtPct(c)}`, v: r.value, c, href: isTv(r.s) ? assetUrl(r.s) : null, title: `${r.n}: ${money(r.value)}, ${c === undefined || c === null ? "pokytis nežinomas" : fmtPct(c)}` };
+    return { ico: isTv(r.s) && (typeof LOGOS === "object" && LOGOS[r.s]) ? logoHTML(r.s, r.n, "#1d3a63", 40) : "", label: isTv(r.s) ? r.s.split(":")[1].replace(/USDT?$/, "") : r.n, sub: `${pct(r.value / a.total)} · ${c === undefined || c === null ? "–" : fmtPct(c)}`, v: r.value, c, href: isTv(r.s) ? assetUrl(r.s) : null, title: `${r.n}: ${money(r.value)}, ${c === undefined || c === null ? "pokytis nežinomas" : fmtPct(c)}` };
   });
-  $("#r-tm").innerHTML = items.length ? treemapHTML(items, { scale: TM_SCALE[tmMode], ratio: window.innerWidth < 680 ? 1 : 0.42 }) + tmLegend(TM_SCALE[tmMode], " %") : "";
+  $("#r-tm").innerHTML = items.length ? treemapHTML(items, { scale: TM_SCALE[tmMode], ratio: window.innerWidth < 680 ? 1 : 0.42, rich: true }) + tmLegend(TM_SCALE[tmMode], " %") : "";
   fitTreemaps($("#r-tm"));
   document.querySelectorAll("#tm-mode [data-tm]").forEach((b) => { b.setAttribute("aria-pressed", String(b.dataset.tm === tmMode)); if (b.dataset.tm === "pnl") b.disabled = !P.known; });
 }
@@ -875,6 +876,22 @@ function syncPrices() {
 function autoStamp() {
   const h = state.holdings.find((x) => x.auto && PRICES_PF.items[x.s]);
   return h && !isDemo ? ` · vertė pagal kainas: ${priceStamp(PRICES_PF.items[h.s]).toLowerCase()}` : "";
+}
+
+/* ---------- Skilčių antraščių ikonos ---------- */
+const HEAD_ICONS = [[/žemėlapis/i, "grid"], [/^Svarbiausia/i, "digest"], [/uždirbo/i, "markets"], [/Diversifikacijos/i, "target"], [/Tavo savaitė/i, "calendar"], [/Tavo pozicijos/i, "portfolio"], [/Palyginimas/i, "screener"], [/nuosmukį/i, "strategy"], [/taisyklės/i, "about"], [/Kas būtų/i, "tools"], [/investuoti\?/i, "upload"], [/aktyvai šiandien/i, "news"], [/^Duomenys/i, "archive"], [/Redaguoti/i, "tools"]];
+const FACT_ICONS = [[/uždirbo|prarado|rezultat/i, "markets"], [/paaugo|krito/i, "strategy"], [/Didžiausia pozicija/i, "portfolio"], [/sektoriaus|sektori/i, "grid"], [/pasaulio rink/i, "screener"], [/paaiškinim/i, "news"], [/Kripto/i, "asset"], [/obligacij|grynų|grynieji/i, "premium"], [/valiut|dolerio|USD/i, "tools"]];
+function decorateHeads() {
+  document.querySelectorAll("#r-facts > li").forEach((li) => {
+    if (li.querySelector(".f-ico")) return;
+    const hit = FACT_ICONS.find(([re]) => re.test(li.textContent));
+    li.innerHTML = `<span class="f-ico">${icon(hit ? hit[1] : "digest", 18)}</span><span class="f-txt">${li.innerHTML}</span>`;
+  });
+  document.querySelectorAll("#v-result h2").forEach((h) => {
+    if (h.querySelector(".h-ico") || h.closest(".rai-head, .al-head, .div-hero")) return;
+    const hit = HEAD_ICONS.find(([re]) => re.test(h.textContent.trim()));
+    if (hit) h.insertAdjacentHTML("afterbegin", `<span class="h-ico">${icon(hit[1], 18)}</span>`);
+  });
 }
 
 /* ---------- Tavo savaitė: judėjimai ir artimiausi įvykiai ---------- */

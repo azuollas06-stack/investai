@@ -291,11 +291,11 @@ function logoHTML(s, name, color = "#1d3a63", size = 40) {
   else if (y) src = `https://financialmodelingprep.com/image-stock/${encodeURIComponent(y)}.png`;
   return `<span class="logo-ava" style="--ava:${color};width:${size}px;height:${size}px"><b>${ini}</b>${src ? `<img src="${src}" alt="" loading="lazy" referrerpolicy="no-referrer" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()">` : ""}</span>`;
 }
-function sparkSVG(values, w = 96, h = 30) {
+function sparkSVG(values, w = 96, h = 30, upOverride) {
   if (!values || values.length < 2) return "";
   const min = Math.min(...values), max = Math.max(...values), r = max - min || 1;
   const pts = values.map((v, i) => `${((i / (values.length - 1)) * w).toFixed(1)},${(h - 2 - ((v - min) / r) * (h - 4)).toFixed(1)}`).join(" ");
-  const up = values[values.length - 1] >= values[0];
+  const up = typeof upOverride === "boolean" ? upOverride : values[values.length - 1] >= values[0];
   return `<svg class="spark ${up ? "s-up" : "s-down"}" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
 }
 const fmtPct = (v, digits = 1) => (v === null || v === undefined ? "–" : `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toLocaleString("lt-LT", { maximumFractionDigits: digits })} %`);

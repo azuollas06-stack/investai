@@ -11,6 +11,17 @@ async function allAssets() {
 }
 const regionOf = (a) => (a.g === "baltic" ? "Baltija" : a.country === "JAV" ? "JAV" : "Europa ir kt.");
 const sparkTail = (sp, frac) => (sp ? sp.slice(-Math.max(4, Math.round(sp.length * frac))) : null);
+// Paskutinės ~2 savaitės dienos kainomis (+ naujausia kaina); spalva – pagal šalia rodomą dienos pokytį
+function daySpark(p, w = 56, h = 22) {
+  if (!p) return "";
+  let v = Array.isArray(p.recent) && p.recent.length >= 3 ? p.recent.map((x) => x[1]) : sparkTail(p.spark, 0.09);
+  if (!v) return "";
+  v = v.slice();
+  const lastDate = Array.isArray(p.recent) && p.recent.length ? p.recent[p.recent.length - 1][0] : null;
+  if (p.price && (p.live || (lastDate && p.date && p.date > lastDate))) v.push(p.price);
+  else if (p.price && v.length) v[v.length - 1] = p.price;
+  return sparkSVG(v, w, h, typeof p.d1 === "number" ? p.d1 >= 0 : undefined);
+}
 function lastDateLabel(P) {
   const d = Object.values(P.items).map((x) => x.date).filter(Boolean).sort().pop();
   return d ? `Paskutinė prekybos diena: ${fmtShort(d)}` : "";
@@ -19,7 +30,7 @@ function lastDateLabel(P) {
 /* ---------- Eilutė su logotipu, kaina ir pokyčiu ---------- */
 function moverRow(a, p, { key = "d1", star = true } = {}) {
   return `<li class="mv"><a href="${assetUrl(a.s)}">${logoHTML(a.s, a.n, "#1d3a63", 36)}<span class="mv-name"><b>${esc(a.n)}</b><small>${esc(a.s.split(":")[1])}</small></span>
-    <span class="mv-spark">${sparkSVG(sparkTail(p.spark, 0.09), 64, 24)}</span>
+    <span class="mv-spark">${daySpark(p, 64, 24)}</span>
     <span class="mv-num"><b>${fmtPrice(p.price, p.cur)}</b><span class="pill ${(p[key] ?? 0) >= 0 ? "pill-up" : "pill-down"}">${fmtPct(p[key])}</span></span></a>${star ? starHTML(a.s, a.n) : ""}</li>`;
 }
 
@@ -63,7 +74,7 @@ const PULSE = [["AMEX:SPY", "S&P 500", "SPY"], ["NASDAQ:QQQ", "Nasdaq 100", "QQQ
 function pulseHTML(P) {
   return PULSE.filter(([s]) => P.items[s]).map(([s, n, t], i) => {
     const p = P.items[s], up = (p.d1 ?? 0) >= 0;
-    return `<a class="pulse-item ${up ? "is-up" : "is-down"}" style="--i:${i}" href="${assetUrl(s)}"><span class="pulse-name">${esc(n)} <small>${t}</small></span><b>${fmtPrice(p.price, p.cur)}</b><span class="pulse-chg">${fmtPct(p.d1, 2)}</span>${sparkSVG(sparkTail(p.spark, 0.09), 120, 30)}</a>`;
+    return `<a class="pulse-item ${up ? "is-up" : "is-down"}" style="--i:${i}" href="${assetUrl(s)}"><span class="pulse-name">${esc(n)} <small>${t}</small></span><b>${fmtPrice(p.price, p.cur)}</b><span class="pulse-chg">${fmtPct(p.d1, 2)}</span>${daySpark(p, 120, 30)}</a>`;
   }).join("");
 }
 /* Sąrašo eilutė (Revolut / Trading 212 stiliaus grupėse) */
@@ -72,11 +83,11 @@ function rowHTML({ href, ava, title, sub, val, chg, spark, star, cls = "" }) {
   return `<li class="row ${cls}"><${tag} class="row-main"${href ? ` href="${esc(href)}"` : ""}>${ava || ""}<span class="row-txt"><b>${title}</b>${sub ? `<small>${sub}</small>` : ""}</span>${spark ? `<span class="row-spark">${spark}</span>` : ""}<span class="row-val">${val || ""}${chg !== undefined && chg !== null ? `<span class="${chg >= 0 ? "up" : "down"}">${fmtPct(chg)}</span>` : ""}</span></${tag}>${star || ""}</li>`;
 }
 function assetRow(a, p, opts = {}) {
-  return rowHTML({ href: assetUrl(a.s), ava: logoHTML(a.s, a.n, "#1d3a63", 40), title: esc(a.n), sub: esc(opts.sub || a.s.split(":")[1]), val: fmtPrice(p.price, p.cur), chg: p.d1, spark: opts.spark === false ? "" : sparkSVG(sparkTail(p.spark, 0.09), 56, 22), star: opts.star ? starHTML(a.s, a.n) : "" });
+  return rowHTML({ href: assetUrl(a.s), ava: logoHTML(a.s, a.n, "#1d3a63", 40), title: esc(a.n), sub: esc(opts.sub || a.s.split(":")[1]), val: fmtPrice(p.price, p.cur), chg: p.d1, spark: opts.spark === false ? "" : daySpark(p), star: opts.star ? starHTML(a.s, a.n) : "" });
 }
 const IDX_BADGE = { "AMEX:SPY": ["500", "#1f4fd1"], "NASDAQ:QQQ": ["100", "#0d8f8a"], "AMEX:DIA": ["30", "#6b46c1"], "XETR:VWCE": ["🌍", "#16385f"], "BITSTAMP:BTCUSD": ["₿", "#f7931a"], "AMEX:GLD": ["Au", "#b8901f"] };
 function marketRows(P) {
-  return PULSE.filter(([s]) => P.items[s]).map(([s, n, t]) => { const p = P.items[s], [txt, bg] = IDX_BADGE[s] || ["•", "#3a4558"]; return rowHTML({ href: assetUrl(s), ava: LOGOS[s] ? logoHTML(s, n, "#1d3a63", 40) : `<span class="row-badge" style="background:${bg}">${txt}</span>`, title: esc(n), sub: t, val: fmtPrice(p.price, p.cur), chg: p.d1, spark: sparkSVG(sparkTail(p.spark, 0.09), 56, 22) }); }).join("");
+  return PULSE.filter(([s]) => P.items[s]).map(([s, n, t]) => { const p = P.items[s], [txt, bg] = IDX_BADGE[s] || ["•", "#3a4558"]; return rowHTML({ href: assetUrl(s), ava: LOGOS[s] ? logoHTML(s, n, "#1d3a63", 40) : `<span class="row-badge" style="background:${bg}">${txt}</span>`, title: esc(n), sub: t, val: fmtPrice(p.price, p.cur), chg: p.d1, spark: daySpark(p) }); }).join("");
 }
 async function pageHome() {
   $(".home-search").addEventListener("click", openSearch);

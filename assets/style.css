@@ -1800,3 +1800,15 @@ details.pos .logo-ava { border-radius: 50%; }
 .wk .row { padding-left: 0; padding-right: 0; }
 .wk-h3 { margin: 16px 0 4px; font-size: 15px; }
 .pmx-tr > span:not(:first-child) { font-size: 13px; }
+/* Portfelio žemėlapis su logotipais */
+.tm-rich { background: var(--surface); }
+.tm-rich .tm-tile { border: 3px solid var(--surface); border-radius: 14px; gap: 2px; background-image: linear-gradient(155deg, rgba(255,255,255,.14), rgba(255,255,255,0) 45%, rgba(0,0,0,.14)); }
+.tm-ico { display: block; font-style: normal; margin-bottom: 6px; }
+.tm-ico .logo-ava { width: var(--isz, 32px) !important; height: var(--isz, 32px) !important; border-radius: 30% !important; box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+.tm-ico .logo-ava img { width: 100%; height: 100%; }
+/* Antraščių ikonos */
+.h-ico { display: inline-grid; place-items: center; width: 30px; height: 30px; margin-right: 10px; vertical-align: -7px; border-radius: 10px; color: var(--amber); background: color-mix(in srgb, var(--amber) 14%, transparent); }
+summary .h-ico { width: 28px; height: 28px; }
+#r-facts > li { display: flex; gap: 12px; align-items: flex-start; }
+.f-ico { flex: none; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 11px; color: var(--amber); background: color-mix(in srgb, var(--amber) 13%, transparent); margin-top: -3px; }
+.f-txt { flex: 1; min-width: 0; }
