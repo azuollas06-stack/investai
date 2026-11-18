@@ -75,7 +75,7 @@ function assetRow(a, p, opts = {}) {
 }
 const IDX_BADGE = { "AMEX:SPY": ["500", "#1f4fd1"], "NASDAQ:QQQ": ["100", "#0d8f8a"], "AMEX:DIA": ["30", "#6b46c1"], "XETR:VWCE": ["🌍", "#16385f"], "BITSTAMP:BTCUSD": ["₿", "#f7931a"], "AMEX:GLD": ["Au", "#b8901f"] };
 function marketRows(P) {
-  return PULSE.filter(([s]) => P.items[s]).map(([s, n, t]) => { const p = P.items[s], [txt, bg] = IDX_BADGE[s] || ["•", "#3a4558"]; return rowHTML({ href: assetUrl(s), ava: `<span class="row-badge" style="background:${bg}">${txt}</span>`, title: esc(n), sub: t, val: fmtPrice(p.price, p.cur), chg: p.d1, spark: sparkSVG(sparkTail(p.spark, 0.09), 56, 22) }); }).join("");
+  return PULSE.filter(([s]) => P.items[s]).map(([s, n, t]) => { const p = P.items[s], [txt, bg] = IDX_BADGE[s] || ["•", "#3a4558"]; return rowHTML({ href: assetUrl(s), ava: LOGOS[s] ? logoHTML(s, n, "#1d3a63", 40) : `<span class="row-badge" style="background:${bg}">${txt}</span>`, title: esc(n), sub: t, val: fmtPrice(p.price, p.cur), chg: p.d1, spark: sparkSVG(sparkTail(p.spark, 0.09), 56, 22) }); }).join("");
 }
 async function pageHome() {
   const [P, all] = await Promise.all([loadPrices(), allAssets()]);

@@ -205,10 +205,14 @@ function initialsOf(name) {
 // Tikri logotipai iš viešo CDN; nepavykus – inicialai
 const AVA_COLORS = ["#2b63d9", "#0f8f7e", "#7a4fd6", "#c4520f", "#c0266d", "#0e7da0", "#4f7d12", "#a8740a", "#3c54b0", "#c22d45"];
 function avaColor(s) { let h = 0; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return AVA_COLORS[h % AVA_COLORS.length]; }
+// Savame serveryje laikomi logotipai (tools/fetch_logos.py); jei nėra – bandoma iš išorės, galiausiai – inicialai
+let LOGOS = {};
+async function loadLogos() { try { LOGOS = await getJSON("data/logos.json"); } catch { LOGOS = {}; } }
 function logoHTML(s, name, color = "#1d3a63", size = 40) {
   if (color === "#1d3a63") color = avaColor(s);
-  const y = yahooSymbol(s);
   const ini = esc(initialsOf(name));
+  if (LOGOS[s]) return `<span class="logo-ava has-img" style="--ava:${color};width:${size}px;height:${size}px"><b>${ini}</b><img src="${LOGOS[s]}" alt="" decoding="async" onerror="this.parentNode.classList.remove('has-img');this.remove()"></span>`;
+  const y = yahooSymbol(s);
   let src = null;
   if (y && /-USD$/.test(y)) src = `https://s3-symbol-logo.tradingview.com/crypto/XTVC${y.replace("-USD", "")}.svg`;
   else if (y) src = `https://financialmodelingprep.com/image-stock/${encodeURIComponent(y)}.png`;
@@ -459,6 +463,7 @@ async function buildSearch(form) {
 /* ---------- Paleidimas ---------- */
 document.addEventListener("DOMContentLoaded", async () => {
   const page = document.body.dataset.page;
+  await loadLogos();
   // Pasirinkto stiliaus diagramų paletė (CSS kintamasis --palette)
   const pal = getComputedStyle(document.documentElement).getPropertyValue("--palette").trim();
   if (pal) {

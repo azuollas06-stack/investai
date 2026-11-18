@@ -1,6 +1,6 @@
 // InvestAI service worker: veikia kaip programėlė ir be interneto rodo paskutinį turinį.
 // Puslapiai ir duomenys – pirmiausia iš tinklo (kad visada būtų naujausi), CSS/JS su ?v= ir OCR failai – iš talpyklos.
-const VERSION = "v6";
+const VERSION = "v7";
 const SHELL = `investai-shell-${VERSION}`;
 const STATIC = `investai-static-${VERSION}`;
 const OCR = "investai-ocr-v1";
@@ -40,6 +40,7 @@ self.addEventListener("fetch", (e) => {
   if (url.origin !== location.origin) return; // TradingView, šriftai – naršyklė tvarko pati
   if (req.mode === "navigate" || url.pathname.endsWith(".html")) return e.respondWith(networkFirst(req, SHELL));
   if (url.pathname.includes("/assets/ocr/")) return e.respondWith(cacheFirst(req, OCR));
+  if (url.pathname.includes("/assets/logos/") || url.pathname.includes("/assets/vendor/")) return e.respondWith(cacheFirst(req, STATIC));
   if (url.pathname.includes("/assets/") && url.search.includes("v=")) return e.respondWith(cacheFirst(req, STATIC));
   if (url.pathname.includes("/data/") || url.pathname.includes("/assets/")) return e.respondWith(networkFirst(req, STATIC));
 });

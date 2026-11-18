@@ -27,6 +27,8 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "assets/logos"
 UA = {"User-Agent": "Mozilla/5.0 (InvestAI logo fetcher; +https://azuollas06-stack.github.io/investai/)"}
 
+# Fondų valdytojai, kurių patronuojančios įmonės kotiruojamos biržoje – jų logotipas
+ISSUER_STOCK = {"iShares": "BLK", "SPDR": "STT", "Invesco": "IVZ", "Xtrackers": "DWS.DE", "Amundi": "AMUN.PA", "WisdomTree": "WT", "Schwab": "SCHW"}
 ISSUERS = [
     ("Vanguard", "vanguard.com"), ("iShares", "ishares.com"), ("SPDR", "ssga.com"), ("Invesco", "invesco.com"),
     ("Xtrackers", "dws.com"), ("Amundi", "amundietf.com"), ("VanEck", "vaneck.com"), ("WisdomTree", "wisdomtree.com"),
@@ -89,13 +91,13 @@ def save(data: bytes, dest: Path, min_side: int = 40) -> bool:
     return True
 
 
-def favicon(domain: str) -> bytes | None:
+def favicon(domain: str, min_side: int = 48) -> bytes | None:
     for url in (f"https://www.google.com/s2/favicons?domain={domain}&sz=128", f"https://icons.duckduckgo.com/ip3/{domain}.ico"):
         data = get(url)
         if data:
             try:
                 im = Image.open(io.BytesIO(data))
-                if min(im.size) >= 48:
+                if min(im.size) >= min_side:
                     return data
             except Exception:  # noqa: BLE001
                 pass
@@ -132,13 +134,22 @@ def main() -> int:
                         ok = True
                         break
             elif g["id"] == "etf":
-                dom = next((d for k, d in ISSUERS if a["n"].startswith(k) or k in a["n"]), None)
-                data = favicon(dom) if dom else None
-                ok = bool(data and save(data, dest, 48))
+                key = next((k for k, _ in ISSUERS if a["n"].startswith(k) or k in a["n"]), None)
+                urls = [f"https://financialmodelingprep.com/image-stock/{y}.png"] if y else []
+                if key in ISSUER_STOCK:
+                    urls.append(f"https://financialmodelingprep.com/image-stock/{ISSUER_STOCK[key]}.png")
+                for url in urls:
+                    data = get(url)
+                    if data and save(data, dest):
+                        ok = True
+                        break
+                if not ok and key:
+                    data = favicon(dict(ISSUERS)[key], 32)
+                    ok = bool(data and save(data, dest, 32))
             else:
                 if tv in DOMAINS:
-                    data = favicon(DOMAINS[tv])
-                    ok = bool(data and save(data, dest, 48))
+                    data = favicon(DOMAINS[tv], 32)
+                    ok = bool(data and save(data, dest, 32))
                 if not ok and y:
                     for url in (f"https://financialmodelingprep.com/image-stock/{y}.png", f"https://assets.parqet.com/logos/symbol/{y.split('.')[0]}?format=png"):
                         data = get(url)
@@ -150,8 +161,8 @@ def main() -> int:
                         site = yf.Ticker(y).info.get("website") or ""
                         websites[tv] = site
                         dom = re.sub(r"^https?://(www\.)?", "", site).split("/")[0]
-                        data = favicon(dom) if dom else None
-                        ok = bool(data and save(data, dest, 48))
+                        data = favicon(dom, 32) if dom else None
+                        ok = bool(data and save(data, dest, 32))
                     except Exception:  # noqa: BLE001
                         pass
             if ok:
