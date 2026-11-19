@@ -1,0 +1,246 @@
+{
+  "date": "2026-11-19",
+  "weekday": "ketvirtadienis",
+  "title": "Anthropic debiutuoja Nasdaq, kibernetinio saugumo akcijos šoktelėjo",
+  "lead": "JAV ateities sandoriai kyla prieš rekordinio Anthropic IPO prekybos pradžią (kaina – 83 $). Vakar Palo Alto Networks pakėlė prognozę ir pakėlė visą kibernetinio saugumo sektorių, o UnitedHealth krito 10 %; Baltijoje – KN Energies 9 mėn. pelnas +22 %.",
+  "generated_at": "2026-11-19T17:30:00+02:00",
+  "prices_available": false,
+  "sections": [
+    {
+      "id": "rinka",
+      "title": "Rinkos nuotaika",
+      "items": [
+        {
+          "headline": "Wall Street ruošiasi Anthropic debiutui: Nasdaq ateities sandoriai +2 %",
+          "text": "Prieš prekybos pradžią Nasdaq-100 ateities sandoriai kilo apie 2 %, S&P 500 – apie 1,2 %, Dow Jones – apie 0,6 %. Trečiadienį S&P 500 nukrito 0,2 % (penkta kritimo diena iš eilės, iš viso beveik −4 %), Dow – 1,1 % (~560 punktų), o Nasdaq Composite pakilo 0,4 %. Nvidia po rezultatų iš pradžių kilo, bet dieną baigė apie 3 % žemiau.",
+          "why": "Rinka Anthropic IPO stebi kaip DI sektoriaus nuotaikų testą po spalio–lapkričio technologijų akcijų kritimo. Dienos uždarymo duomenų apžvalgos rengimo metu dar nebuvo.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "Yahoo Finance / 24/7 Wall St.: rinka šiandien",
+              "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-anthropic-ipo-140633699.html",
+              "type": "media",
+              "published": "2026-11-19T06:06:00-08:00"
+            },
+            {
+              "name": "Investopedia / Yahoo: lapkričio 18 d. rinkos",
+              "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-125812319.html",
+              "type": "media",
+              "published": "2026-11-18"
+            },
+            {
+              "name": "AP / BNN Bloomberg: pasaulio rinkos",
+              "url": "https://www.bnnbloomberg.ca/markets/2026/11/19/world-shares-are-mixed-and-us-futures-climb-ahead-of-anthropics-blockbuster-ipo/",
+              "type": "media",
+              "published": "2026-11-19T06:50:00-05:00"
+            }
+          ]
+        },
+        {
+          "headline": "Pajamingumas ~5,07 %, Azijoje krito Taivano lustų akcijos",
+          "text": "JAV 10 metų obligacijų pajamingumas – apie 5,07 % (lapkričio 13 d. buvo 5,15 %). FED valdytojas Christopher Waller CNBC interviu teigė esąs labai susirūpinęs infliacija. Taivano Taiex indeksas nukrito 4,4 %, TSMC – 3,5 %; Japonijos Nikkei 225 pakilo 0,7 %. Brent nafta – apie 92,7 $, WTI – 83,7 $, auksas – apie 3 710 $ už unciją, bitcoin – apie 63 800 $.",
+          "why": "Aukštas pajamingumas ir FED kalbos apie infliaciją palaiko palūkanų kėlimo gruodį lūkesčius, kurie jautriausiai veikia augimo akcijas ir kriptovaliutas.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "AP / BNN Bloomberg: pasaulio rinkos",
+              "url": "https://www.bnnbloomberg.ca/markets/2026/11/19/world-shares-are-mixed-and-us-futures-climb-ahead-of-anthropics-blockbuster-ipo/",
+              "type": "media",
+              "published": "2026-11-19T06:50:00-05:00"
+            },
+            {
+              "name": "Investopedia / Yahoo: lapkričio 18 d. rinkos",
+              "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-125812319.html",
+              "type": "media",
+              "published": "2026-11-18"
+            },
+            {
+              "name": "Yahoo Finance / 24/7 Wall St.: rinka šiandien",
+              "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-anthropic-ipo-140633699.html",
+              "type": "media",
+              "published": "2026-11-19T06:06:00-08:00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "imones",
+      "title": "Įmonių naujienos",
+      "items": [
+        {
+          "headline": "Anthropic IPO kaina – 83 $, pritraukta 81,3 mlrd. $",
+          "tags": [
+            "ANT",
+            "IPO"
+          ],
+          "text": "Anthropic pardavė 980 mln. A klasės akcijų po 83 $ – virš 70–78 $ intervalo. Pritraukta ~81,3 mlrd. $ – daugiau nei rekordinis SpaceX IPO (75 mlrd. $). Kartu 26 mlrd. $ akcijų už IPO kainą perka Google, Nvidia, Microsoft ir kiti partneriai. Žiniasklaida vertę nurodo ~1,5 trln. $ (visiškai praskiestą); skaičiuojant tik išleistas akcijas – apie 1,1 trln. $. Prekyba Nasdaq simboliu ANT turėjo prasidėti po 10 val. JAV rytų laiku.",
+          "why": "Didžiausias IPO istorijoje laikomas investuotojų apetito DI bendrovėms testu. Pastaba: InvestAI turinį rengia Claude (Anthropic modelis), todėl pateikiami tik faktai be vertinimo.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "Yahoo Finance: Anthropic IPO tiesiogiai",
+              "url": "https://finance.yahoo.com/technology/live/anthropic-ipo-live-company-said-to-price-stock-at-83-begin-trading-thursday-212656452.html",
+              "type": "media",
+              "published": "2026-11-19T05:00:00-08:00"
+            },
+            {
+              "name": "CBS News: debiutas Nasdaq",
+              "url": "https://www.cbsnews.com/news/anthropic-ipo-nasdaq-debut-claude-ai/",
+              "type": "media",
+              "published": "2026-11-19T08:55:00-05:00"
+            },
+            {
+              "name": "CryptoTicker: akcijų skaičius ir kapitalizacija",
+              "url": "https://cryptoticker.io/en/anthropic-stock-live-ant-first-trading-day-nasdaq/",
+              "type": "media",
+              "published": "2026-11-19T09:02:00-05:00"
+            }
+          ]
+        },
+        {
+          "headline": "Palo Alto Networks pakėlė metinę prognozę, akcija +9,9 %",
+          "tags": [
+            "PANW",
+            "rezultatai"
+          ],
+          "text": "Pirmojo finansinio ketvirčio pajamos išaugo 39 % iki 3,44 mlrd. $ (LSEG lūkesčiai – 3,31 mlrd. $). Metinių pajamų prognozė pakelta iki 14,52–14,57 mlrd. $ (buvo 14,10–14,20 mlrd. $). Bendrovė už 4,5 mlrd. $ perka DI startuolį Applied Compute. Lapkričio 18 d. akcija pakilo 9,9 % iki 339,92 $; kartu kilo CrowdStrike (~+8 %), Fortinet (~+6 %).",
+          "why": "Bendrovė augimą sieja su DI keliamomis kibernetinėmis grėsmėmis – tai paveikė viso sektoriaus akcijas.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "TradingKey: rezultatai ir Applied Compute",
+              "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262312701-palo-alto-networks-raises-outlook-applied-compute-deal-panw-389-93-november-19-2026-tradingkey",
+              "type": "media",
+              "published": "2026-11-19"
+            },
+            {
+              "name": "Reuters / Investing.com: sektoriaus šuolis",
+              "url": "https://www.investing.com/news/stock-market-news/palo-altos-raised-sales-forecast-powers-cybersecurity-stock-rally-5038632",
+              "type": "media",
+              "published": "2026-11-19"
+            },
+            {
+              "name": "Investopedia / Yahoo: lapkričio 18 d. rinkos",
+              "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-125812319.html",
+              "type": "media",
+              "published": "2026-11-18"
+            }
+          ]
+        },
+        {
+          "headline": "UnitedHealth krito 10 % dėl Medicare auditų plano",
+          "tags": [
+            "UNH",
+            "reguliavimas"
+          ],
+          "text": "JAV sveikatos programų agentūra CMS pasiūlė susigrąžinti Medicare Advantage permokas nuo 2018 m., ekstrapoliuojant auditų rezultatus (pramonėje vertinama ~9 mlrd. $ per metus). UnitedHealth lapkričio 17 d. nukrito ~5 %, lapkričio 18 d. – dar 10,2 %; Humana – 13 %. Savo galimos sumos UnitedHealth nenurodė.",
+          "why": "Valstybės (CMS) įmokos sudaro ~44 % UnitedHealth pajamų, todėl reguliavimo pokyčiai tiesiogiai veikia sveikatos draudikų pelningumo lūkesčius.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "TIKR: CMS CRUSH pasiūlymas",
+              "url": "https://www.tikr.com/blog/unitedhealth-sinks-5-on-medicare-advantage-audit-plan-as-cms-moves-to-crush-medical-fraud",
+              "type": "media",
+              "published": "2026-11-17"
+            },
+            {
+              "name": "Investopedia / Yahoo: lapkričio 18 d. rinkos",
+              "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-125812319.html",
+              "type": "media",
+              "published": "2026-11-18"
+            },
+            {
+              "name": "FinChannel: UNH −10,21 %",
+              "url": "https://finchannel.com/unitedhealth-stock-drops-10-as-medicare-audit-proposal-unsettles-insurers/142214/american-business-trends/2026/11/",
+              "type": "media",
+              "published": "2026-11-18"
+            }
+          ]
+        },
+        {
+          "headline": "KN Energies: 9 mėn. grynasis pelnas +22 %",
+          "tags": [
+            "KNF1L",
+            "rezultatai"
+          ],
+          "text": "Per 9 mėn. grupės pajamos – 82,1 mln. € (+7 %), EBITDA – 43,2 mln. € (+6 %), grynasis pelnas – 16,1 mln. € (+22 %). Klaipėdos SGD terminalo veiklos apimtys išaugo 20 % iki 28,5 TWh, panaudojimas – 78 % (Europos vidurkis – 49 %). Ilgalaikiais terminalo naudotojais tapo Naftogaz ir Gasum.",
+          "why": "Didesnės SGD apimtys ir ilgalaikės sutartys rodo terminalo paklausos stabilumą; naftos produktų segmento EBITDA sumažėjo 3 % dėl brangesnės energijos.",
+          "status": "primary",
+          "sources": [
+            {
+              "name": "KN Energies: 9 mėn. finansinė informacija",
+              "url": "https://www.globenewswire.com/news-release/2026/11/19/3406300/0/en/ab-kn-energies-unaudited-financial-information-for-the-nine-months-of-2026-with-growing-terminal-activity-volumes-ebitda-increased-by-6-to-eur-43-2-million.html",
+              "type": "primary",
+              "published": "2026-11-19T09:00:00+02:00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "obligacijos",
+      "title": "Obligacijos",
+      "items": [
+        {
+          "headline": "Rytoj baigiasi Bigbank ir Civinity obligacijų pasirašymas",
+          "tags": [
+            "Bigbank",
+            "Civinity",
+            "obligacijos"
+          ],
+          "text": "Bigbank subordinuotos obligacijos: 6,5 % metinės palūkanos, mokamos kas ketvirtį, terminas – 2036 m. lapkričio 26 d., pasirašymas – iki lapkričio 20 d. Civinity: iki 8 mln. € emisija, 10 % palūkanos, taip pat iki lapkričio 20 d. PN Project obligacijų (10 %) pasirašymas tęsiasi iki lapkričio 30 d.",
+          "why": "Didesnės palūkanos atspindi didesnę riziką: subordinuotos obligacijos bankroto atveju grąžinamos po kitų kreditorių.",
+          "status": "primary",
+          "sources": [
+            {
+              "name": "Nasdaq Baltic: viešieji siūlymai",
+              "url": "https://nasdaqbaltic.com/",
+              "type": "primary",
+              "published": "2026-11-19T07:38:00+02:00"
+            },
+            {
+              "name": "Bigbank: subordinuotų obligacijų siūlymas",
+              "url": "https://view.news.eu.nasdaq.com/view?id=1476124&lang=en",
+              "type": "primary",
+              "published": "2026-11-10"
+            },
+            {
+              "name": "PN Project: obligacijų siūlymas",
+              "url": "https://view.news.eu.nasdaq.com/view?id=1475833&lang=en",
+              "type": "primary",
+              "published": "2026-11-16"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "calendar": [
+    {
+      "date": "2026-11-20",
+      "text": "Baigiasi Bigbank ir Civinity obligacijų pasirašymas; JAV vartotojų nuotaikų indeksas",
+      "url": "https://nasdaqbaltic.com/"
+    },
+    {
+      "date": "2026-11-25",
+      "text": "Rheinmetall investuotojų diena (iki lapkričio 27 d.)",
+      "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/rheinmetall-stock-slips-after-strong-nine-month-growth/70493851"
+    },
+    {
+      "date": "2026-11-30",
+      "text": "Baigiasi PN Project obligacijų pasirašymas",
+      "url": "https://view.news.eu.nasdaq.com/view?id=1475833&lang=en"
+    },
+    {
+      "date": "2026-12-09",
+      "text": "FED palūkanų sprendimas",
+      "url": "https://nexo.com/blog/markets-today-november-18"
+    },
+    {
+      "date": "2026-12-10",
+      "text": "Ignitis grupės neeilinis akcininkų susirinkimas (dividendai)",
+      "url": "https://www.globenewswire.com/news-release/2026/11/11/3400468/0/en/ignitis-group-s-updated-financial-calendar-2026.html"
+    }
+  ]
+}
