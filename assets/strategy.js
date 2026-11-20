@@ -71,7 +71,7 @@ function renderModels() {
     $("#custom-grid").innerHTML = BUCKETS.map((b) => `<label class="rule"><span><i class="dot" style="background:${b.color}"></i>${b.name}</span><span><input type="number" min="0" max="100" step="1" data-b="${b.id}" value="${c[b.id] || 0}"> %</span></label>`).join("");
     const sumEl = () => { const s = BUCKETS.reduce((x, b) => x + (Number(c[b.id]) || 0), 0); $("#custom-sum").textContent = s === 100 ? "Iš viso 100 %." : `Iš viso ${s} % – dalys bus perskaičiuotos proporcingai iki 100 %.`; };
     sumEl();
-    $("#custom-grid").querySelectorAll("input").forEach((inp) => inp.addEventListener("input", () => { c[inp.dataset.b] = Math.max(0, Number(inp.value) || 0); save(); sumEl(); renderPlan(); renderChecks(); }));
+    $("#custom-grid").querySelectorAll("input").forEach((inp) => inp.addEventListener("input", () => { c[inp.dataset.b] = Math.max(0, Number(inp.value) || 0); save(); sumEl(); renderPlan(); stgChecks(); }));
   }
 }
 
@@ -157,7 +157,7 @@ function screenLink(bucket, over) {
 
 /* ---------- 4. Pasitikrink prieš pirkdamas ---------- */
 let checkPicked = null;
-function renderChecks() {
+function stgChecks() {
   const out = $("#check-out");
   if (!out.dataset.s) return;
   const s = out.dataset.s, A = Number(out.dataset.v) || 0;
@@ -221,35 +221,37 @@ function renderDrawdowns() {
 
 function renderAll() {
   $("#stg-noportfolio").hidden = (state.holdings || []).length > 0;
-  renderModels(); renderPlan(); renderChecks(); renderDrawdowns();
+  renderModels(); renderPlan(); stgChecks(); renderDrawdowns();
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-  if (document.body.dataset.page !== "strategy") return;
-  try { ASSETS = (await getJSON("data/assets.json")).groups.flatMap((g) => g.items); } catch (e) { console.error(e); }
-  [EXPLAIN, PRICES] = await Promise.all([loadExplain(), loadPrices()]);
-  load();
-  renderStgRules();
-  renderAll();
-  $("#amount-form").addEventListener("submit", (e) => { e.preventDefault(); renderPlan(); });
-  $("#amount").addEventListener("input", renderPlan);
-  picker($("#check-q"), (s) => (checkPicked = s));
-  $("#check-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const s = checkPicked || resolveTyped($("#check-q").value);
-    const v = Number($("#check-val").value);
-    if (!s) return flag($("#check-q"), "Pasirink aktyvą iš sąrašo");
-    if (!(v > 0)) return flag($("#check-val"), "Įvesk sumą");
-    $("#check-out").dataset.s = s; $("#check-out").dataset.v = v;
-    renderChecks();
-  });
-  $("#help-slot").innerHTML = helpHTML();
-  const pre = new URLSearchParams(location.search).get("check");
-  if (pre && (findAsset(pre) || SYMBOL_RE.test(pre))) {
-    checkPicked = pre;
-    $("#check-q").value = (findAsset(pre) || { n: pre }).n;
-    $("#check-out").dataset.s = pre; $("#check-out").dataset.v = $("#check-val").value || 100;
-    renderChecks();
-    setTimeout(() => $("#check-form").scrollIntoView({ block: "start" }), 300);
+// Strategija dabar gyvena portfelio skiltyje „Kas toliau“: paleidžiama, kai ta skiltis atidaroma
+let _stgReady = false;
+async function stgOpen() {
+  if (!$("#models")) return;
+  if (!_stgReady) {
+    _stgReady = true;
+    try { if (typeof ASSETS === "undefined" || !ASSETS || !ASSETS.length) ASSETS = (await getJSON("data/assets.json")).groups.flatMap((g) => g.items); } catch (e) { console.error(e); }
+    [EXPLAIN, PRICES] = await Promise.all([loadExplain(), loadPrices()]);
+    renderStgRules();
+    $("#amount-form").addEventListener("submit", (e) => { e.preventDefault(); renderPlan(); });
+    $("#amount").addEventListener("input", renderPlan);
+    picker($("#check-q"), (s) => (checkPicked = s));
+    $("#check-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const s = checkPicked || resolveTyped($("#check-q").value);
+      const v = Number($("#check-val").value);
+      if (!s) return flag($("#check-q"), "Pasirink aktyvą iš sąrašo");
+      if (!(v > 0)) return flag($("#check-val"), "Įvesk sumą");
+      $("#check-out").dataset.s = s; $("#check-out").dataset.v = v;
+      stgChecks();
+    });
+    const pre = new URLSearchParams(location.search).get("check");
+    if (pre && (findAsset(pre) || SYMBOL_RE.test(pre))) {
+      checkPicked = pre;
+      $("#check-q").value = (findAsset(pre) || { n: pre }).n;
+      $("#check-out").dataset.s = pre; $("#check-out").dataset.v = $("#check-val").value || 100;
+      setTimeout(() => $("#check-form").scrollIntoView({ block: "start" }), 300);
+    } else if (location.hash === "#strategija") setTimeout(() => $("#strategija").scrollIntoView({ block: "start" }), 300);
   }
-});
+  renderAll();
+}

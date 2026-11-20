@@ -24,9 +24,9 @@ const ONBOARD = (() => {
     if (p.exp !== "new") s.push(["upload", "Įkelk savo portfelį", "Nuotrauka arba brokerio CSV – pamatysi sudėtį, rizikas ir „Kas toliau“", "portfelis.html"]);
     if (p.goal === "grow" || p.goal === "unsure") s.push(["tools", "Kiek užaugtų tavo santaupos?", "Skaičiuoklė su infliacija – pamatysi sudėtinių palūkanų galią", "irankiai.html#taupymas"]);
     if (p.goal === "income") s.push(["tools", "Dividendų skaičiuoklė", "Kiek pajamų galėtų atnešti investicijos", "irankiai.html#dividendai"]);
-    if (p.goal === "follow") s.push(["morning", "Mano rytas", "Kas vyksta rinkose ir su tavo stebimomis akcijomis", "rytas.html"], ["screener", "Atranka", "Filtruok akcijas ir fondus pagal savo kriterijus", "atranka.html"]);
-    if (p.risk === "low") s.push(["strategy", "Ramesnės strategijos pavyzdžiai", "Kaip obligacijos ir platūs fondai mažina svyravimus", "strategija.html"]);
-    else s.push(["strategy", "Pasirink strategiją", "Pamatysi, kaip paskirstyti sumą tarp akcijų, fondų ir obligacijų", "strategija.html"]);
+    if (p.goal === "follow") s.push(["morning", "Šiandien", "Kas vyksta rinkose ir su tavo stebimomis akcijomis", "rytas.html"], ["screener", "Atranka", "Filtruok akcijas ir fondus pagal savo kriterijus", "atranka.html"]);
+    if (p.risk === "low") s.push(["strategy", "Ramesnės strategijos pavyzdžiai", "Kaip obligacijos ir platūs fondai mažina svyravimus", "portfelis.html#strategija"]);
+    else s.push(["strategy", "Pasirink strategiją", "Pamatysi, kaip paskirstyti sumą tarp akcijų, fondų ir obligacijų", "portfelis.html#strategija"]);
     if (p.exp === "pro") s.push(["bell", "Įjunk įspėjimus telefone", "Kai tavo akcija pajuda smarkiai ar pasiekia tavo kainą", "portfelis.html"]);
     return s.slice(0, 4);
   }

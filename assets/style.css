@@ -2281,3 +2281,65 @@ html.ia-lock { overflow: hidden; }
   .ld-demo:hover { transform: translateY(-2px); box-shadow: 0 16px 34px -18px rgba(13,19,32,.35); }
 }
 .ld-hero-tour { display: inline-flex; align-items: center; gap: 6px; margin-top: 2px; background: none; border: 0; color: var(--amber); font: inherit; font-weight: 650; font-size: 15px; cursor: pointer; padding: 6px 4px; }
+
+/* ===== v21: gyvas meniu ===== */
+.sheet-grid a.mi { position: relative; gap: 6px; padding: 12px 4px 10px; transition: background .15s, transform .15s; }
+.sheet-grid a.mi:active { transform: scale(.95); }
+.mi .sheet-ico { width: 52px; height: 52px; border-radius: 17px; color: #fff; box-shadow: 0 8px 18px -10px var(--g1, #2f6bff); background: linear-gradient(135deg, var(--g1, #5b8cff), var(--g2, #2f6bff)); position: relative; overflow: hidden; }
+.mi .sheet-ico::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.45) 50%, transparent 70%); transform: translateX(-130%); }
+.mi-l { font-size: 13.5px; font-weight: 650; }
+.mi-live { min-height: 15px; font-size: 11.5px; font-weight: 650; color: var(--muted); font-variant-numeric: tabular-nums; }
+.mi-live.up { color: var(--up); } .mi-live.down { color: var(--down); }
+.sheet-grid a.mi[aria-current="page"] { background: var(--surface-2); }
+.sheet-grid a.mi[aria-current="page"] .sheet-ico { background: linear-gradient(135deg, var(--g1), var(--g2)); color: #fff; }
+.mi-home { --g1: #5b8cff; --g2: #2f5bea; } .mi-morning { --g1: #ffb547; --g2: #f27b1a; } .mi-portfolio { --g1: #9b7bff; --g2: #6a3df0; }
+.mi-news { --g1: #33d1b7; --g2: #0e9488; } .mi-calendar { --g1: #ff7aa8; --g2: #e3366f; } .mi-markets { --g1: #4ade80; --g2: #10a35a; }
+.mi-screener { --g1: #7c8cff; --g2: #4338ca; } .mi-tools { --g1: #38c6f4; --g2: #0a84c6; } .mi-glossary { --g1: #94a3b8; --g2: #52627a; }
+.mi-premium { --g1: #ffd76a; --g2: #e0a106; } .mi-about { --g1: #8aa3c2; --g2: #4b6382; } .mi-play { --g1: #c084fc; --g2: #8b3fe0; }
+@media (prefers-reduced-motion: no-preference) {
+  dialog.sheet[open] .mi { animation: miPop .45s cubic-bezier(.3,1.35,.5,1) both; animation-delay: calc(.04s + var(--i) * .03s); }
+  dialog.sheet[open] .mi .sheet-ico::after { animation: miSheen 1s ease both; animation-delay: calc(.35s + var(--i) * .05s); }
+  .mi:hover .sheet-ico { transform: translateY(-2px) rotate(-3deg); transition: transform .2s cubic-bezier(.3,1.4,.5,1); }
+  @keyframes miPop { from { opacity: 0; transform: translateY(14px) scale(.85); } }
+  @keyframes miSheen { to { transform: translateX(130%); } }
+}
+.sheet-close:focus:not(:focus-visible) { outline: none; box-shadow: none; }
+
+/* ===== v21: gyva pavyzdžio kortelė ===== */
+.ld-demo { padding: 18px 18px 14px; overflow: hidden; }
+.ld-demo-link { display: block; color: inherit; text-decoration: none; }
+.ld-rows li { grid-template-columns: 1fr auto; }
+.ld-bar { grid-column: 1 / -1; height: 6px; border-radius: 6px; background: var(--surface-2); overflow: hidden; margin-top: 6px; }
+.ld-bar i { display: block; height: 100%; width: var(--w); border-radius: 6px; background: var(--muted); }
+.pl-good .ld-bar i { background: linear-gradient(90deg, #34d399, var(--up)); }
+.pl-bad .ld-bar i { background: linear-gradient(90deg, #ff8a95, var(--down)); }
+.pl-ok .ld-bar i { background: linear-gradient(90deg, #ffd27a, #e9a23b); }
+.ld-rows .pl-bad .ld-w, .ld-rows .pl-bad .ld-num { color: var(--down); }
+.ld-rows .pl-good .ld-num { color: var(--up); }
+.ld-demo-f { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+.ld-demo-f .ld-open { margin: 0; text-decoration: none; }
+.ld-dots { display: flex; gap: 6px; }
+.ld-dots button { width: 24px; height: 24px; padding: 0; border: 0; background: none; display: grid; place-items: center; cursor: pointer; }
+.ld-dots i { width: 7px; height: 7px; border-radius: 4px; background: var(--line); transition: width .3s, background .3s; }
+.ld-dots .on i { width: 22px; background: var(--amber); }
+@media (prefers-reduced-motion: no-preference) {
+  .ld-swap .ld-demo-h, .ld-swap .ld-sum { animation: ldIn .5s cubic-bezier(.2,.8,.2,1) both; }
+  .ld-swap .ld-sum { animation-delay: .06s; }
+  .ld-swap .ld-rows li { animation: ldIn .45s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(.12s + var(--i) * .07s); }
+  .ld-swap .ld-bar i { animation: ldBar .9s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(.25s + var(--i) * .08s); }
+  @keyframes ldIn { from { opacity: 0; transform: translateX(18px); } }
+  @keyframes ldBar { from { width: 0; } }
+}
+/* Spalvos ir „Esmė paprastai“ kortelėje: bloga – raudona */
+.plain-list .pl-bad > div > span { color: var(--down); }
+.plain-list .pl-good > div > span { color: var(--ink, var(--sea)); }
+.stg-embed { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--line); scroll-margin-top: 80px; }
+.stg-h { font-size: 22px; letter-spacing: -.02em; margin: 0 0 4px; }
+.dg-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 26px 0 10px; scroll-margin-top: 80px; }
+.dg-top .m-h { display: flex; align-items: center; gap: 8px; margin: 0; }
+.dg-pick select { font: inherit; font-size: 14px; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--sea); }
+.dg-card .dg-title { font-size: 22px; margin: 4px 0 8px; letter-spacing: -.02em; }
+.dg-arch { margin-top: 12px; }
+.dg-arch summary { cursor: pointer; font-weight: 650; padding: 10px 0; }
+#apzvalga { scroll-margin-top: 70px; }
+.ld-sum { min-height: 4.2em; } .ld-w { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

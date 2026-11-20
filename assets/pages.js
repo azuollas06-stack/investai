@@ -96,16 +96,22 @@ async function renderLanding(P, all) {
   try { if (localStorage.getItem("investai.landing.off")) return; } catch {}
   let fund = {};
   try { fund = (await getJSON("data/fund.json")).items || {}; } catch {}
-  const demoS = ["NYSE:KO", "NASDAQ:NVDA", "NASDAQ:AAPL"].find((s) => P.items[s] && PLAIN.metrics(P.items[s], fund[s], P).length >= 5);
-  const demoA = demoS && all.find((a) => a.s === demoS);
-  const demo = demoA ? (() => {
-    const p = P.items[demoS], m = PLAIN.metrics(p, fund[demoS], P, demoA).filter((x) => ["Pelningumas", "Pajamų augimas", "Kaina pagal pelną (P/E)", "Skola"].includes(x.k));
-    return `<a class="ld-demo card" href="aktyvas.html?s=${encodeURIComponent(demoS)}">
-      <div class="ld-demo-h">${logoHTML(demoS, demoA.n, "#1d3a63", 40)}<span><b>${esc(demoA.n)}</b><small>${esc(demoS.split(":")[1])}</small></span></div>
-      <p class="ld-sum">${esc(PLAIN.summary(p, fund[demoS], P, demoA))}</p>
-      <ul class="ld-rows">${m.map((x) => `<li class="pl-${x.t}"><span class="ld-k">${esc(x.k)}</span><span class="ld-num">${esc(x.v)}</span><span class="ld-w">${esc(x.w.split(":")[0].split("–")[0].trim())}</span></li>`).join("")}</ul>
-      <span class="ld-open">Atidaryti visą analizę ${icon("chevron", 16)}</span></a>`;
-  })() : "";
+  // Gyva pavyzdžio kortelė: kas kelias sekundes keičiasi akcija
+  const KEYS = ["Pelningumas", "Pajamų augimas", "Kaina pagal pelną (P/E)", "Skola"];
+  const demos = ["NYSE:KO", "NASDAQ:NVDA", "NYSE:IONQ", "NASDAQ:AAPL", "NASDAQ:TSLA", "NYSE:JNJ"].map((s) => {
+    const a = all.find((x) => x.s === s), p = P.items[s];
+    if (!a || !p) return null;
+    const m = PLAIN.metrics(p, fund[s], P, a).filter((x) => KEYS.includes(x.k));
+    return m.length >= 3 ? { s, a, p, m, sum: PLAIN.summary(p, fund[s], P, a) } : null;
+  }).filter(Boolean);
+  const LVL = { good: 88, ok: 55, bad: 22 };
+  const demoInner = (d) => `<div class="ld-swap">
+      <div class="ld-demo-h">${logoHTML(d.s, d.a.n, "#1d3a63", 40)}<span><b>${esc(d.a.n)}</b><small>${esc(d.s.split(":")[1])}</small></span></div>
+      <p class="ld-sum">${esc(d.sum)}</p>
+      <ul class="ld-rows">${d.m.map((x, i) => `<li class="pl-${x.t}" style="--i:${i}"><span class="ld-k">${esc(x.k)}</span><span class="ld-num">${esc(x.v)}</span><span class="ld-w">${esc(x.w.split(/[:,–.]/)[0].trim())}</span><span class="ld-bar"><i style="--w:${LVL[x.t] || 50}%"></i></span></li>`).join("")}</ul></div>`;
+  const demo = demos.length ? `<div class="ld-demo card" id="ld-demo"><a class="ld-demo-link" href="aktyvas.html?s=${encodeURIComponent(demos[0].s)}">${demoInner(demos[0])}</a>
+      <div class="ld-demo-f"><div class="ld-dots" role="tablist" aria-label="Pavyzdžiai">${demos.map((d, i) => `<button type="button" role="tab" aria-selected="${i === 0}" aria-label="${esc(d.a.n)}"${i === 0 ? ' class="on"' : ""}><i></i></button>`).join("")}</div>
+      <a class="ld-open" href="aktyvas.html?s=${encodeURIComponent(demos[0].s)}">Visa analizė ${icon("chevron", 16)}</a></div></div>` : "";
   const FEAT = [
     ["portfolio", "Portfelio rentgenas", "Įkelk ekrano nuotrauką ar CSV iš brokerio – pamatysi, kiek turi kiekvienoje šalyje, sektoriuje ir įmonėje."],
     ["target", "Esmė paprastai", "Kiekvienai akcijai – pelningumas, augimas, kaina ir skola žodžiais, ir patikra pagal 7 garsių investuotojų taisykles."],
@@ -141,6 +147,24 @@ async function renderLanding(P, all) {
     </section>`;
   $("#ld-hide").addEventListener("click", () => { try { localStorage.setItem("investai.landing.off", "1"); } catch {} box.innerHTML = ""; });
   $("#ld-ask").addEventListener("submit", (e) => { if ($("#ld-q").value.trim().length < 3) e.preventDefault(); });
+  const card = $("#ld-demo");
+  if (card && demos.length > 1) {
+    let cur = 0, timer = null, visible = false;
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const dots = [...card.querySelectorAll(".ld-dots button")];
+    const show = (i) => {
+      cur = (i + demos.length) % demos.length;
+      const d = demos[cur], link = card.querySelector(".ld-demo-link");
+      link.href = card.querySelector(".ld-open").href = `aktyvas.html?s=${encodeURIComponent(d.s)}`;
+      link.innerHTML = demoInner(d);
+      dots.forEach((b, k) => { b.classList.toggle("on", k === cur); b.setAttribute("aria-selected", String(k === cur)); });
+    };
+    const loop = () => { clearTimeout(timer); if (!still && visible) timer = setTimeout(() => { show(cur + 1); loop(); }, 4800); };
+    dots.forEach((b, k) => b.addEventListener("click", () => { show(k); loop(); }));
+    card.addEventListener("pointerenter", () => clearTimeout(timer));
+    card.addEventListener("pointerleave", loop);
+    new IntersectionObserver(([en]) => { visible = en.isIntersecting; visible ? loop() : clearTimeout(timer); }, { threshold: 0.4 }).observe(card);
+  }
 }
 
 async function pageHome() {
@@ -308,7 +332,7 @@ async function pageAsset() {
   $("#ap-actions").innerHTML = `
     <a class="btn" href="irankiai.html?a=${encodeURIComponent(sym)}#jei">O jei būčiau investavęs?</a>
     <a class="btn" href="irankiai.html?c=${encodeURIComponent(sym)}#palyginti">Palyginti su kitu</a>
-    <a class="btn" href="strategija.html?check=${encodeURIComponent(sym)}#check-form">Patikrinti pagal mano strategiją</a>`;
+    <a class="btn" href="portfelis.html?check=${encodeURIComponent(sym)}#strategija">Patikrinti pagal mano strategiją</a>`;
 
   const P = await loadPrices();
   const p = P.items[sym];
@@ -690,7 +714,29 @@ async function pageNews() {
 }
 
 /* ---------- Mano rytas (asmeninė dienos apžvalga) ---------- */
+// Dienos AI apžvalga ir jų archyvas – „Šiandien“ puslapio apačioje
+async function renderDigestEmbed() {
+  const box = $("#m-digest"); if (!box) return;
+  try {
+    const idx = await getJSON("data/index.json");
+    const q = new URLSearchParams(location.search).get("d");
+    const date = isDate(q) && idx.digests.some((x) => x.date === q) ? q : idx.latest;
+    const d = await getJSON(`data/digests/${date}.json`);
+    const title = document.title;
+    const html = renderDigest(d).replace("<h1>", '<h2 class="dg-title">').replace("</h1>", "</h2>");
+    document.title = title;
+    box.innerHTML = `<div class="dg-top"><h2 class="m-h">${aiMark()} Dienos apžvalga</h2>
+        <label class="dg-pick"><span class="sr-only">Pasirink dieną</span><select id="dg-date">${idx.digests.slice(0, 60).map((x) => `<option value="${esc(x.date)}"${x.date === date ? " selected" : ""}>${fmtShort(x.date)}</option>`).join("")}</select></label></div>
+      <div class="card dg-card">${html}</div>
+      <details class="dg-arch"><summary>Visos apžvalgos (${idx.digests.length})</summary>
+        <ul class="archive">${idx.digests.map((x) => `<li><time datetime="${esc(x.date)}">${fmtDate(x.date, true)}</time><a href="rytas.html?d=${esc(x.date)}#apzvalga">${esc(x.title)}</a><p>${esc(x.lead)}</p></li>`).join("")}</ul></details>`;
+    $("#dg-date").addEventListener("change", (e) => { location.href = `rytas.html?d=${e.target.value}#apzvalga`; });
+    if (q && location.hash === "#apzvalga") box.scrollIntoView({ block: "start" });
+  } catch { box.innerHTML = ""; }
+}
+
 async function pageMorning() {
+  renderDigestEmbed();
   const [P, all, n, ex] = await Promise.all([loadPrices(), allAssets(), getJSON("data/news.json").catch(() => ({})), loadExplain()]);
   const nameOf = (s) => (all.find((a) => a.s === s) || {}).n || s.split(":")[1] || s;
   $("#m-greet").textContent = greeting();
@@ -724,7 +770,7 @@ async function pageMorning() {
     const items = (d.sections || []).flatMap((s) => s.items || []);
     const rel = items.filter((it) => (it.tags || []).some((tg) => [...mine].some((s) => s.endsWith(":" + tg))));
     const pick = [...rel, ...items.filter((it) => !rel.includes(it))].slice(0, 4);
-    $("#m-ai").innerHTML = `<div class="card-head"><h2><span class="ai-label">${aiMark()} AI santrauka</span></h2><a class="card-link" href="apzvalga.html">Visa apžvalga</a></div>
+    $("#m-ai").innerHTML = `<div class="card-head"><h2><span class="ai-label">${aiMark()} AI santrauka</span></h2><a class="card-link" href="#apzvalga">Visa apžvalga</a></div>
       <h3 class="m-ai-title">${esc(d.title)}</h3><p>${esc(d.lead)}</p>
       <ul class="latest-list">${pick.map((it) => `<li><span class="badge ${(STATUS[it.status] || STATUS.media).cls}">${(STATUS[it.status] || STATUS.media).label}</span> ${esc(it.headline)}</li>`).join("")}</ul>
       <p class="explain-foot">Santrauką ${fmtShort(d.date)} parengė AI pagal nurodytus šaltinius. Tai ne rekomendacija.</p>`;

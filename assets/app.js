@@ -10,11 +10,10 @@ const STATUS = {
 const MONTHS = ["sausio", "vasario", "kovo", "balandžio", "gegužės", "birželio", "liepos", "rugpjūčio", "rugsėjo", "spalio", "lapkričio", "gruodžio"];
 const WEEKDAYS = ["sekmadienis", "pirmadienis", "antradienis", "trečiadienis", "ketvirtadienis", "penktadienis", "šeštadienis"];
 const NAV = [
-  ["morning", "rytas.html", "Mano rytas"],
+  ["morning", "rytas.html", "Šiandien"],
   ["news", "naujienos.html", "Naujienos"],
   ["markets", "rinkos.html", "Rinkos"],
   ["screener", "atranka.html", "Atranka"],
-  ["strategy", "strategija.html", "Strategija"],
   ["premium", "premium.html", "Premium"],
   ["portfolio", "portfelis.html", "Mano portfelis", "nav-cta"],
 ];
@@ -108,14 +107,13 @@ const FIG = {
 };
 const icon = (id, size = 22) => FIG[id] ? `<svg viewBox="0 0 96 96" width="${size}" height="${size}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">${FIG[id]}</svg>` : `<svg viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS[id] || ""}</svg>`;
 const MENU = [
-  ["home", "./", "Pradžia"], ["morning", "rytas.html", "Mano rytas"], ["portfolio", "portfelis.html", "Mano portfelis"],
-  ["news", "naujienos.html", "Naujienos"], ["calendar", "naujienos.html#kalendorius", "Kalendorius"], ["digest", "apzvalga.html", "Dienos apžvalga"],
-  ["markets", "rinkos.html", "Rinkos"], ["screener", "atranka.html", "Atranka"], ["strategy", "strategija.html", "Strategija"],
-  ["tools", "irankiai.html", "Skaičiuoklės"], ["glossary", "zodynas.html", "Žodynas"], ["premium", "premium.html", "Premium"],
-  ["archive", "archyvas.html", "Archyvas"], ["about", "apie.html", "Apie InvestAI"], ["play", "./?intro=1", "Trumpas turas"],
+  ["home", "./", "Pradžia"], ["morning", "rytas.html", "Šiandien"], ["portfolio", "portfelis.html", "Mano portfelis"],
+  ["news", "naujienos.html", "Naujienos"], ["calendar", "naujienos.html#kalendorius", "Kalendorius"], ["markets", "rinkos.html", "Rinkos"],
+  ["screener", "atranka.html", "Atranka"], ["tools", "irankiai.html", "Skaičiuoklės"], ["glossary", "zodynas.html", "Žodynas"],
+  ["premium", "premium.html", "Premium"], ["about", "apie.html", "Apie InvestAI"], ["play", "./?intro=1", "Trumpas turas"],
 ];
 // Kur grįžti, jei naršyklės istorijos nėra (pvz., atidaryta iš nuorodos)
-const PARENT = { asset: "rinkos.html", digest: "naujienos.html", archive: "apzvalga.html", tools: "./", premium: "./", about: "./", glossary: "./" };
+const PARENT = { asset: "rinkos.html", digest: "rytas.html", archive: "rytas.html", tools: "./", premium: "./", about: "./", glossary: "./" };
 function goBack(page) {
   const same = document.referrer && new URL(document.referrer).origin === location.origin;
   if (same && history.length > 1) history.back();
@@ -190,10 +188,10 @@ function renderChrome(page) {
   sheet.className = "sheet";
   sheet.setAttribute("aria-label", "Visi puslapiai");
   sheet.innerHTML = `<div class="sheet-head"><b>Visi puslapiai</b><button class="icon-btn sheet-close" type="button" aria-label="Uždaryti">${icon("close", 22)}</button></div>
-    <nav class="sheet-grid">${MENU.map(([id, href, label]) => `<a href="${href}"${id === page ? ' aria-current="page"' : ""}><span class="sheet-ico">${icon(id, 22)}</span>${label}</a>`).join("")}</nav>`;
+    <nav class="sheet-grid">${MENU.map(([id, href, label], i) => `<a href="${href}" class="mi mi-${id}" style="--i:${i}"${id === page || (id === "morning" && (page === "digest" || page === "archive")) ? ' aria-current="page"' : ""}><span class="sheet-ico">${icon(id, 22)}</span><span class="mi-l">${label}</span><small class="mi-live" data-live="${id}"></small></a>`).join("")}</nav>`;
   document.body.append(sheet);
   const close = () => { sheet.classList.add("closing"); setTimeout(() => { sheet.classList.remove("closing"); sheet.close(); }, 160); };
-  $(".menu-open", header).addEventListener("click", () => sheet.showModal());
+  $(".menu-open", header).addEventListener("click", () => { sheet.showModal(); if (document.activeElement) document.activeElement.blur(); menuLive(sheet); });
   $(".sheet-close", sheet).addEventListener("click", close);
   sheet.addEventListener("click", (e) => { if (e.target === sheet) close(); });
 
@@ -247,6 +245,28 @@ async function loadPrices() {
   }
   staleNote(_prices);
   return _prices;
+}
+// Gyvi mini duomenys meniu (rinkos pokytis, portfelis šiandien ir pan.)
+async function menuLive(sheet) {
+  const set = (id, html, cls = "") => { const el = sheet.querySelector(`[data-live="${id}"]`); if (el) { el.innerHTML = html; el.className = `mi-live ${cls}`; } };
+  const d = new Date();
+  set("morning", d.toLocaleDateString("lt-LT", { weekday: "long" }).replace(/^./, (c) => c.toUpperCase()));
+  set("screener", "Klausk AI");
+  set("play", "1 min.");
+  set("premium", "2× daugiau AI");
+  if (typeof GLOSSARY !== "undefined") set("glossary", `${GLOSSARY.length} terminai`);
+  try {
+    const P = await loadPrices();
+    const spy = P.items["AMEX:SPY"] || P.items["NYSEARCA:SPY"];
+    if (spy && typeof spy.d1 === "number") set("markets", `S&P ${fmtPct(spy.d1, 1)}`, spy.d1 >= 0 ? "up" : "down");
+    const t = typeof portfolioToday === "function" ? portfolioToday(P) : null;
+    if (t && t.rows && t.rows.length) set("portfolio", `${fmtPct(t.pct, 1)} šiandien`, t.pct >= 0 ? "up" : "down");
+    const ev = await getJSON("data/news.json").catch(() => null);
+    if (ev && ev.stories) set("news", `${ev.stories.length} temos`);
+    const today = new Date().toISOString().slice(0, 10);
+    const nx = ((ev && ev.events) || []).filter((e) => e.date >= today).sort((a, b) => a.date.localeCompare(b.date))[0];
+    if (nx) set("calendar", nx.date === today ? "Šiandien" : fmtShort(nx.date));
+  } catch {}
 }
 // Švelnus atsiradimas slenkant (tik kai vartotojas neišjungęs animacijų)
 function revealOnScroll(sel) {

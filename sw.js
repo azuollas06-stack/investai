@@ -1,12 +1,12 @@
 // InvestAI service worker: veikia kaip programėlė ir be interneto rodo paskutinį turinį.
 // Puslapiai ir duomenys – pirmiausia iš tinklo (kad visada būtų naujausi), CSS/JS su ?v= ir OCR failai – iš talpyklos.
-const VERSION = "v23";
+const VERSION = "v24";
 const SHELL = `investai-shell-${VERSION}`;
 const STATIC = `investai-static-${VERSION}`;
 const OCR = "investai-ocr-v1";
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(SHELL).then((c) => c.addAll(["./", "portfelis.html", "rinkos.html", "apzvalga.html", "naujienos.html", "irankiai.html", "rytas.html", "zodynas.html", "aktyvas.html", "manifest.webmanifest"])).catch(() => {}));
+  e.waitUntil(caches.open(SHELL).then((c) => c.addAll(["./", "portfelis.html", "rinkos.html", "naujienos.html", "irankiai.html", "rytas.html", "zodynas.html", "aktyvas.html", "manifest.webmanifest"])).catch(() => {}));
   self.skipWaiting();
 });
 self.addEventListener("activate", (e) => {

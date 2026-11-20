@@ -456,6 +456,7 @@ let ptab = "overview";
 function showPTab(id) {
   ptab = id;
   document.querySelectorAll(".ptabs [data-ptab]").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.ptab === id)));
+  if (id === "next" && typeof stgOpen === "function") stgOpen();
   document.querySelectorAll(".ptab[data-panel]").forEach((p) => (p.hidden = p.dataset.panel !== id));
 }
 function openCard(s) {
@@ -551,7 +552,7 @@ async function renderMentions(a) {
       if (m) hits.push({ d, it, m });
     }
     el.innerHTML = hits.length
-      ? `<h3>Paminėta apžvalgose</h3><ul class="mentions">${hits.map(({ d, it, m }) => `<li><time>${fmtShort(d.date)}</time><span class="badge tag">${esc(ticker(m.s))}</span><a href="apzvalga.html?d=${d.date}">${esc(it.headline)}</a></li>`).join("")}</ul>`
+      ? `<h3>Paminėta apžvalgose</h3><ul class="mentions">${hits.map(({ d, it, m }) => `<li><time>${fmtShort(d.date)}</time><span class="badge tag">${esc(ticker(m.s))}</span><a href="rytas.html?d=${d.date}#apzvalga">${esc(it.headline)}</a></li>`).join("")}</ul>`
       : `<p class="muted">Paskutinėse apžvalgose tavo aktyvai neminėti. Kiekvieno aktyvo naujienas rasi jo puslapyje.</p>`;
   } catch { el.innerHTML = ""; }
 }
@@ -992,13 +993,13 @@ function renderNext(a) {
       ${watch.length ? `<ul class="nx-list">${watch.map(item).join("")}</ul>` : `<p class="muted">Tarp tavo pozicijų neradome nuostolingų, labai prasiskolinusių ar itin smarkiai svyruojančių įmonių.</p>`}</section>
     ${strong.length ? `<section class="nx-sec"><h3>Stiprios pusės</h3><ul class="nx-list">${strong.slice(0, 6).map(item).join("")}</ul></section>` : ""}
     <section class="nx-sec nx-links"><h3>Kur ieškoti toliau</h3>
-      <a class="nx-link" href="strategija.html">${icon("strategy", 20)}<span><b>Turi pinigų investuoti?</b><small>Pasirink strategiją – pamatysi, kurias portfelio dalis ji siūlo didinti</small></span>${icon("chevron", 18)}</a>
+      <a class="nx-link" href="#strategija">${icon("strategy", 20)}<span><b>Turi pinigų investuoti?</b><small>Pasirink strategiją – pamatysi, kurias portfelio dalis ji siūlo didinti</small></span>${icon("chevron", 18)}</a>
       <a class="nx-link" href="atranka.html">${icon("screener", 20)}<span><b>Atranka</b><small>Pelningos įmonės, plačios rinkos fondai, sektoriai, kurių dar neturi</small></span>${icon("chevron", 18)}</a>
       <a class="nx-link" href="${"#"}" data-ai-ask="Kurios mano portfelio įmonės dirba nuostolingai ir ką tai reiškia investuotojui?">${icon("ai", 20)}<span><b>Paklausk AI</b><small>„Kurios mano įmonės nuostolingos ir ką tai reiškia?“</small></span>${icon("chevron", 18)}</a>
     </section>
     ${unknown.length ? `<p class="muted small">Be pastabų: ${unknown.slice(0, 8).map((x) => esc(x.r.n)).join(", ")}. Fondams ir kriptovaliutoms įmonių rodikliai netaikomi.</p>` : ""}
     <p class="disclaimer">Duomenys – Yahoo Finance (metinės ataskaitos atnaujinamos kas savaitę). Nuostolinga įmonė nebūtinai bloga investicija, o pelninga – nebūtinai gera: tai tik faktai, į kuriuos verta atsižvelgti.</p>`;
-  el.querySelectorAll("[data-ai-ask]").forEach((b) => b.addEventListener("click", (e) => { e.preventDefault(); if (window.openAI) window.openAI(b.dataset.aiAsk); else location.href = "strategija.html"; }));
+  el.querySelectorAll("[data-ai-ask]").forEach((b) => b.addEventListener("click", (e) => { e.preventDefault(); if (window.openAI) window.openAI(b.dataset.aiAsk); else $("#strategija").scrollIntoView({ block: "start" }); }));
 }
 
 /* ---------- Skilčių antraščių ikonos ---------- */
@@ -1444,4 +1445,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   load();
   if (state.holdings.length) renderResult(); else show("start");
+  // Strategija – skiltyje „Kas toliau“
+  const toStg = () => { showPTab("next"); setTimeout(() => { const el = $("#strategija"); if (el) el.scrollIntoView({ block: "start" }); }, 250); };
+  document.addEventListener("click", (e) => { const a = e.target.closest('[data-goto-stg], a[href="#strategija"]'); if (a && state.holdings.length) { e.preventDefault(); toStg(); } });
+  if (state.holdings.length && (location.hash === "#strategija" || new URLSearchParams(location.search).has("check"))) toStg();
 });

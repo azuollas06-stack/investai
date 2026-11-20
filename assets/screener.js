@@ -145,7 +145,7 @@ function update() {
       <span class="res-num"><small>Per mėn.</small><b class="${(p.m1 ?? 0) >= 0 ? "up" : "down"}">${fmtPct(p.m1)}</b></span>
       <span class="res-num"><small>Nuo aukščiausios</small><b class="${(p.fromHigh ?? 0) < -0.5 ? "down" : ""}">${fmtPct(p.fromHigh)}</b></span>
       <span class="res-an">${anHTML(an)}${an.up !== undefined ? `<small>Tikslinė kaina: <b class="${an.up >= 0 ? "up" : "down"}">${fmtPct(an.up, 0)}</b></small>` : ""}</span>
-      <span class="res-act">${starHTML(a.s, a.n)}<a class="btn small" href="strategija.html?check=${encodeURIComponent(a.s)}#check-form">Patikrinti</a></span>
+      <span class="res-act">${starHTML(a.s, a.n)}<a class="btn small" href="portfelis.html?check=${encodeURIComponent(a.s)}#strategija">Patikrinti</a></span>
     </div>`;
   }).join("") || `<div class="card"><p style="margin:0"><b>Nieko nerasta.</b> Pabandyk sušvelninti kai kuriuos filtrus.</p></div>`;
   renderSaved();

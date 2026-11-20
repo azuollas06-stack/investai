@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mano rytas – InvestAI</title>
+<title>Šiandien – InvestAI</title>
 <meta name="description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
-<meta property="og:title" content="Mano rytas – InvestAI">
+<meta property="og:title" content="Šiandien – InvestAI">
 <meta property="og:description" content="Kasdienė rinkų apžvalga lietuvių kalba su pirminiais šaltiniais, S&P 500 ir Baltijos akcijos, aktyvų grafikai ir naujienos.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0a1930">
@@ -20,14 +20,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>try{var d=document.documentElement,t=localStorage.getItem("investai.theme");if(t!=="dark"&&t!=="light")t="light";d.dataset.theme=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==="light"?"#f3f5f9":"#0a1930";try{localStorage.removeItem("investai.style")}catch(e){}}catch(e){}</script>
-<link rel="stylesheet" href="assets/style.css?v=6b09ae4d">
+<link rel="stylesheet" href="assets/style.css?v=a712e25e">
 <script src="assets/viz.js?v=6bbfcc39" defer></script>
-<script src="assets/app.js?v=4c7c37b4" defer></script>
+<script src="assets/app.js?v=5af5f1c5" defer></script>
 <script src="assets/glossary.js?v=470a6839" defer></script>
-<script src="assets/pages.js?v=0bb36567" defer></script>
+<script src="assets/pages.js?v=e780233c" defer></script>
 <script src="assets/alerts.js?v=f0085f96" defer></script>
-<script src="assets/onboard.js?v=6633349e" defer></script>
-<script src="assets/plain.js?v=e7453d02" defer></script>
+<script src="assets/onboard.js?v=e7bff3c4" defer></script>
+<script src="assets/plain.js?v=b0eaff8a" defer></script>
 <script src="assets/ai.js?v=a19a3eff" defer></script>
 </head>
 <body data-page="morning">
@@ -35,7 +35,7 @@
   <header class="m-head">
     <div>
       <p class="greet-date" id="m-date"></p>
-      <h1 id="m-greet">Mano rytas</h1>
+      <h1 id="m-greet">Šiandien</h1>
       <p class="lead" id="m-lead"></p>
     </div>
     <p class="data-stamp" id="m-stamp"></p>
@@ -59,7 +59,9 @@
       <section class="card m-block" id="m-movers"></section>
     </div>
   </div>
-  <p class="muted small">„Mano rytas“ sudaromas tavo naršyklėje pagal tavo portfelį ir stebimus aktyvus – šie duomenys niekur nesiunčiami. Kainos uždelstos iki ~15 min. Tai informacija, ne investavimo rekomendacija.</p>
+  <section class="m-block dg-embed" id="apzvalga"><div id="m-digest"><div class="skel" style="height:300px"></div></div></section>
+
+  <p class="muted small">Puslapis „Šiandien“ sudaromas tavo naršyklėje pagal tavo portfelį ir stebimus aktyvus – šie duomenys niekur nesiunčiami. Kainos uždelstos iki ~15 min. Tai informacija, ne investavimo rekomendacija.</p>
 </main>
 </body>
 </html>

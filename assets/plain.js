@@ -61,7 +61,7 @@
       const r = p.pe / med;
       out.push(r < 0.7 ? { k: "Kaina pagal pelną (P/E)", v: num(p.pe), w: `Pigesnė nei dauguma: mokama ${num(p.pe, 0)} € už 1 € metinio pelno (vidutinė mūsų sąrašo akcija – ${num(med, 0)} €).`, t: "good", term: "pe" }
         : r <= 1.3 ? { k: "Kaina pagal pelną (P/E)", v: num(p.pe), w: `Panaši į vidutinę: ${num(p.pe, 0)} € už 1 € metinio pelno (vidurkis – ${num(med, 0)} €).`, t: "ok", term: "pe" }
-        : r <= 2.5 ? { k: "Kaina pagal pelną (P/E)", v: num(p.pe), w: `Brangesnė nei dauguma: ${num(p.pe, 0)} € už 1 € pelno (vidurkis – ${num(med, 0)} €). Rinka tikisi spartaus augimo.`, t: "ok", term: "pe" }
+        : r <= 2.5 ? { k: "Kaina pagal pelną (P/E)", v: num(p.pe), w: `Brangesnė nei dauguma: ${num(p.pe, 0)} € už 1 € pelno (vidurkis – ${num(med, 0)} €). Rinka tikisi spartaus augimo.`, t: "bad", term: "pe" }
         : { k: "Kaina pagal pelną (P/E)", v: num(p.pe), w: `Labai brangi pagal dabartinį pelną: ${num(p.pe, 0)} € už 1 € pelno. Kaina remiasi dideliais ateities lūkesčiais.`, t: "bad", term: "pe" });
     } else if (has(p.pm) && p.pm < 0) out.push({ k: "Kaina pagal pelną (P/E)", v: "–", w: "Pelno nėra, todėl P/E neskaičiuojamas – kaina remiasi tik ateities lūkesčiais.", t: "bad", term: "pe" });
     // Skola
