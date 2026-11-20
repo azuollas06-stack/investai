@@ -89,6 +89,56 @@ const IDX_BADGE = { "AMEX:SPY": ["500", "#1f4fd1"], "NASDAQ:QQQ": ["100", "#0d8f
 function marketRows(P) {
   return PULSE.filter(([s]) => P.items[s]).map(([s, n, t]) => { const p = P.items[s], [txt, bg] = IDX_BADGE[s] || ["•", "#3a4558"]; return rowHTML({ href: assetUrl(s), ava: LOGOS[s] ? logoHTML(s, n, "#1d3a63", 40) : `<span class="row-badge" style="background:${bg}">${txt}</span>`, title: esc(n), sub: t, val: fmtPrice(p.price, p.cur), chg: p.d1, spark: daySpark(p) }); }).join("");
 }
+/* ---------- Akcijos puslapis: metų intervalas, „Ką žinoti“, konkurentai ---------- */
+async function renderAssetExtras(sym, p, known, P, F) {
+  const all = await allAssets();
+  const cur = p.cur || (/^(XETR|EURONEXT|OMX|BIT|BME|SIX|LSE)/.test(sym) ? "EUR" : "USD");
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // 1) Metų kainų intervalas
+  if (p.hi52 && p.lo52 && p.price && p.hi52 > p.lo52) {
+    const pos = Math.max(0, Math.min(100, ((p.price - p.lo52) / (p.hi52 - p.lo52)) * 100));
+    const fromHi = (p.price / p.hi52 - 1) * 100, fromLo = (p.price / p.lo52 - 1) * 100;
+    $("#range").innerHTML = `<section class="card rng"><div class="rng-h"><h2 class="plain-h">Kur kaina per metus</h2><span class="muted small">${pos > 85 ? "Arti metų aukščiausios" : pos < 15 ? "Arti metų žemiausios" : "Per vidurį"}</span></div>
+      <div class="rng-bar"><span class="rng-fill" style="--to:${pos.toFixed(1)}%"></span><span class="rng-dot" style="--to:${pos.toFixed(1)}%"><b>${fmtPrice(p.price, cur)}</b></span></div>
+      <div class="rng-lbl"><span><small>Žemiausia</small><b>${fmtPrice(p.lo52, cur)}</b></span><span><small>Aukščiausia</small><b>${fmtPrice(p.hi52, cur)}</b></span></div>
+      <p class="muted small" style="margin:10px 0 0">Dabar ${fmtPct(fromLo, 0).replace("+", "")} virš metų žemiausios ir ${fmtPct(fromHi, 0).replace("−", "")} žemiau aukščiausios.</p></section>`;
+  }
+  // 2) Ką žinoti prieš perkant (tik faktai iš duomenų)
+  const K = [];
+  const isStock = !known || !known.type || known.type === "Akcija";
+  if (p.vol) K.push(p.vol >= 45 ? ["warn", "Labai stipriai svyruoja", `Įprastas metinis svyravimas – apie ±${Math.round(p.vol)} %. Per kelias savaites kaina gali pakilti ar nukristi dešimtimis procentų.`]
+    : p.vol >= 28 ? ["warn", "Svyruoja daugiau nei rinka", `Įprastas metinis svyravimas – apie ±${Math.round(p.vol)} % (plataus rinkos fondo – apie ±15 %).`]
+    : ["ok", "Svyruoja vidutiniškai", `Įprastas metinis svyravimas – apie ±${Math.round(p.vol)} %.`]);
+  if (isStock && typeof PLAIN !== "undefined" && PLAIN.coreProfit(p) === false) K.push(["bad", "Pagrindinė veikla nuostolinga", "Įmonė dar neuždirba iš savo veiklos – kaina labiau priklauso nuo lūkesčių ir naujienų."]);
+  if (p.fromHigh != null && p.fromHigh <= -30) K.push(["warn", `Nukritusi ${Math.round(-p.fromHigh)} % nuo metų aukščiausios`, "Didelis kritimas savaime nereiškia, kad akcija pigi – verta suprasti, kodėl ji krito."]);
+  const today = new Date().toISOString().slice(0, 10);
+  if (p.ed && p.ed >= today) { const days = Math.round((new Date(p.ed) - new Date(today)) / 864e5); K.push(["info", `Rezultatai – ${fmtShort(p.ed)}`, days <= 21 ? `Po ${days} d. įmonė skelbs ketvirčio rezultatus – tomis dienomis kaina dažnai šokteli į vieną ar kitą pusę.` : "Ketvirčio rezultatų dieną kaina dažnai stipriai pajuda."]); }
+  if (p.dy > 0) K.push(["ok", `Moka dividendus (~${p.dy.toLocaleString("lt-LT", { maximumFractionDigits: 1 })} % per metus)`, p.xd && p.xd >= today ? `Kad gautum artimiausius dividendus, akciją reikia turėti iki ${fmtShort(p.xd)}.` : "Dividendai nėra garantuoti – įmonė gali juos sumažinti."]);
+  else if (isStock) K.push(["info", "Dividendų nemoka", "Grąža priklauso tik nuo akcijos kainos pokyčio."]);
+  if (cur === "USD") K.push(["info", "Kaina doleriais", "Tavo grąžą eurais veikia ir dolerio kursas: jei doleris silpnėja, grąža eurais mažėja."]);
+  const mine = myHoldings(); const tot = mine.reduce((a, h) => a + (h.value || 0), 0); const me = mine.find((h) => h.s === sym);
+  if (me && tot > 0) { const w = (me.value / tot) * 100; K.push([w >= 20 ? "warn" : "ok", `Jau turi: ${Math.round(w)} % portfelio`, w >= 20 ? "Didelė dalis vienoje įmonėje – jei jai nesiseks, tai stipriai paveiks visą portfelį." : "Pozicija nedidelė, palyginti su visu portfeliu."]); }
+  const ICO = { warn: "!", bad: "!", ok: "✓", info: "i" };
+  if (K.length) $("#know").innerHTML = `<section class="card know"><h2 class="plain-h">Ką žinoti prieš perkant</h2><ul>${K.map(([t, h, d], i) => `<li class="kn-${t}" style="--i:${i}"><span class="kn-i" aria-hidden="true">${ICO[t]}</span><div><b>${esc(h)}</b><p>${esc(d)}</p></div></li>`).join("")}</ul>
+    <p class="muted small" style="margin:8px 0 0">Faktai iš duomenų, ne rekomendacija.</p></section>`;
+  // 3) Konkurentai – tas pats sektorius, panašaus dydžio
+  if (isStock && known && known.sector && p.mcap) {
+    const peers = all.filter((a) => a.s !== sym && a.type === "Akcija" && a.sector === known.sector && P.items[a.s] && P.items[a.s].mcap && !(typeof DUP_SKIP !== "undefined" && DUP_SKIP.has(a.s)))
+      .sort((a, b) => Math.abs(Math.log(P.items[a.s].mcap / p.mcap)) - Math.abs(Math.log(P.items[b.s].mcap / p.mcap))).slice(0, 4);
+    if (peers.length >= 2) {
+      const rows = [{ s: sym, n: known.n || sym, me: true }, ...peers.map((a) => ({ s: a.s, n: a.n }))];
+      const cols = [["y1", "Per metus", (v) => fmtPct(v, 0), 1], ["pe", "P/E", (v) => (v > 0 ? v.toLocaleString("lt-LT", { maximumFractionDigits: 0 }) : "–"), -1], ["pm", "Marža", (v) => `${Math.round(v * 100)} %`, 1], ["rg", "Augimas", (v) => fmtPct(v * 100, 0), 1]];
+      const best = {};
+      cols.forEach(([k, , , dir]) => { const vals = rows.map((r) => P.items[r.s][k]).filter((v) => typeof v === "number" && (k !== "pe" || v > 0)); if (vals.length) best[k] = dir > 0 ? Math.max(...vals) : Math.min(...vals); });
+      $("#peers").innerHTML = `<section class="card peers"><h2 class="plain-h">Palyginimas su konkurentais</h2><p class="muted small" style="margin:0 0 10px">${esc(known.sector)} · panašaus dydžio įmonės. Paryškinta – geriausia reikšmė.</p>
+        <div class="pr-scroll"><table class="pr"><thead><tr><th scope="col">Įmonė</th>${cols.map(([, l]) => `<th scope="col">${l}</th>`).join("")}</tr></thead><tbody>
+        ${rows.map((r) => { const q = P.items[r.s]; return `<tr class="${r.me ? "pr-me" : ""}"><th scope="row"><a href="${assetUrl(r.s)}">${logoHTML(r.s, r.n, "#1d3a63", 26)}<span>${esc(r.n)}</span></a></th>${cols.map(([k, , f]) => { const v = q[k]; const ok = typeof v === "number"; return `<td class="${ok && v === best[k] ? "pr-best" : ""} ${ok && (k === "y1" || k === "rg") ? (v >= 0 ? "up" : "down") : ""}">${ok ? f(v) : "–"}</td>`; }).join("")}</tr>`; }).join("")}
+        </tbody></table></div></section>`;
+    }
+  }
+  if (!still) revealOnScroll("#range .card, #know .card, #legends .card, #peers .card");
+}
+
 /* ---------- Pristatymas naujam lankytojui (kol neįkeltas portfelis) ---------- */
 async function renderLanding(P, all) {
   const box = $("#landing");
@@ -345,6 +395,7 @@ async function pageAsset() {
     if (typeof PLAIN === "undefined" || !p || (known && known.type && known.type !== "Akcija")) return;
     $("#plain").innerHTML = PLAIN.plainHTML(p, F, P, known);
     $("#legends").innerHTML = PLAIN.rulesHTML(p, F, P, known);
+    renderAssetExtras(sym, p, known, P, F);
   });
   renderCompanyAI(sym, name, p, known);
   if (p && p.spark) {
