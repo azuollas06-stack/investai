@@ -1,41 +1,7 @@
 {
-  "updated": "2026-11-19",
+  "updated": "2026-11-20",
   "note": "Naujienų ir įvykių sąrašas. Pildo kasdienė užduotis (žr. TURINIO_GIDAS.md). Nuomonės – tik iš šaltinių, abi pusės.",
   "events": [
-    {
-      "date": "2026-11-19",
-      "kind": "ipo",
-      "title": "Anthropic (ANT) pradeda prekybą Nasdaq biržoje",
-      "symbols": [
-        "NASDAQ:ANT"
-      ],
-      "url": "https://finance.yahoo.com/technology/live/anthropic-ipo-live-company-said-to-price-stock-at-83-begin-trading-thursday-212656452.html"
-    },
-    {
-      "date": "2026-11-19",
-      "kind": "company",
-      "title": "Akola Group investuotojų webinaras",
-      "symbols": [
-        "OMXVSE:AKO1L"
-      ],
-      "url": "https://www.globenewswire.com/news-release/2026/11/19/3406349/0/en/akola-group-s-3m-fy-2026-2027-results-presentation-recording.html"
-    },
-    {
-      "date": "2026-11-19",
-      "kind": "earnings",
-      "title": "KN Energies 9 mėn. rezultatai",
-      "symbols": [
-        "OMXVSE:KNF1L"
-      ],
-      "url": "https://www.globenewswire.com/news-release/2026/11/19/3406300/0/en/ab-kn-energies-unaudited-financial-information-for-the-nine-months-of-2026-with-growing-terminal-activity-volumes-ebitda-increased-by-6-to-eur-43-2-million.html"
-    },
-    {
-      "date": "2026-11-19",
-      "kind": "dividend",
-      "title": "Eleving Group – dividendų ex-data (įrašymo data – lapkričio 20 d.)",
-      "symbols": [],
-      "url": "https://www.nasdaqbaltic.com/statistics/en/calendar?page=1"
-    },
     {
       "date": "2026-11-20",
       "kind": "bonds",
@@ -51,6 +17,31 @@
       "url": "https://www.nasdaqbaltic.com/statistics/en/calendar?page=1"
     },
     {
+      "date": "2026-11-20",
+      "kind": "macro",
+      "title": "JAV vartotojų nuotaikų indeksas (Mičigano universitetas, galutinis)",
+      "symbols": [],
+      "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-20-2026"
+    },
+    {
+      "date": "2026-11-24",
+      "kind": "earnings",
+      "title": "Analog Devices ir Medtronic rezultatai (prieš atidarymą)",
+      "symbols": [
+        "NASDAQ:ADI"
+      ],
+      "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/"
+    },
+    {
+      "date": "2026-11-24",
+      "kind": "earnings",
+      "title": "Workday ir Autodesk rezultatai (po uždarymo)",
+      "symbols": [
+        "NASDAQ:WDAY"
+      ],
+      "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/"
+    },
+    {
       "date": "2026-11-25",
       "kind": "company",
       "title": "Rheinmetall investuotojų diena (lapkričio 25–27 d.)",
@@ -58,6 +49,22 @@
         "XETR:RHM"
       ],
       "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/rheinmetall-stock-slips-after-strong-nine-month-growth/70493851"
+    },
+    {
+      "date": "2026-11-25",
+      "kind": "earnings",
+      "title": "Deere rezultatai",
+      "symbols": [
+        "NYSE:DE"
+      ],
+      "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/"
+    },
+    {
+      "date": "2026-11-29",
+      "kind": "bonds",
+      "title": "Sun Investment Group obligacijų išpirkimo terminas",
+      "symbols": [],
+      "url": "https://kpiresearch.substack.com/p/baltic-stock-market-weekly-review-c45"
     },
     {
       "date": "2026-11-30",
@@ -81,57 +88,65 @@
         "OMXVSE:IGN1L"
       ],
       "url": "https://www.globenewswire.com/news-release/2026/11/11/3400468/0/en/ignitis-group-s-updated-financial-calendar-2026.html"
+    },
+    {
+      "date": "2026-12-16",
+      "kind": "dividend",
+      "title": "DelfinGroup dividendų ex-data (0,0326 €)",
+      "symbols": [
+        "OMXRSE:DGR1R"
+      ],
+      "url": "https://kpiresearch.substack.com/p/baltic-stock-market-weekly-review-c45"
     }
   ],
   "stories": [
     {
       "id": "anthropic-ipo",
-      "date": "2026-11-19",
+      "date": "2026-11-20",
       "kind": "ipo",
-      "title": "Anthropic IPO kaina – 83 $, akcijos šiandien pradeda prekybą Nasdaq",
+      "title": "Anthropic pirmą dieną pakilo 17 %, antrą – krenta kartu su DI sektoriumi",
       "symbols": [
         "NASDAQ:ANT"
       ],
-      "lead": "Claude kūrėja Anthropic lapkričio 18 d. vakare nustatė 83 $ akcijos kainą – virš skelbto 70–78 $ intervalo – ir pritraukė apie 81,3 mlrd. $. Prekyba simboliu ANT lapkričio 19 d. turėjo prasidėti po 10 val. JAV rytų laiku; šio teksto rengimo metu pirmojo sandorio kainos šaltiniuose dar nebuvo.",
+      "lead": "Claude kūrėjos Anthropic akcijos lapkričio 19 d. pradėjo prekybą Nasdaq ir dieną baigė ties 97,17 $ (+17 % nuo 83 $ IPO kainos). Lapkričio 20 d. prieš atidarymą jos krito apie 10 %, kai visame pasaulyje buvo parduodamos lustų ir DI akcijos.",
       "facts": [
-        "Parduota 980 mln. A klasės akcijų (anksčiau planuota 825 mln.); bendrovė per 30 d. gali išleisti dar 147 mln. akcijų.",
-        "Pritraukta ~81,3 mlrd. $ – daugiau nei SpaceX IPO birželį (75 mlrd. $); kartu 26 mlrd. $ akcijų už IPO kainą perka Google, Nvidia, AMD, Broadcom, Micron, Microsoft ir TSMC.",
-        "Vertė: ~1,5 trln. $ visiškai praskiestu pagrindu (CBS, TradingKey); skaičiuojant ~13,2 mlrd. išleistų akcijų – apie 1,1 trln. $ (CryptoTicker).",
-        "Pagal S-1/A, trečiojo ketvirčio pajamos – ~17 mlrd. $, veiklos nuostolis – ~0,57 mlrd. $.",
-        "Pagrindiniai platintojai – Goldman Sachs ir Morgan Stanley; ne įkūrėjams darbuotojams leista nuo pirmos dienos parduoti iki 10 % užrakintų akcijų, įkūrėjams taikomas iki metų užraktas (TradingKey).",
-        "Prieš atidarymą neoficialiose (pilkosiose) rinkose ir ANT išvestinėse priemonėse kaina svyravo apie 98–107 $ – tai nėra biržos kaina."
+        "Pirmasis sandoris – 111,50 $, dienos aukščiausia kaina – 115,10 $, uždarymas – 97,17 $.",
+        "Lapkričio 20 d. prieš prekybos pradžią – apie 87,5–88,4 $ (−9–10 %); Seoul Economic Daily kritimą sieja ir su papildomo paskirstymo (greenshoe) įvykdymu.",
+        "Pritraukta suma šaltiniuose skiriasi: 81,3 mlrd. $ (980 mln. akcijų po 83 $) arba 93,5 mlrd. $ su papildomu paskirstymu; kartu su privačiu platinimu – ~119,5 mlrd. $.",
+        "Pagal prospektą bendrovė pagal standartinę apskaitą nuostolinga, turi 6,2 mlrd. $ skolos ir ~900 mlrd. $ įsipareigojimų skaičiavimo infrastruktūrai (AP).",
+        "Seoul Economic Daily duomenimis, metinis pajamų tempas spalio pabaigoje siekė 81 mlrd. $, o Q3 veiklos nuostolis – 567 mln. $."
       ],
       "pro": [
         {
-          "who": "Arun Sundararajan, NYU Stern",
-          "text": "Istorijoje sunku rasti bendrovę, kuri taip greitai pasiekė tokią sėkmę.",
-          "source": "Yahoo Finance"
-        },
-        {
-          "who": "Malik Ahmed Khan, Morningstar",
-          "text": "Pabrėžia bendrovės poziciją pažangiausių DI modelių kūrimo priešakyje.",
+          "who": "Dan Ives, Yorkville Ives & Co.",
+          "text": "Debiutą vadina didele pergale technologijų sektoriui po sunkaus laikotarpio su Nvidia; kaina rodo stiprią paklausą.",
           "source": "AP"
         },
         {
-          "who": "Glenn Schorr, Evercore ISI",
-          "text": "Sėkmingas listingas gali paskatinti daugiau DI bendrovių žengti į viešąją rinką.",
+          "who": "Goldman Sachs analitikai",
+          "text": "Tikisi, kad bendrovė metinius teigiamus laisvuosius pinigų srautus pasieks 2030 m.",
+          "source": "Seoul Economic Daily"
+        },
+        {
+          "who": "Arun Sundararajan, NYU Stern",
+          "text": "Istorijoje sunku rasti bendrovę, kuri taip greitai pasiekė tokią sėkmę.",
           "source": "Yahoo Finance"
         }
       ],
       "con": [
         {
+          "who": "Aswath Damodaran, NYU Stern",
+          "text": "Diskontuotų pinigų srautų modelyje akcijos vertę įvertino 76 $ – žemiau IPO kainos; mini skaičiavimo kaštus ir reguliavimo riziką.",
+          "source": "24/7 Wall St."
+        },
+        {
+          "who": "Gerald Gan, Lead Capital",
+          "text": "Nuotaikos tapo labai neigiamos, nes griūva „paskutinis DI ralio ramstis“.",
+          "source": "Seoul Economic Daily"
+        },
+        {
           "who": "Jay Ritter, Floridos universitetas",
           "text": "Istoriškai IPO, įvertinti 20–40 kartų pardavimų, per trejus metus nuo pirmos dienos uždarymo uždirbdavo vidutiniškai tik ~3 %.",
-          "source": "Yahoo Finance"
-        },
-        {
-          "who": "Malik Ahmed Khan, Morningstar",
-          "text": "Bendrovei teks išlaikyti spartų augimą ir kartu valdyti milžiniškas modelių kūrimo išlaidas.",
-          "source": "AP"
-        },
-        {
-          "who": "Mellody Hobson, Ariel Investments",
-          "text": "Kelia nerimą, kai visos rinkos kryptis siejama su vienu IPO.",
           "source": "Yahoo Finance"
         }
       ],
@@ -139,164 +154,157 @@
       "status": "media",
       "sources": [
         {
+          "name": "AP / BNN Bloomberg: Anthropic pirmoji prekybos diena",
+          "url": "https://www.bnnbloomberg.ca/business/company-news/2026/11/19/anthropic-set-to-begin-trading-as-a-us15-trillion-company-in-the-biggest-ipo-on-record/",
+          "published": "2026-11-19"
+        },
+        {
+          "name": "Forbes: Anthropic uždarymas 97 $",
+          "url": "https://www.forbes.com/sites/fionariley/2026/11/19/anthropic-ipo-live-stock-closes-day-at-97-up-more-than-17/",
+          "published": "2026-11-19"
+        },
+        {
+          "name": "24/7 Wall St.: antroji Anthropic prekybos diena",
+          "url": "https://247wallst.com/investing/2026/11/20/anthropic-stock-falls-9-6-before-the-bell-on-its-second-day-of-trading-facebook-and-uber-both-fell-11-on-day-2-heres-what-happened-next/",
+          "published": "2026-11-20"
+        },
+        {
+          "name": "24/7 Wall St.: A. Damodarano vertinimas",
+          "url": "https://247wallst.com/investing/2026/11/20/anthropic-shares-are-tumbling-heres-what-nyus-dean-of-valuation-says-its-really-worth/",
+          "published": "2026-11-20"
+        },
+        {
+          "name": "Seoul Economic Daily: Anthropic antrą dieną −10 %",
+          "url": "https://en.sedaily.com/world/2026/11/20/anthropic-shares-sink-10-percent-on-second-day-as-ai-trade",
+          "published": "2026-11-20"
+        },
+        {
           "name": "Yahoo Finance: Anthropic IPO tiesiogiai",
           "url": "https://finance.yahoo.com/technology/live/anthropic-ipo-live-company-said-to-price-stock-at-83-begin-trading-thursday-212656452.html",
           "published": "2026-11-19"
         },
         {
-          "name": "CBS News: debiutas Nasdaq",
-          "url": "https://www.cbsnews.com/news/anthropic-ipo-nasdaq-debut-claude-ai/",
-          "published": "2026-11-19"
-        },
-        {
-          "name": "AP / BNN Bloomberg: rinkos prieš debiutą",
-          "url": "https://www.bnnbloomberg.ca/markets/2026/11/19/world-shares-are-mixed-and-us-futures-climb-ahead-of-anthropics-blockbuster-ipo/",
-          "published": "2026-11-19"
-        },
-        {
-          "name": "TradingKey: vertinimas ir užraktai",
-          "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262312732-ant-debuts-today-record-81-3-billion-ipo-83-line-to-watch-november-19-2026-tradingkey",
-          "published": "2026-11-19"
-        },
-        {
-          "name": "CryptoTicker: akcijų skaičius ir išvestinės kainos",
-          "url": "https://cryptoticker.io/en/anthropic-stock-live-ant-first-trading-day-nasdaq/",
-          "published": "2026-11-19"
-        },
-        {
-          "name": "Forbes: pilkosios rinkos kotiruotės",
-          "url": "https://www.forbes.com/sites/fionariley/2026/11/19/anthropic-ipo-live-nasdaq-futures-jump-2-ahead-of-record-stock-debut/",
-          "published": "2026-11-19"
-        },
-        {
-          "name": "StockTitan: IPO faktai iš S-1/A",
-          "url": "https://www.stocktitan.net/articles/anthropic-ipo-live-ant-first-trading-day-2026",
-          "published": "2026-11-17"
-        },
-        {
           "name": "TheStreet: Jay Ritter apie vertinimą",
           "url": "https://www.thestreet.com/investing/anthropic-ipo-valuation-risk-1-trillion-ceiling-jay-ritter",
           "published": "2026-11-15"
-        },
-        {
-          "name": "Fortune: IPO matematika",
-          "url": "https://fortune.com/2026/11/03/anthropics-third-quarter-results-mean-ipo-math-and-history-are-not-on-its-side-analysts-say/",
-          "published": "2026-11-03"
         }
       ]
     },
     {
-      "id": "palo-alto-q1-fy27",
-      "date": "2026-11-19",
-      "kind": "earnings",
-      "title": "Palo Alto Networks pakėlė prognozę ir pakėlė kibernetinio saugumo akcijas",
-      "symbols": [
-        "NASDAQ:PANW",
-        "NASDAQ:CRWD",
-        "NASDAQ:ZS"
-      ],
-      "lead": "Palo Alto Networks paskelbė rekordinį ketvirtį, pakėlė metinę pajamų prognozę ir už 4,5 mlrd. $ perka DI startuolį Applied Compute. Lapkričio 18 d. akcija pakilo 9,9 %, kartu kilo ir kitos sektoriaus bendrovės.",
-      "facts": [
-        "Ketvirčio pajamos – 3,44 mlrd. $ (+39 %), LSEG lūkesčiai – 3,31 mlrd. $; koreguotas EPS – 1,05 $.",
-        "Metinė pajamų prognozė – 14,52–14,57 mlrd. $ (buvo 14,10–14,20 mlrd. $).",
-        "Naujos kartos saugumo ARR – 9,73 mlrd. $ (+66 %), likę įsipareigojimai (RPO) – 21,0 mlrd. $ (+35 %).",
-        "GAAP veiklos pelnas sumažėjo iki 96 mln. $ (prieš metus – 309 mln. $).",
-        "Lapkričio 18 d. CrowdStrike pakilo ~8 %, Fortinet ~6 %."
-      ],
-      "pro": [
-        {
-          "who": "Dipak Golechha, Palo Alto finansų direktorius",
-          "text": "Dėl dabartinės grėsmių aplinkos ir matomos paklausos metinė prognozė keliama reikšmingai.",
-          "source": "TradingKey"
-        },
-        {
-          "who": "Catharine Trebnick, Rosenblatt",
-          "text": "DI įrankiai pažeidžiamumus atskleidžia greičiau, nei įmonės spėja juos taisyti – tai didina saugumo paklausą.",
-          "source": "TradingKey"
-        }
-      ],
-      "con": [
-        {
-          "who": "Jefferies",
-          "text": "Nepaisant rezultatų, sumažino tikslinę kainą nuo 450 $ iki 400 $.",
-          "source": "TradingKey"
-        },
-        {
-          "who": "Rezultatų apžvalgininkai",
-          "text": "Pajamos auga, bet GAAP veiklos pelnas ir laisvųjų pinigų srauto marža per metus sumažėjo (56,2 % vs 69,2 %).",
-          "source": "TradingKey"
-        }
-      ],
-      "status": "media",
-      "sources": [
-        {
-          "name": "TradingKey: rezultatai ir Applied Compute",
-          "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262312701-palo-alto-networks-raises-outlook-applied-compute-deal-panw-389-93-november-19-2026-tradingkey",
-          "published": "2026-11-19"
-        },
-        {
-          "name": "Reuters / Investing.com: sektoriaus šuolis",
-          "url": "https://www.investing.com/news/stock-market-news/palo-altos-raised-sales-forecast-powers-cybersecurity-stock-rally-5038632",
-          "published": "2026-11-19"
-        },
-        {
-          "name": "Investopedia / Yahoo: lapkričio 18 d. rinkos",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-125812319.html",
-          "published": "2026-11-18"
-        }
-      ]
-    },
-    {
-      "id": "unh-cms-crush",
-      "date": "2026-11-19",
+      "id": "amd-hunterbrook",
+      "date": "2026-11-20",
       "kind": "company",
-      "title": "UnitedHealth per dvi dienas krito ~15 % dėl Medicare auditų plano",
+      "title": "AMD krito 7,7 % po Hunterbrook ataskaitos apie sąsajas su Kinija",
       "symbols": [
-        "NYSE:UNH",
-        "NYSE:CVS"
+        "NASDAQ:AMD"
       ],
-      "lead": "JAV sveikatos programų agentūra CMS pasiūlė susigrąžinti Medicare Advantage permokas nuo 2018 m. Sveikatos draudikų akcijos smarkiai krito: UnitedHealth lapkričio 18 d. – 10,2 %, Humana – 13 %.",
+      "lead": "Trumpųjų pozicijų investuotoja Hunterbrook lapkričio 19 d. paskelbė ataskaitą, kad AMD programinė įranga naudojama JAV sankcionuotos Kinijos bendrovės serveriuose. AMD kaltinimus atmeta; akcija tą dieną nukrito 7,7 %.",
       "facts": [
-        "Pasiūlymas (CMS jį vadina CRUSH) leistų auditų rezultatus ekstrapoliuoti atgal iki 2018 mokėjimo metų.",
-        "Pramonės mastu tai vertinama ~9 mlrd. $ per mokėjimo metus; UnitedHealth savo dalies nenurodė.",
-        "CMS įmokos sudarė 44 % UnitedHealth 2025 m. pajamų; veiklos marža 2025 m. sumažėjo iki 4,8 % (2024 m. – 8,1 %).",
-        "Lapkričio 17 d. UNH krito ~5 %, lapkričio 18 d. – dar 10,2 %; komentarai dėl taisyklės priimami iki 2027 m. sausio 19 d."
+        "Hunterbrook teigia, kad IEIT (JAV eksporto ribojimų sąraše nuo 2025 m. kovo) savo atnaujinimuose panaudojo bent šešias naujesnes AMD firmware versijas.",
+        "Ataskaitoje pripažįstama, kad neaišku, kaip IEIT gavo kodą, ir kad duomenys tiesiogiai eksporto pažeidimo neįrodo.",
+        "Hunterbrook fondas turi trumpąją poziciją AMD akcijose.",
+        "AMD 2025 m. Kinijai ir Honkongui priskyrė 7,75 mlrd. $ (~22 %) pajamų.",
+        "Akcija lapkričio 19 d. užsidarė ties 489,19 $ (−7,72 %)."
       ],
       "pro": [
         {
-          "who": "TIKR apžvalgininkai",
-          "text": "Po kritimo akcijos vertinimas (~17 kartų būsimo pelno) jau žemesnis nei 5 metų vidurkis (19), o galutinė suma dar neaiški.",
-          "source": "TIKR"
+          "who": "AMD",
+          "text": "Ataskaita iškreipia bendrovės veiklą; AMD laikosi JAV eksporto kontrolės taisyklių.",
+          "source": "Bloomberg per Motley Fool"
+        },
+        {
+          "who": "Johnny Rice, Motley Fool",
+          "text": "Kaltinimai siauresni, nei rodo antraštės, o trumpųjų pozicijų ataskaitas reikia vertinti atsargiai.",
+          "source": "Motley Fool"
         }
       ],
       "con": [
         {
-          "who": "TIKR apžvalgininkai",
-          "text": "Kol suma neįvertinta, nuolaida pagrįsta – grąžintinos permokos gali reikšmingai paveikti ir taip sumažėjusią maržą.",
-          "source": "TIKR"
+          "who": "Hunterbrook",
+          "text": "Teigia, kad AMD technologija pasiekia sankcionuotą Kinijos bendrovę ir kad panašūs atvejai anksčiau buvo laikomi pažeidimais.",
+          "source": "Motley Fool"
         },
         {
-          "who": "Rinkos apžvalgininkai",
-          "text": "Kritimą lėmė augantis nerimas dėl griežtesnės sveikatos draudikų priežiūros apskritai.",
-          "source": "Investopedia"
+          "who": "Johnny Rice, Motley Fool",
+          "text": "Ataskaita dar vienas ženklas, kad DI akcijų ralyje daugėja įtrūkimų.",
+          "source": "Motley Fool"
         }
       ],
       "status": "media",
       "sources": [
         {
-          "name": "TIKR: CMS CRUSH pasiūlymas",
-          "url": "https://www.tikr.com/blog/unitedhealth-sinks-5-on-medicare-advantage-audit-plan-as-cms-moves-to-crush-medical-fraud",
-          "published": "2026-11-17"
+          "name": "Motley Fool: Hunterbrook ataskaita apie AMD",
+          "url": "https://www.fool.com/investing/2026/11/19/first-nvidia-now-amd-a-short-seller-just-put-its-china-business-under-the-microscope/",
+          "published": "2026-11-19"
         },
         {
-          "name": "Investopedia / Yahoo: lapkričio 18 d. rinkos",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-125812319.html",
-          "published": "2026-11-18"
+          "name": "CNBC: AMD krinta po trumpųjų pozicijų ataskaitos",
+          "url": "https://www.cnbc.com/2026/11/19/amd-falls-on-short-seller-report-of-alleged-china-exposure.html",
+          "published": "2026-11-19"
         },
         {
-          "name": "FinChannel: UNH −10,21 %",
-          "url": "https://finchannel.com/unitedhealth-stock-drops-10-as-medicare-audit-proposal-unsettles-insurers/142214/american-business-trends/2026/11/",
-          "published": "2026-11-18"
+          "name": "Motley Fool / Yahoo: lapkričio 19 d. rinkos",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nov-19-222025646.html",
+          "published": "2026-11-19"
+        }
+      ]
+    },
+    {
+      "id": "pdd-q3-2026",
+      "date": "2026-11-20",
+      "kind": "earnings",
+      "title": "PDD (Temu) pelnas viršijo lūkesčius, nors pajamos nepaaugo",
+      "symbols": [
+        "NASDAQ:PDD"
+      ],
+      "lead": "Temu ir Pinduoduo valdytoja PDD Holdings lapkričio 19 d. paskelbė trečiojo ketvirčio rezultatus: pajamos beveik nepakito, bet pelnas viršijo analitikų lūkesčius. Akcija tą dieną pakilo apie 11 %.",
+      "facts": [
+        "Pajamos – 108,3 mlrd. juanių (16,2 mlrd. $), +0,1 % per metus; analitikai tikėjosi ~116 mlrd.",
+        "Reklamos pajamos +12 % (59,8 mlrd.), sandorių paslaugų −12 % (48,5 mlrd.).",
+        "Veiklos pelnas – 31,2 mlrd. juanių (prieš metus – 25 mlrd.); rinkodaros išlaidos sumažėjo ~17 %.",
+        "Koreguotas pelnas vienai ADS – 21,04 juanio, analitikų vidurkis – 18,93.",
+        "Vadovybė konkrečių prognozių nepateikė ir tęsia 100 mlrd. juanių paramos pardavėjams programą."
+      ],
+      "pro": [
+        {
+          "who": "Investing.com apžvalga",
+          "text": "Pabrėžia pelno viršijimą ir ~30 % koreguotą veiklos maržą.",
+          "source": "Investing.com"
+        },
+        {
+          "who": "Lei Chen, PDD vadovas",
+          "text": "Bendrovė tęs investicijas į tiekimo grandinę, kad platforma būtų atsparesnė.",
+          "source": "PDD pranešimas"
+        }
+      ],
+      "con": [
+        {
+          "who": "Investing.com apžvalga",
+          "text": "Mini sustojusį pajamų augimą, krentančias sandorių pajamas ir aršią konkurenciją.",
+          "source": "Investing.com"
+        },
+        {
+          "who": "Investing.com apžvalga",
+          "text": "Prekybos ir mokesčių neapibrėžtumas bei didelės investicijos gali spausti pelną.",
+          "source": "Investing.com"
+        }
+      ],
+      "status": "primary",
+      "sources": [
+        {
+          "name": "PDD Holdings (SEC 6-K): Q3 2026 rezultatai",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001737806/000110465926130116/tm2630261d1_ex99-1.htm",
+          "published": "2026-11-19"
+        },
+        {
+          "name": "Investing.com: PDD konferencinis pokalbis",
+          "url": "https://www.investing.com/news/transcripts/earnings-call-transcript-pdd-beats-q3-2026-eps-revenue-misses-estimates-93CH-5039096",
+          "published": "2026-11-19"
+        },
+        {
+          "name": "JournalArta: JAV rinkų atidarymas lapkričio 20 d.",
+          "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/",
+          "published": "2026-11-20"
         }
       ]
     },
@@ -377,6 +385,67 @@
           "name": "StockTitan: rezultatai vs prognozė",
           "url": "https://www.stocktitan.net/articles/nvidia-q3-fiscal-2027-earnings-revenue-outlook",
           "published": "2026-11-17"
+        }
+      ]
+    },
+    {
+      "id": "palo-alto-q1-fy27",
+      "date": "2026-11-19",
+      "kind": "earnings",
+      "title": "Palo Alto Networks pakėlė prognozę ir pakėlė kibernetinio saugumo akcijas",
+      "symbols": [
+        "NASDAQ:PANW",
+        "NASDAQ:CRWD",
+        "NASDAQ:ZS"
+      ],
+      "lead": "Palo Alto Networks paskelbė rekordinį ketvirtį, pakėlė metinę pajamų prognozę ir už 4,5 mlrd. $ perka DI startuolį Applied Compute. Lapkričio 18 d. akcija pakilo 9,9 %, kartu kilo ir kitos sektoriaus bendrovės.",
+      "facts": [
+        "Ketvirčio pajamos – 3,44 mlrd. $ (+39 %), LSEG lūkesčiai – 3,31 mlrd. $; koreguotas EPS – 1,05 $.",
+        "Metinė pajamų prognozė – 14,52–14,57 mlrd. $ (buvo 14,10–14,20 mlrd. $).",
+        "Naujos kartos saugumo ARR – 9,73 mlrd. $ (+66 %), likę įsipareigojimai (RPO) – 21,0 mlrd. $ (+35 %).",
+        "GAAP veiklos pelnas sumažėjo iki 96 mln. $ (prieš metus – 309 mln. $).",
+        "Lapkričio 18 d. CrowdStrike pakilo ~8 %, Fortinet ~6 %."
+      ],
+      "pro": [
+        {
+          "who": "Dipak Golechha, Palo Alto finansų direktorius",
+          "text": "Dėl dabartinės grėsmių aplinkos ir matomos paklausos metinė prognozė keliama reikšmingai.",
+          "source": "TradingKey"
+        },
+        {
+          "who": "Catharine Trebnick, Rosenblatt",
+          "text": "DI įrankiai pažeidžiamumus atskleidžia greičiau, nei įmonės spėja juos taisyti – tai didina saugumo paklausą.",
+          "source": "TradingKey"
+        }
+      ],
+      "con": [
+        {
+          "who": "Jefferies",
+          "text": "Nepaisant rezultatų, sumažino tikslinę kainą nuo 450 $ iki 400 $.",
+          "source": "TradingKey"
+        },
+        {
+          "who": "Rezultatų apžvalgininkai",
+          "text": "Pajamos auga, bet GAAP veiklos pelnas ir laisvųjų pinigų srauto marža per metus sumažėjo (56,2 % vs 69,2 %).",
+          "source": "TradingKey"
+        }
+      ],
+      "status": "media",
+      "sources": [
+        {
+          "name": "TradingKey: rezultatai ir Applied Compute",
+          "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262312701-palo-alto-networks-raises-outlook-applied-compute-deal-panw-389-93-november-19-2026-tradingkey",
+          "published": "2026-11-19"
+        },
+        {
+          "name": "Reuters / Investing.com: sektoriaus šuolis",
+          "url": "https://www.investing.com/news/stock-market-news/palo-altos-raised-sales-forecast-powers-cybersecurity-stock-rally-5038632",
+          "published": "2026-11-19"
+        },
+        {
+          "name": "Investopedia / Yahoo: lapkričio 18 d. rinkos",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-125812319.html",
+          "published": "2026-11-18"
         }
       ]
     }

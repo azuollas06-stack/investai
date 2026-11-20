@@ -1,0 +1,292 @@
+{
+  "date": "2026-11-20",
+  "weekday": "penktadienis",
+  "title": "DI išpardavimas plinta: S&P 500 −2 %, Azijoje lustai −5 %",
+  "lead": "Ketvirtadienį visi trys JAV indeksai krito daugiau nei 2 %, o penktadienį lustų gamintojų akcijos smuko visame pasaulyje. Anthropic pirmą dieną pakilo 17 %, bet antrą dieną prieš atidarymą krito apie 10 %; AMD smukdė trumpųjų pozicijų ataskaita, PDD pakilo po pelno.",
+  "generated_at": "2026-11-20T17:30:00+02:00",
+  "prices_available": false,
+  "sections": [
+    {
+      "id": "rinka",
+      "title": "Rinkos nuotaika",
+      "items": [
+        {
+          "headline": "JAV indeksai ketvirtadienį krito daugiau nei 2 %, penktadienį spaudimas tęsiasi",
+          "text": "Lapkričio 19 d. S&P 500 nukrito 2,02 % iki 7 175,83 (šešta kritimo diena iš eilės), Nasdaq Composite – 2,25 % iki 23 879,2, Dow Jones – 2,19 % (−1 101 punktas) iki 49 097,06. Penktadienį atsidarius Nasdaq buvo −1,39 %, S&P 500 −0,51 %, o Dow +0,39 %. Volatilumo indeksas VIX ryte siekė ~31 – aukščiausią lygį nuo kovo.",
+          "why": "Rytinis kilimas prieš Anthropic debiutą ketvirtadienį išblėso, o šaltiniai kritimą sieja su abejonėmis dėl DI investicijų atsipirkimo, Nvidia vadovybės pokyčiais ir lūkesčiais, kad FED gruodį kels palūkanas.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "Motley Fool / Yahoo: lapkričio 19 d. rinkos",
+              "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nov-19-222025646.html",
+              "published": "2026-11-19",
+              "type": "media"
+            },
+            {
+              "name": "JournalArta: DI išpardavimas gilėja",
+              "url": "https://journalarta.com/en/2026/11/20/stock-market-today-nasdaq-sp-500-futures-slide-as-ai-selloff-deepens/",
+              "published": "2026-11-20",
+              "type": "media"
+            },
+            {
+              "name": "JournalArta: JAV rinkų atidarymas lapkričio 20 d.",
+              "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/",
+              "published": "2026-11-20",
+              "type": "media"
+            },
+            {
+              "name": "StockTitan: rinka lapkričio 20 d. (cituoja CNBC)",
+              "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-20-2026",
+              "published": "2026-11-20",
+              "type": "media"
+            }
+          ]
+        },
+        {
+          "headline": "Azijoje – didžiausias kritimas: Nikkei −5 %, Kospi −5,2 %, Taiex −5,7 %",
+          "text": "Penktadienį Japonijos Nikkei 225 nukrito 5,06 %, Pietų Korėjos Kospi – 5,21 %, Taivano Taiex – 5,65 % (pagal LSEG, tai gali būti didžiausias savaitinis kritimas nuo 1997 m. spalio). SoftBank Group smuko 14,5 %, Tokyo Electron – 7,1 %, Samsung Electronics – apie 7 %. Europoje ASML krito apie 6 %, DAX – apie 2 %.",
+          "why": "Lustų gamintojai ir su DI susijusios bendrovės sudaro didelę Azijos indeksų dalį, todėl JAV technologijų akcijų kritimas ten atsiliepia stipriausiai.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "StockTitan: rinka lapkričio 20 d. (cituoja CNBC)",
+              "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-20-2026",
+              "published": "2026-11-20",
+              "type": "media"
+            },
+            {
+              "name": "JournalArta: JAV rinkų atidarymas lapkričio 20 d.",
+              "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/",
+              "published": "2026-11-20",
+              "type": "media"
+            },
+            {
+              "name": "InvestAI kainų duomenys (Yahoo Finance)",
+              "url": "https://azuollas06-stack.github.io/investai/",
+              "published": "2026-11-20",
+              "type": "media"
+            }
+          ]
+        },
+        {
+          "headline": "Pajamingumas nukrito žemiau 5 %, auksas ir nafta pigo",
+          "text": "JAV 10 metų obligacijų pajamingumas nukrito iki ~4,99 % (ketvirtadienį – 5,05 %), nes investuotojai ieškojo saugesnio turto. Brent nafta atpigo 3,7 % iki ~88,6 $, auksas – 2,4 % iki ~3 580 $ už unciją, sidabras – 5,4 %. Bitcoin – apie 61 400 $ (−0,9 %). Šiandien skelbiamas galutinis Mičigano universiteto vartotojų nuotaikų indeksas (preliminarus – 51,0).",
+          "why": "Pajamingumo kritimas rodo pabėgimą į saugesnį turtą; kartu auksas pigo dėl lūkesčių, kad JAV palūkanos išliks aukštos.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "JournalArta: JAV rinkų atidarymas lapkričio 20 d.",
+              "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/",
+              "published": "2026-11-20",
+              "type": "media"
+            },
+            {
+              "name": "StockTitan: rinka lapkričio 20 d. (cituoja CNBC)",
+              "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-20-2026",
+              "published": "2026-11-20",
+              "type": "media"
+            }
+          ]
+        },
+        {
+          "headline": "Baltijos biržos – nedideliame minuse",
+          "text": "Apie 15 val. Vilniaus OMXV indeksas buvo −0,59 %, Rygos OMXR −0,61 %, Talino OMXT −0,45 %. Tarp pokyčių: Rokiškio sūris +2,3 %, KN Energies −4,2 %, AUGA group −6,3 %, LHV Group −0,6 %, Ignitis grupė −0,2 %.",
+          "why": "Baltijos rinka pasaulinį technologijų išpardavimą jaučia silpniau, nes čia vyrauja energetikos, bankų ir vartojimo bendrovės. Duomenys – dienos eigoje, ne uždarymo.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "LHV finantsportaal: Baltijos rinka",
+              "url": "https://news.fp.lhv.ee/en/baltiturg",
+              "published": "2026-11-20",
+              "type": "media"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "imones",
+      "title": "Įmonių naujienos",
+      "items": [
+        {
+          "headline": "Anthropic pirmą dieną +17 %, antrą – prieš atidarymą apie −10 %",
+          "tags": [
+            "ANT",
+            "IPO"
+          ],
+          "text": "Lapkričio 19 d. ANT pirmasis sandoris įvyko po 111,50 $, dienos aukščiausia kaina – 115,10 $, uždarymas – 97,17 $ (+17,1 % nuo 83 $ IPO kainos). Penktadienį prieš prekybos pradžią akcija buvo apie 87,5–88,4 $ (−9–10 %). Šaltiniai skirtingai nurodo pritrauktą sumą: 81,3 mlrd. $ (980 mln. akcijų po 83 $) arba 93,5 mlrd. $ (su papildomu paskirstymu) ir ~119,5 mlrd. $ su lygiagrečiu privačiu platinimu.",
+          "why": "Debiutas buvo laikomas DI sektoriaus nuotaikų testu; antros dienos kritimas sutapo su visos rinkos išpardavimu. InvestAI turinį rengia Claude (Anthropic modelis), todėl pateikiami tik šaltinių faktai.",
+          "disclosure": "InvestAI turinį rengia DI modelis Claude, kurį kuria Anthropic. Todėl čia pateikiami tik šaltinių faktai ir abiejų pusių nuomonės, be jokio savo vertinimo.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "AP / BNN Bloomberg: Anthropic pirmoji prekybos diena",
+              "url": "https://www.bnnbloomberg.ca/business/company-news/2026/11/19/anthropic-set-to-begin-trading-as-a-us15-trillion-company-in-the-biggest-ipo-on-record/",
+              "published": "2026-11-19",
+              "type": "media"
+            },
+            {
+              "name": "Forbes: Anthropic uždarymas 97 $",
+              "url": "https://www.forbes.com/sites/fionariley/2026/11/19/anthropic-ipo-live-stock-closes-day-at-97-up-more-than-17/",
+              "published": "2026-11-19",
+              "type": "media"
+            },
+            {
+              "name": "24/7 Wall St.: antroji Anthropic prekybos diena",
+              "url": "https://247wallst.com/investing/2026/11/20/anthropic-stock-falls-9-6-before-the-bell-on-its-second-day-of-trading-facebook-and-uber-both-fell-11-on-day-2-heres-what-happened-next/",
+              "published": "2026-11-20",
+              "type": "media"
+            },
+            {
+              "name": "Seoul Economic Daily: Anthropic antrą dieną −10 %",
+              "url": "https://en.sedaily.com/world/2026/11/20/anthropic-shares-sink-10-percent-on-second-day-as-ai-trade",
+              "published": "2026-11-20",
+              "type": "media"
+            }
+          ]
+        },
+        {
+          "headline": "AMD −7,7 % po Hunterbrook trumpųjų pozicijų ataskaitos apie Kiniją",
+          "tags": [
+            "AMD",
+            "lustai"
+          ],
+          "text": "Hunterbrook, kurios fondas turi trumpąją poziciją AMD akcijose, teigia, kad AMD programinė įranga (firmware) naudojama Kinijos serverių gamintojos IEIT, įtrauktos į JAV eksporto ribojimų sąrašą, serveriuose; pati ataskaita pripažįsta, kad tiesiogiai pažeidimo neįrodo. AMD Bloomberg teigė, kad ataskaita iškreipia jos veiklą ir kad ji laikosi eksporto kontrolės taisyklių. Akcija lapkričio 19 d. užsidarė ties 489,19 $ (−7,72 %).",
+          "why": "Po Nvidia eksporto apribojimų investuotojai jautriai reaguoja į bet kokią lustų gamintojų riziką, susijusią su Kinija.",
+          "status": "media",
+          "sources": [
+            {
+              "name": "Motley Fool: Hunterbrook ataskaita apie AMD",
+              "url": "https://www.fool.com/investing/2026/11/19/first-nvidia-now-amd-a-short-seller-just-put-its-china-business-under-the-microscope/",
+              "published": "2026-11-19",
+              "type": "media"
+            },
+            {
+              "name": "CNBC: AMD krinta po trumpųjų pozicijų ataskaitos",
+              "url": "https://www.cnbc.com/2026/11/19/amd-falls-on-short-seller-report-of-alleged-china-exposure.html",
+              "published": "2026-11-19",
+              "type": "media"
+            },
+            {
+              "name": "Motley Fool / Yahoo: lapkričio 19 d. rinkos",
+              "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nov-19-222025646.html",
+              "published": "2026-11-19",
+              "type": "media"
+            }
+          ]
+        },
+        {
+          "headline": "PDD (Temu) pelnas viršijo lūkesčius, akcija +11 %",
+          "tags": [
+            "PDD",
+            "rezultatai"
+          ],
+          "text": "PDD Holdings trečiojo ketvirčio pajamos – 108,3 mlrd. juanių (16,2 mlrd. $), beveik nepakitusios (+0,1 %); internetinės reklamos pajamos +12 %, sandorių paslaugų −12 %. Veiklos pelnas išaugo iki 31,2 mlrd. juanių (praėjusiais metais – 25 mlrd.), nes rinkodaros išlaidos sumažėjo ~17 %. Koreguotas pelnas vienai ADS – 21,04 juanio (analitikų vidurkis – 18,93), pajamos buvo mažesnės nei tikėtasi (~116 mlrd.). Akcija lapkričio 19 d. pakilo ~11 % iki 86 $.",
+          "why": "Rinka teigiamai įvertino pelningumą ir išlaidų mažinimą, nors pajamų augimas sustojo.",
+          "status": "primary",
+          "sources": [
+            {
+              "name": "PDD Holdings (SEC 6-K): Q3 2026 rezultatai",
+              "url": "https://www.sec.gov/Archives/edgar/data/0001737806/000110465926130116/tm2630261d1_ex99-1.htm",
+              "published": "2026-11-19",
+              "type": "primary"
+            },
+            {
+              "name": "Investing.com: PDD konferencinis pokalbis",
+              "url": "https://www.investing.com/news/transcripts/earnings-call-transcript-pdd-beats-q3-2026-eps-revenue-misses-estimates-93CH-5039096",
+              "published": "2026-11-19",
+              "type": "media"
+            },
+            {
+              "name": "JournalArta: JAV rinkų atidarymas lapkričio 20 d.",
+              "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/",
+              "published": "2026-11-20",
+              "type": "media"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "obligacijos",
+      "title": "Obligacijos",
+      "items": [
+        {
+          "headline": "Šiandien baigiasi Bigbank ir Civinity obligacijų pasirašymas",
+          "tags": [
+            "Bigbank",
+            "Civinity",
+            "obligacijos"
+          ],
+          "text": "Bigbank subordinuotų 10 metų obligacijų (6,5 % kuponas, tikslas – iki 15 mln. €, esant paklausai iki 25 mln. €) ir Civinity obligacijų pasirašymas baigiasi lapkričio 20 d.",
+          "why": "Rezultatų paskelbimas parodys, ar išliko paklausa Baltijos įmonių skolai; neseniai Inbank emisija buvo padidinta iki 15 mln. € (paklausa – 27,9 mln. €).",
+          "status": "media",
+          "sources": [
+            {
+              "name": "KPI Research: Baltijos rinkos savaitės apžvalga",
+              "url": "https://kpiresearch.substack.com/p/baltic-stock-market-weekly-review-c45",
+              "published": "2026-11-16",
+              "type": "media"
+            }
+          ]
+        },
+        {
+          "headline": "Lietuvos bankas patvirtino Urbo banko Tier 2 obligacijų programą iki 15 mln. €",
+          "tags": [
+            "Urbo bankas",
+            "obligacijos"
+          ],
+          "text": "Pagal lapkričio 20 d. GlobeNewswire pranešimo antraštę, Lietuvos bankas patvirtino Urbo banko subordinuotų (Tier 2) obligacijų programos bazinį prospektą, kurios nominali vertė – iki 15 mln. €.",
+          "why": "Tai leidžia bankui ateityje platinti obligacijas mažmeniniams investuotojams; subordinuotos obligacijos bankroto atveju grąžinamos po kitų kreditorių.",
+          "status": "unverified",
+          "note": "Perskaityta tik pranešimo antraštė; kuponas, terminai ir platinimo datos šaltinyje nepatikrinti.",
+          "sources": [
+            {
+              "name": "GlobeNewswire / Manila Times: Urbo banko Tier 2 prospektas",
+              "url": "https://www.manilatimes.net/2026/11/20/tmt-newswire/globenewswire/the-bank-of-lithuania-has-approved-the-base-prospectus-of-the-tier-2-subordinated-bond-programme-of-urbo-bankas-uab-with-a-nominal-value-of-up-to-eur-15000000/2475103",
+              "published": "2026-11-20",
+              "type": "media"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "calendar": [
+    {
+      "date": "2026-11-24",
+      "text": "Analog Devices, Medtronic (prieš atidarymą), Workday, Autodesk (po uždarymo) rezultatai",
+      "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/"
+    },
+    {
+      "date": "2026-11-25",
+      "text": "Deere rezultatai; Rheinmetall investuotojų diena (iki lapkričio 27 d.)",
+      "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/"
+    },
+    {
+      "date": "2026-11-29",
+      "text": "Sun Investment Group obligacijų išpirkimo terminas (pratęsti nepavyko)",
+      "url": "https://kpiresearch.substack.com/p/baltic-stock-market-weekly-review-c45"
+    },
+    {
+      "date": "2026-11-30",
+      "text": "Baigiasi PN Project obligacijų pasirašymas",
+      "url": "https://view.news.eu.nasdaq.com/view?id=1475833&lang=en"
+    },
+    {
+      "date": "2026-12-09",
+      "text": "FED palūkanų sprendimas",
+      "url": "https://nexo.com/blog/markets-today-november-18"
+    },
+    {
+      "date": "2026-12-10",
+      "text": "Ignitis grupės neeilinis akcininkų susirinkimas (dividendai)",
+      "url": "https://www.globenewswire.com/news-release/2026/11/11/3400468/0/en/ignitis-group-s-updated-financial-calendar-2026.html"
+    },
+    {
+      "date": "2026-12-16",
+      "text": "DelfinGroup dividendų ex-data (0,0326 € akcijai)",
+      "url": "https://kpiresearch.substack.com/p/baltic-stock-market-weekly-review-c45"
+    }
+  ]
+}

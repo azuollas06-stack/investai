@@ -1,34 +1,35 @@
 {
-  "updated": "2026-11-19",
+  "updated": "2026-11-20",
   "note": "Paaiškinimai, kodėl pasikeitė aktyvų kainos. Raktas – TradingView simbolis. Pildo kasdienė užduotis (žr. TURINIO_GIDAS.md).",
   "items": {
     "NASDAQ:NVDA": {
-      "date": "2026-11-19",
+      "date": "2026-11-20",
       "direction": "down",
-      "move": "−2,9 % lapkričio 18 d. (iki 150,96 $) nepaisant rezultatų",
-      "headline": "Po rezultatų pradinis šuolis išblėso – akcija dieną baigė žemiau",
+      "move": "−3,3 % lapkričio 19 d. (iki 145,98 $); ≈ −39 % nuo 52 sav. piko",
+      "headline": "Kritimas tęsiasi nepaisant rezultatų – vadovybės ir eksporto klausimai",
       "points": [
-        "Lapkričio 17 d. paskelbtos ketvirčio pajamos – 115,8 mlrd. $ (+103 %), kito ketvirčio prognozė – ~130 mlrd. $.",
-        "Lapkričio 18 d. akcija iš pradžių kilo, tačiau dieną baigė apie 2,9 % žemiau.",
-        "Investuotojų nuotaikas tebeslegia vadovybės klausimai (Jensen Huang pasitraukimas) ir eksporto į Kiniją ribojimai; lapkričio 19 d. Taivane TSMC nukrito 3,5 %."
+        "Lapkričio 19 d. akcija nukrito 3,3 % iki 145,98 $, prekybos apyvarta ~95 % viršijo 3 mėn. vidurkį.",
+        "Šaltiniai mini Jensen Huang pasitraukimą iš generalinio direktoriaus pareigų (lapkričio 12 d.) ir pirmadienį sugriežtintą taisyklę, ribojančią Kinijos bendrovių nuotolinę prieigą prie Nvidia lustų.",
+        "Lapkričio 20 d. prieš atidarymą akcija buvo apie 142,7 $ (−2,2 %).",
+        "Ketvirčio pajamos (115,8 mlrd. $, +103 %) ir prognozė (~130 mlrd. $) lūkesčius viršijo."
       ],
-      "context": "Bendrovė tikisi, kad bendrasis pelningumas kitą ketvirtį sumažės iki 71–72 %. Gruodžio 9 d. – FED sprendimas, kuris veikia visą technologijų sektorių.",
-      "status": "primary",
+      "context": "Gruodžio 9 d. – FED sprendimas, kuris veikia visą technologijų sektorių.",
+      "status": "media",
       "sources": [
         {
-          "name": "NVIDIA: Q3 FY2027 rezultatai",
-          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2027",
-          "published": "2026-11-17"
-        },
-        {
-          "name": "Investopedia / Yahoo: lapkričio 18 d. rinkos",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-125812319.html",
-          "published": "2026-11-18"
-        },
-        {
-          "name": "AP / BNN Bloomberg: pasaulio rinkos",
-          "url": "https://www.bnnbloomberg.ca/markets/2026/11/19/world-shares-are-mixed-and-us-futures-climb-ahead-of-anthropics-blockbuster-ipo/",
+          "name": "Motley Fool / Yahoo: lapkričio 19 d. rinkos",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nov-19-222025646.html",
           "published": "2026-11-19"
+        },
+        {
+          "name": "StockTitan: rinka lapkričio 20 d. (cituoja CNBC)",
+          "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-20-2026",
+          "published": "2026-11-20"
+        },
+        {
+          "name": "JournalArta: DI išpardavimas gilėja",
+          "url": "https://journalarta.com/en/2026/11/20/stock-market-today-nasdaq-sp-500-futures-slide-as-ai-selloff-deepens/",
+          "published": "2026-11-20"
         }
       ]
     },
@@ -311,6 +312,221 @@
           "name": "KN Energies: 9 mėn. finansinė informacija",
           "url": "https://www.globenewswire.com/news-release/2026/11/19/3406300/0/en/ab-kn-energies-unaudited-financial-information-for-the-nine-months-of-2026-with-growing-terminal-activity-volumes-ebitda-increased-by-6-to-eur-43-2-million.html",
           "published": "2026-11-19"
+        }
+      ]
+    },
+    "NASDAQ:AMD": {
+      "date": "2026-11-20",
+      "direction": "down",
+      "move": "−7,72 % lapkričio 19 d. (iki 489,19 $); ≈ −16 % per savaitę",
+      "headline": "Trumpųjų pozicijų fondas Hunterbrook susiejo AMD programinę įrangą su sankcionuota Kinijos bendrove",
+      "points": [
+        "Lapkričio 19 d. Hunterbrook paskelbė, kad AMD firmware randama Kinijos serverių gamintojos IEIT (JAV eksporto ribojimų sąraše nuo 2025 m. kovo) atnaujinimuose; ataskaita pripažįsta, kad tiesiogiai pažeidimo neįrodo.",
+        "Hunterbrook fondas turi trumpąją poziciją AMD akcijose, t. y. uždirba, jei kaina krinta.",
+        "AMD teigė, kad ataskaita iškreipia jos veiklą ir kad bendrovė laikosi JAV eksporto kontrolės taisyklių.",
+        "Tą pačią dieną visas lustų sektorius krito kartu su Nvidia; penktadienį prieš atidarymą AMD buvo dar apie −4 %."
+      ],
+      "context": "Pagal AMD ataskaitas, 2025 m. Kinijai ir Honkongui teko ~22 % pajamų (7,75 mlrd. $).",
+      "status": "media",
+      "sources": [
+        {
+          "name": "Motley Fool: Hunterbrook ataskaita apie AMD",
+          "url": "https://www.fool.com/investing/2026/11/19/first-nvidia-now-amd-a-short-seller-just-put-its-china-business-under-the-microscope/",
+          "published": "2026-11-19"
+        },
+        {
+          "name": "CNBC: AMD krinta po trumpųjų pozicijų ataskaitos",
+          "url": "https://www.cnbc.com/2026/11/19/amd-falls-on-short-seller-report-of-alleged-china-exposure.html",
+          "published": "2026-11-19"
+        },
+        {
+          "name": "Motley Fool / Yahoo: lapkričio 19 d. rinkos",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nov-19-222025646.html",
+          "published": "2026-11-19"
+        },
+        {
+          "name": "StockTitan: rinka lapkričio 20 d. (cituoja CNBC)",
+          "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-20-2026",
+          "published": "2026-11-20"
+        }
+      ]
+    },
+    "NASDAQ:ANT": {
+      "date": "2026-11-20",
+      "direction": "mixed",
+      "move": "+17,1 % pirmą dieną (97,17 $), antrą dieną prieš atidarymą ≈ −10 %",
+      "headline": "Rekordinis IPO: pirmą dieną kilo, antrą krenta kartu su DI sektoriumi",
+      "points": [
+        "IPO kaina – 83 $ (intervalas buvo 70–78 $); lapkričio 19 d. pirmasis sandoris – 111,50 $, aukščiausia kaina – 115,10 $, uždarymas – 97,17 $.",
+        "Lapkričio 20 d. prieš prekybos pradžią akcija buvo apie 87,5–88,4 $ – tuo metu visame pasaulyje krito lustų ir DI akcijos.",
+        "Seoul Economic Daily kritimą taip pat sieja su papildomo akcijų paskirstymo (greenshoe) įvykdymu.",
+        "NYU profesorius Aswath Damodaran savo modelyje akcijos vertę įvertino 76 $ – žemiau IPO kainos; Goldman Sachs analitikai, anot Seoul Economic Daily, tikisi teigiamų laisvųjų pinigų srautų 2030 m."
+      ],
+      "context": "Šaltiniai skirtingai nurodo pritrauktą sumą (81,3–119,5 mlrd. $, priklausomai nuo to, ar įskaičiuotas papildomas paskirstymas ir privatus platinimas).",
+      "disclosure": "InvestAI turinį rengia DI modelis Claude, kurį kuria Anthropic. Todėl čia pateikiami tik šaltinių faktai ir abiejų pusių nuomonės, be jokio savo vertinimo.",
+      "status": "media",
+      "sources": [
+        {
+          "name": "AP / BNN Bloomberg: Anthropic pirmoji prekybos diena",
+          "url": "https://www.bnnbloomberg.ca/business/company-news/2026/11/19/anthropic-set-to-begin-trading-as-a-us15-trillion-company-in-the-biggest-ipo-on-record/",
+          "published": "2026-11-19"
+        },
+        {
+          "name": "Forbes: Anthropic uždarymas 97 $",
+          "url": "https://www.forbes.com/sites/fionariley/2026/11/19/anthropic-ipo-live-stock-closes-day-at-97-up-more-than-17/",
+          "published": "2026-11-19"
+        },
+        {
+          "name": "24/7 Wall St.: antroji Anthropic prekybos diena",
+          "url": "https://247wallst.com/investing/2026/11/20/anthropic-stock-falls-9-6-before-the-bell-on-its-second-day-of-trading-facebook-and-uber-both-fell-11-on-day-2-heres-what-happened-next/",
+          "published": "2026-11-20"
+        },
+        {
+          "name": "24/7 Wall St.: A. Damodarano vertinimas",
+          "url": "https://247wallst.com/investing/2026/11/20/anthropic-shares-are-tumbling-heres-what-nyus-dean-of-valuation-says-its-really-worth/",
+          "published": "2026-11-20"
+        },
+        {
+          "name": "Seoul Economic Daily: Anthropic antrą dieną −10 %",
+          "url": "https://en.sedaily.com/world/2026/11/20/anthropic-shares-sink-10-percent-on-second-day-as-ai-trade",
+          "published": "2026-11-20"
+        }
+      ]
+    },
+    "NASDAQ:PDD": {
+      "date": "2026-11-20",
+      "direction": "up",
+      "move": "+11 % lapkričio 19 d. (iki 86 $)",
+      "headline": "Pelnas viršijo lūkesčius dėl mažesnių rinkodaros išlaidų",
+      "points": [
+        "Q3 pajamos – 108,3 mlrd. juanių (+0,1 %), mažesnės už analitikų lūkesčius (~116 mlrd.).",
+        "Veiklos pelnas – 31,2 mlrd. juanių (prieš metus 25 mlrd.); rinkodaros išlaidos sumažėjo ~17 %.",
+        "Koreguotas pelnas vienai ADS – 21,04 juanio, analitikų vidurkis – 18,93.",
+        "Reklamos pajamos +12 %, sandorių paslaugų (įsk. Temu) −12 %."
+      ],
+      "context": "Vadovybė konkrečių ateities prognozių nepateikė ir kalba apie „strateginių investicijų etapą“.",
+      "status": "primary",
+      "sources": [
+        {
+          "name": "PDD Holdings (SEC 6-K): Q3 2026 rezultatai",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001737806/000110465926130116/tm2630261d1_ex99-1.htm",
+          "published": "2026-11-19"
+        },
+        {
+          "name": "Investing.com: PDD konferencinis pokalbis",
+          "url": "https://www.investing.com/news/transcripts/earnings-call-transcript-pdd-beats-q3-2026-eps-revenue-misses-estimates-93CH-5039096",
+          "published": "2026-11-19"
+        },
+        {
+          "name": "JournalArta: JAV rinkų atidarymas lapkričio 20 d.",
+          "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/",
+          "published": "2026-11-20"
+        }
+      ]
+    },
+    "NASDAQ:NBIS": {
+      "date": "2026-11-20",
+      "direction": "down",
+      "move": "−9,4 % lapkričio 19 d. (iki 96,92 $); ≈ −25 % per savaitę",
+      "headline": "DI infrastruktūros (neocloud) akcijos krenta kartu su sektoriumi",
+      "points": [
+        "Konkrečios lapkričio 19 d. Nebius naujienos šaltiniuose nerasta – akcija krito kartu su lustų ir DI sektoriumi.",
+        "Lapkričio 12 d. akcija krito ~14 %: 2026 m. pajamos tikėtinos 3–3,4 mlrd. $ intervalo apačioje, o investicijų planas padidintas iki 27 mlrd. $ (2027 m. – 40–45 mlrd. $).",
+        "Lapkričio 13 d. po Nvidia vadovo pasitraukimo Reuters minėjo naujus nerimo signalus dėl DI finansavimo; Nebius tądien užsidarė −9,9 %."
+      ],
+      "status": "unverified",
+      "sources": [
+        {
+          "name": "InvestAI kainų duomenys (Yahoo Finance)",
+          "url": "https://azuollas06-stack.github.io/investai/",
+          "published": "2026-11-20"
+        },
+        {
+          "name": "24/7 Wall St. / Webull: Nebius prognozė ir investicijos",
+          "url": "https://www.webull.com/news/15911150097712128",
+          "published": "2026-11-12"
+        },
+        {
+          "name": "FourWeekMBA: CoreWeave ir Nebius po Nvidia vadovo pasitraukimo",
+          "url": "https://fourweekmba.com/ai-coreweave-nebius-lose-16b-in-2-days-after-nvidia-ceo-exit/",
+          "published": "2026-11-13"
+        }
+      ]
+    },
+    "NASDAQ:CRWV": {
+      "date": "2026-11-20",
+      "direction": "down",
+      "move": "−6,1 % lapkričio 19 d. (iki 44,91 $); ≈ −21 % per savaitę",
+      "headline": "Spaudimas dėl DI finansavimo ir priklausomybės nuo Nvidia",
+      "points": [
+        "Konkrečios lapkričio 19 d. CoreWeave naujienos šaltiniuose nerasta – krito kartu su DI sektoriumi.",
+        "Lapkričio 13 d. akcija užsidarė −6,1 % (53,13 $); Reuters minėjo nerimą dėl DI finansavimo po Nvidia vadovo pasitraukimo.",
+        "Nvidia yra pagrindinė CoreWeave lustų tiekėja ir stambi investuotoja."
+      ],
+      "status": "unverified",
+      "sources": [
+        {
+          "name": "InvestAI kainų duomenys (Yahoo Finance)",
+          "url": "https://azuollas06-stack.github.io/investai/",
+          "published": "2026-11-20"
+        },
+        {
+          "name": "FourWeekMBA: CoreWeave ir Nebius po Nvidia vadovo pasitraukimo",
+          "url": "https://fourweekmba.com/ai-coreweave-nebius-lose-16b-in-2-days-after-nvidia-ceo-exit/",
+          "published": "2026-11-13"
+        },
+        {
+          "name": "24/7 Wall St. / Webull: Nebius prognozė ir investicijos",
+          "url": "https://www.webull.com/news/15911150097712128",
+          "published": "2026-11-12"
+        }
+      ]
+    },
+    "EURONEXT:ASML": {
+      "date": "2026-11-20",
+      "direction": "down",
+      "move": "≈ −6 % lapkričio 20 d.",
+      "headline": "Krito kartu su pasauliniu lustų akcijų išpardavimu",
+      "points": [
+        "Lapkričio 20 d. ASML Europoje krito apie 5,8–6,3 %.",
+        "Tą dieną Taiex nukrito 5,65 %, Tokyo Electron – 7,1 %, TSMC prieš JAV prekybą – apie 4,9 %.",
+        "Konkrečios ASML naujienos šaltiniuose nerasta."
+      ],
+      "status": "unverified",
+      "sources": [
+        {
+          "name": "StockTitan: rinka lapkričio 20 d. (cituoja CNBC)",
+          "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-20-2026",
+          "published": "2026-11-20"
+        },
+        {
+          "name": "InvestAI kainų duomenys (Yahoo Finance)",
+          "url": "https://azuollas06-stack.github.io/investai/",
+          "published": "2026-11-20"
+        }
+      ]
+    },
+    "KRX:005930": {
+      "date": "2026-11-20",
+      "direction": "down",
+      "move": "−7 % lapkričio 20 d.",
+      "headline": "Kospi indeksas krito 5,2 % per DI akcijų išpardavimą",
+      "points": [
+        "Lapkričio 20 d. Samsung Electronics nukrito apie 7 % iki 183 100 KRW.",
+        "Pietų Korėjos Kospi indeksas tą dieną nukrito 5,21 %, Japonijos Nikkei – 5,06 %.",
+        "Konkrečios Samsung naujienos šaltiniuose nerasta – kritimas sutapo su pasauliniu lustų akcijų kritimu."
+      ],
+      "status": "unverified",
+      "sources": [
+        {
+          "name": "StockTitan: rinka lapkričio 20 d. (cituoja CNBC)",
+          "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-20-2026",
+          "published": "2026-11-20"
+        },
+        {
+          "name": "InvestAI kainų duomenys (Yahoo Finance)",
+          "url": "https://azuollas06-stack.github.io/investai/",
+          "published": "2026-11-20"
         }
       ]
     }
