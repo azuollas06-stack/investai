@@ -319,7 +319,105 @@ async function nativeMap(el) {
   });
   draw();
 }
+/* ---------- Rinkų nuotaika, sektorių lenktynės, „Šiandien rinkoje“ ---------- */
+function marketStats(P, all) {
+  const st = all.filter((a) => a.type === "Akcija" && !DUP_SKIP.has(a.s) && P.items[a.s] && typeof P.items[a.s].d1 === "number");
+  const it = (a) => P.items[a.s];
+  const share = (f) => st.length ? st.filter(f).length / st.length : 0.5;
+  const up1 = share((a) => it(a).d1 > 0), upW = share((a) => (it(a).w1 || 0) > 0), nearHi = share((a) => (it(a).fromHigh ?? -100) > -5);
+  const avgAbs = st.reduce((t, a) => t + Math.abs(it(a).d1), 0) / Math.max(1, st.length);
+  const spy = P.items["AMEX:SPY"] || {};
+  const clamp = (v) => Math.max(0, Math.min(100, v));
+  const parts = [
+    ["Kiek akcijų kilo šiandien", clamp(up1 * 100), `${Math.round(up1 * 100)} %`],
+    ["Kiek akcijų kilo per savaitę", clamp(upW * 100), `${Math.round(upW * 100)} %`],
+    ["Arti metų aukščiausios", clamp(nearHi * 250), `${Math.round(nearHi * 100)} % akcijų`],
+    ["S&P 500 per mėnesį", clamp(50 + (spy.m1 || 0) * 6), fmtPct(spy.m1 || 0, 1)],
+    ["Ramybė (mažai svyruoja)", clamp(100 - (avgAbs - 0.6) * 40), `vid. ±${avgAbs.toLocaleString("lt-LT", { maximumFractionDigits: 1 })} % per dieną`],
+  ];
+  const score = Math.round(parts.reduce((t, x) => t + x[1], 0) / parts.length);
+  // Sektoriai – pagal rinkos vertę svertinis vidurkis
+  const secs = new Map();
+  st.forEach((a) => { if (!a.sector || !it(a).mcap) return; const m = secs.get(a.sector) || []; m.push(a); secs.set(a.sector, m); });
+  const sectorPerf = (k) => [...secs].filter(([, l]) => l.length >= 3).map(([sec, l]) => {
+    const w = l.reduce((t, a) => t + it(a).mcap, 0);
+    const v = l.reduce((t, a) => t + (it(a)[k] || 0) * it(a).mcap, 0) / w;
+    const lead = [...l].sort((x, y) => (it(y)[k] || 0) - (it(x)[k] || 0))[0];
+    return { sec, v, lead };
+  }).sort((x, y) => y.v - x.v);
+  const movers = [...st].filter((a) => it(a).mcap > 2e10).sort((x, y) => it(y).d1 - it(x).d1);
+  return { score, parts, sectorPerf, up: movers[0], down: movers[movers.length - 1], spy, qqq: P.items["NASDAQ:QQQ"] || {}, n: st.length };
+}
+const MOOD_LBL = (v) => (v < 25 ? ["Didelė baimė", "#e5394a"] : v < 45 ? ["Baimė", "#f27b1a"] : v <= 55 ? ["Neutrali", "#8a94a6"] : v <= 75 ? ["Optimizmas", "#4ade80"] : ["Didelis optimizmas", "#0e9f6e"]);
+function moodHTML(m) {
+  const [lbl, col] = MOOD_LBL(m.score);
+  const ang = -90 + (m.score / 100) * 180;
+  return `<div class="mood-h"><h2 class="plain-h">Rinkos nuotaika</h2><span class="muted small">${m.n} akcijų</span></div>
+    <div class="gauge"><svg viewBox="0 0 220 122" aria-hidden="true">
+      <defs><linearGradient id="gg" x1="0" x2="1"><stop offset="0" stop-color="#e5394a"/><stop offset=".3" stop-color="#f27b1a"/><stop offset=".5" stop-color="#c3cad6"/><stop offset=".72" stop-color="#4ade80"/><stop offset="1" stop-color="#0e9f6e"/></linearGradient></defs>
+      <path d="M20 110 A90 90 0 0 1 200 110" fill="none" stroke="url(#gg)" stroke-width="16" stroke-linecap="round"/>
+      <g class="needle" style="--a:${ang}deg"><line x1="110" y1="110" x2="110" y2="34" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="110" cy="110" r="8" fill="currentColor"/></g>
+    </svg><div class="gauge-v"><b class="mood-num" style="color:${col}">${m.score}</b><span style="color:${col}">${lbl}</span></div></div>
+    <ul class="mood-parts">${m.parts.map(([k, v, t], i) => `<li style="--i:${i}"><span>${k}</span><span class="mp-bar"><i style="--w:${v.toFixed(0)}%;background:${MOOD_LBL(v)[1]}"></i></span><b>${t}</b></li>`).join("")}</ul>
+    <p class="muted small" style="margin:8px 0 0">InvestAI indeksas iš mūsų sąrašo akcijų (0 – didelė baimė, 100 – didelis optimizmas). Tai nuotaikos matas, ne prognozė.</p>`;
+}
+function mountRace(el, m) {
+  const PER = [["d1", "Diena"], ["w1", "Savaitė"], ["m1", "Mėnuo"], ["y1", "Metai"]];
+  let k = "d1";
+  el.innerHTML = `<div class="mood-h"><h2 class="plain-h">Sektorių lenktynės</h2><div class="seg seg-sm" id="race-seg" role="group" aria-label="Laikotarpis">${PER.map(([id, l]) => `<button type="button" data-k="${id}" aria-pressed="${id === k}">${l}</button>`).join("")}</div></div><div class="race-list" id="race-list"></div>`;
+  const list = $("#race-list", el);
+  const ROW = 38;
+  const draw = () => {
+    const data = m.sectorPerf(k);
+    const mx = Math.max(...data.map((x) => Math.abs(x.v)), 0.1);
+    list.style.height = `${data.length * ROW}px`;
+    data.forEach((x, i) => {
+      let row = list.querySelector(`[data-sec="${CSS.escape(x.sec)}"]`);
+      if (!row) {
+        row = document.createElement("a"); row.className = "race-row"; row.dataset.sec = x.sec;
+        row.innerHTML = `<span class="rr-n"></span><span class="rr-bar"><i></i></span><b class="rr-v"></b>`;
+        row.style.transform = `translateY(${i * ROW}px)`;
+        list.appendChild(row);
+      }
+      row.href = assetUrl(x.lead.s);
+      row.title = `Pirmauja: ${x.lead.n}`;
+      row.querySelector(".rr-n").textContent = shortSector(x.sec);
+      const bar = row.querySelector("i");
+      bar.style.width = `${(Math.abs(x.v) / mx) * 100}%`;
+      bar.className = x.v >= 0 ? "up" : "down";
+      const v = row.querySelector(".rr-v"); v.textContent = fmtPct(x.v, 1); v.className = `rr-v ${x.v >= 0 ? "up" : "down"}`;
+      requestAnimationFrame(() => (row.style.transform = `translateY(${i * ROW}px)`));
+    });
+  };
+  $("#race-seg", el).addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; k = b.dataset.k; $("#race-seg", el).querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); draw(); });
+  draw();
+}
+async function renderMood() {
+  const [P, all] = await Promise.all([loadPrices(), allAssets()]);
+  const m = marketStats(P, all);
+  const mood = $("#mood"), race = $("#race");
+  if (mood) { mood.innerHTML = moodHTML(m); revealOnScroll("#mood"); }
+  if (race) { mountRace(race, m); revealOnScroll("#race"); }
+  return m;
+}
+async function renderTodayMarket() {
+  const el = $("#today-mk"); if (!el) return;
+  const [P, all] = await Promise.all([loadPrices(), allAssets()]);
+  const m = marketStats(P, all);
+  const sp = m.sectorPerf("d1");
+  if (!sp.length || typeof m.spy.d1 !== "number") return;
+  const [lbl, col] = MOOD_LBL(m.score);
+  const dir = (v) => (v > 0.3 ? "kilo" : v < -0.3 ? "krito" : "beveik nepakito");
+  const best = sp[0], worst = sp[sp.length - 1];
+  el.hidden = false;
+  el.innerHTML = `<div class="tm-h"><h2 class="sec-h" style="margin:0">Šiandien rinkoje</h2><span class="tm-mood" style="--c:${col}">${lbl} · ${m.score}</span></div>
+    <p class="tm-lead">S&P 500 ${dir(m.spy.d1)} <b class="${m.spy.d1 >= 0 ? "up" : "down"}">${fmtPct(m.spy.d1, 1)}</b>, Nasdaq 100 – <b class="${(m.qqq.d1 || 0) >= 0 ? "up" : "down"}">${fmtPct(m.qqq.d1 || 0, 1)}</b>. Geriausiai sekėsi sektoriui „${esc(shortSector(best.sec))}“ (${fmtPct(best.v, 1)}), prasčiausiai – „${esc(shortSector(worst.sec))}“ (${fmtPct(worst.v, 1)}).</p>
+    <div class="tm-movers">${[m.up, m.down].filter(Boolean).map((a) => `<a href="${assetUrl(a.s)}">${logoHTML(a.s, a.n, "#1d3a63", 30)}<span><b>${esc(a.n)}</b><small>${P.items[a.s].d1 >= 0 ? "Daugiausiai kilo" : "Daugiausiai krito"}</small></span><em class="${P.items[a.s].d1 >= 0 ? "up" : "down"}">${fmtPct(P.items[a.s].d1, 1)}</em></a>`).join("")}</div>
+    <a class="tm-link" href="rinkos.html">Nuotaikos indeksas ir sektoriai ${icon("chevron", 16)}</a>`;
+}
+
 async function pageMarkets() {
+  renderMood();
   const tabs = document.querySelectorAll("[data-tab]");
   const loaded = new Set();
   const runners = { ...MARKET_TABS, map: nativeMap };
@@ -721,6 +819,7 @@ function storyHTML(st, assets, P) {
   </article>`;
 }
 async function pageNews() {
+  renderTodayMarket();
   (async () => {
     if (!(await aiUrl())) { $("#hl").hidden = true; return; }
     let hs = []; try { hs = (JSON.parse(localStorage.getItem("investai.portfolio.v1") || "{}").holdings || []).filter((h) => h.s && !h.s.startsWith("X:") && h.s !== "CASH").sort((a, b) => b.value - a.value).slice(0, 4); } catch {}

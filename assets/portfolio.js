@@ -138,6 +138,7 @@ function renderResult() {
   renderScenarios(a);
   renderCards(a);
   renderDivs(a);
+  renderStress(a);
   renderWeek(a);
   renderBackup();
   renderReal(a);
@@ -569,6 +570,36 @@ function snapshot() {
   } catch {}
 }
 function commit() { save(); snapshot(); renderResult(); }
+/* ---------- „Kas būtų, jei…“ – scenarijų simuliatorius ---------- */
+const STRESS = [
+  { id: "drop20", t: "Rinka krenta 20 %", d: "Įprasta korekcija – būna kas kelerius metus.", f: (r, p) => (r.type === "Akcija" || r.type === "ETF" && !/Obligac|Aukso/i.test(r.sector || "") ? -0.2 * Math.max(0.3, Math.min(2.5, (p && p.beta) || 1)) : r.type === "Kriptovaliuta" ? -0.45 : r.type === "Obligacijos" ? -0.02 : 0) },
+  { id: "tech30", t: "Technologijos krenta 30 %", d: "Kaip 2022 m., kai technologijų akcijos smuko labiausiai.", f: (r) => (/Technolog|Ryši/i.test(r.sector || "") ? -0.3 : r.type === "ETF" && !/Obligac|Aukso/i.test(r.sector || "") ? -0.09 : r.type === "Kriptovaliuta" ? -0.35 : 0) },
+  { id: "usd10", t: "Doleris nusilpsta 10 %", d: "Tavo JAV turtas eurais būtų vertas mažiau.", f: (r, p) => ((p && p.cur === "USD") || r.country === "JAV" ? -0.1 : r.type === "ETF" && /Pasaul/i.test(r.country || "") ? -0.06 : 0) },
+  { id: "y2008", t: "2008 m. krizė", d: "Pasaulio akcijos per ~1,5 m. krito apie 50 %.", f: (r) => (r.type === "Akcija" || (r.type === "ETF" && !/Obligac|Aukso/i.test(r.sector || "")) ? -0.5 : r.type === "Obligacijos" || /Obligac/i.test(r.sector || "") ? 0.05 : /Auks/i.test(r.type + (r.sector || "")) ? 0.05 : r.type === "Kriptovaliuta" ? -0.75 : 0) },
+  { id: "up20", t: "Rinka pakyla 20 %", d: "Geri metai – ir taip būna dažniau.", f: (r, p) => (r.type === "Akcija" || r.type === "ETF" && !/Obligac|Aukso/i.test(r.sector || "") ? 0.2 * Math.max(0.3, Math.min(2.5, (p && p.beta) || 1)) : r.type === "Kriptovaliuta" ? 0.4 : 0) },
+];
+let stressSel = "drop20";
+async function renderStress(a) {
+  const el = $("#r-stress"); if (!el) return;
+  const P = await loadPrices().catch(() => ({ items: {} }));
+  const draw = (animate) => {
+    const sc = STRESS.find((x) => x.id === stressSel);
+    const rows = a.rows.filter((r) => r.s !== CASH).map((r) => { const k = sc.f(r, P.items[r.s]); return { r, k, d: r.value * k }; });
+    const delta = rows.reduce((t, x) => t + x.d, 0), pctv = a.total ? (delta / a.total) * 100 : 0;
+    const top = rows.filter((x) => Math.abs(x.d) > 0.5).sort((x, y) => Math.abs(y.d) - Math.abs(x.d)).slice(0, 5);
+    const mx = Math.max(...top.map((x) => Math.abs(x.d)), 1);
+    el.innerHTML = `<h2>Kas būtų, jei…</h2>
+      <div class="st-chips" role="radiogroup" aria-label="Scenarijus">${STRESS.map((x) => `<button type="button" role="radio" aria-checked="${x.id === stressSel}" data-st="${x.id}">${esc(x.t)}</button>`).join("")}</div>
+      <p class="muted small st-desc">${esc(sc.d)}</p>
+      <div class="st-big ${delta >= 0 ? "up" : "down"}"><b class="st-num">${signed(Math.round(delta))}</b><span>${signedPct(pctv)} portfelio · liktų ~${money(Math.round(a.total + delta))}</span></div>
+      ${top.length ? `<ul class="st-list">${top.map((x, i) => `<li style="--i:${i}"><span class="st-n">${esc(x.r.n)}</span><span class="st-bar"><i class="${x.d >= 0 ? "up" : "down"}" style="--w:${(Math.abs(x.d) / mx * 100).toFixed(0)}%"></i></span><b class="${x.d >= 0 ? "up" : "down"}">${signed(Math.round(x.d))}</b></li>`).join("")}</ul>` : `<p class="muted">Šis scenarijus tavo portfelio beveik nepaveiktų.</p>`}
+      <p class="muted small" style="margin:10px 0 0">Tai supaprastintas scenarijus, ne prognozė: naudojamas akcijų jautrumas rinkai (beta) ir istoriniai kritimai. Tikri pokyčiai būtų kitokie.</p>`;
+    if (animate) countUp($(".st-num", el), Math.round(delta), (v) => signed(Math.round(v)), 700);
+    el.querySelectorAll("[data-st]").forEach((b) => b.addEventListener("click", () => { stressSel = b.dataset.st; draw(true); }));
+  };
+  draw(false);
+}
+
 /* ---------- Atsarginė kopija ---------- */
 const BK_KEY = "investai.backup.v1";
 const BACKUP_KEYS = ["investai.history.v1", "investai.pf.snap.v1", "investai.watch.v1", "investai.alerts.v1", "investai.profile.v1", "investai.pf.review.v1", "investai.co.v1"];
