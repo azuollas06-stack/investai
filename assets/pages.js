@@ -89,6 +89,60 @@ const IDX_BADGE = { "AMEX:SPY": ["500", "#1f4fd1"], "NASDAQ:QQQ": ["100", "#0d8f
 function marketRows(P) {
   return PULSE.filter(([s]) => P.items[s]).map(([s, n, t]) => { const p = P.items[s], [txt, bg] = IDX_BADGE[s] || ["•", "#3a4558"]; return rowHTML({ href: assetUrl(s), ava: LOGOS[s] ? logoHTML(s, n, "#1d3a63", 40) : `<span class="row-badge" style="background:${bg}">${txt}</span>`, title: esc(n), sub: t, val: fmtPrice(p.price, p.cur), chg: p.d1, spark: daySpark(p) }); }).join("");
 }
+/* ---------- Pristatymas naujam lankytojui (kol neįkeltas portfelis) ---------- */
+async function renderLanding(P, all) {
+  const box = $("#landing");
+  if (!box || typeof PLAIN === "undefined") return;
+  try { if (localStorage.getItem("investai.landing.off")) return; } catch {}
+  let fund = {};
+  try { fund = (await getJSON("data/fund.json")).items || {}; } catch {}
+  const demoS = ["NYSE:KO", "NASDAQ:NVDA", "NASDAQ:AAPL"].find((s) => P.items[s] && PLAIN.metrics(P.items[s], fund[s], P).length >= 5);
+  const demoA = demoS && all.find((a) => a.s === demoS);
+  const demo = demoA ? (() => {
+    const p = P.items[demoS], m = PLAIN.metrics(p, fund[demoS], P, demoA).filter((x) => ["Pelningumas", "Pajamų augimas", "Kaina pagal pelną (P/E)", "Skola"].includes(x.k));
+    return `<a class="ld-demo card" href="aktyvas.html?s=${encodeURIComponent(demoS)}">
+      <div class="ld-demo-h">${logoHTML(demoS, demoA.n, "#1d3a63", 40)}<span><b>${esc(demoA.n)}</b><small>${esc(demoS.split(":")[1])}</small></span></div>
+      <p class="ld-sum">${esc(PLAIN.summary(p, fund[demoS], P, demoA))}</p>
+      <ul class="ld-rows">${m.map((x) => `<li class="pl-${x.t}"><span class="ld-k">${esc(x.k)}</span><span class="ld-num">${esc(x.v)}</span><span class="ld-w">${esc(x.w.split(":")[0].split("–")[0].trim())}</span></li>`).join("")}</ul>
+      <span class="ld-open">Atidaryti visą analizę ${icon("chevron", 16)}</span></a>`;
+  })() : "";
+  const FEAT = [
+    ["portfolio", "Portfelio rentgenas", "Įkelk ekrano nuotrauką ar CSV iš brokerio – pamatysi, kiek turi kiekvienoje šalyje, sektoriuje ir įmonėje."],
+    ["target", "Esmė paprastai", "Kiekvienai akcijai – pelningumas, augimas, kaina ir skola žodžiais, ir patikra pagal 7 garsių investuotojų taisykles."],
+    ["ai", "AI asistentas", "Klausk lietuviškai: kodėl krito akcija, ką reiškia rodiklis. Atsakymai su šaltiniais."],
+    ["bell", "Įspėjimai telefone", "Pranešimas, kai tavo akcija stipriai pajuda ar pasiekia tavo nustatytą kainą."],
+  ];
+  const FAQ = [
+    ["Ar tai nemokama?", "Taip. Visos pagrindinės funkcijos nemokamos ir be reklamų. Premium tik padidina AI užklausų ir įspėjimų limitus."],
+    ["Ar InvestAI pataria, ką pirkti?", "Ne. Paaiškiname, ką rodo skaičiai, bet sprendimus priimi pats. InvestAI neturi licencijos teikti investavimo rekomendacijų."],
+    ["Kur saugomas mano portfelis?", "Tik tavo naršyklėje. Paskyros nereikia, o mūsų serveris tavo portfelio nemato, nebent pats įjungi AI analizę."],
+    ["Iš kur duomenys?", "Kainos ir finansai – Yahoo Finance (uždelsti iki ~15 min.), naujienos – CNBC, MarketWatch, Yahoo, LRT ir kt."],
+  ];
+  box.innerHTML = `
+    <section class="ld-sec">
+      <h2 class="ld-h">Skaičiai, paversti žodžiais</h2>
+      <p class="ld-p">Finansų svetainės rodo skaičius. Mes paaiškiname, ką jie reiškia – kiekvienai akcijai.</p>
+      ${demo}
+    </section>
+    <section class="ld-sec">
+      <h2 class="ld-h">Klausk paprastai</h2>
+      <p class="ld-p">AI paverčia klausimą filtrais, o rezultatus gali patikrinti pats.</p>
+      <form class="ask-form" id="ld-ask" action="atranka.html"><span class="ask-ico" aria-hidden="true"></span><label for="ld-q" class="sr-only">Ko ieškai?</label><input id="ld-q" name="ask" type="search" maxlength="300" placeholder="Pvz.: pelningos įmonės be skolų" autocomplete="off"><button class="btn primary" type="submit">Ieškoti</button></form>
+      <div class="ask-ex">${["Mokančios dideles dividendus", "Atitinka Buffetto taisykles", "Nukritusios, bet pelningos"].map((x) => `<a class="ask-chip" href="atranka.html?ask=${encodeURIComponent(x)}">${esc(x)}</a>`).join("")}</div>
+    </section>
+    <section class="ld-sec">
+      <h2 class="ld-h">Viskas, ko reikia pradedančiam</h2>
+      <div class="ld-feat">${FEAT.map(([ic, t, d]) => `<div class="ld-f"><span class="ld-fi">${icon(ic, 22)}</span><b>${t}</b><p>${d}</p></div>`).join("")}</div>
+    </section>
+    <section class="ld-sec">
+      <h2 class="ld-h">Dažni klausimai</h2>
+      <div class="ld-faq">${FAQ.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join("")}</div>
+      <button type="button" class="ld-hide" id="ld-hide">Paslėpti šį pristatymą</button>
+    </section>`;
+  $("#ld-hide").addEventListener("click", () => { try { localStorage.setItem("investai.landing.off", "1"); } catch {} box.innerHTML = ""; });
+  $("#ld-ask").addEventListener("submit", (e) => { if ($("#ld-q").value.trim().length < 3) e.preventDefault(); });
+}
+
 async function pageHome() {
   if (typeof ONBOARD !== "undefined") ONBOARD.mountHome();
   $(".home-search").addEventListener("click", openSearch);
@@ -110,6 +164,7 @@ async function pageHome() {
       <a class="btn primary" href="portfelis.html">${icon("upload", 18)} Įkelti portfelio nuotrauką</a>
       <a class="bal-sub" href="portfelis.html?pavyzdys=1">arba žiūrėti pavyzdį</a></div>`;
   }
+  if (!(t && t.rows.length)) renderLanding(P, all);
   // Stebimi
   const drawWatch = () => {
     const wl = watchList().map((s) => all.find((a) => a.s === s) || { s, n: s.split(":")[1] }).filter((a) => P.items[a.s]);
@@ -256,7 +311,11 @@ async function pageAsset() {
     $(".bell-btn").addEventListener("click", () => openBell(sym, name, p));
     ALERTS.sync().then(() => { const b = $(".bell-btn"); if (b) { b.outerHTML = bellHTML(sym); $(".bell-btn").addEventListener("click", () => openBell(sym, name, p)); } });
   }
-  renderFin(sym, p);
+  renderFin(sym, p).then((F) => {
+    if (typeof PLAIN === "undefined" || !p || (known && known.type && known.type !== "Akcija")) return;
+    $("#plain").innerHTML = PLAIN.plainHTML(p, F, P, known);
+    $("#legends").innerHTML = PLAIN.rulesHTML(p, F, P, known);
+  });
   renderCompanyAI(sym, name, p, known);
   if (p && p.spark) {
     $("#ap-price").textContent = fmtPrice(p.price, p.cur);
@@ -379,9 +438,9 @@ async function renderFin(sym, p) {
   let F = {};
   try { F = ((await getJSON("data/fund.json")).items || {})[sym] || {}; } catch {}
   const el = $("#fin");
-  if (!el || !(F.rev || F.ni)) return;
+  if (!el || !(F.rev || F.ni)) return F;
   const tabs = [["rev", "Pajamos", F.rev], ["ni", "Grynasis pelnas", F.ni], ["sh", "Akcijų skaičius", F.sh]].filter((t) => t[2] && t[2].length >= 2);
-  if (!tabs.length) return;
+  if (!tabs.length) return F;
   const ni = (F.ni || []).map((x) => x[1]), losses = ni.filter((v) => v < 0).length;
   const sh = (F.sh || []).map((x) => x[1]), dil = sh.length >= 2 && sh[0] > 0 ? (sh[sh.length - 1] / sh[0] - 1) * 100 : null;
   const notes = [];

@@ -194,6 +194,52 @@ async function callAnthropic(env, system, msgs) {
 }
 
 /* ---------- Maršrutai ---------- */
+/* ===== AI paieška ===== */
+const SCR_FIELDS = ["pe", "pm", "om", "rg", "eg", "de", "roe", "dy", "beta", "vol", "fromHigh", "m1", "y1", "ytd", "mcap", "up", "an", "lossYears", "coreProfit", "cashOverDebt"];
+const SCR_SCHEMA = {
+  type: "object", additionalProperties: false,
+  required: ["title", "conds", "type", "region", "sector", "legend", "picks", "sort", "note"],
+  properties: {
+    title: { type: "string" },
+    conds: { type: "array", items: { type: "object", additionalProperties: false, required: ["f", "op", "v"], properties: { f: { type: "string", enum: SCR_FIELDS }, op: { type: "string", enum: [">=", "<=", ">", "<", "="] }, v: { type: "number" } } } },
+    type: { type: "array", items: { type: "string", enum: ["Akcija", "ETF", "Kriptovaliuta", "Auksas", "Obligacijos"] } },
+    region: { type: "array", items: { type: "string", enum: ["JAV", "Europa", "Baltija", "Pasaulis", "Kita"] } },
+    sector: { type: "array", items: { type: "string" } },
+    legend: { type: "string", enum: ["", "graham", "buffett", "lynch", "fisher", "greenblatt", "neff", "templeton"] },
+    picks: { type: "array", items: { type: "string" } },
+    sort: { type: "object", additionalProperties: false, required: ["f", "dir"], properties: { f: { type: "string", enum: ["", ...SCR_FIELDS] }, dir: { type: "string", enum: ["asc", "desc"] } } },
+    note: { type: "string" },
+  },
+};
+async function screenQuery(env, q) {
+  const A = await fetch(`${SITE_URL}data/assets.json`, { cf: { cacheTtl: 3600 } }).then((r) => r.json());
+  const items = (A.groups || []).flatMap((g) => g.items).filter((a) => !a.s.startsWith("X:"));
+  const sectors = [...new Set(items.map((a) => a.sector).filter(Boolean))];
+  const list = items.map((a) => `${a.s}|${a.n}|${a.type}|${a.sector || ""}|${a.country || ""}`).join("\n");
+  const sys = `Tu – InvestAI akcijų atrankos pagalbininkas. Paversk vartotojo klausimą (lietuviškai) filtrais, kuriuos programa pritaikys mūsų duomenims. Nesiūlyk pirkti ar parduoti – tik filtruok.
+Laukai (vienetai!): pe – P/E santykis; pm – grynojo pelno marža %; om – veiklos marža %; rg – pajamų augimas per metus %; eg – pelno augimas %; de – skolos ir nuosavo kapitalo santykis % (50 = nedidelė skola); roe – grąža kapitalui %; dy – dividendų pajamingumas %; beta; vol – metinis svyravimas %; fromHigh – kritimas nuo metų aukščiausios % (neigiamas, pvz. -30); m1, y1, ytd – kainos pokytis %; mcap – rinkos vertė mlrd. USD; up – analitikų tikslinės kainos atotrūkis %; an – analitikų vidurkis 1 (stipriai pirkti)–5 (parduoti); lossYears – nuostolingų metų skaičius per ~4 m.; coreProfit – 1, jei pagrindinė veikla pelninga; cashOverDebt – 1, jei grynųjų daugiau nei skolų.
+Taisyklės: „pelninga“ → coreProfit = 1 (ir, jei sako „visada/nuolat“, lossYears = 0). „be skolų / maža skola“ → cashOverDebt = 1 arba de <= 50. „pigi“ → pe <= 15 (ir coreProfit = 1). „brangi“ → pe >= 40. „sparčiai auganti“ → rg >= 20. „moka dividendus“ → dy > 0; „dideli dividendai“ → dy >= 3. „nukritusi“ → fromHigh <= -20 (ar nurodytas skaičius). „ramios/mažai svyruojančios“ → vol <= 25. „didelės įmonės“ → mcap >= 100.
+Jei klausiama apie investuotojo stilių (Buffett, Graham, Lynch, Fisher, Greenblatt, Neff, Templeton) – nustatyk legend.
+Jei klausimas teminis (pvz., „parduodančios kavą“, „dirbtinio intelekto lustai“, „ginklų gamintojai“) ir to neišreikši laukais – picks sąraše nurodyk tinkamus simbolius TIK iš pateikto sąrašo (iki 25). Kitaip picks tuščias.
+type: jei klausiama apie įmones – ["Akcija"]; jei apie fondus – ["ETF"]; kitaip tuščias. sector – tik iš: ${sectors.join(", ")}.
+sort: svarbiausias klausimo laukas (pvz., dividendai → dy desc; pigiausios → pe asc). title – trumpai lietuviškai, kaip supratai klausimą. note – tuščias, nebent dalies klausimo negalima įvykdyti mūsų duomenimis (tada trumpai paaiškink).
+Mūsų sąrašas (simbolis|pavadinimas|tipas|sektorius|šalis):
+${list}`;
+  const r = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST", headers: { Authorization: `Bearer ${env.OPENAI_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ model: env.MODEL || "gpt-6-luna", reasoning_effort: "low", max_completion_tokens: 1500,
+      response_format: { type: "json_schema", json_schema: { name: "screen", strict: true, schema: SCR_SCHEMA } },
+      messages: [{ role: "developer", content: sys }, { role: "user", content: q }] }),
+  });
+  if (!r.ok) throw new Error(`openai ${r.status} ${(await r.text()).slice(0, 200)}`);
+  const out = JSON.parse((await r.json()).choices[0].message.content);
+  const known = new Set(items.map((a) => a.s));
+  out.picks = (out.picks || []).filter((s) => known.has(s)).slice(0, 25);
+  out.sector = (out.sector || []).filter((x) => sectors.includes(x));
+  out.conds = (out.conds || []).slice(0, 8);
+  return out;
+}
+
 /* ===== Duomenų šviežumo sargas ===== */
 const REPO = "azuollas06-stack/investai";
 const SITE_URL = "https://azuollas06-stack.github.io/investai/";
@@ -378,6 +424,24 @@ export default {
         return json({ error: msg }, 502, c.headers);
       }
       return new Response(res.stream, { status: 200, headers: { ...c.headers, "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store", "X-Left": String(lim.left) } });
+    }
+    /* ----- AI paieška paprastais žodžiais: klausimas → filtrai (patys duomenys filtruojami naršyklėje) ----- */
+    if (url.pathname === "/screen" && req.method === "POST") {
+      let body; try { body = await req.json(); } catch { return json({ error: "Netinkama užklausa." }, 400, c.headers); }
+      const q = String((body && body.q) || "").replace(/\s+/g, " ").trim().slice(0, 300);
+      if (q.length < 3) return json({ error: "Parašyk, ko ieškai." }, 400, c.headers);
+      if (!env.OPENAI_API_KEY) return json({ error: "Asistentas dar nesukonfigūruotas." }, 503, c.headers);
+      const key = await userKey(req);
+      const lim = await limiter().take(key, perUser, global);
+      if (!lim.ok) return json({ error: `Šiandienos AI limitas (${perUser}) išnaudotas – grįžk rytoj arba naudok filtrus žemiau.`, left: 0 }, 429, c.headers);
+      try {
+        const out = await screenQuery(env, q);
+        return json({ ...out, left: lim.left }, 200, { ...c.headers, "X-Left": String(lim.left) });
+      } catch (e) {
+        await limiter().refund(key);
+        console.log("screen klaida", String(e));
+        return json({ error: "AI šiuo metu neatsako. Pabandyk po minutės." }, 502, c.headers);
+      }
     }
     if (url.pathname === "/status" && req.method === "GET") {
       const f = await freshness();

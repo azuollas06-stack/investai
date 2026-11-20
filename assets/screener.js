@@ -151,6 +151,83 @@ function update() {
   renderSaved();
 }
 
+/* ---------- AI paieška paprastais žodžiais ---------- */
+const ASK_EX = ["Pelningos įmonės be skolų, mokančios dividendus", "Pigios pagal P/E, bet pelningos", "Atitinka Warreno Buffetto taisykles", "Nukritusios ≥ 30 %, bet pelningos", "Dirbtinio intelekto lustų gamintojai", "Baltijos įmonės su dividendais"];
+const fmtNum = (v, d = 1) => Number(v).toLocaleString("lt-LT", { maximumFractionDigits: d }).replace("-", "−");
+const PCT_FRAC = new Set(["pm", "om", "rg", "eg", "roe"]); // duomenyse – trupmenomis
+const FIELD_LT = { pe: "P/E", pm: "Pelno marža", om: "Veiklos marža", rg: "Pajamų augimas", eg: "Pelno augimas", de: "Skola / kapitalas", roe: "ROE", dy: "Dividendai", beta: "Beta", vol: "Svyravimas", fromHigh: "Nuo aukščiausios", m1: "Per mėn.", y1: "Per metus", ytd: "Nuo metų pr.", mcap: "Rinkos vertė", up: "Iki analitikų tikslo", an: "Analitikų vidurkis", lossYears: "Nuostolingi metai", coreProfit: "Pagrindinė veikla pelninga", cashOverDebt: "Pinigų daugiau nei skolų" };
+const LEGEND_NAME = { graham: "Benjamin Graham", buffett: "Warren Buffett", lynch: "Peter Lynch", fisher: "Philip Fisher", greenblatt: "Joel Greenblatt", neff: "John Neff", templeton: "John Templeton" };
+let SCR_FUND = null;
+async function fundAll() { if (!SCR_FUND) { try { SCR_FUND = (await getJSON("data/fund.json")).items || {}; } catch { SCR_FUND = {}; } } return SCR_FUND; }
+function fieldVal(f, a, p, fund) {
+  if (f === "mcap") return p.mcap ? p.mcap / 1e9 : null;
+  if (f === "up") return (p.an || {}).up ?? null;
+  if (f === "an") return (p.an || {}).mean ?? null;
+  if (f === "lossYears") { const ni = ((fund[a.s] || {}).ni || []); return ni.length ? ni.filter((x) => x[1] < 0).length : null; }
+  if (f === "coreProfit") return typeof PLAIN !== "undefined" ? (PLAIN.coreProfit(p) === null ? null : PLAIN.coreProfit(p) ? 1 : 0) : null;
+  if (f === "cashOverDebt") return /Finans/.test(a.sector || "") ? null : p.cash != null && p.debt != null ? (p.cash >= p.debt ? 1 : 0) : null;
+  const v = p[f];
+  if (v == null || !isFinite(v)) return null;
+  return PCT_FRAC.has(f) ? v * 100 : v;
+}
+function fmtField(f, v) {
+  if (v == null) return "–";
+  if (f === "coreProfit" || f === "cashOverDebt") return v ? "taip" : "ne";
+  if (f === "mcap") return `${fmtNum(v, v >= 100 ? 0 : 1)} mlrd. $`;
+  if (f === "pe" || f === "beta" || f === "an") return fmtNum(v, 1);
+  if (f === "lossYears") return String(v);
+  return `${fmtNum(v, Math.abs(v) >= 10 ? 0 : 1)} %`;
+}
+const OPS = { ">=": (a, b) => a >= b, "<=": (a, b) => a <= b, ">": (a, b) => a > b, "<": (a, b) => a < b, "=": (a, b) => a === b };
+const OP_LT = { ">=": "≥", "<=": "≤", ">": ">", "<": "<", "=": "=" };
+async function askAI(q) {
+  const out = $("#ask-out");
+  const url = await aiUrl();
+  if (!url) { out.innerHTML = `<p class="muted">AI paieška šiuo metu nepasiekiama – naudok filtrus žemiau.</p>`; return; }
+  out.innerHTML = `<div class="card ask-res"><p class="muted" style="margin:0"><span class="ask-spin"></span> Suprantu klausimą ir ieškau mūsų duomenyse…</p></div>`;
+  let d;
+  try {
+    const prem = (() => { try { return localStorage.getItem("investai.premium.ai") || ""; } catch { return ""; } })();
+    const r = await fetch(url + "/screen", { method: "POST", headers: { "Content-Type": "application/json", ...(prem ? { "X-Premium": prem } : {}) }, body: JSON.stringify({ q }) });
+    d = await r.json();
+    if (!r.ok) throw new Error(d.error || "Nepavyko");
+  } catch (e) { out.innerHTML = `<div class="card ask-res"><p style="margin:0">${esc(e.message || "Nepavyko.")}</p></div>`; return; }
+  const fund = await fundAll();
+  const conds = (d.conds || []).filter((c) => FIELD_LT[c.f]);
+  const picks = new Set(d.picks || []);
+  // Rodome skaitinius laukus (pirmas – rūšiavimo), kad kiekvieną atsakymą būtų galima patikrinti
+  const BOOL = new Set(["coreProfit", "cashOverDebt"]);
+  const used = [...new Set([...(d.sort && d.sort.f ? [d.sort.f] : []), ...conds.map((c) => c.f)])].filter((f) => !BOOL.has(f)).slice(0, 3);
+  let list = ALL.filter((a) => {
+    const p = P.items[a.s]; if (!p) return false;
+    if (picks.size && !picks.has(a.s)) return false;
+    if (d.type && d.type.length && !d.type.includes(a.type)) return false;
+    if (d.region && d.region.length && !d.region.includes(REGION_OF(a.country))) return false;
+    if (d.sector && d.sector.length && !d.sector.includes(a.sector)) return false;
+    for (const c of conds) { const v = fieldVal(c.f, a, p, fund); if (v == null || !OPS[c.op](v, c.v)) return false; }
+    if (d.legend && typeof PLAIN !== "undefined") { const R = PLAIN.rules(p, fund[a.s] || {}, P, a).find((x) => x.who.toLowerCase().includes(d.legend)); if (!R || !R.ok) return false; }
+    return true;
+  });
+  if (d.sort && d.sort.f) { const k = d.sort.f, m = d.sort.dir === "asc" ? 1 : -1; list.sort((x, y) => { const vx = fieldVal(k, x, P.items[x.s], fund), vy = fieldVal(k, y, P.items[y.s], fund); return vx == null ? 1 : vy == null ? -1 : (vx - vy) * m; }); }
+  else list.sort((x, y) => (P.items[y.s].mcap || 0) - (P.items[x.s].mcap || 0));
+  const chips = [
+    ...(picks.size ? [`Tema: ${picks.size} įmonės, atrinktos AI`] : []),
+    ...(d.type || []).map((t) => t), ...(d.region || []), ...(d.sector || []).map(shortSector),
+    ...conds.map((c) => (c.f === "coreProfit" || c.f === "cashOverDebt") ? FIELD_LT[c.f] + (c.v ? "" : " – ne") : `${FIELD_LT[c.f]} ${OP_LT[c.op]} ${fmtField(c.f, c.v)}`),
+    ...(d.legend ? [`Atitinka ${LEGEND_NAME[d.legend]} taisykles`] : []),
+  ];
+  const leg = d.legend ? [d.legend] : [];
+  out.innerHTML = `<div class="card ask-res">
+    <p class="ask-title"><b>${esc(d.title || q)}</b> · rasta ${list.length}</p>
+    <div class="ask-chips">${chips.map((c) => `<span>${esc(c)}</span>`).join("")}</div>
+    ${d.note ? `<p class="muted small" style="margin:8px 0 0">${esc(d.note)}</p>` : ""}
+    ${list.length ? `<ul class="ask-list">${list.slice(0, 30).map((a) => { const p = P.items[a.s]; return `<li><a href="aktyvas.html?s=${encodeURIComponent(a.s)}">${logoHTML(a.s, a.n, "#1d3a63", 36)}<span class="ask-n"><b>${esc(a.n)}</b><small>${esc(a.s.split(":")[1])} · ${esc(shortSector(a.sector) || a.type)}</small></span>
+      <span class="ask-v">${used.map((f) => `<span><small>${esc(FIELD_LT[f])}</small><b>${fmtField(f, fieldVal(f, a, p, fund))}</b></span>`).join("")}${leg.length ? `<span><small>Taisyklės</small><b>✓</b></span>` : ""}</span></a></li>`; }).join("")}</ul>${list.length > 30 ? `<p class="muted small">Rodoma 30 iš ${list.length}.</p>` : ""}`
+      : `<p style="margin:12px 0 0"><b>Nieko nerasta.</b> Pabandyk paprastesnį klausimą arba sušvelnink sąlygas.</p>`}
+    <p class="muted small" style="margin:10px 0 0">AI tik paverčia klausimą filtrais – visus skaičius gali patikrinti paspaudęs įmonę. Tai ne rekomendacija pirkti.${typeof d.left === "number" ? ` Šiandien liko AI užklausų: ${d.left}.` : ""}</p>
+  </div>`;
+}
+
 /* ---------- Premium: išsaugoti filtrai ---------- */
 function savedList() { try { return JSON.parse(localStorage.getItem(SAVED_KEY) || "[]"); } catch { return []; } }
 function renderSaved() {
@@ -183,6 +260,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   $("#scr-q").addEventListener("input", () => { F.q = $("#scr-q").value.trim(); update(); });
   $("#reset").addEventListener("click", () => { F = {}; SORT = "dd"; $("#scr-q").value = ""; update(); });
   $("#help-slot").innerHTML = helpHTML();
+  $("#ask-ex").innerHTML = ASK_EX.map((x) => `<button type="button" class="ask-chip">${esc(x)}</button>`).join("");
+  $("#ask-ex").addEventListener("click", (e) => { const b = e.target.closest(".ask-chip"); if (!b) return; $("#ask-q").value = b.textContent; askAI(b.textContent); });
+  $("#ask-form").addEventListener("submit", (e) => { e.preventDefault(); const q = $("#ask-q").value.trim(); if (q.length >= 3) { askAI(q); const u = new URL(location.href); u.searchParams.set("ask", q); history.replaceState(null, "", u); } });
+  const ask0 = new URLSearchParams(location.search).get("ask");
+  if (ask0) { $("#ask-q").value = ask0; askAI(ask0); }
   document.addEventListener("watchchange", () => { if (F.pf === "watch") update(); });
   // Telefone filtrai suskleidžiami po mygtuku
   const grid = document.querySelector(".scr-grid");

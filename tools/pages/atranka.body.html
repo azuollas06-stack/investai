@@ -1,7 +1,19 @@
 <body data-page="screener">
 <main class="wrap wide scr">
   <h1>Akcijų atranka</h1>
-  <p class="lead">Filtruok akcijas, fondus ir kriptovaliutas pagal savo kriterijus.</p>
+  <p class="lead">Paklausk paprastais žodžiais arba filtruok pagal savo kriterijus.</p>
+
+  <section class="ask" aria-labelledby="ask-h">
+    <h2 id="ask-h" class="sr-only">Klausk paprastai</h2>
+    <form class="ask-form" id="ask-form" autocomplete="off">
+      <span class="ask-ico" aria-hidden="true"></span>
+      <label for="ask-q" class="sr-only">Ko ieškai?</label>
+      <input id="ask-q" type="search" maxlength="300" placeholder="Pvz.: pelningos įmonės be skolų, mokančios dividendus">
+      <button class="btn primary" type="submit">Ieškoti</button>
+    </form>
+    <div class="ask-ex" id="ask-ex"></div>
+    <div id="ask-out" aria-live="polite"></div>
+  </section>
 
   <div class="presets" id="presets" aria-label="Greiti filtrai"></div>
 

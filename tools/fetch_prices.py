@@ -251,7 +251,8 @@ def main() -> int:
         for src, dst in (("marketCap", "mcap"), ("trailingPE", "pe"), ("forwardPE", "fpe"), ("dividendYield", "dy"), ("dividendRate", "dr"),
                          ("profitMargins", "pm"), ("operatingMargins", "om"), ("revenueGrowth", "rg"), ("earningsGrowth", "eg"),
                          ("debtToEquity", "de"), ("returnOnEquity", "roe"), ("trailingEps", "eps"), ("beta", "beta"),
-                         ("freeCashflow", "fcf"), ("totalCash", "cash"), ("totalDebt", "debt"), ("totalRevenue", "rev")):
+                         ("freeCashflow", "fcf"), ("totalCash", "cash"), ("totalDebt", "debt"), ("totalRevenue", "rev"),
+                         ("priceToBook", "pb"), ("currentRatio", "cr"), ("trailingPegRatio", "peg"), ("payoutRatio", "po"), ("grossMargins", "gm")):
             v = info.get(src)
             if isinstance(v, (int, float)) and math.isfinite(v):
                 m[dst] = round(float(v), 4)
