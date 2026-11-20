@@ -88,6 +88,7 @@ const ICONS = {
   glossary: '<path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H19v17H7.5A2.5 2.5 0 0 0 5 21.5z"/><path d="M5 19.5V4.5M9 7h6"/>',
   calendar: '<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   asset: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+  play: '<circle cx="12" cy="12" r="8.5"/><path d="M10.2 8.8v6.4l5-3.2z"/>',
   clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
   upload: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 15v4a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-4"/>',
   chevron: '<path d="m9 6 6 6-6 6"/>',
@@ -111,7 +112,7 @@ const MENU = [
   ["news", "naujienos.html", "Naujienos"], ["calendar", "naujienos.html#kalendorius", "Kalendorius"], ["digest", "apzvalga.html", "Dienos apžvalga"],
   ["markets", "rinkos.html", "Rinkos"], ["screener", "atranka.html", "Atranka"], ["strategy", "strategija.html", "Strategija"],
   ["tools", "irankiai.html", "Skaičiuoklės"], ["glossary", "zodynas.html", "Žodynas"], ["premium", "premium.html", "Premium"],
-  ["archive", "archyvas.html", "Archyvas"], ["about", "apie.html", "Apie InvestAI"],
+  ["archive", "archyvas.html", "Archyvas"], ["about", "apie.html", "Apie InvestAI"], ["play", "./?intro=1", "Trumpas turas"],
 ];
 // Kur grįžti, jei naršyklės istorijos nėra (pvz., atidaryta iš nuorodos)
 const PARENT = { asset: "rinkos.html", digest: "naujienos.html", archive: "apzvalga.html", tools: "./", premium: "./", about: "./", glossary: "./" };
@@ -246,6 +247,22 @@ async function loadPrices() {
   }
   staleNote(_prices);
   return _prices;
+}
+// Švelnus atsiradimas slenkant (tik kai vartotojas neišjungęs animacijų)
+function revealOnScroll(sel) {
+  const els = [...document.querySelectorAll(sel)].filter((e) => !e.classList.contains("rv"));
+  if (!els.length) return;
+  if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  els.forEach((e) => e.classList.add("rv"));
+  const io = new IntersectionObserver((ents) => ents.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("rv-in"); io.unobserve(en.target); } }), { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+  els.forEach((e) => io.observe(e));
+}
+// Skaičius „suskaičiuoja“ iki galutinės reikšmės
+function countUp(el, to, fmt, ms = 900) {
+  if (!el || matchMedia("(prefers-reduced-motion: reduce)").matches) { if (el) el.textContent = fmt(to); return; }
+  const t0 = performance.now();
+  const step = (t) => { const k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3); el.textContent = fmt(to * e); if (k < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
 }
 // Jei kainų atnaujinimas vėluoja – aiškiai pasakome (geriau nei tyliai rodyti senas kainas)
 function staleNote(P) {

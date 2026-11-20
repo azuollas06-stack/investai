@@ -144,6 +144,7 @@ async function renderLanding(P, all) {
 }
 
 async function pageHome() {
+  if (typeof INTRO !== "undefined") INTRO.maybe();
   if (typeof ONBOARD !== "undefined") ONBOARD.mountHome();
   $(".home-search").addEventListener("click", openSearch);
   const [P, all] = await Promise.all([loadPrices(), allAssets()]);
@@ -154,17 +155,22 @@ async function pageHome() {
   const t = portfolioToday(P);
   if (t && t.rows.length) {
     const up = t.chg >= 0;
-    $("#hero").innerHTML = `<a class="bal" href="portfelis.html"><span class="bal-label">Mano portfelis ${icon("chevron", 16)}</span>
+    $("#hero").innerHTML = `<a class="bal hero-anim" href="portfelis.html"><span class="bal-label">Mano portfelis ${icon("chevron", 16)}</span>
       <span class="bal-num">${Math.round(t.total).toLocaleString("lt-LT")} €</span>
       <span class="bal-chg ${up ? "up" : "down"}">${eur0(t.chg)} · ${fmtPct(t.pct, 2)} <small>per dieną</small></span></a>`;
+    countUp($(".bal-num"), t.total, (v) => `${Math.round(v).toLocaleString("lt-LT")} €`);
   } else {
-    $("#hero").innerHTML = `<div class="bal bal-cta"><span class="bal-label">${esc(greeting())}</span>
-      <span class="bal-title">Sužinok, kur iš tikrųjų tavo pinigai</span>
+    const words = "Sužinok, kur iš tikrųjų tavo pinigai".split(" ");
+    $("#hero").innerHTML = `<div class="bal bal-cta hero-anim"><span class="bal-label">${esc(greeting())}</span>
+      <span class="bal-title">${words.map((w, i) => `<span class="hw" style="--i:${i}">${w}</span>`).join(" ")}</span>
       <span class="bal-lead">Nemokama portfelio analizė, rinkų naujienos ir AI asistentas – lietuviškai ir be reklamų.</span>
       <a class="btn primary" href="portfelis.html">${icon("upload", 18)} Įkelti portfelio nuotrauką</a>
-      <a class="bal-sub" href="portfelis.html?pavyzdys=1">arba žiūrėti pavyzdį</a></div>`;
+      <a class="bal-sub" href="portfelis.html?pavyzdys=1">arba žiūrėti pavyzdį</a>
+      <button type="button" class="ld-hero-tour" id="tour-btn">${icon("play", 18)} Ką čia galiu padaryti? (1 min.)</button></div>`;
+    $("#tour-btn").addEventListener("click", () => typeof INTRO !== "undefined" && INTRO.open());
   }
-  if (!(t && t.rows.length)) renderLanding(P, all);
+  if (!(t && t.rows.length)) renderLanding(P, all).then(() => revealOnScroll(".ld-sec, .ld-f"));
+  revealOnScroll(".app-grid .grp-wrap");
   // Stebimi
   const drawWatch = () => {
     const wl = watchList().map((s) => all.find((a) => a.s === s) || { s, n: s.split(":")[1] }).filter((a) => P.items[a.s]);
