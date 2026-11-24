@@ -1,0 +1,40 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "",
+  "outputDirectory": ".",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)data' ':(exclude)assets/logos'",
+  "rewrites": [
+    {
+      "source": "/data/:path*",
+      "destination": "https://azuollas06-stack.github.io/investai/data/:path*"
+    },
+    {
+      "source": "/assets/logos/:path*",
+      "destination": "https://azuollas06-stack.github.io/investai/assets/logos/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ]
+}

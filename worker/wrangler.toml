@@ -9,7 +9,7 @@ workers_dev = true
 # Tiekėją ir modelį galima pakeisti čia: PROVIDER = "openai" | "anthropic"
 PROVIDER = "openai"
 MODEL = "gpt-6-luna"
-ALLOWED_ORIGINS = "https://azuollas06-stack.github.io,http://localhost:8765"
+ALLOWED_ORIGINS = "https://azuollas06-stack.github.io,https://investai*.vercel.app,http://localhost:8765"
 # Kiek klausimų per dieną vienam lankytojui ir visiems kartu (biudžeto apsauga)
 PER_USER_DAY = "25"
 GLOBAL_DAY = "600"

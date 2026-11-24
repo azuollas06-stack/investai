@@ -104,7 +104,9 @@ async function userKey(req) {
 }
 function cors(req, env) {
   const origin = req.headers.get("Origin") || "";
-  const ok = (env.ALLOWED_ORIGINS || "").split(",").map((s) => s.trim()).includes(origin);
+  // Leidžiami adresai; „*“ – bet kokia dalis (pvz., https://investai*.vercel.app – Vercel peržiūros adresai)
+  const ok = (env.ALLOWED_ORIGINS || "").split(",").map((s) => s.trim()).filter(Boolean)
+    .some((a) => a === origin || (a.includes("*") && new RegExp("^" + a.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[a-z0-9-]*") + "$").test(origin)));
   return {
     ok,
     headers: {
