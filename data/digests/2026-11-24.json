@@ -1,9 +1,9 @@
 {
  "date": "2026-11-24",
  "weekday": "antradienis",
- "title": "Nvidia +31 % grįžus Huangui; antradienį dalis kilimo atiduodama",
- "lead": "Pirmadienį Nvidia valdyba grąžino Jensen Huang į generalinio direktoriaus pareigas – akcija pakilo 31,5 %, o S&P 500 ir Nasdaq turėjo geriausią dieną nuo 2025 m. balandžio. Antradienį prieš atidarymą Nvidia krenta apie 5 %, ateities sandoriai – žemyn.",
- "generated_at": "2026-11-24T16:10:00+02:00",
+ "title": "Rinka atiduoda dalį kilimo: Nvidia −5 %, Sanofi perka Insmed",
+ "lead": "Po geriausios nuo 2025 m. balandžio dienos (Nasdaq +6,5 %) JAV ateities sandoriai antradienį krito, Nvidia prieš atidarymą – apie 5 %. Europoje dėmesio centre – Sanofi 41 mlrd. $ sandoris dėl Insmed; Baltijoje Merko pradėjo 434 butų projektą Kaune.",
+ "generated_at": "2026-11-24T17:30:00+02:00",
  "prices_available": false,
  "sections": [
   {
@@ -46,6 +46,58 @@
       {
        "name": "CNBC: ateities sandoriai krenta, Nvidia atiduoda dalį kilimo",
        "url": "https://www.cnbc.com/2026/11/23/stock-market-today-live-updates.html",
+       "type": "media",
+       "published": "2026-11-24"
+      }
+     ]
+    },
+    {
+     "headline": "Europa: STOXX 600 stoja po didžiausio šuolio nuo gegužės",
+     "tags": [
+      "STOXX600"
+     ],
+     "text": "Antradienio rytą STOXX 600 svyravo apie nulį (0920 GMT – 635,92 punkto, −0,16 %), po to, kai pirmadienį technologijų akcijos pakilo daugiau nei 4 %. Kasybos sektorius krito beveik 3 % (Anglo American, Antofagasta – daugiau nei −5 %), Aixtron – apie −8,8 % po UBS vertinimo sumažinimo iki „parduoti“. Brent nafta pigo iki beveik trijų mėnesių žemumos.",
+     "why": "Reuters pažymi, kad investuotojai vis dar abejoja DI investicijų grąža ir vertinimais, todėl pirmadienio optimizmas Europoje neišsilaikė.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "Reuters (per AOL): Europos akcijos stoja",
+       "url": "https://www.aol.com/articles/europes-stoxx-600-subdued-ai-082727000.html",
+       "type": "media",
+       "published": "2026-11-24"
+      },
+      {
+       "name": "CaixaBank Research: dienos rinkų apžvalga",
+       "url": "https://www.caixabankresearch.com/en/publications/financial-markets-daily-report/24-november-2026",
+       "type": "media",
+       "published": "2026-11-24"
+      }
+     ]
+    },
+    {
+     "headline": "Rinkos vertina ~95 % tikimybę, kad FED gruodį kels palūkanas",
+     "tags": [
+      "FED"
+     ],
+     "text": "Yahoo Finance duomenimis, ateities sandoriai antradienį atspindėjo apie 95 % tikimybę, kad FED gruodžio 9 d. pakels palūkanas 0,25 p. p. (ir ~5 % – kad 0,5 p. p.). 10 metų JAV obligacijų pajamingumas – apie 4,9 %, doleris euro atžvilgiu – stipriausias per daugiau nei 19 mėnesių (CaixaBank). Lapkričio JAV pirkimų vadybininkų indeksai (PMI) sumažėjo: pramonės – 53,7, paslaugų – 54,7.",
+     "why": "Evercore ISI ekonomistas Krishna Guha DI akcijų įtampą sieja su palūkanų kėlimu. Brangstantys skolinimosi kaštai paprastai labiausiai spaudžia aukštai vertinamas augimo akcijas.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "Yahoo Finance: rinkos gyvai, lapkričio 24 d.",
+       "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-24-dow-sp-500-nasdaq-rebound-090614276.html",
+       "type": "media",
+       "published": "2026-11-24"
+      },
+      {
+       "name": "CaixaBank Research: dienos rinkų apžvalga",
+       "url": "https://www.caixabankresearch.com/en/publications/financial-markets-daily-report/24-november-2026",
+       "type": "media",
+       "published": "2026-11-24"
+      },
+      {
+       "name": "Zacks (Yahoo): rinkos naujienos",
+       "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-24-080800306.html",
        "type": "media",
        "published": "2026-11-24"
       }
@@ -102,6 +154,89 @@
        "published": "2026-11-24"
       }
      ]
+    },
+    {
+     "headline": "Sanofi už 41 mlrd. $ perka JAV bendrovę Insmed",
+     "tags": [
+      "SAN",
+      "sandoris"
+     ],
+     "text": "Lapkričio 24 d. Sanofi paskelbė perkanti Insmed po 175 $ už akciją grynaisiais – iš viso apie 41 mlrd. $ (37,6 mlrd. €). Sandorį planuojama užbaigti 2027 m. pirmąjį pusmetį, jis finansuojamas skola ir turimais pinigais. Insmed parduoda kvėpavimo takų ligų vaistus Brinsupri ir Arikayce. Reuters duomenimis, Sanofi akcija rytą kilo apie 6 %, Insmed kaina – 17,5 % virš pirmadienio uždarymo.",
+     "why": "Pasak Reuters, tai didžiausias Sanofi sandoris per du dešimtmečius; bendrovė ieško augimo šaltinių, kai artėja jos pagrindinio vaisto Dupixent (~40 % pardavimų) patentų pabaiga.",
+     "status": "primary",
+     "sources": [
+      {
+       "name": "Sanofi (SEC 6-K): Insmed įsigijimas",
+       "url": "https://www.sec.gov/Archives/edgar/data/0001121404/000119312526473314/d130092dex991.htm",
+       "type": "primary",
+       "published": "2026-11-24"
+      },
+      {
+       "name": "Reuters (per AOL): Sanofi lažybos už Dupixent ribų",
+       "url": "https://www.aol.com/articles/sanofi-strikes-41-billion-deal-063559000.html",
+       "type": "media",
+       "published": "2026-11-24"
+      }
+     ]
+    },
+    {
+     "headline": "Anthropic trumpam nukrito žemiau 83 $ IPO kainos",
+     "tags": [
+      "ANT"
+     ],
+     "text": "Antradienį prieš prekybos pradžią Anthropic akcija krito iki 6 % ir 6:30 val. (JAV rytų laiku) buvo 82,30 $ – žemiau 83 $ IPO kainos, vėliau dalį nuostolio atsiėmė. Pirmadienio DI akcijų kilime ji beveik nedalyvavo. Needham analitikai silpnumą siejo su būsimais kapitalo poreikiais, dar neatskleistu kredito reitingu, galimais vidinių akcininkų pardavimais ir pelno fiksavimu po IPO.",
+     "why": "Turinį rengia Claude (Anthropic modelis), todėl pateikiami tik šaltinio faktai be vertinimo. Pirmosios prekybos savaitės po IPO dažnai būna svyruojančios.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "Yahoo Finance: rinkos gyvai (Anthropic įrašas)",
+       "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-24-dow-sp-500-nasdaq-rebound-090614276.html",
+       "type": "media",
+       "published": "2026-11-24"
+      }
+     ]
+    },
+    {
+     "headline": "Best Buy: geriausias per penkerius metus ketvirtis, akcija +5 % prieš prekybą",
+     "tags": [
+      "BBY",
+      "rezultatai"
+     ],
+     "text": "Best Buy III ketv. pajamos išaugo 5 % iki 10,2 mlrd. $ (laukta 9,9 mlrd. $), lyginamosios parduotuvių pajamos +6,1 % (laukta +2,3 %), koreguotas EPS – 1,62 $ (laukta 1,49 $). Bendrovė pakėlė metų prognozę; akcija prieš prekybą kilo apie 5 %.",
+     "why": "Tai vienas pirmųjų prekybininkų rezultatų prieš šventinį sezoną – rodiklis, kaip vartotojai leidžia pinigus elektronikai.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "Yahoo Finance: rinkos gyvai (Best Buy įrašas)",
+       "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-24-dow-sp-500-nasdaq-rebound-090614276.html",
+       "type": "media",
+       "published": "2026-11-24"
+      }
+     ]
+    },
+    {
+     "headline": "Merko pradeda 434 butų projektą Kaune ir pasirašė 6 mln. € sutartį Taline",
+     "tags": [
+      "MRK1T",
+      "Baltija"
+     ],
+     "text": "Merko Būstas (Merko Ehitus grupė) pradėjo projektą „Brastos“ Kaune, prie Neries: 13 gyvenamųjų namų su 434 butais ir komercinėmis patalpomis. Pirmasis etapas – 4 namai su 128 butais, baigti planuojama 2028 m. III ketv.; investicijų suma nenurodyta. Atskirai grupės įmonė Tallinna Teede lapkričio 23 d. pasirašė 6 mln. € (be PVM) Rahumäe tee ir Tuisu gatvių rekonstrukcijos Taline sutartį, darbai turi baigtis 2027 m. rudenį.",
+     "why": "Nauji projektai ir sutartys papildo statybų bendrovės užsakymų portfelį, nuo kurio priklauso būsimos pajamos.",
+     "status": "primary",
+     "sources": [
+      {
+       "name": "Merko Ehitus: „Brastos“ projektas Kaune",
+       "url": "https://www.globenewswire.com/news-release/2026/11/24/3408999/0/en/launch-of-brastos-residential-project-kaunas-lithuania.html",
+       "type": "primary",
+       "published": "2026-11-24"
+      },
+      {
+       "name": "Merko Ehitus: statybos sutartis Taline",
+       "url": "https://www.globenewswire.com/news-release/2026/11/24/3409337/0/en/construction-contract-in-estonia-reconstruction-of-sections-of-rahum%C3%A4e-tee-and-tuisu-street-in-tallinn.html",
+       "type": "primary",
+       "published": "2026-11-24"
+      }
+     ]
     }
    ]
   }
@@ -116,6 +251,11 @@
    "date": "2026-11-25",
    "text": "Deere rezultatai; Rheinmetall investuotojų diena (iki lapkričio 27 d.)",
    "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/"
+  },
+  {
+   "date": "2026-11-26",
+   "text": "JAV biržos uždarytos (Padėkos diena); lapkričio 27 d. – sutrumpinta prekyba",
+   "url": "https://www.nyse.com/markets/hours-calendars"
   },
   {
    "date": "2026-11-29",

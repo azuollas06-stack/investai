@@ -145,33 +145,21 @@
    ]
   },
   "BITSTAMP:BTCUSD": {
-   "date": "2026-11-18",
+   "date": "2026-11-24",
    "direction": "down",
-   "move": "≈ −49 % nuo 2025 m. spalio 6 d. rekordo (126 198 $)",
-   "headline": "FED kėlimo lūkesčiai, stiprus doleris ir fondų išmokos",
+   "move": "≈ −5,8 % lapkričio 24 d. (≈ 60 060 $)",
+   "headline": "Krito kartu su rizikingais aktyvais; aiškios priežasties šaltiniuose nerasta",
    "points": [
-    "Lapkričio 18 d. kaina – apie 64 000 $ (−1,5 % per parą); savaitgalį buvo nukritusi iki ~62 000 $.",
-    "Spalio JAV infliacija (+0,4 % per mėn.) viršijo lūkesčius, todėl rinkos beveik neabejoja FED palūkanų kėlimu gruodžio 9 d.; 10 m. obligacijų pajamingumas pakilo virš 5 %.",
-    "Spot bitcoin fondai kelias dienas iš eilės patyrė grynųjų išmokų – vien šią savaitę apie 232 mln. $.",
-    "Lapkričio 13 d. greitas kritimas žemiau 70 000 $ sukėlė skolintų pozicijų likvidavimą, kuris pagreitino nuosmukį."
+    "Lapkričio 24 d. Yahoo Finance kotiruočių juostoje bitkoinas rodytas ties ~60 060 $ (−5,84 %).",
+    "Tuo metu Nasdaq 100 ateities sandoriai buvo apie −2 %, o VIX nepastovumo indeksas pakilęs ~13 %.",
+    "Rekordas – 126 198 $ (2025 m. spalio 6 d.); konkrečios kriptovaliutai skirtos naujienos šaltiniuose nerasta."
    ],
-   "context": "Kriptovaliutos įprastai svyruoja daug labiau nei akcijos; artimiausias svarbus makro įvykis – FED sprendimas gruodžio 9 d.",
-   "status": "media",
+   "status": "unverified",
    "sources": [
     {
-     "name": "Nexo: Markets Today",
-     "url": "https://nexo.com/blog/markets-today-november-18",
-     "published": "2026-11-18"
-    },
-    {
-     "name": "Motley Fool: kodėl bitcoin krenta",
-     "url": "https://www.fool.com/investing/2026/11/13/why-bitcoin-is-falling-today/",
-     "published": "2026-11-13"
-    },
-    {
-     "name": "IfYouSpent: 40 % žemiau rekordo",
-     "url": "https://news.ifyouspent.com/th/news/bitcoin-40-percent-below-record-november-2026-explained",
-     "published": "2026-11-12"
+     "name": "Yahoo Finance: rinkos gyvai, lapkričio 24 d.",
+     "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-24-dow-sp-500-nasdaq-rebound-090614276.html",
+     "published": "2026-11-24"
     }
    ]
   },
@@ -361,20 +349,25 @@
    ]
   },
   "NASDAQ:ANT": {
-   "date": "2026-11-20",
-   "direction": "mixed",
-   "move": "+17,1 % pirmą dieną (97,17 $), antrą dieną prieš atidarymą ≈ −10 %",
-   "headline": "Rekordinis IPO: pirmą dieną kilo, antrą krenta kartu su DI sektoriumi",
+   "date": "2026-11-24",
+   "direction": "down",
+   "move": "Lapkričio 24 d. prieš prekybą iki −6 %, trumpam 82,30 $ – žemiau 83 $ IPO kainos",
+   "headline": "Trečią prekybos dieną akcija trumpam nukrito žemiau IPO kainos",
    "points": [
-    "IPO kaina – 83 $ (intervalas buvo 70–78 $); lapkričio 19 d. pirmasis sandoris – 111,50 $, aukščiausia kaina – 115,10 $, uždarymas – 97,17 $.",
-    "Lapkričio 20 d. prieš prekybos pradžią akcija buvo apie 87,5–88,4 $ – tuo metu visame pasaulyje krito lustų ir DI akcijos.",
-    "Seoul Economic Daily kritimą taip pat sieja su papildomo akcijų paskirstymo (greenshoe) įvykdymu.",
-    "NYU profesorius Aswath Damodaran savo modelyje akcijos vertę įvertino 76 $ – žemiau IPO kainos; Goldman Sachs analitikai, anot Seoul Economic Daily, tikisi teigiamų laisvųjų pinigų srautų 2030 m."
+    "IPO kaina – 83 $; lapkričio 19 d. uždarymas – 97,17 $ (+17,1 %), lapkričio 20 d. kartu su DI sektoriumi krito.",
+    "Lapkričio 24 d. 6:30 val. (JAV rytų laiku) akcija buvo 82,30 $ (−6 %), vėliau dalį nuostolio atsiėmė; pirmadienio DI akcijų kilime beveik nedalyvavo (Yahoo Finance).",
+    "Needham analitikai silpnumą siejo su būsimais kapitalo poreikiais, neatskleistu kredito reitingu, galimais vidinių akcininkų pardavimais ir pelno fiksavimu po IPO.",
+    "NYU profesorius A. Damodaran savo modelyje vertę įvertino 76 $; Goldman Sachs analitikai, anot Seoul Economic Daily, tikisi teigiamų laisvųjų pinigų srautų 2030 m."
    ],
    "context": "Šaltiniai skirtingai nurodo pritrauktą sumą (81,3–119,5 mlrd. $, priklausomai nuo to, ar įskaičiuotas papildomas paskirstymas ir privatus platinimas).",
    "disclosure": "InvestAI turinį rengia DI modelis Claude, kurį kuria Anthropic. Todėl čia pateikiami tik šaltinių faktai ir abiejų pusių nuomonės, be jokio savo vertinimo.",
    "status": "media",
    "sources": [
+    {
+     "name": "Yahoo Finance: Anthropic trumpam žemiau IPO kainos",
+     "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-24-dow-sp-500-nasdaq-rebound-090614276.html",
+     "published": "2026-11-24"
+    },
     {
      "name": "AP / BNN Bloomberg: Anthropic pirmoji prekybos diena",
      "url": "https://www.bnnbloomberg.ca/business/company-news/2026/11/19/anthropic-set-to-begin-trading-as-a-us15-trillion-company-in-the-biggest-ipo-on-record/",
@@ -463,31 +456,31 @@
    ]
   },
   "NASDAQ:CRWV": {
-   "date": "2026-11-20",
-   "direction": "down",
-   "move": "−6,1 % lapkričio 19 d. (iki 44,91 $); ≈ −21 % per savaitę",
-   "headline": "Spaudimas dėl DI finansavimo ir priklausomybės nuo Nvidia",
+   "date": "2026-11-24",
+   "direction": "up",
+   "move": "+22,3 % lapkričio 23 d. (po ≈ −21 % ankstesnę savaitę)",
+   "headline": "Atšoko kartu su DI infrastruktūros akcijomis",
    "points": [
-    "Konkrečios lapkričio 19 d. CoreWeave naujienos šaltiniuose nerasta – krito kartu su DI sektoriumi.",
-    "Lapkričio 13 d. akcija užsidarė −6,1 % (53,13 $); Reuters minėjo nerimą dėl DI finansavimo po Nvidia vadovo pasitraukimo.",
-    "Nvidia yra pagrindinė CoreWeave lustų tiekėja ir stambi investuotoja."
+    "Lapkričio 23 d. CoreWeave pakilo 22,3 % – DI akcijos atsigavo Nvidia grąžinus Jensen Huang.",
+    "Prieš tai, lapkričio 19 d., akcija buvo kritusi 6,1 % iki 44,91 $, per savaitę – apie 21 %.",
+    "Atskiros CoreWeave naujienos šaltiniuose nerasta."
    ],
-   "status": "unverified",
+   "status": "media",
    "sources": [
+    {
+     "name": "Zacks (Yahoo): rinkos naujienos lapkričio 24 d.",
+     "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-24-080800306.html",
+     "published": "2026-11-24"
+    },
+    {
+     "name": "TipRanks: rinkos tampa neramios",
+     "url": "https://www.tipranks.com/news/stock-market-today-nov-24-markets-turn-jittery-even-as-huang-returns-to-nvidia",
+     "published": "2026-11-24"
+    },
     {
      "name": "InvestAI kainų duomenys (Yahoo Finance)",
      "url": "https://azuollas06-stack.github.io/investai/",
      "published": "2026-11-20"
-    },
-    {
-     "name": "FourWeekMBA: CoreWeave ir Nebius po Nvidia vadovo pasitraukimo",
-     "url": "https://fourweekmba.com/ai-coreweave-nebius-lose-16b-in-2-days-after-nvidia-ceo-exit/",
-     "published": "2026-11-13"
-    },
-    {
-     "name": "24/7 Wall St. / Webull: Nebius prognozė ir investicijos",
-     "url": "https://www.webull.com/news/15911150097712128",
-     "published": "2026-11-12"
     }
    ]
   },
@@ -538,6 +531,80 @@
      "published": "2026-11-20"
     }
    ]
+  },
+  "NASDAQ:MU": {
+   "date": "2026-11-24",
+   "direction": "up",
+   "move": "+19 % lapkričio 23 d.",
+   "headline": "Kilo kartu su visu lustų sektoriumi grįžus Nvidia vadovui",
+   "points": [
+    "Lapkričio 23 d. Micron pakilo 19 %, kai Nvidia valdyba grąžino Jensen Huang į vadovo pareigas ir Nasdaq pakilo 6,5 %.",
+    "Tą pačią dieną technologijų sektoriaus ETF XLK pakilo 9 %, TSMC – 14,1 %.",
+    "Lapkričio 24 d. ateities sandoriuose lustų akcijos dalį kilimo atidavė (TipRanks)."
+   ],
+   "status": "media",
+   "sources": [
+    {
+     "name": "Zacks (Yahoo): rinkos naujienos lapkričio 24 d.",
+     "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-24-080800306.html",
+     "published": "2026-11-24"
+    },
+    {
+     "name": "TipRanks: rinkos tampa neramios",
+     "url": "https://www.tipranks.com/news/stock-market-today-nov-24-markets-turn-jittery-even-as-huang-returns-to-nvidia",
+     "published": "2026-11-24"
+    }
+   ],
+   "context": "Konkrečios su Micron susijusios naujienos šaltiniuose nerasta – judėjo kartu su sektoriumi."
+  },
+  "NYSE:TSM": {
+   "date": "2026-11-24",
+   "direction": "up",
+   "move": "+14,1 % lapkričio 23 d.",
+   "headline": "Nvidia tiekėjas kilo grįžus Jensen Huang",
+   "points": [
+    "Lapkričio 23 d. TSMC ADR pakilo 14,1 %, Nvidia – 31,5 %.",
+    "Lapkričio 24 d. Azijoje Kospi pakilo apie 6–7 %, Nikkei – beveik 4 %; Nvidia tiekėjų akcijos kilo (TipRanks, Yahoo).",
+    "Kitų TSMC naujienų šaltiniuose nerasta – judėjimą lėmė sektoriaus nuotaika."
+   ],
+   "status": "media",
+   "sources": [
+    {
+     "name": "Zacks (Yahoo): rinkos naujienos lapkričio 24 d.",
+     "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-24-080800306.html",
+     "published": "2026-11-24"
+    },
+    {
+     "name": "TipRanks: rinkos tampa neramios",
+     "url": "https://www.tipranks.com/news/stock-market-today-nov-24-markets-turn-jittery-even-as-huang-returns-to-nvidia",
+     "published": "2026-11-24"
+    }
+   ]
+  },
+  "EURONEXT:SAN": {
+   "date": "2026-11-24",
+   "direction": "up",
+   "move": "≈ +6 % lapkričio 24 d. ryte (≈ 90 €)",
+   "headline": "Paskelbė 41 mlrd. $ Insmed įsigijimą",
+   "points": [
+    "Lapkričio 24 d. Sanofi paskelbė perkanti Insmed po 175 $ už akciją grynaisiais, iš viso ~41 mlrd. $ (37,6 mlrd. €); užbaigti planuojama 2027 m. I pusmetį.",
+    "Bendrovė tikisi, kad sandoris didins pelną akcijai iki 2028 m. pabaigos, o finansinis direktorius mini daugiau nei 500 mln. $ metinės kaštų naudos (Reuters).",
+    "Reuters duomenimis, 0915 GMT akcija buvo apie 90 € (+6 %) – didžiausias STOXX 600 kilimas; nuo spalio pradžios ji jau buvo pakilusi apie 20 %."
+   ],
+   "status": "primary",
+   "sources": [
+    {
+     "name": "Sanofi (SEC 6-K): Insmed įsigijimas",
+     "url": "https://www.sec.gov/Archives/edgar/data/0001121404/000119312526473314/d130092dex991.htm",
+     "published": "2026-11-24"
+    },
+    {
+     "name": "Reuters (per AOL): Sanofi ir Insmed",
+     "url": "https://www.aol.com/articles/sanofi-strikes-41-billion-deal-063559000.html",
+     "published": "2026-11-24"
+    }
+   ],
+   "context": "Sandoriui dar reikia Insmed akcininkų ir reguliuotojų pritarimo."
   }
  }
 }

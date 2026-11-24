@@ -39,6 +39,13 @@
    "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/"
   },
   {
+   "date": "2026-11-26",
+   "kind": "macro",
+   "title": "JAV biržos uždarytos (Padėkos diena); lapkričio 27 d. – sutrumpinta prekyba",
+   "symbols": [],
+   "url": "https://www.nyse.com/markets/hours-calendars"
+  },
+  {
    "date": "2026-11-29",
    "kind": "bonds",
    "title": "Sun Investment Group obligacijų išpirkimo terminas",
@@ -79,6 +86,65 @@
   }
  ],
  "stories": [
+  {
+   "id": "sanofi-insmed",
+   "date": "2026-11-24",
+   "kind": "company",
+   "title": "Sanofi už 41 mlrd. $ perka Insmed – didžiausias sandoris per du dešimtmečius",
+   "symbols": [
+    "EURONEXT:SAN"
+   ],
+   "lead": "Prancūzijos farmacijos bendrovė Sanofi perka JAV kvėpavimo takų ligų vaistų kūrėją Insmed po 175 $ už akciją grynaisiais. Taip ji siekia augimo, kai artėja jos didžiausio vaisto Dupixent patentų pabaiga.",
+   "facts": [
+    "Kaina – 175 $ už akciją, nuosavybės vertė ~41 mlrd. $ (37,6 mlrd. €); finansuojama skola ir turimais pinigais.",
+    "Premija – ~17,5 % virš lapkričio 23 d. uždarymo (149,09 $) ir ~46 % virš lapkričio 18 d. kainos, prieš pasirodant žinioms apie derybas.",
+    "Insmed vaistas Brinsupri per 2026 m. tris ketvirčius uždirbo 1,09 mlrd. $, Arikayce 2025 m. – 433,8 mln. $ (+19 %).",
+    "Dupixent pernai sudarė beveik 40 % Sanofi pardavimų (>15 mlrd. €); vadovė Belen Garijo tikisi, kad įsigyti vaistai iki kito dešimtmečio pabaigos galės pasiekti >10 mlrd. $ metinių pardavimų.",
+    "Užbaigti planuojama 2027 m. I pusmetį; Sanofi akcija lapkričio 24 d. ryte kilo apie 6 %."
+   ],
+   "pro": [
+    {
+     "who": "Markus Manns, Union Investment",
+     "text": "Insmed vadina puikiai tinkančiu strategiškai – sandoris padeda spręsti Dupixent patentų pabaigos ir silpnos vaistų kūrimo grandinės problemą.",
+     "source": "Reuters"
+    },
+    {
+     "who": "Luisa Hector, Berenberg",
+     "text": "Mato gerą atitikimą: kvėpavimo takų ligų kryptis, jau parduodami vaistai ir tolesni kūrimo projektai.",
+     "source": "Reuters"
+    }
+   ],
+   "con": [
+    {
+     "who": "Jefferies analitikai",
+     "text": "Sandoris – „ne stebuklingas sprendimas“: jis nuperka laiko, bet neišsprendžia klausimų dėl Sanofi tyrimų ir naujų vaistų kūrimo.",
+     "source": "Reuters"
+    },
+    {
+     "who": "Claus Henrik Johansen, Global Health Invest",
+     "text": "Nors sandorio buvo laukta, kainai pagrįsti reikia daugiau klinikinių duomenų ir pardavimų prognozių.",
+     "source": "Reuters"
+    }
+   ],
+   "status": "primary",
+   "sources": [
+    {
+     "name": "Sanofi (SEC 6-K): Insmed įsigijimas",
+     "url": "https://www.sec.gov/Archives/edgar/data/0001121404/000119312526473314/d130092dex991.htm",
+     "published": "2026-11-24"
+    },
+    {
+     "name": "Reuters (per AOL): Sanofi lažybos už Dupixent ribų",
+     "url": "https://www.aol.com/articles/sanofi-strikes-41-billion-deal-063559000.html",
+     "published": "2026-11-24"
+    },
+    {
+     "name": "Investing.com: Raymond James apie Insmed sandorį",
+     "url": "https://www.investing.com/news/analyst-ratings/raymond-james-reiterates-insmed-stock-rating-after-sanofi-deal-93CH-5048064",
+     "published": "2026-11-24"
+    }
+   ]
+  },
   {
    "id": "nvidia-huang-return",
    "date": "2026-11-24",
@@ -175,16 +241,17 @@
   },
   {
    "id": "anthropic-ipo",
-   "date": "2026-11-20",
+   "date": "2026-11-24",
    "kind": "ipo",
-   "title": "Anthropic pirmą dieną pakilo 17 %, antrą – krenta kartu su DI sektoriumi",
+   "title": "Anthropic po IPO: +17 % pirmą dieną, trečią – trumpam žemiau 83 $",
    "symbols": [
     "NASDAQ:ANT"
    ],
-   "lead": "Claude kūrėjos Anthropic akcijos lapkričio 19 d. pradėjo prekybą Nasdaq ir dieną baigė ties 97,17 $ (+17 % nuo 83 $ IPO kainos). Lapkričio 20 d. prieš atidarymą jos krito apie 10 %, kai visame pasaulyje buvo parduodamos lustų ir DI akcijos.",
+   "lead": "Claude kūrėjos Anthropic akcijos lapkričio 19 d. pradėjo prekybą Nasdaq ir dieną baigė ties 97,17 $ (+17 % nuo 83 $ IPO kainos). Vėliau jos krito kartu su DI sektoriumi, o lapkričio 24 d. prieš prekybą trumpam nukrito žemiau IPO kainos.",
    "facts": [
     "Pirmasis sandoris – 111,50 $, dienos aukščiausia kaina – 115,10 $, uždarymas – 97,17 $.",
     "Lapkričio 20 d. prieš prekybos pradžią – apie 87,5–88,4 $ (−9–10 %); Seoul Economic Daily kritimą sieja ir su papildomo paskirstymo (greenshoe) įvykdymu.",
+    "Lapkričio 24 d. 6:30 val. (JAV rytų laiku) akcija buvo 82,30 $ (iki −6 %), vėliau dalį nuostolio atsiėmė; pirmadienio DI akcijų kilime beveik nedalyvavo (Yahoo Finance).",
     "Pritraukta suma šaltiniuose skiriasi: 81,3 mlrd. $ (980 mln. akcijų po 83 $) arba 93,5 mlrd. $ su papildomu paskirstymu; kartu su privačiu platinimu – ~119,5 mlrd. $.",
     "Pagal prospektą bendrovė pagal standartinę apskaitą nuostolinga, turi 6,2 mlrd. $ skolos ir ~900 mlrd. $ įsipareigojimų skaičiavimo infrastruktūrai (AP).",
     "Seoul Economic Daily duomenimis, metinis pajamų tempas spalio pabaigoje siekė 81 mlrd. $, o Q3 veiklos nuostolis – 567 mln. $."
@@ -226,6 +293,11 @@
    "disclosure": "InvestAI turinį rengia DI modelis Claude, kurį kuria Anthropic. Todėl čia pateikiami tik šaltinių faktai ir abiejų pusių nuomonės, be jokio savo vertinimo.",
    "status": "media",
    "sources": [
+    {
+     "name": "Yahoo Finance: Anthropic trumpam žemiau IPO kainos",
+     "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-24-dow-sp-500-nasdaq-rebound-090614276.html",
+     "published": "2026-11-24"
+    },
     {
      "name": "AP / BNN Bloomberg: Anthropic pirmoji prekybos diena",
      "url": "https://www.bnnbloomberg.ca/business/company-news/2026/11/19/anthropic-set-to-begin-trading-as-a-us15-trillion-company-in-the-biggest-ipo-on-record/",
@@ -323,65 +395,6 @@
    ]
   },
   {
-   "id": "pdd-q3-2026",
-   "date": "2026-11-20",
-   "kind": "earnings",
-   "title": "PDD (Temu) pelnas viršijo lūkesčius, nors pajamos nepaaugo",
-   "symbols": [
-    "NASDAQ:PDD"
-   ],
-   "lead": "Temu ir Pinduoduo valdytoja PDD Holdings lapkričio 19 d. paskelbė trečiojo ketvirčio rezultatus: pajamos beveik nepakito, bet pelnas viršijo analitikų lūkesčius. Akcija tą dieną pakilo apie 11 %.",
-   "facts": [
-    "Pajamos – 108,3 mlrd. juanių (16,2 mlrd. $), +0,1 % per metus; analitikai tikėjosi ~116 mlrd.",
-    "Reklamos pajamos +12 % (59,8 mlrd.), sandorių paslaugų −12 % (48,5 mlrd.).",
-    "Veiklos pelnas – 31,2 mlrd. juanių (prieš metus – 25 mlrd.); rinkodaros išlaidos sumažėjo ~17 %.",
-    "Koreguotas pelnas vienai ADS – 21,04 juanio, analitikų vidurkis – 18,93.",
-    "Vadovybė konkrečių prognozių nepateikė ir tęsia 100 mlrd. juanių paramos pardavėjams programą."
-   ],
-   "pro": [
-    {
-     "who": "Investing.com apžvalga",
-     "text": "Pabrėžia pelno viršijimą ir ~30 % koreguotą veiklos maržą.",
-     "source": "Investing.com"
-    },
-    {
-     "who": "Lei Chen, PDD vadovas",
-     "text": "Bendrovė tęs investicijas į tiekimo grandinę, kad platforma būtų atsparesnė.",
-     "source": "PDD pranešimas"
-    }
-   ],
-   "con": [
-    {
-     "who": "Investing.com apžvalga",
-     "text": "Mini sustojusį pajamų augimą, krentančias sandorių pajamas ir aršią konkurenciją.",
-     "source": "Investing.com"
-    },
-    {
-     "who": "Investing.com apžvalga",
-     "text": "Prekybos ir mokesčių neapibrėžtumas bei didelės investicijos gali spausti pelną.",
-     "source": "Investing.com"
-    }
-   ],
-   "status": "primary",
-   "sources": [
-    {
-     "name": "PDD Holdings (SEC 6-K): Q3 2026 rezultatai",
-     "url": "https://www.sec.gov/Archives/edgar/data/0001737806/000110465926130116/tm2630261d1_ex99-1.htm",
-     "published": "2026-11-19"
-    },
-    {
-     "name": "Investing.com: PDD konferencinis pokalbis",
-     "url": "https://www.investing.com/news/transcripts/earnings-call-transcript-pdd-beats-q3-2026-eps-revenue-misses-estimates-93CH-5039096",
-     "published": "2026-11-19"
-    },
-    {
-     "name": "JournalArta: JAV rinkų atidarymas lapkričio 20 d.",
-     "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/",
-     "published": "2026-11-20"
-    }
-   ]
-  },
-  {
    "id": "nvidia-q3-fy27",
    "date": "2026-11-18",
    "kind": "earnings",
@@ -458,67 +471,6 @@
      "name": "StockTitan: rezultatai vs prognozė",
      "url": "https://www.stocktitan.net/articles/nvidia-q3-fiscal-2027-earnings-revenue-outlook",
      "published": "2026-11-17"
-    }
-   ]
-  },
-  {
-   "id": "palo-alto-q1-fy27",
-   "date": "2026-11-19",
-   "kind": "earnings",
-   "title": "Palo Alto Networks pakėlė prognozę ir pakėlė kibernetinio saugumo akcijas",
-   "symbols": [
-    "NASDAQ:PANW",
-    "NASDAQ:CRWD",
-    "NASDAQ:ZS"
-   ],
-   "lead": "Palo Alto Networks paskelbė rekordinį ketvirtį, pakėlė metinę pajamų prognozę ir už 4,5 mlrd. $ perka DI startuolį Applied Compute. Lapkričio 18 d. akcija pakilo 9,9 %, kartu kilo ir kitos sektoriaus bendrovės.",
-   "facts": [
-    "Ketvirčio pajamos – 3,44 mlrd. $ (+39 %), LSEG lūkesčiai – 3,31 mlrd. $; koreguotas EPS – 1,05 $.",
-    "Metinė pajamų prognozė – 14,52–14,57 mlrd. $ (buvo 14,10–14,20 mlrd. $).",
-    "Naujos kartos saugumo ARR – 9,73 mlrd. $ (+66 %), likę įsipareigojimai (RPO) – 21,0 mlrd. $ (+35 %).",
-    "GAAP veiklos pelnas sumažėjo iki 96 mln. $ (prieš metus – 309 mln. $).",
-    "Lapkričio 18 d. CrowdStrike pakilo ~8 %, Fortinet ~6 %."
-   ],
-   "pro": [
-    {
-     "who": "Dipak Golechha, Palo Alto finansų direktorius",
-     "text": "Dėl dabartinės grėsmių aplinkos ir matomos paklausos metinė prognozė keliama reikšmingai.",
-     "source": "TradingKey"
-    },
-    {
-     "who": "Catharine Trebnick, Rosenblatt",
-     "text": "DI įrankiai pažeidžiamumus atskleidžia greičiau, nei įmonės spėja juos taisyti – tai didina saugumo paklausą.",
-     "source": "TradingKey"
-    }
-   ],
-   "con": [
-    {
-     "who": "Jefferies",
-     "text": "Nepaisant rezultatų, sumažino tikslinę kainą nuo 450 $ iki 400 $.",
-     "source": "TradingKey"
-    },
-    {
-     "who": "Rezultatų apžvalgininkai",
-     "text": "Pajamos auga, bet GAAP veiklos pelnas ir laisvųjų pinigų srauto marža per metus sumažėjo (56,2 % vs 69,2 %).",
-     "source": "TradingKey"
-    }
-   ],
-   "status": "media",
-   "sources": [
-    {
-     "name": "TradingKey: rezultatai ir Applied Compute",
-     "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262312701-palo-alto-networks-raises-outlook-applied-compute-deal-panw-389-93-november-19-2026-tradingkey",
-     "published": "2026-11-19"
-    },
-    {
-     "name": "Reuters / Investing.com: sektoriaus šuolis",
-     "url": "https://www.investing.com/news/stock-market-news/palo-altos-raised-sales-forecast-powers-cybersecurity-stock-rally-5038632",
-     "published": "2026-11-19"
-    },
-    {
-     "name": "Investopedia / Yahoo: lapkričio 18 d. rinkos",
-     "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-125812319.html",
-     "published": "2026-11-18"
     }
    ]
   }
