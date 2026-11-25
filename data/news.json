@@ -1,25 +1,7 @@
 {
- "updated": "2026-11-24",
+ "updated": "2026-11-25",
  "note": "Naujienų ir įvykių sąrašas. Pildo kasdienė užduotis (žr. TURINIO_GIDAS.md). Nuomonės – tik iš šaltinių, abi pusės.",
  "events": [
-  {
-   "date": "2026-11-24",
-   "kind": "earnings",
-   "title": "Analog Devices ir Medtronic rezultatai (prieš atidarymą)",
-   "symbols": [
-    "NASDAQ:ADI"
-   ],
-   "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/"
-  },
-  {
-   "date": "2026-11-24",
-   "kind": "earnings",
-   "title": "Workday ir Autodesk rezultatai (po uždarymo)",
-   "symbols": [
-    "NASDAQ:WDAY"
-   ],
-   "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/"
-  },
   {
    "date": "2026-11-25",
    "kind": "company",
@@ -28,15 +10,6 @@
     "XETR:RHM"
    ],
    "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/rheinmetall-stock-slips-after-strong-nine-month-growth/70493851"
-  },
-  {
-   "date": "2026-11-25",
-   "kind": "earnings",
-   "title": "Deere rezultatai",
-   "symbols": [
-    "NYSE:DE"
-   ],
-   "url": "https://journalarta.com/en/2026/11/20/stock-market-today-dow-rises-0-39-while-nasdaq-drops-1-39-at-open/"
   },
   {
    "date": "2026-11-26",
@@ -53,6 +26,13 @@
    "url": "https://kpiresearch.substack.com/p/baltic-stock-market-weekly-review-c45"
   },
   {
+   "date": "2026-11-29",
+   "kind": "macro",
+   "title": "OPEC+ susitikimas",
+   "symbols": [],
+   "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---chip-stocks-slump-again-in-new-york-and-seoul---25-november-2026-25112026"
+  },
+  {
    "date": "2026-11-30",
    "kind": "bonds",
    "title": "Baigiasi PN Project obligacijų pasirašymas (10 %)",
@@ -60,11 +40,20 @@
    "url": "https://view.news.eu.nasdaq.com/view?id=1475833&lang=en"
   },
   {
+   "date": "2026-11-30",
+   "kind": "company",
+   "title": "Artea bankas pradeda savų akcijų supirkimą (iki 3 mln. akcijų, iki gruodžio 8 d.)",
+   "symbols": [
+    "OMXVSE:SAB1L"
+   ],
+   "url": "https://www.globenewswire.com/news-release/2026/11/25/3410281/0/lt/ab-artea-banko-valdybos-sprendimas-d%C4%97l-sav%C5%B3-akcij%C5%B3-%C4%AFsigijimo.html"
+  },
+  {
    "date": "2026-12-09",
    "kind": "macro",
-   "title": "JAV FED palūkanų sprendimas",
+   "title": "JAV FED palūkanų sprendimas (posėdis gruodžio 8–9 d.)",
    "symbols": [],
-   "url": "https://www.lrt.lt/naujienos/verslas/4/3117123/birzos-laikmatis-akciju-rinkose-tesiasi-di-imoniu-ispardavimas"
+   "url": "https://marketspeaker.com/us-pce-inflation-october-2026-core-prices-fed-december/"
   },
   {
    "date": "2026-12-10",
@@ -76,6 +65,15 @@
    "url": "https://www.globenewswire.com/news-release/2026/11/11/3400468/0/en/ignitis-group-s-updated-financial-calendar-2026.html"
   },
   {
+   "date": "2026-12-15",
+   "kind": "company",
+   "title": "Pirmasis Anthropic akcijų pardavimo apribojimų (lock-up) palengvinimas – iki 303 mln. akcijų",
+   "symbols": [
+    "NASDAQ:ANT"
+   ],
+   "url": "https://financefeeds.com/anthropic-ipo-lock-up-insider-selling-dates/"
+  },
+  {
    "date": "2026-12-16",
    "kind": "dividend",
    "title": "DelfinGroup dividendų ex-data (0,0326 €)",
@@ -83,9 +81,122 @@
     "OMXRSE:DGR1R"
    ],
    "url": "https://kpiresearch.substack.com/p/baltic-stock-market-weekly-review-c45"
+  },
+  {
+   "date": "2026-12-23",
+   "kind": "macro",
+   "title": "JAV lapkričio PCE infliacijos duomenys",
+   "symbols": [],
+   "url": "https://trendandticker.com/news/markets/capital-markets/2026-11-25/pce-inflation-october-3-8-percent-gdp-revised-4-3"
   }
  ],
  "stories": [
+  {
+   "id": "anthropic-ipo",
+   "date": "2026-11-25",
+   "kind": "ipo",
+   "title": "Anthropic po IPO: +17 % pirmą dieną, dabar žemiau 83 $ IPO kainos",
+   "symbols": [
+    "NASDAQ:ANT"
+   ],
+   "lead": "Claude kūrėjos Anthropic akcijos lapkričio 19 d. pradėjo prekybą Nasdaq ir pirmą dieną baigė ties 97,17 $ (+17 % nuo 83 $ IPO kainos). Vėliau jos krito kartu su DI sektoriumi: lapkričio 24 d. uždarė žemiau IPO kainos, trečiadienį prieš prekybą buvo apie 78 $.",
+   "facts": [
+    "Pirmasis sandoris – 111,50 $, dienos aukščiausia kaina – 115,10 $, pirmos dienos uždarymas – 97,17 $.",
+    "Lapkričio 24 d. akcija nukrito 6,5 % iki 81,91 $ (dienos žemuma – 75,61 $); lapkričio 25 d. 6:19 val. (JAV rytų laiku) – 78,01 $ (−4,8 %).",
+    "Pagal prospektą vidinių akcininkų pardavimo apribojimai švelninami etapais: gruodžio 15 d. (iki 303 mln. akcijų), sausio 5 ir 19 d., vasario 2 d.; įkūrėjams ir stambiems akcininkams – ilgesni terminai.",
+    "Pritraukta suma šaltiniuose skiriasi: 81,3 mlrd. $ (980 mln. akcijų po 83 $) arba 93,5 mlrd. $ su papildomu paskirstymu.",
+    "Pagal prospektą bendrovė pagal standartinę apskaitą nuostolinga, turi 6,2 mlrd. $ skolos ir ~900 mlrd. $ įsipareigojimų skaičiavimo infrastruktūrai (AP).",
+    "Seoul Economic Daily duomenimis, metinis pajamų tempas spalio pabaigoje siekė 81 mlrd. $, o Q3 veiklos nuostolis – 567 mln. $."
+   ],
+   "pro": [
+    {
+     "who": "Canaccord Genuity",
+     "text": "Pradėjo vertinimą reitingu „pirkti“ su 135 $ tiksline kaina; bendrovę laiko didele verslo DI platforma, kurios galimybės platesnės nei tradicinės programinės įrangos išlaidos.",
+     "source": "Tech Funding News"
+    },
+    {
+     "who": "Wedbush",
+     "text": "Reitingas „geriau už rinką“, tikslinė kaina 120 $; tikisi, kad bendrovė užims reikšmingą verslo DI rinkos dalį nepaisant konkurencijos.",
+     "source": "Tech Funding News"
+    },
+    {
+     "who": "Oppenheimer",
+     "text": "Mini augančias įmonių DI išlaidas, skaičiavimo efektyvumą ir kelių lustų tiekėjų strategiją.",
+     "source": "Tech Funding News"
+    }
+   ],
+   "con": [
+    {
+     "who": "Aswath Damodaran, NYU Stern",
+     "text": "Diskontuotų pinigų srautų modelyje akcijos vertę įvertino 76 $ – žemiau IPO kainos; mini skaičiavimo kaštus ir reguliavimo riziką.",
+     "source": "24/7 Wall St."
+    },
+    {
+     "who": "Jay Ritter, Floridos universitetas",
+     "text": "Istoriškai IPO, įvertinti 20–40 kartų pardavimų, per trejus metus nuo pirmos dienos uždarymo uždirbdavo vidutiniškai tik ~3 %.",
+     "source": "Yahoo Finance"
+    },
+    {
+     "who": "Needham analitikai",
+     "text": "Silpnumą siejo su būsimais kapitalo poreikiais, neatskleistu kredito reitingu ir galimais vidinių akcininkų pardavimais.",
+     "source": "Yahoo Finance"
+    }
+   ],
+   "disclosure": "InvestAI turinį rengia DI modelis Claude, kurį kuria Anthropic. Todėl čia pateikiami tik šaltinių faktai ir abiejų pusių nuomonės, be jokio savo vertinimo.",
+   "status": "media",
+   "sources": [
+    {
+     "name": "TradingKey: rinkų apžvalga lapkričio 24 d.",
+     "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262321021-market-recap-nasdaq-slips-nvidia-anthropic-breaks-ipo-price-dell-tradingkey",
+     "published": "2026-11-25"
+    },
+    {
+     "name": "MarketSpeaker: Anthropic prieš prekybą −4,8 %",
+     "url": "https://marketspeaker.com/briefs/anthropic-stock-nearly-5-percent-premarket-november-25/",
+     "published": "2026-11-25"
+    },
+    {
+     "name": "FinanceFeeds: Anthropic akcijų pardavimo apribojimų (lock-up) datos",
+     "url": "https://financefeeds.com/anthropic-ipo-lock-up-insider-selling-dates/",
+     "published": "2026-11-25"
+    },
+    {
+     "name": "Tech Funding News: analitikų vertinimai po kritimo žemiau IPO kainos",
+     "url": "https://techfundingnews.com/anthropic-stock-drops-below-83-ipo-price-as-canaccord-wedbush-and-oppenheimer-stay-bullish/",
+     "published": "2026-11-25"
+    },
+    {
+     "name": "Yahoo Finance: Anthropic trumpam žemiau IPO kainos",
+     "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-24-dow-sp-500-nasdaq-rebound-090614276.html",
+     "published": "2026-11-24"
+    },
+    {
+     "name": "AP / BNN Bloomberg: Anthropic pirmoji prekybos diena",
+     "url": "https://www.bnnbloomberg.ca/business/company-news/2026/11/19/anthropic-set-to-begin-trading-as-a-us15-trillion-company-in-the-biggest-ipo-on-record/",
+     "published": "2026-11-19"
+    },
+    {
+     "name": "Forbes: Anthropic uždarymas 97 $",
+     "url": "https://www.forbes.com/sites/fionariley/2026/11/19/anthropic-ipo-live-stock-closes-day-at-97-up-more-than-17/",
+     "published": "2026-11-19"
+    },
+    {
+     "name": "24/7 Wall St.: antroji Anthropic prekybos diena",
+     "url": "https://247wallst.com/investing/2026/11/20/anthropic-stock-falls-9-6-before-the-bell-on-its-second-day-of-trading-facebook-and-uber-both-fell-11-on-day-2-heres-what-happened-next/",
+     "published": "2026-11-20"
+    },
+    {
+     "name": "24/7 Wall St.: A. Damodarano vertinimas",
+     "url": "https://247wallst.com/investing/2026/11/20/anthropic-shares-are-tumbling-heres-what-nyus-dean-of-valuation-says-its-really-worth/",
+     "published": "2026-11-20"
+    },
+    {
+     "name": "Seoul Economic Daily: Anthropic antrą dieną −10 %",
+     "url": "https://en.sedaily.com/world/2026/11/20/anthropic-shares-sink-10-percent-on-second-day-as-ai-trade",
+     "published": "2026-11-20"
+    }
+   ]
+  },
   {
    "id": "sanofi-insmed",
    "date": "2026-11-24",
@@ -160,7 +271,8 @@
     "Akcija dieną baigė ties 165,05 $ (+31,48 %), rinkos vertė per dieną padidėjo daugiau nei 1 trln. $ (Yahoo Finance).",
     "Tą pačią dieną Nasdaq pakilo 6,51 %, S&P 500 – 4,73 %, Dow – 3,01 % – geriausia diena nuo 2025 m. balandžio (CNN).",
     "Antradienio rytą prieš prekybą akcija buvo apie 5 % žemiau (Yahoo Finance).",
-    "Dėl Huango elgesio ir verslo vis dar vyksta keli tyrimai (CBC)."
+    "Dėl Huango elgesio ir verslo vis dar vyksta keli tyrimai (CBC).",
+    "Lapkričio 24 d. akcija atidavė 5,86 % (iki 155,38 $), lustų indeksas krito 7,88 %; trečiadienį Nasdaq 100 ateities sandoriai buvo ≈ −2,7 %."
    ],
    "pro": [
     {
@@ -236,102 +348,11 @@
      "url": "https://foreignpolicy.com/2026/11/23/jensen-huang-nvidia-return-ceo-national-security-scandal/",
      "type": "media",
      "published": "2026-11-23"
-    }
-   ]
-  },
-  {
-   "id": "anthropic-ipo",
-   "date": "2026-11-24",
-   "kind": "ipo",
-   "title": "Anthropic po IPO: +17 % pirmą dieną, trečią – trumpam žemiau 83 $",
-   "symbols": [
-    "NASDAQ:ANT"
-   ],
-   "lead": "Claude kūrėjos Anthropic akcijos lapkričio 19 d. pradėjo prekybą Nasdaq ir dieną baigė ties 97,17 $ (+17 % nuo 83 $ IPO kainos). Vėliau jos krito kartu su DI sektoriumi, o lapkričio 24 d. prieš prekybą trumpam nukrito žemiau IPO kainos.",
-   "facts": [
-    "Pirmasis sandoris – 111,50 $, dienos aukščiausia kaina – 115,10 $, uždarymas – 97,17 $.",
-    "Lapkričio 20 d. prieš prekybos pradžią – apie 87,5–88,4 $ (−9–10 %); Seoul Economic Daily kritimą sieja ir su papildomo paskirstymo (greenshoe) įvykdymu.",
-    "Lapkričio 24 d. 6:30 val. (JAV rytų laiku) akcija buvo 82,30 $ (iki −6 %), vėliau dalį nuostolio atsiėmė; pirmadienio DI akcijų kilime beveik nedalyvavo (Yahoo Finance).",
-    "Pritraukta suma šaltiniuose skiriasi: 81,3 mlrd. $ (980 mln. akcijų po 83 $) arba 93,5 mlrd. $ su papildomu paskirstymu; kartu su privačiu platinimu – ~119,5 mlrd. $.",
-    "Pagal prospektą bendrovė pagal standartinę apskaitą nuostolinga, turi 6,2 mlrd. $ skolos ir ~900 mlrd. $ įsipareigojimų skaičiavimo infrastruktūrai (AP).",
-    "Seoul Economic Daily duomenimis, metinis pajamų tempas spalio pabaigoje siekė 81 mlrd. $, o Q3 veiklos nuostolis – 567 mln. $."
-   ],
-   "pro": [
-    {
-     "who": "Dan Ives, Yorkville Ives & Co.",
-     "text": "Debiutą vadina didele pergale technologijų sektoriui po sunkaus laikotarpio su Nvidia; kaina rodo stiprią paklausą.",
-     "source": "AP"
     },
     {
-     "who": "Goldman Sachs analitikai",
-     "text": "Tikisi, kad bendrovė metinius teigiamus laisvuosius pinigų srautus pasieks 2030 m.",
-     "source": "Seoul Economic Daily"
-    },
-    {
-     "who": "Arun Sundararajan, NYU Stern",
-     "text": "Istorijoje sunku rasti bendrovę, kuri taip greitai pasiekė tokią sėkmę.",
-     "source": "Yahoo Finance"
-    }
-   ],
-   "con": [
-    {
-     "who": "Aswath Damodaran, NYU Stern",
-     "text": "Diskontuotų pinigų srautų modelyje akcijos vertę įvertino 76 $ – žemiau IPO kainos; mini skaičiavimo kaštus ir reguliavimo riziką.",
-     "source": "24/7 Wall St."
-    },
-    {
-     "who": "Gerald Gan, Lead Capital",
-     "text": "Nuotaikos tapo labai neigiamos, nes griūva „paskutinis DI ralio ramstis“.",
-     "source": "Seoul Economic Daily"
-    },
-    {
-     "who": "Jay Ritter, Floridos universitetas",
-     "text": "Istoriškai IPO, įvertinti 20–40 kartų pardavimų, per trejus metus nuo pirmos dienos uždarymo uždirbdavo vidutiniškai tik ~3 %.",
-     "source": "Yahoo Finance"
-    }
-   ],
-   "disclosure": "InvestAI turinį rengia DI modelis Claude, kurį kuria Anthropic. Todėl čia pateikiami tik šaltinių faktai ir abiejų pusių nuomonės, be jokio savo vertinimo.",
-   "status": "media",
-   "sources": [
-    {
-     "name": "Yahoo Finance: Anthropic trumpam žemiau IPO kainos",
-     "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-24-dow-sp-500-nasdaq-rebound-090614276.html",
-     "published": "2026-11-24"
-    },
-    {
-     "name": "AP / BNN Bloomberg: Anthropic pirmoji prekybos diena",
-     "url": "https://www.bnnbloomberg.ca/business/company-news/2026/11/19/anthropic-set-to-begin-trading-as-a-us15-trillion-company-in-the-biggest-ipo-on-record/",
-     "published": "2026-11-19"
-    },
-    {
-     "name": "Forbes: Anthropic uždarymas 97 $",
-     "url": "https://www.forbes.com/sites/fionariley/2026/11/19/anthropic-ipo-live-stock-closes-day-at-97-up-more-than-17/",
-     "published": "2026-11-19"
-    },
-    {
-     "name": "24/7 Wall St.: antroji Anthropic prekybos diena",
-     "url": "https://247wallst.com/investing/2026/11/20/anthropic-stock-falls-9-6-before-the-bell-on-its-second-day-of-trading-facebook-and-uber-both-fell-11-on-day-2-heres-what-happened-next/",
-     "published": "2026-11-20"
-    },
-    {
-     "name": "24/7 Wall St.: A. Damodarano vertinimas",
-     "url": "https://247wallst.com/investing/2026/11/20/anthropic-shares-are-tumbling-heres-what-nyus-dean-of-valuation-says-its-really-worth/",
-     "published": "2026-11-20"
-    },
-    {
-     "name": "Seoul Economic Daily: Anthropic antrą dieną −10 %",
-     "url": "https://en.sedaily.com/world/2026/11/20/anthropic-shares-sink-10-percent-on-second-day-as-ai-trade",
-     "published": "2026-11-20"
-    },
-    {
-     "name": "Yahoo Finance: Anthropic IPO tiesiogiai",
-     "url": "https://finance.yahoo.com/technology/live/anthropic-ipo-live-company-said-to-price-stock-at-83-begin-trading-thursday-212656452.html",
-     "published": "2026-11-19"
-    },
-    {
-     "name": "TheStreet: Jay Ritter apie vertinimą",
-     "url": "https://www.thestreet.com/investing/anthropic-ipo-valuation-risk-1-trillion-ceiling-jay-ritter",
-     "published": "2026-11-15"
+     "name": "TradingKey: rinkų apžvalga lapkričio 24 d.",
+     "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262321021-market-recap-nasdaq-slips-nvidia-anthropic-breaks-ipo-price-dell-tradingkey",
+     "published": "2026-11-25"
     }
    ]
   },

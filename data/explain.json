@@ -1,43 +1,39 @@
 {
- "updated": "2026-11-24",
+ "updated": "2026-11-25",
  "note": "Paaiškinimai, kodėl pasikeitė aktyvų kainos. Raktas – TradingView simbolis. Pildo kasdienė užduotis (žr. TURINIO_GIDAS.md).",
  "items": {
   "NASDAQ:NVDA": {
-   "date": "2026-11-24",
-   "direction": "up",
-   "move": "+31,5 % lapkričio 23 d. (iki 165,05 $); antradienį ryte ≈ −5 %",
-   "headline": "Valdyba grąžino Jensen Huang – rekordinis dienos kilimas",
+   "date": "2026-11-25",
+   "direction": "mixed",
+   "move": "+31,5 % lapkričio 23 d., −5,9 % lapkričio 24 d. (155,38 $)",
+   "headline": "Po rekordinio šuolio grįžus J. Huangui – kritimas kartu su lustų sektoriumi",
    "points": [
-    "Lapkričio 23 d. valdyba vienbalsiai grąžino Huangą į generalinio direktoriaus pareigas; jis buvo atsistatydinęs lapkričio 12 d. dėl skandalo.",
-    "Akcija pakilo 31,48 % iki 165,05 $, rinkos vertė per dieną padidėjo daugiau nei 1 trln. $.",
-    "Kilimas patempė visą rinką: Nasdaq +6,51 %, S&P 500 +4,73 %.",
-    "Antradienį prieš prekybą akcija atidavė apie 5 % – dalis investuotojų fiksavo pelną."
+    "Lapkričio 23 d. valdyba grąžino Jensen Huang į vadovo pareigas, akcija pakilo 31,5 % iki 165,05 $.",
+    "Lapkričio 24 d. akcija nukrito 5,86 % iki 155,38 $, kai visas lustų indeksas smuko 7,9 %.",
+    "Investopedia duomenimis, akcija vis dar apie 35 % žemiau spalio 6 d. rekordinio uždarymo kainos.",
+    "Lapkričio 25 d. Nasdaq 100 ateities sandoriai buvo ≈ −2,7 % – lustų išpardavimas tęsėsi."
    ],
-   "context": "Dėl Huango elgesio ir verslo vis dar vyksta tyrimai; akcija vis dar apie 30 % žemiau spalio rekordo.",
    "status": "media",
    "sources": [
+    {
+     "name": "TradingKey: rinkų apžvalga lapkričio 24 d.",
+     "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262321021-market-recap-nasdaq-slips-nvidia-anthropic-breaks-ipo-price-dell-tradingkey",
+     "published": "2026-11-25"
+    },
+    {
+     "name": "Investopedia (Yahoo Finance): rinkos lapkričio 24 d.",
+     "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-132051241.html",
+     "published": "2026-11-24"
+    },
+    {
+     "name": "JournalArta: JAV ateities sandoriai krenta",
+     "url": "https://journalarta.com/en/2026/11/25/stock-market-today-nasdaq-sp-500-and-dow-futures-slide-as-ai-chip-selloff-deepens/",
+     "published": "2026-11-25"
+    },
     {
      "name": "Nvidia 8-K: valdyba grąžina Jensen Huang",
      "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000090/nov23pressrelease.htm",
      "type": "primary",
-     "published": "2026-11-23"
-    },
-    {
-     "name": "Yahoo Finance: Nvidia krenta po istorinio kilimo",
-     "url": "https://finance.yahoo.com/markets/stocks/article/nvidia-stock-falls-after-epic-rally-on-jensen-huangs-return-as-ceo-094535877.html",
-     "type": "media",
-     "published": "2026-11-24"
-    },
-    {
-     "name": "Yahoo Finance: Nvidia gyvai – antradienį −5 %",
-     "url": "https://finance.yahoo.com/markets/stocks/live/nvidia-live-updates-jensen-huang-reinstated-as-ceo-trump-says-he-convinced-board-165423793.html",
-     "type": "media",
-     "published": "2026-11-24"
-    },
-    {
-     "name": "CBC: Huangas vis dar susiduria su tyrimais",
-     "url": "https://www.cbc.ca/news/business/livestory/nvidia-jensen-huang-reinstated-spy-scandal-9.7432391",
-     "type": "media",
      "published": "2026-11-23"
     }
    ]
@@ -145,20 +141,25 @@
    ]
   },
   "BITSTAMP:BTCUSD": {
-   "date": "2026-11-24",
+   "date": "2026-11-25",
    "direction": "down",
-   "move": "≈ −5,8 % lapkričio 24 d. (≈ 60 060 $)",
-   "headline": "Krito kartu su rizikingais aktyvais; aiškios priežasties šaltiniuose nerasta",
+   "move": "≈ 59 200 $ lapkričio 25 d.; ≈ −20 % per lapkritį",
+   "headline": "Bitkoino ETF lėšos traukiasi šeštą dieną iš eilės",
    "points": [
-    "Lapkričio 24 d. Yahoo Finance kotiruočių juostoje bitkoinas rodytas ties ~60 060 $ (−5,84 %).",
-    "Tuo metu Nasdaq 100 ateities sandoriai buvo apie −2 %, o VIX nepastovumo indeksas pakilęs ~13 %.",
-    "Rekordas – 126 198 $ (2025 m. spalio 6 d.); konkrečios kriptovaliutai skirtos naujienos šaltiniuose nerasta."
+    "Saxo duomenimis, lapkričio 25 d. ryte bitkoinas buvo apie 59 241 $ (−0,9 %), ether – apie 1 660 $.",
+    "JAV bitkoino ETF lėšų nutekėjimas tęsėsi šeštą dieną: 232 mln. $ antradienį po 570 mln. $ pirmadienį; lapkritis – rekordinio nutekėjimo mėnuo.",
+    "Kritimas sutampa su rizikingų aktyvų išpardavimu ir lūkesčiais, kad FED gruodį kels palūkanas."
    ],
-   "status": "unverified",
+   "status": "media",
    "sources": [
     {
-     "name": "Yahoo Finance: rinkos gyvai, lapkričio 24 d.",
-     "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-24-dow-sp-500-nasdaq-rebound-090614276.html",
+     "name": "Saxo: Market Quick Take, lapkričio 25 d.",
+     "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---chip-stocks-slump-again-in-new-york-and-seoul---25-november-2026-25112026",
+     "published": "2026-11-25"
+    },
+    {
+     "name": "Investopedia (Yahoo Finance): rinkos lapkričio 24 d.",
+     "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-132051241.html",
      "published": "2026-11-24"
     }
    ]
@@ -349,49 +350,39 @@
    ]
   },
   "NASDAQ:ANT": {
-   "date": "2026-11-24",
+   "date": "2026-11-25",
    "direction": "down",
-   "move": "Lapkričio 24 d. prieš prekybą iki −6 %, trumpam 82,30 $ – žemiau 83 $ IPO kainos",
-   "headline": "Trečią prekybos dieną akcija trumpam nukrito žemiau IPO kainos",
+   "move": "81,91 $ lapkričio 24 d. (−6,5 %, žemiau 83 $ IPO kainos); lapkričio 25 d. prieš prekybą ≈ 78 $",
+   "headline": "Uždarė žemiau IPO kainos, kritimas tęsiasi kartu su DI akcijomis",
    "points": [
-    "IPO kaina – 83 $; lapkričio 19 d. uždarymas – 97,17 $ (+17,1 %), lapkričio 20 d. kartu su DI sektoriumi krito.",
-    "Lapkričio 24 d. 6:30 val. (JAV rytų laiku) akcija buvo 82,30 $ (−6 %), vėliau dalį nuostolio atsiėmė; pirmadienio DI akcijų kilime beveik nedalyvavo (Yahoo Finance).",
-    "Needham analitikai silpnumą siejo su būsimais kapitalo poreikiais, neatskleistu kredito reitingu, galimais vidinių akcininkų pardavimais ir pelno fiksavimu po IPO.",
-    "NYU profesorius A. Damodaran savo modelyje vertę įvertino 76 $; Goldman Sachs analitikai, anot Seoul Economic Daily, tikisi teigiamų laisvųjų pinigų srautų 2030 m."
+    "Lapkričio 24 d. akcija nukrito 6,5 % iki 81,91 $, dienos žemuma – 75,61 $; pirmas sandoris lapkričio 19 d. buvo 111,50 $.",
+    "Lapkričio 25 d. 6:19 val. (JAV rytų laiku) – 78,01 $ (−4,8 %); šaltiniai kritimą sieja su bendru ateities sandorių kritimu, DI infrastruktūros finansavimo abejonėmis ir galimais naujais muitais.",
+    "Pagal prospektą pirmasis vidinių akcininkų pardavimo apribojimų palengvinimas – gruodžio 15 d. (iki 303 mln. akcijų), vėliau – sausio 5, 19 d. ir vasario 2 d.",
+    "Canaccord (tikslinė kaina 135 $), Wedbush (120 $) ir Oppenheimer pradėjo vertinimus teigiamais reitingais; NYU profesorius A. Damodaran anksčiau vertę skaičiavo 76 $."
    ],
-   "context": "Šaltiniai skirtingai nurodo pritrauktą sumą (81,3–119,5 mlrd. $, priklausomai nuo to, ar įskaičiuotas papildomas paskirstymas ir privatus platinimas).",
+   "context": "Šaltiniuose skiriasi tikslios kainos skirtingu laiku; kitas reikšmingas įvykis – gruodžio 15 d. lock-up palengvinimas.",
    "disclosure": "InvestAI turinį rengia DI modelis Claude, kurį kuria Anthropic. Todėl čia pateikiami tik šaltinių faktai ir abiejų pusių nuomonės, be jokio savo vertinimo.",
    "status": "media",
    "sources": [
     {
-     "name": "Yahoo Finance: Anthropic trumpam žemiau IPO kainos",
-     "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-24-dow-sp-500-nasdaq-rebound-090614276.html",
-     "published": "2026-11-24"
+     "name": "TradingKey: rinkų apžvalga lapkričio 24 d.",
+     "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262321021-market-recap-nasdaq-slips-nvidia-anthropic-breaks-ipo-price-dell-tradingkey",
+     "published": "2026-11-25"
     },
     {
-     "name": "AP / BNN Bloomberg: Anthropic pirmoji prekybos diena",
-     "url": "https://www.bnnbloomberg.ca/business/company-news/2026/11/19/anthropic-set-to-begin-trading-as-a-us15-trillion-company-in-the-biggest-ipo-on-record/",
-     "published": "2026-11-19"
+     "name": "MarketSpeaker: Anthropic prieš prekybą −4,8 %",
+     "url": "https://marketspeaker.com/briefs/anthropic-stock-nearly-5-percent-premarket-november-25/",
+     "published": "2026-11-25"
     },
     {
-     "name": "Forbes: Anthropic uždarymas 97 $",
-     "url": "https://www.forbes.com/sites/fionariley/2026/11/19/anthropic-ipo-live-stock-closes-day-at-97-up-more-than-17/",
-     "published": "2026-11-19"
+     "name": "FinanceFeeds: Anthropic akcijų pardavimo apribojimų (lock-up) datos",
+     "url": "https://financefeeds.com/anthropic-ipo-lock-up-insider-selling-dates/",
+     "published": "2026-11-25"
     },
     {
-     "name": "24/7 Wall St.: antroji Anthropic prekybos diena",
-     "url": "https://247wallst.com/investing/2026/11/20/anthropic-stock-falls-9-6-before-the-bell-on-its-second-day-of-trading-facebook-and-uber-both-fell-11-on-day-2-heres-what-happened-next/",
-     "published": "2026-11-20"
-    },
-    {
-     "name": "24/7 Wall St.: A. Damodarano vertinimas",
-     "url": "https://247wallst.com/investing/2026/11/20/anthropic-shares-are-tumbling-heres-what-nyus-dean-of-valuation-says-its-really-worth/",
-     "published": "2026-11-20"
-    },
-    {
-     "name": "Seoul Economic Daily: Anthropic antrą dieną −10 %",
-     "url": "https://en.sedaily.com/world/2026/11/20/anthropic-shares-sink-10-percent-on-second-day-as-ai-trade",
-     "published": "2026-11-20"
+     "name": "Tech Funding News: analitikų vertinimai po kritimo žemiau IPO kainos",
+     "url": "https://techfundingnews.com/anthropic-stock-drops-below-83-ipo-price-as-canaccord-wedbush-and-oppenheimer-stay-bullish/",
+     "published": "2026-11-25"
     }
    ]
   },
@@ -485,77 +476,81 @@
    ]
   },
   "EURONEXT:ASML": {
-   "date": "2026-11-20",
+   "date": "2026-11-25",
    "direction": "down",
-   "move": "≈ −6 % lapkričio 20 d.",
-   "headline": "Krito kartu su pasauliniu lustų akcijų išpardavimu",
+   "move": "≈ +10 % lapkričio 23 d., −5,6 % lapkričio 24 d.",
+   "headline": "Svyruoja kartu su DI ir lustų akcijomis",
    "points": [
-    "Lapkričio 20 d. ASML Europoje krito apie 5,8–6,3 %.",
-    "Tą dieną Taiex nukrito 5,65 %, Tokyo Electron – 7,1 %, TSMC prieš JAV prekybą – apie 4,9 %.",
+    "Lapkričio 23 d. ASML pakilo beveik 10 % po žinios, kad Nvidia grąžino J. Huangą.",
+    "Lapkričio 24 d. akcija nukrito 5,6 %, Euro Stoxx 50 – 1,2 %.",
     "Konkrečios ASML naujienos šaltiniuose nerasta."
    ],
    "status": "unverified",
    "sources": [
     {
-     "name": "StockTitan: rinka lapkričio 20 d. (cituoja CNBC)",
-     "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-20-2026",
-     "published": "2026-11-20"
+     "name": "Saxo: Market Quick Take, lapkričio 25 d.",
+     "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---chip-stocks-slump-again-in-new-york-and-seoul---25-november-2026-25112026",
+     "published": "2026-11-25"
     },
     {
-     "name": "InvestAI kainų duomenys (Yahoo Finance)",
-     "url": "https://azuollas06-stack.github.io/investai/",
-     "published": "2026-11-20"
+     "name": "Trading Economics: Europos akcijos atšoko",
+     "url": "https://tradingeconomics.com/euro-area/stock-market/news/505758",
+     "published": "2026-11-23"
     }
    ]
   },
   "KRX:005930": {
-   "date": "2026-11-20",
+   "date": "2026-11-25",
    "direction": "down",
-   "move": "−7 % lapkričio 20 d.",
-   "headline": "Kospi indeksas krito 5,2 % per DI akcijų išpardavimą",
+   "move": "Kospi ≈ −6 % lapkričio 25 d.",
+   "headline": "Korėjos lustų akcijos vėl smuko po JAV sektoriaus kritimo",
    "points": [
-    "Lapkričio 20 d. Samsung Electronics nukrito apie 7 % iki 183 100 KRW.",
-    "Pietų Korėjos Kospi indeksas tą dieną nukrito 5,21 %, Japonijos Nikkei – 5,06 %.",
-    "Konkrečios Samsung naujienos šaltiniuose nerasta – kritimas sutapo su pasauliniu lustų akcijų kritimu."
+    "Lapkričio 25 d. Kospi indeksas krito apie 6 %; Saxo duomenimis, Samsung Electronics ir SK Hynix patyrė didelių nuostolių.",
+    "Prieš tai JAV Filadelfijos lustų indeksas nukrito 7,88 %, Micron – 11 %.",
+    "Tikslus Samsung pokytis šaltinyje nenurodytas; konkrečios bendrovės naujienos nerasta."
    ],
    "status": "unverified",
    "sources": [
     {
-     "name": "StockTitan: rinka lapkričio 20 d. (cituoja CNBC)",
-     "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-20-2026",
-     "published": "2026-11-20"
+     "name": "Saxo: Market Quick Take, lapkričio 25 d.",
+     "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---chip-stocks-slump-again-in-new-york-and-seoul---25-november-2026-25112026",
+     "published": "2026-11-25"
     },
     {
-     "name": "InvestAI kainų duomenys (Yahoo Finance)",
-     "url": "https://azuollas06-stack.github.io/investai/",
-     "published": "2026-11-20"
+     "name": "TradingKey: rinkų apžvalga lapkričio 24 d.",
+     "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262321021-market-recap-nasdaq-slips-nvidia-anthropic-breaks-ipo-price-dell-tradingkey",
+     "published": "2026-11-25"
     }
    ]
   },
   "NASDAQ:MU": {
-   "date": "2026-11-24",
-   "direction": "up",
-   "move": "+19 % lapkričio 23 d.",
-   "headline": "Kilo kartu su visu lustų sektoriumi grįžus Nvidia vadovui",
+   "date": "2026-11-25",
+   "direction": "down",
+   "move": "−11 % lapkričio 24 d. (iki 629,79 $) po +19 % pirmadienį",
+   "headline": "Atidavė dalį kilimo per lustų sektoriaus išpardavimą",
    "points": [
-    "Lapkričio 23 d. Micron pakilo 19 %, kai Nvidia valdyba grąžino Jensen Huang į vadovo pareigas ir Nasdaq pakilo 6,5 %.",
-    "Tą pačią dieną technologijų sektoriaus ETF XLK pakilo 9 %, TSMC – 14,1 %.",
-    "Lapkričio 24 d. ateities sandoriuose lustų akcijos dalį kilimo atidavė (TipRanks)."
+    "Lapkričio 23 d. Micron pakilo 19 %, kai Nvidia valdyba grąžino Jensen Huang.",
+    "Lapkričio 24 d. akcija nukrito 11 % iki 629,79 $; SK Hynix taip pat apie −10 %, Filadelfijos lustų indeksas −7,9 %.",
+    "Konkrečios Micron naujienos šaltiniuose nerasta – kritimas sutapo su visu sektoriumi."
    ],
    "status": "media",
    "sources": [
     {
-     "name": "Zacks (Yahoo): rinkos naujienos lapkričio 24 d.",
-     "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-24-080800306.html",
-     "published": "2026-11-24"
+     "name": "TradingKey: rinkų apžvalga lapkričio 24 d.",
+     "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262321021-market-recap-nasdaq-slips-nvidia-anthropic-breaks-ipo-price-dell-tradingkey",
+     "published": "2026-11-25"
     },
     {
-     "name": "TipRanks: rinkos tampa neramios",
-     "url": "https://www.tipranks.com/news/stock-market-today-nov-24-markets-turn-jittery-even-as-huang-returns-to-nvidia",
+     "name": "JournalArta: JAV ateities sandoriai krenta",
+     "url": "https://journalarta.com/en/2026/11/25/stock-market-today-nasdaq-sp-500-and-dow-futures-slide-as-ai-chip-selloff-deepens/",
+     "published": "2026-11-25"
+    },
+    {
+     "name": "Investopedia (Yahoo Finance): rinkos lapkričio 24 d.",
+     "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-132051241.html",
      "published": "2026-11-24"
     }
-   ],
-   "context": "Konkrečios su Micron susijusios naujienos šaltiniuose nerasta – judėjo kartu su sektoriumi."
+   ]
   },
   "NYSE:TSM": {
    "date": "2026-11-24",
@@ -584,12 +579,12 @@
   "EURONEXT:SAN": {
    "date": "2026-11-24",
    "direction": "up",
-   "move": "≈ +6 % lapkričio 24 d. ryte (≈ 90 €)",
+   "move": "+9,8 % lapkričio 24 d.",
    "headline": "Paskelbė 41 mlrd. $ Insmed įsigijimą",
    "points": [
     "Lapkričio 24 d. Sanofi paskelbė perkanti Insmed po 175 $ už akciją grynaisiais, iš viso ~41 mlrd. $ (37,6 mlrd. €); užbaigti planuojama 2027 m. I pusmetį.",
     "Bendrovė tikisi, kad sandoris didins pelną akcijai iki 2028 m. pabaigos, o finansinis direktorius mini daugiau nei 500 mln. $ metinės kaštų naudos (Reuters).",
-    "Reuters duomenimis, 0915 GMT akcija buvo apie 90 € (+6 %) – didžiausias STOXX 600 kilimas; nuo spalio pradžios ji jau buvo pakilusi apie 20 %."
+    "Saxo duomenimis, lapkričio 24 d. Sanofi akcija uždarė 9,8 % aukščiau – vienas didžiausių kilimų Europoje tą dieną."
    ],
    "status": "primary",
    "sources": [
@@ -602,9 +597,117 @@
      "name": "Reuters (per AOL): Sanofi ir Insmed",
      "url": "https://www.aol.com/articles/sanofi-strikes-41-billion-deal-063559000.html",
      "published": "2026-11-24"
+    },
+    {
+     "name": "Saxo: Market Quick Take, lapkričio 25 d.",
+     "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---chip-stocks-slump-again-in-new-york-and-seoul---25-november-2026-25112026",
+     "published": "2026-11-25"
     }
    ],
    "context": "Sandoriui dar reikia Insmed akcininkų ir reguliuotojų pritarimo."
+  },
+  "NYSE:DELL": {
+   "date": "2026-11-25",
+   "direction": "mixed",
+   "move": "≈ −11 % lapkričio 24 d. (prieš rezultatus)",
+   "headline": "Rekordiniai DI užsakymai ir pakelta prognozė, bet akcija krito kartu su DI sektoriumi",
+   "points": [
+    "Lapkričio 24 d. prekyboje, dar prieš rezultatus, akcija krito apie 11 %, kai Filadelfijos lustų indeksas smuko 7,9 %.",
+    "Po uždarymo paskelbtos Q3 pajamos – 54,9 mlrd. $ (+103 %), DI serverių pajamos – 22,0 mlrd. $ (+291 %), DI užsakymų portfelis – 132,3 mlrd. $.",
+    "Metinė pajamų prognozė pakelta iki 202 mlrd. $ (buvo 192 mlrd. $), Q4 tikimasi 56,3 mlrd. $; patvirtintas papildomas 25 mlrd. $ akcijų supirkimas."
+   ],
+   "context": "Akcijos reakcija po rezultatų šaltiniuose prieštaringa – patikrinti pagal trečiadienio prekybą.",
+   "status": "primary",
+   "sources": [
+    {
+     "name": "Dell: Q3 FY2027 rezultatai (SEC 8-K)",
+     "url": "https://www.sec.gov/Archives/edgar/data/0001571996/000157199626000050/exhibit991earnings8kq3fy27.htm",
+     "published": "2026-11-24"
+    },
+    {
+     "name": "Investopedia (Yahoo Finance): rinkos lapkričio 24 d.",
+     "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-132051241.html",
+     "published": "2026-11-24"
+    },
+    {
+     "name": "TradingKey: rinkų apžvalga lapkričio 24 d.",
+     "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262321021-market-recap-nasdaq-slips-nvidia-anthropic-breaks-ipo-price-dell-tradingkey",
+     "published": "2026-11-25"
+    }
+   ]
+  },
+  "NYSE:DE": {
+   "date": "2026-11-25",
+   "direction": "mixed",
+   "move": "Rezultatai lapkričio 25 d. prieš atidarymą",
+   "headline": "Ketvirčio pelnas −1 %, 2027 m. pelno prognozė 4,5–5,25 mlrd. $",
+   "points": [
+    "Q4 grynasis pelnas – 1,051 mlrd. $ (3,89 $ akcijai), pajamos – 12,1 mlrd. $ (−2 %); 2026 fin. metų pelnas – 4,86 mlrd. $ (−3 %).",
+    "Didelės žemės ūkio technikos pardavimai ketvirtį krito 15 %, mažosios technikos (+10 %) ir statybų technikos (+12 %) – augo.",
+    "2027 m. tikimasi 4,50–5,25 mlrd. $ pelno, įskaitant vienkartinį 0,25–0,40 mlrd. $ pensijų sąnaudų mokestį."
+   ],
+   "context": "Kai kurie leidiniai skelbia, kad prognozė nusileido analitikų lūkesčiams ir akcija prieš prekybą krito, tačiau tikslių skaičių patikrinti nepavyko.",
+   "status": "primary",
+   "sources": [
+    {
+     "name": "Deere: Q4 ir 2026 finansinių metų rezultatai (SEC 8-K)",
+     "url": "https://www.sec.gov/Archives/edgar/data/0000315189/000110465926131741/de-ex99d1.htm",
+     "published": "2026-11-25"
+    }
+   ]
+  },
+  "NASDAQ:ADI": {
+   "date": "2026-11-25",
+   "direction": "down",
+   "move": "−17,4 % lapkričio 24 d. (iki 312,95 $)",
+   "headline": "Rekordinės pajamos, bet kito ketvirčio pelno prognozė žemiau lūkesčių",
+   "points": [
+    "Lapkričio 24 d. Analog Devices paskelbė rekordines ketvirčio pajamas – 4,37 mlrd. $.",
+    "Kito ketvirčio koreguoto pelno akcijai prognozė (~3,82 $) buvo žemesnė nei analitikų lūkesčiai.",
+    "Akcija nukrito 17,4 % iki 312,95 $; tą dieną Texas Instruments krito 11,3 %, lustų indeksas – 7,9 %."
+   ],
+   "status": "media",
+   "sources": [
+    {
+     "name": "TradingKey: rinkų apžvalga lapkričio 24 d.",
+     "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262321021-market-recap-nasdaq-slips-nvidia-anthropic-breaks-ipo-price-dell-tradingkey",
+     "published": "2026-11-25"
+    },
+    {
+     "name": "JournalArta: JAV ateities sandoriai krenta",
+     "url": "https://journalarta.com/en/2026/11/25/stock-market-today-nasdaq-sp-500-and-dow-futures-slide-as-ai-chip-selloff-deepens/",
+     "published": "2026-11-25"
+    },
+    {
+     "name": "Investopedia (Yahoo Finance): rinkos lapkričio 24 d.",
+     "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-132051241.html",
+     "published": "2026-11-24"
+    }
+   ]
+  },
+  "XETR:IFX": {
+   "date": "2026-11-25",
+   "direction": "down",
+   "move": "−9,7 % lapkričio 24 d.",
+   "headline": "Krito kartu su pasauliniu lustų akcijų išpardavimu",
+   "points": [
+    "Lapkričio 23 d. Infineon buvo pakilęs apie 7 %, kai Nvidia grąžino J. Huangą.",
+    "Lapkričio 24 d. akcija smuko 9,7 % – daugiausiai tarp didžiųjų Europos akcijų; ASML tą dieną −5,6 %.",
+    "Konkrečios Infineon naujienos šaltiniuose nerasta – kritimas sutapo su JAV lustų indekso −7,9 %."
+   ],
+   "status": "unverified",
+   "sources": [
+    {
+     "name": "Saxo: Market Quick Take, lapkričio 25 d.",
+     "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---chip-stocks-slump-again-in-new-york-and-seoul---25-november-2026-25112026",
+     "published": "2026-11-25"
+    },
+    {
+     "name": "TradingKey: rinkų apžvalga lapkričio 24 d.",
+     "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262321021-market-recap-nasdaq-slips-nvidia-anthropic-breaks-ipo-price-dell-tradingkey",
+     "published": "2026-11-25"
+    }
+   ]
   }
  }
 }

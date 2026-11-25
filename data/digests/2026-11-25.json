@@ -1,0 +1,274 @@
+{
+ "date": "2026-11-25",
+ "weekday": "trečiadienis",
+ "title": "Infliacija 3,8 %, lustai vėl krenta: Nasdaq ateitis ≈ −2,7 %",
+ "lead": "Spalio PCE infliacija pasiekė 3,8 % (bazinė – 3,3 %), o rinka beveik neabejoja, kad FED gruodį kels palūkanas. Lustų akcijų išpardavimas tęsiasi nuo Seulo iki Niujorko; Dell ir Deere paskelbė rezultatus, Artea banke – savų akcijų supirkimas.",
+ "generated_at": "2026-11-25T17:15:00+02:00",
+ "prices_available": false,
+ "sections": [
+  {
+   "id": "rinka",
+   "title": "Rinkos nuotaika",
+   "items": [
+    {
+     "headline": "JAV spalio PCE infliacija – 3,8 %, bazinė – 3,3 %; BVP patikslintas iki 4,3 %",
+     "tags": [
+      "FED",
+      "infliacija"
+     ],
+     "text": "Lapkričio 25 d. paskelbta, kad PCE kainų indeksas spalį per metus augo 3,8 % (per mėnesį – 0,3 %), bazinis (be maisto ir energijos) – 3,3 % (lūkesčiai – 3,2 %). Trečiojo ketvirčio BVP augimas patikslintas iki 4,3 % metiniu tempu (pirminis įvertis – 3,4 %). Asmeninės pajamos augo 0,7 %, vartojimo išlaidos – 0,3 %, taupymo norma – 4,1 %. Šaltinių duomenimis, ateities sandoriai beveik užtikrintai vertina 0,25 p. p. FED palūkanų kėlimą gruodžio 8–9 d. posėdyje.",
+     "why": "PCE – FED labiausiai stebimas infliacijos rodiklis ir paskutinis prieš gruodžio sprendimą. Aukštesnės palūkanos paprastai spaudžia brangiai vertinamų augimo akcijų kainas ir obligacijų kainas.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "MarketSpeaker: PCE infliacija spalį 3,8 %",
+       "url": "https://marketspeaker.com/us-pce-inflation-october-2026-core-prices-fed-december/",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "Trend & Ticker: PCE 3,8 %, BVP patikslintas iki 4,3 %",
+       "url": "https://trendandticker.com/news/markets/capital-markets/2026-11-25/pce-inflation-october-3-8-percent-gdp-revised-4-3",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "Briefs: spalio infliacija išlieka aukšta",
+       "url": "https://www.briefs.co/news/october-inflation-stays-hot-as-markets-price-in-december-fed/",
+       "type": "media",
+       "published": "2026-11-25"
+      }
+     ]
+    },
+    {
+     "headline": "Antradienį Dow grįžo virš 50 000, o lustų indeksas krito 7,9 %",
+     "tags": [
+      "SPY",
+      "QQQ"
+     ],
+     "text": "Lapkričio 24 d. Dow Jones pakilo 0,85 % iki 50 018,70, S&P 500 nukrito 0,50 % iki 7 201,09, Nasdaq Composite – 1,48 % iki 23 733,54. Filadelfijos puslaidininkių indeksas smuko 7,88 %: Analog Devices −17,4 % (silpnesnė nei tikėtasi kito ketvirčio pelno prognozė), Texas Instruments −11,3 %, Micron −11 %, Nvidia −5,9 %. Kilo Nike (+5,9 %) ir Insmed (+14 %, Sanofi pirkimo pasiūlymas).",
+     "why": "Pinigai sukasi iš DI ir lustų akcijų į „senosios ekonomikos“ bendroves – todėl Dow ir Nasdaq juda priešingomis kryptimis.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "TradingKey: rinkų apžvalga lapkričio 24 d.",
+       "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262321021-market-recap-nasdaq-slips-nvidia-anthropic-breaks-ipo-price-dell-tradingkey",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "PR Newswire / Market Updates: Dow virš 50 000",
+       "url": "https://www.prnewswire.com/news-releases/dow-reclaims-50-000-as-inflation-and-gdp-data-land-before-thanksgiving-302950361.html",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "Investopedia (Yahoo Finance): rinkos lapkričio 24 d.",
+       "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-132051241.html",
+       "type": "media",
+       "published": "2026-11-24"
+      }
+     ]
+    },
+    {
+     "headline": "Trečiadienį JAV ateities sandoriai krenta: Nasdaq 100 ≈ −2,7 %",
+     "tags": [
+      "QQQ",
+      "muitai"
+     ],
+     "text": "Trečiadienio rytą Nasdaq 100 ateities sandoriai buvo apie 2,7 % žemiau (žemiau 26 000), S&P 500 – daugiau nei 1 %, Dow – apie 1,1 %; VIX nepastovumo indeksas viršijo 30. Šaltiniai kritimą sieja su tęsiamu DI ir lustų akcijų pardavimu bei pranešimais, kad administracija gali jau šią savaitę paskelbti naujus Section 301 muitus Kinijai, ES ir daugiau nei dešimčiai kitų šalių. Ketvirtadienį JAV biržos uždarytos (Padėkos diena), penktadienį prekyba sutrumpinta.",
+     "why": "Didelis VIX rodo, kad rinka tikisi stiprių svyravimų; muitų naujienos gali paveikti ir Europos eksportuotojus.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "JournalArta: JAV ateities sandoriai krenta",
+       "url": "https://journalarta.com/en/2026/11/25/stock-market-today-nasdaq-sp-500-and-dow-futures-slide-as-ai-chip-selloff-deepens/",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "Saxo: Market Quick Take, lapkričio 25 d.",
+       "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---chip-stocks-slump-again-in-new-york-and-seoul---25-november-2026-25112026",
+       "type": "media",
+       "published": "2026-11-25"
+      }
+     ]
+    },
+    {
+     "headline": "Europa ir Azija: Infineon −9,7 %, Kospi ≈ −6 %, nafta pinga",
+     "tags": [
+      "STOXX600",
+      "IFX",
+      "ASML"
+     ],
+     "text": "Antradienį STOXX 600 nukrito 0,7 %, DAX – 1,3 %; Infineon smuko 9,7 %, ASML – 5,6 %, o Sanofi pakilo 9,8 % po Insmed sandorio. Trečiadienį Azijoje Kospi krito apie 6 % (stipriai nukentėjo Samsung Electronics ir SK Hynix), Nikkei 225 – 2,8 %. Europos biržos atsidarė nedideliu pliusu (CAC 40 ≈ +1 %, DAX ≈ +0,1 %) – vartojimo bendrovės atsvėrė technologijų kritimą; Brent nafta ryte pigo iki ~87 $.",
+     "why": "Lustų sektoriaus kritimas – pasaulinis, todėl paliečia ir Europos bei Korėjos tiekėjus. Pigesnė nafta mažina infliacijos spaudimą, bet šiandien ją nustelbė PCE duomenys.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "Saxo: Market Quick Take, lapkričio 25 d.",
+       "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---chip-stocks-slump-again-in-new-york-and-seoul---25-november-2026-25112026",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "JournalArta: Europos akcijos atsidarė aukščiau",
+       "url": "https://journalarta.com/en/2026/11/25/european-stocks-open-higher-as-consumer-shares-offset-tech-selloff-and-oil-slide/",
+       "type": "media",
+       "published": "2026-11-25"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "imones",
+   "title": "Įmonių naujienos",
+   "items": [
+    {
+     "headline": "Dell: pajamos +103 %, DI užsakymų portfelis – rekordiniai 132,3 mlrd. $",
+     "tags": [
+      "DELL",
+      "rezultatai"
+     ],
+     "text": "Lapkričio 24 d. po uždarymo Dell paskelbė Q3 (2027 fin. m.) pajamas 54,9 mlrd. $ (+103 %) ir koreguotą pelną akcijai 9,45 $ (+265 %). DI serverių pajamos – 22,0 mlrd. $ (+291 %), DI užsakymai per ketvirtį – 60,2 mlrd. $, užsakymų portfelis – 132,3 mlrd. $. Metinė pajamų prognozė pakelta iki 202 mlrd. $ (buvo 192 mlrd. $), patvirtintas papildomas 25 mlrd. $ akcijų supirkimas. Prieš rezultatus, antradienio prekyboje, akcija krito apie 11 %.",
+     "why": "Dell – vienas didžiausių DI serverių tiekėjų, todėl jo užsakymai rodo, ar DI infrastruktūros paklausa išlieka. Akcijos reakcija po rezultatų šaltiniuose prieštaringa – stebėti trečiadienio prekybą.",
+     "status": "primary",
+     "sources": [
+      {
+       "name": "Dell: Q3 FY2027 rezultatai (SEC 8-K)",
+       "url": "https://www.sec.gov/Archives/edgar/data/0001571996/000157199626000050/exhibit991earnings8kq3fy27.htm",
+       "type": "primary",
+       "published": "2026-11-24"
+      },
+      {
+       "name": "Investopedia (Yahoo Finance): rinkos lapkričio 24 d.",
+       "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-132051241.html",
+       "type": "media",
+       "published": "2026-11-24"
+      },
+      {
+       "name": "TradingKey: rinkų apžvalga lapkričio 24 d.",
+       "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262321021-market-recap-nasdaq-slips-nvidia-anthropic-breaks-ipo-price-dell-tradingkey",
+       "type": "media",
+       "published": "2026-11-25"
+      }
+     ]
+    },
+    {
+     "headline": "Deere: Q4 pelnas 1,05 mlrd. $, 2027 m. tikisi 4,5–5,25 mlrd. $",
+     "tags": [
+      "DE",
+      "rezultatai"
+     ],
+     "text": "Deere Q4 grynasis pelnas – 1,051 mlrd. $ arba 3,89 $ akcijai (prieš metus – 3,93 $), pajamos – 12,1 mlrd. $ (−2 %). Visų 2026 finansinių metų pelnas – 4,86 mlrd. $ (−3 %). Didelės žemės ūkio technikos pardavimai ketvirtį krito 15 %, o mažosios technikos ir statybų segmentai augo 10–12 %. 2027 m. bendrovė tikisi 4,50–5,25 mlrd. $ grynojo pelno (įskaitant vienkartinį 0,25–0,40 mlrd. $ pensijų sąnaudų mokestį).",
+     "why": "Deere rezultatai rodo ūkininkų investicijų ciklą: bendrovė pati ketvirtį vadina ciklo žemuma, o 2027 m. tikisi didelės technikos rinkos augimo 5–15 % JAV ir Kanadoje.",
+     "status": "primary",
+     "sources": [
+      {
+       "name": "Deere: Q4 ir 2026 finansinių metų rezultatai (SEC 8-K)",
+       "url": "https://www.sec.gov/Archives/edgar/data/0000315189/000110465926131741/de-ex99d1.htm",
+       "type": "primary",
+       "published": "2026-11-25"
+      }
+     ]
+    },
+    {
+     "headline": "Anthropic: uždarymas žemiau IPO kainos, trečiadienį – apie 78 $",
+     "tags": [
+      "ANT"
+     ],
+     "text": "Lapkričio 24 d. Anthropic akcija nukrito 6,5 % iki 81,91 $ – žemiau 83 $ IPO kainos (dienos žemuma – 75,61 $). Trečiadienį prieš prekybą ji buvo 78,01 $ (−4,8 %). Pirmieji pagal prospektą numatyti vidinių akcininkų pardavimo apribojimų (lock-up) palengvinimai – gruodžio 15 d. (iki 303 mln. akcijų). Canaccord, Wedbush ir Oppenheimer pradėjo vertinimus teigiamais reitingais.",
+     "why": "Turinį rengia Claude (Anthropic modelis), todėl pateikiami tik šaltinių faktai be vertinimo. Išsamiau – skiltyje „Naujienos ir įvykiai“.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "TradingKey: rinkų apžvalga lapkričio 24 d.",
+       "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262321021-market-recap-nasdaq-slips-nvidia-anthropic-breaks-ipo-price-dell-tradingkey",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "MarketSpeaker: Anthropic prieš prekybą −4,8 %",
+       "url": "https://marketspeaker.com/briefs/anthropic-stock-nearly-5-percent-premarket-november-25/",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "FinanceFeeds: Anthropic akcijų pardavimo apribojimų (lock-up) datos",
+       "url": "https://financefeeds.com/anthropic-ipo-lock-up-insider-selling-dates/",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "Tech Funding News: analitikų vertinimai po kritimo žemiau IPO kainos",
+       "url": "https://techfundingnews.com/anthropic-stock-drops-below-83-ipo-price-as-canaccord-wedbush-and-oppenheimer-stay-bullish/",
+       "type": "media",
+       "published": "2026-11-25"
+      }
+     ]
+    },
+    {
+     "headline": "Artea bankas supirks iki 3 mln. savų akcijų darbuotojų atlygiui",
+     "tags": [
+      "SAB1L",
+      "akcijų supirkimas"
+     ],
+     "text": "Artea bankas lapkričio 30 – gruodžio 8 d. per Nasdaq Vilnius oficialaus siūlymo rinką supirks iki 3 mln. savų akcijų už ne daugiau kaip 0,85 € vienai (iš viso iki 2,55 mln. €); kaina bus nustatyta olandiško aukciono būdu, atsiskaitymas – gruodžio 10 d. Akcijos skirtos grupės darbuotojų kintamajam atlygiui, kad nebūtų sumažintos esamų akcininkų dalys.",
+     "why": "Supirkimas nedidelis, palyginti su bendrovės dydžiu, bet akcininkams svarbu, kad darbuotojų atlygis nebūtų mokamas išleidžiant naujas akcijas.",
+     "status": "primary",
+     "sources": [
+      {
+       "name": "Artea bankas: valdybos sprendimas dėl savų akcijų įsigijimo",
+       "url": "https://www.globenewswire.com/news-release/2026/11/25/3410281/0/lt/ab-artea-banko-valdybos-sprendimas-d%C4%97l-sav%C5%B3-akcij%C5%B3-%C4%AFsigijimo.html",
+       "type": "primary",
+       "published": "2026-11-25"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "calendar": [
+  {
+   "date": "2026-11-26",
+   "text": "JAV biržos uždarytos (Padėkos diena); lapkričio 27 d. – sutrumpinta prekyba",
+   "url": "https://www.nyse.com/markets/hours-calendars"
+  },
+  {
+   "date": "2026-11-29",
+   "text": "OPEC+ susitikimas; Sun Investment Group obligacijų išpirkimo terminas",
+   "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---chip-stocks-slump-again-in-new-york-and-seoul---25-november-2026-25112026"
+  },
+  {
+   "date": "2026-11-30",
+   "text": "Prasideda Artea banko savų akcijų supirkimas (iki gruodžio 8 d.); baigiasi PN Project obligacijų pasirašymas",
+   "url": "https://www.globenewswire.com/news-release/2026/11/25/3410281/0/lt/ab-artea-banko-valdybos-sprendimas-d%C4%97l-sav%C5%B3-akcij%C5%B3-%C4%AFsigijimo.html"
+  },
+  {
+   "date": "2026-12-09",
+   "text": "FED palūkanų sprendimas (posėdis gruodžio 8–9 d.)",
+   "url": "https://marketspeaker.com/us-pce-inflation-october-2026-core-prices-fed-december/"
+  },
+  {
+   "date": "2026-12-10",
+   "text": "Ignitis grupės neeilinis akcininkų susirinkimas (dividendai)",
+   "url": "https://www.globenewswire.com/news-release/2026/11/11/3400468/0/en/ignitis-group-s-updated-financial-calendar-2026.html"
+  },
+  {
+   "date": "2026-12-15",
+   "text": "Pirmasis Anthropic akcijų pardavimo apribojimų (lock-up) palengvinimas – iki 303 mln. akcijų",
+   "url": "https://financefeeds.com/anthropic-ipo-lock-up-insider-selling-dates/"
+  },
+  {
+   "date": "2026-12-16",
+   "text": "DelfinGroup dividendų ex-data (0,0326 € akcijai)",
+   "url": "https://kpiresearch.substack.com/p/baltic-stock-market-weekly-review-c45"
+  },
+  {
+   "date": "2026-12-23",
+   "text": "JAV lapkričio PCE infliacijos duomenys",
+   "url": "https://trendandticker.com/news/markets/capital-markets/2026-11-25/pce-inflation-october-3-8-percent-gdp-revised-4-3"
+  }
+ ]
+}
