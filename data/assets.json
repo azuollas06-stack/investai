@@ -1340,6 +1340,13 @@
      "type": "Akcija",
      "sector": "Technologijos",
      "country": "JAV"
+    },
+    {
+     "s": "NYSE:HPQ",
+     "n": "HP Inc.",
+     "type": "Akcija",
+     "sector": "Technologijos",
+     "country": "JAV"
     }
    ]
   },

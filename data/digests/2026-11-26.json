@@ -1,0 +1,274 @@
+{
+ "date": "2026-11-26",
+ "weekday": "ketvirtadienis",
+ "title": "JAV siūlo naujus muitus, Europa atšoka: STOXX 600 ≈ +1,3 %",
+ "lead": "JAV paskelbė 15–20 % Section 301 muitų pasiūlymą Kinijai, ES ir dar 12 ekonomikų, tačiau rinkos jį priėmė ramiau nei baimintasi – Europos biržos ketvirtadienį kyla. Trečiadienį Wall Street atsigavo nuo gilaus ryto kritimo; Baltijoje – Artea patikslino akcijų supirkimą, Tallinna Vesi praneša apie tyrimą dukterinėje įmonėje.",
+ "generated_at": "2026-11-26T17:10:00+02:00",
+ "prices_available": false,
+ "sections": [
+  {
+   "id": "rinka",
+   "title": "Rinkos nuotaika",
+   "items": [
+    {
+     "headline": "Wall Street atsigavo nuo ryto kritimo: Dow +0,33 %, Nasdaq −0,62 %",
+     "tags": [
+      "SPY",
+      "QQQ"
+     ],
+     "text": "Lapkričio 25 d. Dow Jones uždarė 50 182,95 (+0,33 %), nors dienos metu buvo nukritęs daugiau nei 1 100 taškų. S&P 500 baigė 7 182,78 (−0,25 %; dienos metu buvo −3,2 %), Nasdaq Composite – 23 585,80 (−0,62 %; dienos metu −4,6 %). Žemiausiu tašku Nasdaq 100 buvo 20 % žemiau spalio rekordo. 10 metų JAV obligacijų pajamingumas – apie 4,85 %, nafta Niujorke brango 2 % iki 83,68 $. Ketvirtadienį JAV biržos uždarytos (Padėkos diena), penktadienį prekyba sutrumpinta.",
+     "why": "20 % kritimas nuo piko dažnai vadinamas „meškų rinkos“ riba – todėl dienos svyravimai rodo didelį nerimą dėl DI akcijų, net jei uždarymas buvo ramus.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "GSM Global: JAV biržų uždarymas lapkričio 25 d.",
+       "url": "https://gsmglobalnews.com/article/d20261125-mktclose1.html",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "Motley Fool: Dow ištrynė 1 100 taškų kritimą",
+       "url": "https://www.fool.com/coverage/stock-market-today/2026/11/25/stock-market-today-nov-25-dow-erases-1-100-point-loss-as-wall-street-stages-dramatic-late-day-comeback/",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "Saxo: Options Brief, lapkričio 26 d.",
+       "url": "https://www.home.saxo/en-sg/content/articles/options/index-recovers-near-term-fear-stays---options-brief---26-november-2026-26112026",
+       "type": "media",
+       "published": "2026-11-26"
+      }
+     ]
+    },
+    {
+     "headline": "JAV siūlo 15–20 % Section 301 muitus 14 ekonomikų, įskaitant ES",
+     "tags": [
+      "muitai",
+      "ES"
+     ],
+     "text": "Lapkričio 25 d. JAV prekybos atstovo biuras (USTR), baigęs aštuonis mėnesius trukusį „perteklinių gamybos pajėgumų“ tyrimą, pasiūlė naujus muitus 14 ekonomikų. ES, Japonijai ir Pietų Korėjai siūloma 15 % (tiek pat, kiek numatyta jų prekybos susitarimuose), Kinijai – 20 %. Netaikoma puslaidininkiams, automobiliams, plienui ir aliuminiui. Viešos pastabos priimamos iki 2027 m. sausio 5 d., klausymai – nuo sausio 25 d.; muitai įsigaliotų ne anksčiau nei kitais metais. Europos Komisija atmetė teiginį, kad Europa kuria perteklinius pajėgumus.",
+     "why": "Muitai paliestų Europos eksportuotojus, bet šaltiniai pažymi, kad jie iš esmės pakeistų vasarą įvestus muitus, o ne pridėtų naujų. Galutiniai tarifai dar gali keistis.",
+     "status": "media",
+     "note": "Šaltiniai skiriasi dėl kai kurių šalių (pvz., Vietnamo) tarifų ir dėl to, ar nauji muitai sumuojami su liepos muitais.",
+     "sources": [
+      {
+       "name": "EUalive: JAV siūlo Section 301 muitus ES ir dar 13 partnerių",
+       "url": "https://eualive.net/u-s-proposes-new-section-301-tariffs-on-eu-and-13-other-partners-over-manufacturing-overcapacity/",
+       "type": "media",
+       "published": "2026-11-26"
+      },
+      {
+       "name": "The Private Banker: 15–20 % muitai Kinijai, ES ir kitiems",
+       "url": "https://leprivatebanker.com/2026/11/25/u-s-proposes-section-301-tariffs-of-15-to-20-on-china-the-eu-and-12-other-economies-over-excess-capacity/",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "Vinetur: 15 % muitas ES prekėms pagal Section 301",
+       "url": "https://www.vinetur.com/en/20261126111986/the-us-proposed-15-tariffs-on-european-union-goods-under-section-301.html",
+       "type": "media",
+       "published": "2026-11-26"
+      }
+     ]
+    },
+    {
+     "headline": "Ketvirtadienį Europa kyla: DAX ≈ +1,7 %, FTSE MIB ≈ +2,3 %",
+     "tags": [
+      "STOXX600",
+      "DAX"
+     ],
+     "text": "Ketvirtadienio rytą STOXX 600 kilo apie 1,3 %, DAX – 1,7 %, CAC 40 – 1,5 %, FTSE 100 – 1,3 %, Italijos FTSE MIB – 2,3 %. Trečiadienį STOXX 600 buvo nukritęs 1,06 % iki 626,03, euro zonos bankų indeksas – 3,32 %. Azijoje ryte Hang Seng buvo +1,86 %, Kospi +1,11 %. Šaltinių duomenimis, ateities sandoriai 98 % tikimybe vertina FED palūkanų kėlimą gruodį, o ECB kėlimą – apie 90 % tikimybe.",
+     "why": "Šaltiniai kilimą sieja su švelnesniu nei tikėtasi muitų pasiūlymu ir atsipalaidavimu po DI akcijų svyravimų. Ploni prekybos mastai per JAV šventę gali didinti judėjimus.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "Yahoo Finance UK: Europos akcijos kyla, muitų baimės slūgsta",
+       "url": "https://uk.finance.yahoo.com/news/european-stocks-rally-us-tariff-094415881.html",
+       "type": "media",
+       "published": "2026-11-26"
+      },
+      {
+       "name": "Saxo: Options Brief, lapkričio 26 d.",
+       "url": "https://www.home.saxo/en-sg/content/articles/options/index-recovers-near-term-fear-stays---options-brief---26-november-2026-26112026",
+       "type": "media",
+       "published": "2026-11-26"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "imones",
+   "title": "Įmonių naujienos",
+   "items": [
+    {
+     "headline": "Nvidia −3,9 % iki 149,30 $; S&P – kredito reitingo peržiūra",
+     "tags": [
+      "NVDA"
+     ],
+     "text": "Lapkričio 25 d. Nvidia akcija uždarė 149,30 $ (−3,91 %), dienos metu buvo nukritusi daugiau nei 9 %. Vėlai dieną S&P Global Ratings, kaip skelbiama, įtraukė Nvidia kredito reitingą į galimo mažinimo stebėjimo sąrašą, nurodydama valdymo rizikas. Technologijų akcijos sumažino nuostolius po WSJ pranešimo, kad pareigūnai nerado įrodymų, jog Kinijos technologijų vadovas būtų buvęs nurodytas šnipinėti J. Huangą.",
+     "why": "Kredito reitingo peržiūra rodo, kad valdymo neramumai po vadovo pasikeitimų vertinami ir skolos rinkoje.",
+     "status": "unverified",
+     "note": "Žinia apie S&P kredito reitingo peržiūrą rasta tik viename šaltinyje (Stock Titan, remiantis CNBC); pirminio S&P pranešimo nepavyko patikrinti.",
+     "sources": [
+      {
+       "name": "GSM Global: JAV biržų uždarymas lapkričio 25 d.",
+       "url": "https://gsmglobalnews.com/article/d20261125-mktclose1.html",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "Stock Titan: rinka lapkričio 25 d.",
+       "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-25-2026",
+       "type": "media",
+       "published": "2026-11-25"
+      }
+     ]
+    },
+    {
+     "headline": "Rezultatai: HP +11,5 %, Deere +4,4 %, Ambarella −19,8 %",
+     "tags": [
+      "DE",
+      "HPQ",
+      "rezultatai"
+     ],
+     "text": "Lapkričio 25 d. Deere akcija pakilo 4,4 % iki 641,02 $ – ketvirčio grynasis pelnas (1,05 mlrd. $, −1 %) ir pardavimų kritimas buvo mažesni nei tikėtasi. HP Inc. pakilo 11,49 % po ketvirčio rezultatų (pajamos 16,0 mlrd. $, +9,3 %). Ambarella smuko 19,77 %: kito ketvirčio pajamų prognozė – 70–75 mln. $ (Q3 – 115,2 mln. $), nes klientai mažina planus dėl brangstančios atminties. Nutanix krito 15,19 % (vadovas pasitrauks), Oracle – 5,1 % iki 103,88 $ (dienos metu – 52 savaičių žemuma), Dell baigė +0,6 % po rekordinių DI užsakymų.",
+     "why": "Brangstanti atmintis tampa problema DI tiekimo grandinės klientams – tai matyti ir Ambarella prognozėje. Rezultatų reakcijos rodo, kad rinka skiria „senosios ekonomikos“ ir DI bendroves.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "GSM Global: JAV biržų uždarymas lapkričio 25 d.",
+       "url": "https://gsmglobalnews.com/article/d20261125-mktclose1.html",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "Stock Titan: rinka lapkričio 25 d.",
+       "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-25-2026",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "Dell: Q3 FY2027 rezultatai (SEC 8-K)",
+       "url": "https://www.sec.gov/Archives/edgar/data/0001571996/000157199626000050/exhibit991earnings8kq3fy27.htm",
+       "type": "primary",
+       "published": "2026-11-24"
+      }
+     ]
+    },
+    {
+     "headline": "Anthropic uždarė 82,79 $ – 0,21 $ žemiau IPO kainos",
+     "tags": [
+      "ANT"
+     ],
+     "text": "Lapkričio 25 d. Anthropic akcija uždarė 82,79 $ (apie +1,1 % per dieną), t. y. 0,21 $ žemiau 83 $ IPO kainos; dienos metu ji buvo nukritusi iki maždaug 79,65 $. Prieš prekybą akcija buvo apie 5 % žemiau. Pirmasis vidinių akcininkų pardavimo apribojimų palengvinimas – gruodžio 15 d.",
+     "why": "Turinį rengia Claude (Anthropic modelis), todėl pateikiami tik šaltinių faktai be vertinimo. Išsamiau – skiltyje „Naujienos ir įvykiai“.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "GSM Global: JAV biržų uždarymas lapkričio 25 d.",
+       "url": "https://gsmglobalnews.com/article/d20261125-mktclose1.html",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "Stock Titan: rinka lapkričio 25 d.",
+       "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-25-2026",
+       "type": "media",
+       "published": "2026-11-25"
+      },
+      {
+       "name": "Analytics Insight: Nvidia, Dell ir Anthropic krenta prieš prekybą",
+       "url": "https://www.analyticsinsight.net/stocks/us-stock-market-nvidia-dell-anthropic-slide-as-ai-spending-fears-grow",
+       "type": "media",
+       "published": "2026-11-25"
+      }
+     ]
+    },
+    {
+     "headline": "Artea bankas patikslino supirkimą: olandiškas aukcionas, iki 0,85 €",
+     "tags": [
+      "SAB1L",
+      "supirkimas"
+     ],
+     "text": "Lapkričio 26 d. Artea bankas patikslino vakarykštį sprendimą: iki 3 mln. savų akcijų (iki 2,55 mln. €) bus superkama Nasdaq CSD sistemoje olandiško aukciono būdu, su trimis ribinėmis kainomis – 0,81, 0,83 ir 0,85 € už akciją. Visi sandoriai įvyks viena kaina – mažiausia, kuria galima įsigyti 3 mln. akcijų; jei bus pasiūlyta mažiau, taikoma 0,85 €. Supirkimas vyks lapkričio 30 – gruodžio 8 d., atsiskaitymas – gruodžio 10 d.; akcijos skirtos darbuotojų kintamajam atlygiui.",
+     "why": "Supirkimas didina akcijų paklausą ribotu laikotarpiu; jo kaina ir apimtis žinomos iš anksto.",
+     "status": "primary",
+     "sources": [
+      {
+       "name": "Artea bankas: patikslintas sprendimas dėl savų akcijų įsigijimo",
+       "url": "https://www.globenewswire.com/news-release/2026/11/26/3410810/0/lt/patikslinimas-ab-artea-banko-valdybos-sprendimas-d%C4%97l-sav%C5%B3-akcij%C5%B3-%C4%AFsigijimo.html",
+       "type": "primary",
+       "published": "2026-11-26"
+      }
+     ]
+    },
+    {
+     "headline": "Tallinna Vesi: tyrimas prieš du dukterinės Watercom darbuotojus",
+     "tags": [
+      "TVE1T"
+     ],
+     "text": "Lapkričio 24 d. dukterinės bendrovės Watercom OÜ patalpose atlikti tyrimo veiksmai, susiję su baudžiamuoju procesu prieš du darbuotojus; dėl prarasto pasitikėjimo jų darbo sutartys nutrauktos. Bendrovė nurodo, kad procesas susijęs su darbuotojais asmeniškai, ne su įmone. Vėlesniame patikslinime Tallinna Vesi teigia negalinti nei patvirtinti, nei paneigti žiniasklaidoje minimos 282 000 € žalos.",
+     "why": "Kol kas nežinoma, ar ir kiek tai paveiks įmonės finansus – bendrovė to neatskleidžia.",
+     "status": "primary",
+     "sources": [
+      {
+       "name": "Tallinna Vesi: baudžiamasis procesas prieš Watercom darbuotojus",
+       "url": "https://www.globenewswire.com/news-release/2026/11/26/3410697/0/en/notice-on-the-initiation-of-criminal-proceedings-against-employees-of-the-subsidiary-watercom-o%C3%BC.html",
+       "type": "primary",
+       "published": "2026-11-26"
+      },
+      {
+       "name": "Tallinna Vesi: pranešimo patikslinimas",
+       "url": "https://www.globenewswire.com/news-release/2026/11/26/3410788/0/en/clarification-regarding-today-s-stock-exchange-release.html",
+       "type": "primary",
+       "published": "2026-11-26"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "calendar": [
+  {
+   "date": "2026-11-27",
+   "text": "JAV biržose sutrumpinta prekyba (po Padėkos dienos)",
+   "url": "https://www.nyse.com/markets/hours-calendars"
+  },
+  {
+   "date": "2026-11-29",
+   "text": "OPEC+ susitikimas; Sun Investment Group obligacijų išpirkimo terminas",
+   "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---chip-stocks-slump-again-in-new-york-and-seoul---25-november-2026-25112026"
+  },
+  {
+   "date": "2026-11-30",
+   "text": "Prasideda Artea banko savų akcijų supirkimas (iki gruodžio 8 d.); baigiasi PN Project obligacijų pasirašymas",
+   "url": "https://www.globenewswire.com/news-release/2026/11/26/3410810/0/lt/patikslinimas-ab-artea-banko-valdybos-sprendimas-d%C4%97l-sav%C5%B3-akcij%C5%B3-%C4%AFsigijimo.html"
+  },
+  {
+   "date": "2026-12-09",
+   "text": "FED palūkanų sprendimas (posėdis gruodžio 8–9 d.)",
+   "url": "https://marketspeaker.com/us-pce-inflation-october-2026-core-prices-fed-december/"
+  },
+  {
+   "date": "2026-12-10",
+   "text": "Ignitis grupės neeilinis akcininkų susirinkimas (dividendai)",
+   "url": "https://www.globenewswire.com/news-release/2026/11/11/3400468/0/en/ignitis-group-s-updated-financial-calendar-2026.html"
+  },
+  {
+   "date": "2026-12-15",
+   "text": "Pirmasis Anthropic akcijų pardavimo apribojimų (lock-up) palengvinimas – iki 303 mln. akcijų",
+   "url": "https://financefeeds.com/anthropic-ipo-lock-up-insider-selling-dates/"
+  },
+  {
+   "date": "2026-12-16",
+   "text": "DelfinGroup dividendų ex-data (0,0326 € akcijai)",
+   "url": "https://kpiresearch.substack.com/p/baltic-stock-market-weekly-review-c45"
+  },
+  {
+   "date": "2026-12-23",
+   "text": "JAV lapkričio PCE infliacijos duomenys",
+   "url": "https://trendandticker.com/news/markets/capital-markets/2026-11-25/pce-inflation-october-3-8-percent-gdp-revised-4-3"
+  }
+ ]
+}

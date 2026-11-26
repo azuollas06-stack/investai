@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25",
+ "updated": "2026-11-26",
  "note": "Naujienų ir įvykių sąrašas. Pildo kasdienė užduotis (žr. TURINIO_GIDAS.md). Nuomonės – tik iš šaltinių, abi pusės.",
  "events": [
   {
@@ -14,7 +14,14 @@
   {
    "date": "2026-11-26",
    "kind": "macro",
-   "title": "JAV biržos uždarytos (Padėkos diena); lapkričio 27 d. – sutrumpinta prekyba",
+   "title": "JAV biržos uždarytos (Padėkos diena)",
+   "symbols": [],
+   "url": "https://www.nyse.com/markets/hours-calendars"
+  },
+  {
+   "date": "2026-11-27",
+   "kind": "macro",
+   "title": "JAV biržose sutrumpinta prekyba po Padėkos dienos",
    "symbols": [],
    "url": "https://www.nyse.com/markets/hours-calendars"
   },
@@ -42,11 +49,11 @@
   {
    "date": "2026-11-30",
    "kind": "company",
-   "title": "Artea bankas pradeda savų akcijų supirkimą (iki 3 mln. akcijų, iki gruodžio 8 d.)",
+   "title": "Artea bankas pradeda savų akcijų supirkimą olandiško aukciono būdu (iki 3 mln. akcijų, 0,81–0,85 €, iki gruodžio 8 d.)",
    "symbols": [
     "OMXVSE:SAB1L"
    ],
-   "url": "https://www.globenewswire.com/news-release/2026/11/25/3410281/0/lt/ab-artea-banko-valdybos-sprendimas-d%C4%97l-sav%C5%B3-akcij%C5%B3-%C4%AFsigijimo.html"
+   "url": "https://www.globenewswire.com/news-release/2026/11/26/3410810/0/lt/patikslinimas-ab-artea-banko-valdybos-sprendimas-d%C4%97l-sav%C5%B3-akcij%C5%B3-%C4%AFsigijimo.html"
   },
   {
    "date": "2026-12-09",
@@ -88,21 +95,92 @@
    "title": "JAV lapkričio PCE infliacijos duomenys",
    "symbols": [],
    "url": "https://trendandticker.com/news/markets/capital-markets/2026-11-25/pce-inflation-october-3-8-percent-gdp-revised-4-3"
+  },
+  {
+   "date": "2027-01-05",
+   "kind": "macro",
+   "title": "Baigiasi viešų pastabų dėl JAV Section 301 muitų pasiūlymo terminas (klausymai – nuo sausio 25 d.)",
+   "symbols": [],
+   "url": "https://eualive.net/u-s-proposes-new-section-301-tariffs-on-eu-and-13-other-partners-over-manufacturing-overcapacity/"
   }
  ],
  "stories": [
   {
+   "id": "section-301-muitai",
+   "date": "2026-11-26",
+   "kind": "macro",
+   "title": "JAV siūlo 15–20 % muitus Kinijai, ES ir dar 12 ekonomikų",
+   "symbols": [],
+   "lead": "Lapkričio 25 d. JAV prekybos atstovo biuras pasiūlė naujus Section 301 muitus 14 ekonomikų dėl „perteklinių gamybos pajėgumų“. Pasiūlymas dar nėra galutinis: laukia viešų pastabų ir klausymų etapas, todėl muitai įsigaliotų ne anksčiau nei 2027 m.",
+   "facts": [
+    "ES, Japonijai ir Pietų Korėjai siūloma 15 % – tiek, kiek numatyta jų susitarimuose su JAV; Kinijai – 20 %, kai kurioms Pietryčių Azijos šalims – 17–18 % (šaltiniai dėl kai kurių šalių tarifų skiriasi).",
+    "Tyrimas apėmė 14 ekonomikų: Kiniją, ES, Japoniją, Pietų Korėją, Indiją, Taivaną, Šveicariją, Vietnamą ir kitas; dėl Meksikos ir Norvegijos sprendimo dar nėra.",
+    "Muitai netaikomi puslaidininkiams, automobiliams, plienui ir aliuminiui (jiems taikomos kitos priemonės).",
+    "Pastabos priimamos iki 2027 m. sausio 5 d., klausymai prasideda sausio 25 d.",
+    "Ketvirtadienį Europos biržos kilo: STOXX 600 ≈ +1,3 %, DAX ≈ +1,7 %; šaltiniai tai sieja su švelnesniu nei tikėtasi pasiūlymu."
+   ],
+   "pro": [
+    {
+     "who": "Stephen Brown, Capital Economics",
+     "text": "Pasiūlymas mažiau grėsmingas, nei atrodo: nauji muitai iš esmės pakeistų vasarą paskelbtus ir apimtų ribotą prekių ratą, todėl kainas kilstelėtų tik nežymiai.",
+     "source": "EUalive"
+    },
+    {
+     "who": "Chang Pao-Li, Singapūro vadybos universitetas",
+     "text": "Section 301 pagrindas teisiškai tvirtesnis nei anksčiau naudoti nepaprastųjų įgaliojimų muitai; teisminiai ginčai tikėtini, bet istoriškai jie dažniau palankūs administracijai.",
+     "source": "EUalive"
+    }
+   ],
+   "con": [
+    {
+     "who": "Olof Gill, Europos Komisijos atstovas",
+     "text": "ES griežtai atmeta prielaidą, kad Europa kuria perteklinius pajėgumus, ir apgailestauja dėl vienašališkų veiksmų.",
+     "source": "EUalive"
+    },
+    {
+     "who": "Bernd Lange, Europos Parlamento prekybos komiteto pirmininkas",
+     "text": "JAV išvadas pavadino „absurdiškomis“; tarifai virš 15 % pažeistų susitarimą ir galėtų sukelti atsakomąsias priemones.",
+     "source": "EUalive"
+    }
+   ],
+   "status": "media",
+   "note": "Šaltiniai skiriasi dėl kai kurių šalių tarifų ir dėl to, ar muitai sumuojami su liepos muitais.",
+   "sources": [
+    {
+     "name": "EUalive: JAV siūlo Section 301 muitus ES ir dar 13 partnerių",
+     "url": "https://eualive.net/u-s-proposes-new-section-301-tariffs-on-eu-and-13-other-partners-over-manufacturing-overcapacity/",
+     "published": "2026-11-26"
+    },
+    {
+     "name": "The Private Banker: 15–20 % muitai Kinijai, ES ir kitiems",
+     "url": "https://leprivatebanker.com/2026/11/25/u-s-proposes-section-301-tariffs-of-15-to-20-on-china-the-eu-and-12-other-economies-over-excess-capacity/",
+     "published": "2026-11-25"
+    },
+    {
+     "name": "Vinetur: 15 % muitas ES prekėms",
+     "url": "https://www.vinetur.com/en/20261126111986/the-us-proposed-15-tariffs-on-european-union-goods-under-section-301.html",
+     "published": "2026-11-26"
+    },
+    {
+     "name": "Yahoo Finance UK: Europos akcijos kyla",
+     "url": "https://uk.finance.yahoo.com/news/european-stocks-rally-us-tariff-094415881.html",
+     "published": "2026-11-26"
+    }
+   ]
+  },
+  {
    "id": "anthropic-ipo",
-   "date": "2026-11-25",
+   "date": "2026-11-26",
    "kind": "ipo",
-   "title": "Anthropic po IPO: +17 % pirmą dieną, dabar žemiau 83 $ IPO kainos",
+   "title": "Anthropic po IPO: +17 % pirmą dieną, dabar apie IPO kainą (83 $)",
    "symbols": [
     "NASDAQ:ANT"
    ],
-   "lead": "Claude kūrėjos Anthropic akcijos lapkričio 19 d. pradėjo prekybą Nasdaq ir pirmą dieną baigė ties 97,17 $ (+17 % nuo 83 $ IPO kainos). Vėliau jos krito kartu su DI sektoriumi: lapkričio 24 d. uždarė žemiau IPO kainos, trečiadienį prieš prekybą buvo apie 78 $.",
+   "lead": "Claude kūrėjos Anthropic akcijos lapkričio 19 d. pradėjo prekybą Nasdaq ir pirmą dieną baigė ties 97,17 $ (+17 % nuo 83 $ IPO kainos). Vėliau jos krito kartu su DI sektoriumi: lapkričio 24 d. uždarė 81,91 $, lapkričio 25 d. – 82,79 $, t. y. 0,21 $ žemiau IPO kainos.",
    "facts": [
     "Pirmasis sandoris – 111,50 $, dienos aukščiausia kaina – 115,10 $, pirmos dienos uždarymas – 97,17 $.",
     "Lapkričio 24 d. akcija nukrito 6,5 % iki 81,91 $ (dienos žemuma – 75,61 $); lapkričio 25 d. 6:19 val. (JAV rytų laiku) – 78,01 $ (−4,8 %).",
+    "Lapkričio 25 d. akcija uždarė 82,79 $ (≈ +1,1 %); dienos metu buvo nukritusi iki maždaug 79,65 $.",
     "Pagal prospektą vidinių akcininkų pardavimo apribojimai švelninami etapais: gruodžio 15 d. (iki 303 mln. akcijų), sausio 5 ir 19 d., vasario 2 d.; įkūrėjams ir stambiems akcininkams – ilgesni terminai.",
     "Pritraukta suma šaltiniuose skiriasi: 81,3 mlrd. $ (980 mln. akcijų po 83 $) arba 93,5 mlrd. $ su papildomu paskirstymu.",
     "Pagal prospektą bendrovė pagal standartinę apskaitą nuostolinga, turi 6,2 mlrd. $ skolos ir ~900 mlrd. $ įsipareigojimų skaičiavimo infrastruktūrai (AP).",
@@ -145,6 +223,16 @@
    "disclosure": "InvestAI turinį rengia DI modelis Claude, kurį kuria Anthropic. Todėl čia pateikiami tik šaltinių faktai ir abiejų pusių nuomonės, be jokio savo vertinimo.",
    "status": "media",
    "sources": [
+    {
+     "name": "GSM Global: JAV biržų uždarymas lapkričio 25 d.",
+     "url": "https://gsmglobalnews.com/article/d20261125-mktclose1.html",
+     "published": "2026-11-25"
+    },
+    {
+     "name": "Stock Titan: rinka lapkričio 25 d.",
+     "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-25-2026",
+     "published": "2026-11-25"
+    },
     {
      "name": "TradingKey: rinkų apžvalga lapkričio 24 d.",
      "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262321021-market-recap-nasdaq-slips-nvidia-anthropic-breaks-ipo-price-dell-tradingkey",
@@ -412,86 +500,6 @@
      "name": "Motley Fool / Yahoo: lapkričio 19 d. rinkos",
      "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nov-19-222025646.html",
      "published": "2026-11-19"
-    }
-   ]
-  },
-  {
-   "id": "nvidia-q3-fy27",
-   "date": "2026-11-18",
-   "kind": "earnings",
-   "title": "Nvidia rezultatai viršijo lūkesčius, akcija kyla po keturių kritimo dienų",
-   "symbols": [
-    "NASDAQ:NVDA"
-   ],
-   "lead": "Lapkričio 17 d. vakare Nvidia paskelbė trečiojo ketvirčio rezultatus – pirmuosius po Jensen Huang pasitraukimo. Pajamos išaugo dvigubai ir viršijo lūkesčius; akcija po prekybos pakilo daugiau nei 4 %, trečiadienį atsidarė apie 2 % aukščiau.",
-   "facts": [
-    "Ketvirčio pajamos – 115,8 mlrd. $ (+103 % per metus), analitikai tikėjosi apie 109 mlrd. $.",
-    "Duomenų centrų pajamos – 107,6 mlrd. $ (+110 %).",
-    "Kito ketvirčio prognozė – apie 130 mlrd. $ pajamų, neįskaičiuojant duomenų centrų pardavimų Kinijai.",
-    "Bendrovė tikisi, kad bendrasis pelningumas kitą ketvirtį sumažės nuo ~75 % iki 71–72 %.",
-    "Bendrovė padidino metinio pajamų augimo prognozę nuo 70 % iki 75 %.",
-    "Laikinai bendrovei vadovauja finansų direktorė Colette Kress; valdybos pirmininkas pareiškė, kad Huang negrąžinamas."
-   ],
-   "pro": [
-    {
-     "who": "Michael Casper, HB Wealth",
-     "text": "Rezultatus ir prognozę rinka sutiko su palengvėjimu – DI paklausa išlieka stipri, o Nvidia tebėra lyderio pozicijoje.",
-     "source": "Kiplinger"
-    },
-    {
-     "who": "Rezultatų apžvalgininkai",
-     "text": "Pajamos viršijo net pačios bendrovės prognozę, o kito ketvirčio prognozė rodo stiprią DI infrastruktūros paklausą.",
-     "source": "StockTitan"
-    }
-   ],
-   "con": [
-    {
-     "who": "Michael Casper, HB Wealth",
-     "text": "Rizikos lieka: maža pardavimų Kinijai dalis (6 %), galimi griežtesni eksporto ribojimai ir „žiedinis“ finansavimas su DI debesijos bendrovėmis (pvz., CoreWeave).",
-     "source": "Kiplinger"
-    },
-    {
-     "who": "Reuters cituotas strategas",
-     "text": "Rezultatai neatsakė į klausimus apie DI investicijų grąžą ir vadovybės ateitį.",
-     "source": "Reuters / Yahoo Finance"
-    }
-   ],
-   "status": "primary",
-   "sources": [
-    {
-     "name": "Kiplinger: rezultatai ir reakcija",
-     "url": "https://www.kiplinger.com/news/live/nvidia-earnings-live-updates-and-commentary-november-2026",
-     "published": "2026-11-18"
-    },
-    {
-     "name": "Yahoo Finance: rinkos tiesiogiai",
-     "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-november-18-dow-sp-500-nasdaq-nvidia-anthropic-ipo-090613569.html",
-     "published": "2026-11-18"
-    },
-    {
-     "name": "NVIDIA pranešimas",
-     "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2027",
-     "published": "2026-11-17"
-    },
-    {
-     "name": "Investing.com / Yahoo: lūkesčiai",
-     "url": "https://uk.finance.yahoo.com/news/nvidia-beats-third-quarter-estimates-214100513.html",
-     "published": "2026-11-17"
-    },
-    {
-     "name": "Quantisnow: 8-K santrauka",
-     "url": "https://www.quantisnow.com/insight/nvidia-corporation-filed-sec-form-8-k-results-of-operations-and-6796844",
-     "published": "2026-11-17"
-    },
-    {
-     "name": "TradingKey: pelningumo prognozė",
-     "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262309793-nvidia-earnings-report-q3-rubin-ramp-data-center-growth-revenue-guidance-gross-margin-tradingkey",
-     "published": "2026-11-17"
-    },
-    {
-     "name": "StockTitan: rezultatai vs prognozė",
-     "url": "https://www.stocktitan.net/articles/nvidia-q3-fiscal-2027-earnings-revenue-outlook",
-     "published": "2026-11-17"
     }
    ]
   }
