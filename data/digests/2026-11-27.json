@@ -1,0 +1,276 @@
+{
+ "date": "2026-11-27",
+ "weekday": "penktadienis",
+ "title": "Kinija šoka +4 %, lustai atsigauna: Nasdaq ateitis ≈ +2,3 %",
+ "lead": "Pekinui pažadėjus stipresnę rinkos paramą, Kinijos akcijos pakilo labiausiai per dvejus metus, o JAV ateities sandoriai prieš sutrumpintą Juodojo penktadienio sesiją kilo 1,3–2,8 %. Rheinmetall sumažino 2030 m. tikslus, bet akcija kyla; Vilniuje – Invalda INVL 9 mėn. rezultatai.",
+ "generated_at": "2026-11-27T17:15:00+02:00",
+ "prices_available": false,
+ "sections": [
+  {
+   "id": "rinka",
+   "title": "Rinkos nuotaika",
+   "items": [
+    {
+     "headline": "JAV ateities sandoriai kyla prieš sutrumpintą sesiją: Nasdaq 100 ≈ +2,3–2,8 %",
+     "tags": [
+      "SPY",
+      "QQQ"
+     ],
+     "text": "Penktadienio rytą prieš prekybos pradžią Nasdaq 100 ateities sandoriai kilo apie 2,3–2,8 %, S&P 500 – 1,7–2 %, Dow – apie 1,3–1,4 % (skirtingų šaltinių duomenys skirtingu laiku). Prekyba akcijomis baigiasi anksčiau – 13 val. Niujorko (20 val. Vilniaus) laiku. Trečiadienį Nasdaq 100 trumpam buvo pasiekęs 20 % kritimo nuo piko ribą, bet uždarė −0,6 %. Lapkričio 25 d. paskelbti duomenys: III ketv. BVP antrasis įvertinimas – 4,3 % (metiniu tempu), pirminių bedarbio pašalpų prašymų – 189 tūkst. 10 metų JAV obligacijų pajamingumas – apie 4,9 %, auksas brango apie 2,5 % iki ≈ 3 650–3 666 $.",
+     "why": "Šventinės dienos prekyba paprastai būna menka, todėl dideli pokyčiai gali būti nepatvarūs – tai pažymi ir patys šaltiniai. Rinka beveik neabejoja, kad FED gruodžio 9 d. pakels palūkanas 0,25 p. p.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "XTB: Morning Wrap, lapkričio 27 d.",
+       "url": "https://www.xtb.com/int/market-analysis/news-and-research/morning-wrap-nasdaq-rebounds-from-bear-market-threshold-27-11-2026",
+       "type": "media",
+       "published": "2026-11-27"
+      },
+      {
+       "name": "Options Oracle: prieš prekybą, lapkričio 27 d.",
+       "url": "https://optionsoracle.substack.com/p/the-chips-bounce-back-nasdaq-futures",
+       "type": "media",
+       "published": "2026-11-27"
+      },
+      {
+       "name": "Zacks: rinkos naujienos lapkričio 27 d.",
+       "url": "https://www.metatrader.com/en/news/zacks/5120943-stock-market-news-for-nov-27-2026",
+       "type": "media",
+       "published": "2026-11-27"
+      },
+      {
+       "name": "Blockonomi: Juodojo penktadienio judėjimai",
+       "url": "https://blockonomi.com/todays-market-movers-sandisk-marvell-nvidia-lead-black-friday-tech-rebound/",
+       "type": "media",
+       "published": "2026-11-27"
+      }
+     ]
+    },
+    {
+     "headline": "Pekinas pažadėjo stipresnę paramą: CSI 300 +4,2 %, STAR 50 +15 %",
+     "tags": [
+      "Kinija",
+      "FXI"
+     ],
+     "text": "Po Kinijos Valstybės tarybos posėdžio pranešta, kad valstybinis fondas Central Huijin stiprins rinkos stabilizavimo vaidmenį, o maržinio skolinimo taisyklės švelninamos. Penktadienį CSI 300 pakilo 4,2 %, Šanchajaus Composite – 3,7 % (daugiausia nuo 2024 m. spalio), technologijų indeksas STAR 50 – 15 %, Hang Seng – 2,1 %. Kospi kilo apie 4,3 %, Nikkei – apie 2 %. Prieš tai STAR 50 ir ChiNext nuo liepos buvo nukritę maždaug perpus.",
+     "why": "Valstybės parama gali greitai pakeisti nuotaiką, tačiau dalis analitikų pažymi, kad pareiškime nebuvo konkrečių sumų ir terminų, o ilgalaikis atsigavimas priklausys nuo ekonomikos rodiklių.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "Reuters (per WHBL): Kinijos akcijos ir juanis kyla",
+       "url": "https://whbl.com/2026/11/27/china-stocks-yuan-rally-after-beijing-vows-stronger-market-support/",
+       "type": "media",
+       "published": "2026-11-27"
+      },
+      {
+       "name": "Oninvest: Kinijos akcijos šoktelėjo",
+       "url": "https://en.oninvest.com/article/stocks-in-china-soared-following-beijing-s-unexpected-announcement-of-market-support-measures",
+       "type": "media",
+       "published": "2026-11-27"
+      },
+      {
+       "name": "XTB: Morning Wrap, lapkričio 27 d.",
+       "url": "https://www.xtb.com/int/market-analysis/news-and-research/morning-wrap-nasdaq-rebounds-from-bear-market-threshold-27-11-2026",
+       "type": "media",
+       "published": "2026-11-27"
+      }
+     ]
+    },
+    {
+     "headline": "Europa kyla antrą dieną; Ispanijos infliacija lėtėja",
+     "tags": [
+      "STOXX600",
+      "DAX"
+     ],
+     "text": "Penktadienio rytą (08:46 GMT) STOXX 600 buvo +0,92 % (642,81), DAX +0,90 % (25 443), FTSE MIB +1,60 %, CAC 40 +0,32 %. Ketvirtadienį DAX uždarė +2,08 % (25 216). Ispanijos lapkričio išankstinė infliacija – 4,1 % (spalį 4,9 %), Vokietijoje bedarbių skaičius išaugo 9 tūkst. iki 3,025 mln. Bloomberg duomenimis, SAP rengiasi panaikinti mažiausiai 10 tūkst. darbo vietų; SAP akcija svyravo apie −0,2 %.",
+     "why": "Lėtėjanti infliacija Ispanijoje ir Prancūzijoje mažina spaudimą ECB, tačiau ECB apklausoje vartotojų metų infliacijos lūkesčiai spalį išaugo iki 3,5 %.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "Edge Research: Europos rinkos ryte",
+       "url": "https://edgeconsultancykw.com/europe-market-wrap-27-november-2026/",
+       "type": "media",
+       "published": "2026-11-27"
+      },
+      {
+       "name": "Trading Economics: DAX",
+       "url": "https://tradingeconomics.com/germany/stock-market/news/529018",
+       "type": "media",
+       "published": "2026-11-27"
+      },
+      {
+       "name": "SquawkNews: dienos santrauka",
+       "url": "https://squawknews.com/brief/livecast/2026-11-27",
+       "type": "media",
+       "published": "2026-11-27"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "imones",
+   "title": "Įmonių naujienos",
+   "items": [
+    {
+     "headline": "Rheinmetall sumažino 2030 m. tikslus, bet akcija kyla ≈ 4–5 %",
+     "tags": [
+      "RHM",
+      "gynyba"
+     ],
+     "text": "Investuotojų dienoje Hamburge Rheinmetall paskelbė 2030 m. tikslą – 33–37 mlrd. € pardavimų ir apie 20 % veiklos maržą; Bloomberg tai vadina konservatyvesniu posūkiu nuo ankstesnių ambicijų. Tą pačią dieną Rumunija užsakė 66 Lynx pėstininkų kovos mašinas už ≈ 738 mln. € (paskutinė dalis pagal 298 mašinų sutartį). Akcija ryte kilo apie 4–5 %, kartu kilo Hensoldt ir Renk. Ketvirtadienį per drono ataką Kuveite žuvo du Rheinmetall Italia technikai.",
+     "why": "Mažesni, bet galbūt realistiškesni tikslai po dviejų prognozių sumažinimų šiemet – rinka kol kas reaguoja kilimu.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "Investing.com: kodėl kyla Rheinmetall",
+       "url": "https://www.investing.com/news/stock-market-news/why-is-rheinmetall-stock-climbing-today-93CH-5053206",
+       "type": "media",
+       "published": "2026-11-27"
+      },
+      {
+       "name": "Bloomberg: Rheinmetall mažina vidutinės trukmės tikslus",
+       "url": "https://www.bloomberg.com/news/articles/2026-11-27/rheinmetall-cuts-back-mid-term-goals-in-conservative-turnabout",
+       "type": "media",
+       "published": "2026-11-27"
+      },
+      {
+       "name": "Trading Economics: DAX ir Rheinmetall",
+       "url": "https://tradingeconomics.com/germany/stock-market/news/529018",
+       "type": "media",
+       "published": "2026-11-27"
+      }
+     ]
+    },
+    {
+     "headline": "Lustai atsigauna prieš prekybą: Marvell ≈ +7–9 %, Nvidia ≈ +3 %",
+     "tags": [
+      "MRVL",
+      "NVDA",
+      "MU"
+     ],
+     "text": "Prieš prekybos pradžią Marvell kilo apie 7–8,6 % po lūkesčius viršijusių rezultatų (per mėnesį akcija buvo nukritusi ~43 %). Nvidia, trečiadienį uždariusi 149,24 $, kilo apie 2–5 %; Micron – apie 5 %, Sandisk – apie 10–11 %. DI infrastruktūros akcijos CoreWeave ir Nebius kilo apie 5–9,5 %.",
+     "why": "Po kelių dienų išpardavimo lustų sektorius atšoka, bet šaltiniai pabrėžia, kad šventinė prekyba menka, o Nvidia vis dar >35 % žemiau spalio rekordo.",
+     "status": "media",
+     "note": "Prieš prekybą skelbti pokyčiai šaltiniuose skiriasi ir dienos uždarymo neatspindi.",
+     "sources": [
+      {
+       "name": "Options Oracle: prieš prekybą",
+       "url": "https://optionsoracle.substack.com/p/the-chips-bounce-back-nasdaq-futures",
+       "type": "media",
+       "published": "2026-11-27"
+      },
+      {
+       "name": "Blockonomi: Sandisk, Marvell, Nvidia",
+       "url": "https://blockonomi.com/todays-market-movers-sandisk-marvell-nvidia-lead-black-friday-tech-rebound/",
+       "type": "media",
+       "published": "2026-11-27"
+      },
+      {
+       "name": "Yahoo Finance: rinka tiesiogiai",
+       "url": "https://finance.yahoo.com/markets/live/stock-market-today-firday-november-27-dow-sp-500-nasdaq-black-friday-holiday-091152065.html",
+       "type": "media",
+       "published": "2026-11-27"
+      }
+     ]
+    },
+    {
+     "headline": "Vertex ≈ −7 %: FDA pratęsė povetacicept vertinimą iki vasario 28 d.",
+     "tags": [
+      "VRTX"
+     ],
+     "text": "FDA iki trijų mėnesių pratęsė inkstų ligos (IgA nefropatijos) vaisto povetacicept paraiškos vertinimą: sprendimas, laukiamas lapkričio 30 d., dabar bus priimtas ne vėliau kaip 2027 m. vasario 28 d. Prieš prekybą akcija krito apie 7 % iki ≈ 523 $.",
+     "why": "Vertinimo pratęsimas nereiškia atmetimo, bet nukelia galimą produkto pardavimų pradžią.",
+     "status": "media",
+     "sources": [
+      {
+       "name": "Options Oracle: Vertex",
+       "url": "https://optionsoracle.substack.com/p/the-chips-bounce-back-nasdaq-futures",
+       "type": "media",
+       "published": "2026-11-27"
+      },
+      {
+       "name": "SquawkNews: Vertex prieš prekybą",
+       "url": "https://squawknews.com/brief/livecast/2026-11-27",
+       "type": "media",
+       "published": "2026-11-27"
+      }
+     ]
+    },
+    {
+     "headline": "Invalda INVL: 9 mėn. grynasis pelnas 18,5 mln. € (+33 %)",
+     "tags": [
+      "IVL1L",
+      "rezultatai"
+     ],
+     "text": "Neaudituotais duomenimis, Invalda INVL per 9 mėn. uždirbo 18,5 mln. € grynojo pelno (prieš metus – 13,9 mln. €). Nuosavas kapitalas rugsėjo pabaigoje – 265,2 mln. € arba 21,31 € akcijai; vertė akcijai per metus +21,2 %. Klientų valdomas turtas – 2,3 mlrd. € (+11,3 %). Litagra pardavimas portfeliui pridėjo 7,3 mln. €. Ataskaita parengta neeiliniam akcininkų susirinkimui, kuris spręs dėl dividendų už trumpesnį nei finansiniai metai laikotarpį.",
+     "why": "Tarpiniai dividendai gali būti svarbūs akcininkams – verta sekti susirinkimo darbotvarkę.",
+     "status": "primary",
+     "sources": [
+      {
+       "name": "Invalda INVL: 9 mėn. neaudituota finansinė informacija",
+       "url": "https://globenewswire.com/news-release/2026/11/27/3411084/0/en/ab-invalda-invl-unaudited-financial-information-for-9-months-of-2026.html",
+       "type": "primary",
+       "published": "2026-11-27"
+      }
+     ]
+    },
+    {
+     "headline": "LHV Group per savaitę supirko 69 tūkst. savų akcijų",
+     "tags": [
+      "LHV1T",
+      "supirkimas"
+     ],
+     "text": "Lapkričio 20–26 d. LHV Group įsigijo 69 047 savas akcijas; vidutinė dienos kaina krito nuo ≈ 3,22 € iki ≈ 3,16 €. Supirkimas vykdomas pagal 2025 m. kovo 26 d. akcininkų susirinkimo sprendimą.",
+     "why": "Nuolatinis supirkimas didina paklausą akcijai, bet apimtys palyginti nedidelės.",
+     "status": "primary",
+     "sources": [
+      {
+       "name": "LHV Group: savų akcijų įsigijimo sandoriai",
+       "url": "https://www.globenewswire.com/news-release/2026/11/27/3411260/0/en/lhv-group-s-own-share-acquisition-transactions.html",
+       "type": "primary",
+       "published": "2026-11-27"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "calendar": [
+  {
+   "date": "2026-11-29",
+   "text": "OPEC+ susitikimas; Sun Investment Group obligacijų išpirkimo terminas",
+   "url": "https://www.xtb.com/int/market-analysis/news-and-research/morning-wrap-nasdaq-rebounds-from-bear-market-threshold-27-11-2026"
+  },
+  {
+   "date": "2026-11-30",
+   "text": "Prasideda Artea banko savų akcijų supirkimas (iki gruodžio 8 d.); baigiasi PN Project obligacijų pasirašymas",
+   "url": "https://www.globenewswire.com/news-release/2026/11/26/3410810/0/lt/patikslinimas-ab-artea-banko-valdybos-sprendimas-d%C4%97l-sav%C5%B3-akcij%C5%B3-%C4%AFsigijimo.html"
+  },
+  {
+   "date": "2026-12-09",
+   "text": "FED palūkanų sprendimas (posėdis gruodžio 8–9 d.)",
+   "url": "https://optionsoracle.substack.com/p/the-chips-bounce-back-nasdaq-futures"
+  },
+  {
+   "date": "2026-12-10",
+   "text": "Ignitis grupės neeilinis akcininkų susirinkimas (dividendai)",
+   "url": "https://www.globenewswire.com/news-release/2026/11/11/3400468/0/en/ignitis-group-s-updated-financial-calendar-2026.html"
+  },
+  {
+   "date": "2026-12-15",
+   "text": "Pirmasis Anthropic akcijų pardavimo apribojimų (lock-up) palengvinimas – iki 303 mln. akcijų",
+   "url": "https://financefeeds.com/anthropic-ipo-lock-up-insider-selling-dates/"
+  },
+  {
+   "date": "2026-12-16",
+   "text": "DelfinGroup dividendų ex-data (0,0326 € akcijai)",
+   "url": "https://kpiresearch.substack.com/p/baltic-stock-market-weekly-review-c45"
+  },
+  {
+   "date": "2026-12-23",
+   "text": "JAV lapkričio PCE infliacijos duomenys",
+   "url": "https://trendandticker.com/news/markets/capital-markets/2026-11-25/pce-inflation-october-3-8-percent-gdp-revised-4-3"
+  }
+ ]
+}

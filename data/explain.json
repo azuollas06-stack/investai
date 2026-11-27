@@ -1,61 +1,66 @@
 {
- "updated": "2026-11-26",
+ "updated": "2026-11-27",
  "note": "Paaiškinimai, kodėl pasikeitė aktyvų kainos. Raktas – TradingView simbolis. Pildo kasdienė užduotis (žr. TURINIO_GIDAS.md).",
  "items": {
   "NASDAQ:NVDA": {
-   "date": "2026-11-26",
-   "direction": "down",
-   "move": "−3,91 % lapkričio 25 d. (149,30 $); dienos metu buvo −9 %",
-   "headline": "Krito toliau po rekordinio šuolio; S&P, kaip skelbiama, peržiūri kredito reitingą",
+   "date": "2026-11-27",
+   "direction": "mixed",
+   "move": "≈ +2–5 % prieš prekybą lapkričio 27 d.; uždarymas lapkričio 25 d. 149,24 $ (>35 % žemiau spalio rekordo)",
+   "headline": "Atšoka kartu su lustais po dviejų kritimo dienų",
    "points": [
-    "Lapkričio 23 d. akcija šoktelėjo 31,5 % grįžus J. Huangui, lapkričio 24 d. krito 5,9 %, lapkričio 25 d. – dar 3,91 % iki 149,30 $.",
-    "Lapkričio 25 d. dienos metu kritimas siekė daugiau nei 9 %, kartu su visu lustų sektoriumi.",
-    "Stock Titan, remdamasis CNBC, rašo, kad S&P Global Ratings įtraukė Nvidia reitingą į galimo mažinimo stebėjimą dėl valdymo rizikų (pirminio pranešimo nepatikrinome).",
-    "WSJ duomenimis, pareigūnai nerado įrodymų, kad Kinijos technologijų vadovas buvo nurodytas šnipinėti J. Huangą."
+    "Pirmadienį akcija pakilo 31 % grįžus Jensen Huang, antradienį krito 5,86 %, trečiadienį – 3,9 %.",
+    "S&P įtraukė Nvidia kredito reitingą į neigiamą stebėjimą (CreditWatch negative), nurodydama valdysenos klausimus.",
+    "Nuo lapkričio 19 d. galioja nauji JAV eksporto apribojimai pažangiems lustams į Malaiziją, Singapūrą, Indoneziją ir Tailandą; FT duomenimis, Nvidia sustabdė serverių siuntas į šias šalis, kol tikrinamas atitikimas.",
+    "Penktadienio ryte prieš prekybą akcija kilo apie 2–5 % (skirtingi šaltiniai)."
    ],
-   "context": "JAV biržos lapkričio 26 d. uždarytos, lapkričio 27 d. – sutrumpinta prekyba.",
+   "context": "Dan Ives (Yorkville Ives) Yahoo Finance laidoje tikisi tolesnio didelio svyravimo.",
    "status": "media",
    "sources": [
     {
-     "name": "GSM Global: JAV biržų uždarymas lapkričio 25 d.",
-     "url": "https://gsmglobalnews.com/article/d20261125-mktclose1.html",
-     "published": "2026-11-25"
+     "name": "XTB: Morning Wrap",
+     "url": "https://www.xtb.com/int/market-analysis/news-and-research/morning-wrap-nasdaq-rebounds-from-bear-market-threshold-27-11-2026",
+     "published": "2026-11-27"
     },
     {
-     "name": "Stock Titan: rinka lapkričio 25 d.",
-     "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-25-2026",
-     "published": "2026-11-25"
+     "name": "Options Oracle: prieš prekybą",
+     "url": "https://optionsoracle.substack.com/p/the-chips-bounce-back-nasdaq-futures",
+     "published": "2026-11-27"
+    },
+    {
+     "name": "Yahoo Finance: rinka tiesiogiai",
+     "url": "https://finance.yahoo.com/markets/live/stock-market-today-firday-november-27-dow-sp-500-nasdaq-black-friday-holiday-091152065.html",
+     "published": "2026-11-27"
     }
    ]
   },
   "XETR:RHM": {
-   "date": "2026-11-17",
-   "direction": "down",
-   "move": "≈ −20 % per lapkritį",
-   "headline": "Antrą kartą per metus sumažintos 2026 m. prognozės",
+   "date": "2026-11-27",
+   "direction": "up",
+   "move": "≈ +4–5 % lapkričio 27 d. ryte (po ≈ −20 % per lapkritį)",
+   "headline": "Investuotojų diena: nauji 2030 m. tikslai ir Rumunijos užsakymas",
    "points": [
-    "Lapkričio 5 d. akcija per vieną sesiją krito apie 16 %, kai bendrovė antrą kartą šiais metais sumažino 2026 m. pardavimų ir pelningumo tikslus.",
-    "Viena priežasčių – Vokietijos kariuomenės „Boxer“ šarvuočių sutartis šiais metais jau nebebus pasirašyta; vėluoja ir dalis amunicijos pristatymų.",
-    "Kartu krito ir kitos Europos gynybos bendrovės (Leonardo, Thales, Indra).",
-    "Tuo pat metu 9 mėnesių pardavimai išaugo 38 % iki 8,4 mlrd. € – verslas auga, bet lėčiau, nei tikėtasi."
+    "Lapkričio 27 d. bendrovė paskelbė 2030 m. tikslą – 33–37 mlrd. € pardavimų ir apie 20 % veiklos maržą; Bloomberg tai vertina kaip konservatyvesnius tikslus nei anksčiau.",
+    "Tą pačią dieną Rumunija užsakė 66 Lynx kovos mašinas už ≈ 738 mln. € – paskutinę dalį pagal 298 mašinų sutartį.",
+    "Kartu kilo ir kitos Vokietijos gynybos akcijos (Hensoldt ≈ +5 %, Renk ≈ +4 %).",
+    "RBC ir Barclays išlaikė teigiamus reitingus (pagal Investing.com)."
    ],
-   "context": "Lapkričio 25–27 d. bendrovė rengia investuotojų dieną – joje gali paaiškėti naujesni tikslai.",
+   "context": "Lapkričio 5 d. akcija buvo kritusi ~16 %, kai bendrovė antrą kartą šiemet sumažino 2026 m. prognozes.",
    "status": "media",
    "sources": [
     {
-     "name": "Investing.com / Yahoo: prognozių mažinimas",
-     "url": "https://ca.finance.yahoo.com/news/rheinmetall-cuts-2026-sales-margin-073413277.html",
-     "published": "2026-11-05"
+     "name": "Investing.com: kodėl kyla Rheinmetall",
+     "url": "https://www.investing.com/news/stock-market-news/why-is-rheinmetall-stock-climbing-today-93CH-5053206",
+     "published": "2026-11-27"
     },
     {
-     "name": "Eurasia Business News: priežastys",
-     "url": "https://eurasiabusinessnews.com/2026/11/06/rheinmetall-shares-plunge-after-german-defence-giant-cuts-2026-forecasts/",
-     "published": "2026-11-06"
+     "name": "Bloomberg: mažinami vidutinės trukmės tikslai",
+     "url": "https://www.bloomberg.com/news/articles/2026-11-27/rheinmetall-cuts-back-mid-term-goals-in-conservative-turnabout",
+     "published": "2026-11-27"
     },
     {
-     "name": "AD HOC NEWS: 9 mėn. rezultatai",
-     "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/rheinmetall-stock-slips-after-strong-nine-month-growth/70493851",
-     "published": "2026-11-11"
+     "name": "Trading Economics: DAX ir Rheinmetall",
+     "url": "https://tradingeconomics.com/germany/stock-market/news/529018",
+     "published": "2026-11-27"
     }
    ]
   },
@@ -131,26 +136,26 @@
    ]
   },
   "BITSTAMP:BTCUSD": {
-   "date": "2026-11-25",
-   "direction": "down",
-   "move": "≈ 59 200 $ lapkričio 25 d.; ≈ −20 % per lapkritį",
-   "headline": "Bitkoino ETF lėšos traukiasi šeštą dieną iš eilės",
+   "date": "2026-11-27",
+   "direction": "mixed",
+   "move": "≈ 61 100–61 700 $ lapkričio 27 d. (≈ +1–1,6 %); > −20 % per lapkritį",
+   "headline": "Nedidelis atšokimas, bet ETF lėšos toliau traukiasi",
    "points": [
-    "Saxo duomenimis, lapkričio 25 d. ryte bitkoinas buvo apie 59 241 $ (−0,9 %), ether – apie 1 660 $.",
-    "JAV bitkoino ETF lėšų nutekėjimas tęsėsi šeštą dieną: 232 mln. $ antradienį po 570 mln. $ pirmadienį; lapkritis – rekordinio nutekėjimo mėnuo.",
-    "Kritimas sutampa su rizikingų aktyvų išpardavimu ir lūkesčiais, kad FED gruodį kels palūkanas."
+    "Penktadienį bitkoinas kilo apie 1–1,6 % iki ≈ 61 000–61 700 $.",
+    "Per lapkritį kaina nukrito daugiau nei 20 %.",
+    "Trečiadienį JAV bitkoino ETF neto ištraukta 453 mln. $; per mėnesį išpirkimai viršijo 5 mlrd. $."
    ],
    "status": "media",
    "sources": [
     {
-     "name": "Saxo: Market Quick Take, lapkričio 25 d.",
-     "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---chip-stocks-slump-again-in-new-york-and-seoul---25-november-2026-25112026",
-     "published": "2026-11-25"
+     "name": "XTB: Morning Wrap",
+     "url": "https://www.xtb.com/int/market-analysis/news-and-research/morning-wrap-nasdaq-rebounds-from-bear-market-threshold-27-11-2026",
+     "published": "2026-11-27"
     },
     {
-     "name": "Investopedia (Yahoo Finance): rinkos lapkričio 24 d.",
-     "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nasdaq-p-132051241.html",
-     "published": "2026-11-24"
+     "name": "Yahoo Finance: rinka tiesiogiai",
+     "url": "https://finance.yahoo.com/markets/live/stock-market-today-firday-november-27-dow-sp-500-nasdaq-black-friday-holiday-091152065.html",
+     "published": "2026-11-27"
     }
    ]
   },
@@ -757,6 +762,76 @@
      "name": "Tallinna Vesi: pranešimo patikslinimas",
      "url": "https://www.globenewswire.com/news-release/2026/11/26/3410788/0/en/clarification-regarding-today-s-stock-exchange-release.html",
      "published": "2026-11-26"
+    }
+   ]
+  },
+  "NASDAQ:MRVL": {
+   "date": "2026-11-27",
+   "direction": "up",
+   "move": "≈ +7–9 % prieš prekybą lapkričio 27 d. (po ≈ −43 % per mėnesį)",
+   "headline": "Rezultatai viršijo lūkesčius, lustų sektorius atšoka",
+   "points": [
+    "Prieš prekybą penktadienį akcija kilo apie 7 % (Options Oracle) – 8,6 % (Blockonomi, remiantis CNBC) po lūkesčius viršijusių rezultatų.",
+    "Per mėnesį iki tol akcija buvo nukritusi maždaug 43 %.",
+    "Kartu kilo ir kitos lustų akcijos: Nvidia ≈ +3 %, Micron ≈ +5 %, Sandisk ≈ +10–11 %."
+   ],
+   "context": "Penktadienį JAV prekyba sutrumpinta, apimtys mažos – prieš prekybą matyti pokyčiai gali skirtis nuo uždarymo.",
+   "status": "media",
+   "sources": [
+    {
+     "name": "Options Oracle: lustai atsigauna",
+     "url": "https://optionsoracle.substack.com/p/the-chips-bounce-back-nasdaq-futures",
+     "published": "2026-11-27"
+    },
+    {
+     "name": "Blockonomi: Sandisk, Marvell, Nvidia",
+     "url": "https://blockonomi.com/todays-market-movers-sandisk-marvell-nvidia-lead-black-friday-tech-rebound/",
+     "published": "2026-11-27"
+    }
+   ]
+  },
+  "NASDAQ:VRTX": {
+   "date": "2026-11-27",
+   "direction": "down",
+   "move": "≈ −7 % prieš prekybą lapkričio 27 d. (≈ 523 $)",
+   "headline": "FDA pratęsė povetacicept vertinimą iki 2027 m. vasario 28 d.",
+   "points": [
+    "FDA iki trijų mėnesių pratęsė IgA nefropatijos vaisto povetacicept paraiškos vertinimą.",
+    "Sprendimas buvo laukiamas lapkričio 30 d., dabar – ne vėliau kaip 2027 m. vasario 28 d.",
+    "Prieš prekybą akcija krito apie 7,3 %."
+   ],
+   "context": "Vertinimo pratęsimas nėra atmetimas; tai nukelia galimo sprendimo datą.",
+   "status": "media",
+   "sources": [
+    {
+     "name": "Options Oracle: Vertex",
+     "url": "https://optionsoracle.substack.com/p/the-chips-bounce-back-nasdaq-futures",
+     "published": "2026-11-27"
+    },
+    {
+     "name": "SquawkNews: Vertex prieš prekybą",
+     "url": "https://squawknews.com/brief/livecast/2026-11-27",
+     "published": "2026-11-27"
+    }
+   ]
+  },
+  "OMXVSE:IVL1L": {
+   "date": "2026-11-27",
+   "direction": "mixed",
+   "move": "Kainos pokytis šaltiniuose nenurodytas – svarbi naujiena: 9 mėn. rezultatai",
+   "headline": "9 mėn. grynasis pelnas 18,5 mln. € (+33 %), artėja sprendimas dėl dividendų",
+   "points": [
+    "Grynasis pelnas per 9 mėn. – 18,5 mln. € (prieš metus 13,9 mln. €).",
+    "Nuosavas kapitalas – 265,2 mln. € (21,31 € akcijai), vertė akcijai +21,2 % per metus.",
+    "Klientų valdomas turtas – 2,3 mlrd. € (+11,3 %); Litagra pardavimas pridėjo 7,3 mln. €.",
+    "Ataskaita parengta neeiliniam susirinkimui, kuris spręs dėl dividendų už trumpesnį nei finansiniai metai laikotarpį."
+   ],
+   "status": "primary",
+   "sources": [
+    {
+     "name": "Invalda INVL: 9 mėn. finansinė informacija",
+     "url": "https://globenewswire.com/news-release/2026/11/27/3411084/0/en/ab-invalda-invl-unaudited-financial-information-for-9-months-of-2026.html",
+     "published": "2026-11-27"
     }
    ]
   }
